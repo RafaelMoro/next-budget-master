@@ -1,17 +1,28 @@
+"use client"
+import { FormEvent, useState } from "react";
 import { Card, Button, Checkbox, Label, TextInput } from "flowbite-react";
 
-export const LoginCard = () => {
-  return (
+export const LoginCard =  () => {
+  const [email, setEmail] = useState("");
+  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  }
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    // logic handle submit
+    console.log('email', email)
+  }
+  return ( 
     <Card href="#" className="max-w-sm">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         Ingrese sus credenciales para entrar a su cuenta.
       </h5>
-      <form className="flex max-w-md flex-col gap-4">
+      <form onSubmit={(event) => handleSubmit(event)} className="flex max-w-md flex-col gap-4">
         <div>
           <div className="mb-2 block">
             <Label htmlFor="email1">Correo Electrónico</Label>
           </div>
-          <TextInput id="email1" type="email" placeholder="name@flowbite.com" required />
+          <TextInput value={email} id="email1" type="email" placeholder="name@flowbite.com" required onChange={handleEmail} />
         </div>
         <div>
           <div className="mb-2 block">
