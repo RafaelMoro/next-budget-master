@@ -1,6 +1,8 @@
 "use client"
 import { FormEvent, useState } from "react";
 import { Card, Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { LoginSchema } from "@/shared/types/Login.schema";
+import { type ZodError } from "@/shared/types/Global";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
@@ -13,11 +15,28 @@ export const LoginCard =  () => {
     setPassword(event.target.value);
   }
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    // logic handle submit
-    console.log('email', email)
-    console.log('password', password)
+    try {
+      event.preventDefault()
+      // logic handle submit
+      console.log('email', email)
+      console.log('password', password)
+      const dataForm = {
+        email,
+        password
+      }
+      const data = LoginSchema.parse(dataForm)
+    }
+    catch (error: unknown) {
+      const currentError = error as ZodError
+      const infoError = {
+        message: currentError.message,
+        path: currentError.path,
+        code: currentError.code,
+      }
+      console.log('error', infoError)
+    }
   }
+
   return ( 
     <Card href="#" className="max-w-sm">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
