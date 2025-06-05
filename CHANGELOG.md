@@ -1,3 +1,9 @@
+## v0.3.0 (2025-06-05)
+
+### Pull Requests
+[#5](https://github.com/RafaelMoro/next-budget-master/pull/5) | Add flowbite and toggle theme mode
+
+
 ## v0.2.2 (2025-06-05)
 
 ### Pull Requests
