@@ -6,8 +6,12 @@ import { type ZodError } from "@/shared/types/Global";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
 
+  const getEmailError = (error: string) => {
+    setEmailError(error)
+  }
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   }
@@ -27,13 +31,17 @@ export const LoginCard =  () => {
       const data = LoginSchema.parse(dataForm)
     }
     catch (error: unknown) {
-      const currentError = error as ZodError
+      const newError = error as ZodError
+      const [currentError] = JSON.parse(newError?.message)
       const infoError = {
         message: currentError.message,
         path: currentError.path,
         code: currentError.code,
       }
-      console.log('error', infoError)
+      console.log('infoError', infoError)
+      if (infoError.path.includes('email')) {
+        getEmailError(infoError.message)
+      }
     }
   }
 
@@ -48,16 +56,15 @@ export const LoginCard =  () => {
             <Label htmlFor="email1">Correo Electrónico</Label>
           </div>
           <TextInput value={email} id="email1" type="email" placeholder="name@flowbite.com" required onChange={handleEmail} />
+          { emailError && (
+            <p className="text-red-500 text-sm mt-1">{emailError}</p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="password1">Contraseña</Label>
           </div>
           <TextInput value={password} onChange={handlePassword} id="password1" type="password" required />
-        </div>
-        <div className="flex items-center gap-2">
-          <Checkbox id="remember" />
-          <Label htmlFor="remember">Recordar cuenta</Label>
         </div>
         <Button type="submit">Iniciar sesión</Button>
       </form>
