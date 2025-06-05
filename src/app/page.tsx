@@ -1,7 +1,10 @@
+import { Header } from "@/shared/ui/organisms/Header";
+
 export default function Home() {
   return (
     <div>
-      <h1>Home</h1>
+      <Header />
+      <h1 className="text-black dark:text-white">Home</h1>
     </div>
   );
 }
