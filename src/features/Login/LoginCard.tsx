@@ -1,8 +1,8 @@
 "use client"
 import { FormEvent, useState } from "react";
-import { Card, Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Card, Button, Label, TextInput } from "flowbite-react";
 import { LoginSchema } from "@/shared/types/Login.schema";
-import { type ZodError } from "@/shared/types/Global";
+import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
@@ -31,14 +31,7 @@ export const LoginCard =  () => {
       const data = LoginSchema.parse(dataForm)
     }
     catch (error: unknown) {
-      const newError = error as ZodError
-      const [currentError] = JSON.parse(newError?.message)
-      const infoError = {
-        message: currentError.message,
-        path: currentError.path,
-        code: currentError.code,
-      }
-      console.log('infoError', infoError)
+      const infoError = handleErrorForm(error);
       if (infoError.path.includes('email')) {
         getEmailError(infoError.message)
       }

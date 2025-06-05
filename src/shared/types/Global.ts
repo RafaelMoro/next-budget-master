@@ -4,3 +4,9 @@ export interface ZodError {
   message: string;
   path: string[];
 }
+
+export interface FormError {
+  message: string;
+  path: string[];
+  code: string;
+}
