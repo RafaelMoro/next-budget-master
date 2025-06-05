@@ -4,13 +4,19 @@ import { Card, Button, Checkbox, Label, TextInput } from "flowbite-react";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
+  }
+  const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
   }
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     // logic handle submit
     console.log('email', email)
+    console.log('password', password)
   }
   return ( 
     <Card href="#" className="max-w-sm">
@@ -28,7 +34,7 @@ export const LoginCard =  () => {
           <div className="mb-2 block">
             <Label htmlFor="password1">Contraseña</Label>
           </div>
-          <TextInput id="password1" type="password" required />
+          <TextInput value={password} onChange={handlePassword} id="password1" type="password" required />
         </div>
         <div className="flex items-center gap-2">
           <Checkbox id="remember" />
