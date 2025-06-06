@@ -1,10 +1,8 @@
-import { Header } from "@/shared/ui/organisms/Header";
+"use client"
+import { LoginPage } from '@/features/Login/LoginPage';
 
 export default function Home() {
   return (
-    <div>
-      <Header />
-      <h1 className="text-black dark:text-white">Home</h1>
-    </div>
+    <LoginPage />
   );
 }
