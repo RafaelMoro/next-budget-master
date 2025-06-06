@@ -1,8 +1,8 @@
 "use client"
 import { FormEvent, useState, useEffect } from "react";
-import { redirect } from "next/navigation";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from 'next/navigation'
 
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
@@ -11,6 +11,7 @@ import { LoginData, LoginMutationFn, LoginPayload } from "./LoginCard.utils";
 import { DASHBOARD_ROUTE } from "@/shared/types/Global";
 
 export const LoginCard =  () => {
+  const router = useRouter()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -26,7 +27,9 @@ export const LoginCard =  () => {
   const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<LoginData, LoginError, LoginPayload>({
     mutationFn: LoginMutationFn,
     onSuccess: () => {
-      redirect(DASHBOARD_ROUTE)
+      setTimeout(() => {
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
     }
   })
   const messageError = error?.response?.data?.error?.error
@@ -66,8 +69,8 @@ export const LoginCard =  () => {
     }
   }, [messageError, isError])
 
-  return ( 
-    <Card href="#" className="max-w-sm">
+  return (
+    <Card className="max-w-sm">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         Ingrese sus credenciales para entrar a su cuenta.
       </h5>
