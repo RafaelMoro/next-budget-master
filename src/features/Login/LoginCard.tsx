@@ -7,8 +7,9 @@ import { useRouter } from 'next/navigation'
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { ERROR_EMAIL_REQUIRED, ERROR_INVALID_EMAIL, ERROR_PASSWORD_REQUIRED, ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError, LoginSchema } from "@/shared/types/Login.types";
-import { LoginData, LoginMutationFn, LoginPayload } from "./LoginCard.utils";
+import { LoginMutationFn } from "./LoginCard.utils";
 import { DASHBOARD_ROUTE } from "@/shared/types/Global";
+import { LoginData, LoginPayload } from "@/shared/types/Login.types";
 
 export const LoginCard =  () => {
   const router = useRouter()
