@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import axios from 'axios';
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Home from '../src/app/page'
@@ -122,6 +122,42 @@ describe('Home', () => {
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
       await user.click(signInButton)
       expect(await screen.findByText(/Correo electronico o contraseña incorrecta/i))
+    })
+
+    it('Given a user entering email or password correctly, redirect to dashboard', async () => {
+      const user = userEvent.setup()
+      const push = jest.fn();
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: null,
+        success: true,
+        version: "v1.2.0",
+        data: {
+          user: {
+            _id: "656ce2abfe380684665e92a3",
+            email: "rafael.moro.galindo@gmail.com",
+            firstName: "Jose",
+            lastName: "Moro Galindo",
+            middleName: "Rafael"
+          }
+        }
+      })
+
+      render(
+        <AppRouterContextProviderMock router={{ push }}>
+          <Home />
+        </AppRouterContextProviderMock>
+      )
+
+      const pwdInput = screen.getByLabelText(/contraseña/i)
+      await user.type(pwdInput, '123')
+      const emailInput = screen.getByLabelText(/correo electrónico/i)
+      await user.type(emailInput, 'correo-electronico@a.com')
+      const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
+      await user.click(signInButton)
+      await waitFor(() => {
+        expect(push).toHaveBeenCalledWith('/dashboard')
+      }, { timeout: 2000 })
     })
   })
 })
