@@ -3,6 +3,8 @@ import { FormEvent, useState } from "react";
 import { Card, Button, Label, TextInput } from "flowbite-react";
 import { LoginSchema } from "@/shared/types/Login.schema";
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
+import { LoginMutationFn, LoginPayload } from "./LoginCard.utils";
+import { useMutation } from "@tanstack/react-query";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
@@ -18,17 +20,25 @@ export const LoginCard =  () => {
   const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   }
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+
+  const { mutate: loginMutation, isError, isPending, isSuccess, error } = useMutation({
+    mutationFn: LoginMutationFn,
+    onSuccess: (response) => {
+      // Save data in local storage
+      console.log('response', response)
+    }
+  })
+  const messageError: string = error?.response?.data?.error?.error
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault()
-      // logic handle submit
-      console.log('email', email)
-      console.log('password', password)
       const dataForm = {
         email,
         password
       }
-      const data = LoginSchema.parse(dataForm)
+      const data: LoginPayload = LoginSchema.parse(dataForm)
+      loginMutation(data)
     }
     catch (error: unknown) {
       const infoError = handleErrorForm(error);
@@ -61,6 +71,9 @@ export const LoginCard =  () => {
         </div>
         <Button type="submit">Iniciar sesión</Button>
       </form>
+      { isError && (<p>{messageError}</p>)}
+      { isPending && (<p>Loading...</p>)}
+      { isSuccess && (<p>Success!</p>)}
     </Card>
   )
 }
