@@ -1,5 +1,5 @@
 "use client"
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -11,9 +11,10 @@ import { LoginData, LoginMutationFn, LoginPayload } from "./LoginCard.utils";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [password, setPassword] = useState("");
+  const [errorAuth, setErrorAuth] = useState("");
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -34,6 +35,7 @@ export const LoginCard =  () => {
     try {
       event.preventDefault()
       // Reset errors
+      setErrorAuth("");
       setEmailError("");
       setPasswordError("");
 
@@ -55,6 +57,14 @@ export const LoginCard =  () => {
       }
     }
   }
+
+  useEffect(() => {
+    if (isError && messageError) {
+      if (messageError === 'Unauthorized') {
+        setErrorAuth('Correo electrónico o contraseña incorrectos');
+      }
+    }
+  }, [messageError, isError])
 
   return ( 
     <Card href="#" className="max-w-sm">
@@ -86,7 +96,7 @@ export const LoginCard =  () => {
           { isSuccess && (<CheckIcon />)}
         </Button>
       </form>
-      { isError && (<p className="text-red-500 text-sm mt-1">{messageError}</p>)}
+      { isError && (<p className="text-red-500 text-sm mt-1">{errorAuth}</p>)}
     </Card>
   )
 }
