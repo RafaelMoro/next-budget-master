@@ -77,18 +77,18 @@ export const LoginCard =  () => {
       <form onSubmit={(event) => handleSubmit(event)} className="flex max-w-md flex-col gap-4">
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="email1">Correo Electrónico</Label>
+            <Label htmlFor="email">Correo Electrónico</Label>
           </div>
-          <TextInput value={email} id="email1" type="email" placeholder="correo-electrónico@gmail.com" onChange={handleEmail} />
+          <TextInput value={email} id="email" type="email" placeholder="correo-electrónico@gmail.com" onChange={handleEmail} />
           { emailError && (
             <p className="text-red-500 text-sm mt-1">{emailError}</p>
           )}
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="password1">Contraseña</Label>
+            <Label htmlFor="password">Contraseña</Label>
           </div>
-          <TextInput value={password} onChange={handlePassword} id="password1" type="password" />
+          <TextInput value={password} onChange={handlePassword} id="password" type="password" />
           { passwordError && (
             <p className="text-red-500 text-sm mt-1">{passwordError}</p>
           )}

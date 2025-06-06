@@ -12,8 +12,9 @@ describe('Home', () => {
       </AppRouterContextProviderMock>
   )
  
-    const heading = screen.getByRole('heading', { name: /bienvenido de vuelta/i })
- 
-    expect(heading).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /bienvenido de vuelta/i })).toBeInTheDocument()
+    expect(screen.getByText(/ingrese sus credenciales para entrar a su cuenta\./i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument()
   })
 })
