@@ -3,10 +3,9 @@ import { FormEvent, useState, useEffect } from "react";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 import { useMutation } from "@tanstack/react-query";
 
-import { LoginSchema } from "@/shared/types/Login.schema";
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
-import { LoginError } from "@/shared/types/Login.types";
+import { ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError, LoginSchema } from "@/shared/types/Login.types";
 import { LoginData, LoginMutationFn, LoginPayload } from "./LoginCard.utils";
 
 export const LoginCard =  () => {
@@ -60,8 +59,8 @@ export const LoginCard =  () => {
 
   useEffect(() => {
     if (isError && messageError) {
-      if (messageError === 'Unauthorized') {
-        setErrorAuth('Correo electrónico o contraseña incorrectos');
+      if (messageError === ERROR_UNAUTHORIZED_LOGIN) {
+        setErrorAuth(ERROR_UNAUTHORIZED_LOGIN_MESSAGE);
       }
     }
   }, [messageError, isError])
@@ -91,7 +90,7 @@ export const LoginCard =  () => {
           )}
         </div>
         <Button disabled={isPending || isSuccess} type="submit">
-          { isIdle && 'Iniciar sesión'}
+          { (isIdle || isError) && 'Iniciar sesión'}
           { isPending && (<Spinner aria-label="loading login budget master" />) }
           { isSuccess && (<CheckIcon />)}
         </Button>
