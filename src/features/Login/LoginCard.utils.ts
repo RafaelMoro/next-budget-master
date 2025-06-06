@@ -18,6 +18,6 @@ export interface LoginPayload {
 }
 
 export const LoginMutationFn = (data: LoginPayload): Promise<LoginData> => {
-  const uri = `${process.env.NEXT_PUBLIC_BACKEND_URI}/auth/local`
+  const uri = `${process.env.NEXT_PUBLIC_BACKEND_URI}/auth/`
   return axios.post(uri, data)
 }

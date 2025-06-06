@@ -12,11 +12,9 @@ import { LoginData, LoginMutationFn, LoginPayload } from "./LoginCard.utils";
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [password, setPassword] = useState("");
 
-  const getEmailError = (error: string) => {
-    setEmailError(error)
-  }
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   }
@@ -35,6 +33,11 @@ export const LoginCard =  () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault()
+      // Reset errors
+      setEmailError("");
+      setPasswordError("");
+
+      // Validate form
       const dataForm = {
         email,
         password
@@ -45,7 +48,10 @@ export const LoginCard =  () => {
     catch (error: unknown) {
       const infoError = handleErrorForm(error);
       if (infoError.path.includes('email')) {
-        getEmailError(infoError.message)
+        setEmailError(infoError.message)
+      }
+      if (infoError.path.includes('password')) {
+        setPasswordError(infoError.message)
       }
     }
   }
@@ -60,7 +66,7 @@ export const LoginCard =  () => {
           <div className="mb-2 block">
             <Label htmlFor="email1">Correo Electrónico</Label>
           </div>
-          <TextInput value={email} id="email1" type="email" placeholder="correo-electrónico@gmail.com" required onChange={handleEmail} />
+          <TextInput value={email} id="email1" type="email" placeholder="correo-electrónico@gmail.com" onChange={handleEmail} />
           { emailError && (
             <p className="text-red-500 text-sm mt-1">{emailError}</p>
           )}
@@ -69,7 +75,10 @@ export const LoginCard =  () => {
           <div className="mb-2 block">
             <Label htmlFor="password1">Contraseña</Label>
           </div>
-          <TextInput value={password} onChange={handlePassword} id="password1" type="password" required />
+          <TextInput value={password} onChange={handlePassword} id="password1" type="password" />
+          { passwordError && (
+            <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+          )}
         </div>
         <Button disabled={isPending || isSuccess} type="submit">
           { isIdle && 'Iniciar sesión'}
