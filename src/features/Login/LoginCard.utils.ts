@@ -1,15 +1,20 @@
 import axios from "axios";
 
 export interface LoginData {
-  accessToken: string;
-  user: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    middleName: string;
-    _id: string
-    __v: number
+  data: {
+    user: {
+      email: string;
+      firstName: string;
+      lastName: string;
+      middleName: string;
+      _id: string
+      __v: number
+    }
   }
+  error: null;
+  message: null;
+  success: boolean;
+  version: string;
 }
 
 export interface LoginPayload {
