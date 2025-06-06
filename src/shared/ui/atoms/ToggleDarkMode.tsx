@@ -19,7 +19,7 @@ export const ToggleDarkMode = () => {
   }
 
   return (
-    <Button onClick={toggleDarkMode} color="dark" outline>
+    <Button data-testid="toggle-theme-mode-button" onClick={toggleDarkMode} color="dark" outline>
       <NightIcon />
     </Button>
   )
