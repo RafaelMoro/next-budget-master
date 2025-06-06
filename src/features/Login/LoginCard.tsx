@@ -71,7 +71,7 @@ export const LoginCard =  () => {
 
   return (
     <Card className="max-w-sm">
-      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <h5 className="text-2xl text-gray-900 dark:text-white">
         Ingrese sus credenciales para entrar a su cuenta.
       </h5>
       <form onSubmit={(event) => handleSubmit(event)} className="flex max-w-md flex-col gap-4">
