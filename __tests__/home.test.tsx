@@ -59,5 +59,19 @@ describe('Home', () => {
       await user.click(signInButton)
       expect(await screen.findByText(/Correo electrónico inválido/i))
     })
+
+    it('Given a user leaving the password empty, show password required error', async () => {
+      const user = userEvent.setup()
+      const push = jest.fn();
+      render(
+        <AppRouterContextProviderMock router={{ push }}>
+          <Home />
+        </AppRouterContextProviderMock>
+      )
+    
+      const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
+      await user.click(signInButton)
+      expect(await screen.findByText(/Contraseña es requerida/i))
+    })
   })
 })
