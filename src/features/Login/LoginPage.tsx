@@ -5,7 +5,7 @@ import { LoginCard } from "./LoginCard";
 
 const queryClient = new QueryClient()
 
-export function LoginPage() {
+export const LoginPage = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <div>

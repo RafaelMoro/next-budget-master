@@ -4,7 +4,7 @@ import { Button } from "flowbite-react";
 import { NightIcon } from "@/shared/ui/icons/Nights";
 import { ThemeMode } from "@/shared/constants/Global.constants";
 
-export function ToggleDarkMode() {
+export const ToggleDarkMode = () => {
   const [mode, setMode] = useState<ThemeMode>('dark');
   const toggleDarkMode = () => {
     const htmlElement = document.documentElement;
@@ -18,9 +18,9 @@ export function ToggleDarkMode() {
     htmlElement.setAttribute("data-theme", "light");
   }
 
-return (
-  <Button onClick={toggleDarkMode} color="dark" outline>
-    <NightIcon />
-  </Button>
-)
+  return (
+    <Button onClick={toggleDarkMode} color="dark" outline>
+      <NightIcon />
+    </Button>
+  )
 }
