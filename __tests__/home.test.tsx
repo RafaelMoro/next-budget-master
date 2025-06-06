@@ -35,5 +35,21 @@ describe('Home', () => {
       await user.click(signInButton)
       expect(await screen.findByText(/Correo electrónico inválido/i))
     })
+
+    it('Given a user filling the email wrong, show invalid email error ', async () => {
+      const user = userEvent.setup()
+      const push = jest.fn();
+      render(
+        <AppRouterContextProviderMock router={{ push }}>
+          <Home />
+        </AppRouterContextProviderMock>
+      )
+    
+      const emailInput = screen.getByLabelText(/correo electrónico/i)
+      await user.type(emailInput, 'correo-electronico@a')
+      const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
+      await user.click(signInButton)
+      expect(await screen.findByText(/Correo electrónico inválido/i))
+    })
   })
 })
