@@ -6,6 +6,10 @@ import Home from '../src/app/page'
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
  
 describe('Home', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
   it('Show the login page', () => {
     const push = jest.fn();
     render(
@@ -22,7 +26,7 @@ describe('Home', () => {
   })
 
   describe('Validation form', () => {
-    it('Validate email showing error if it is empty ', async () => {
+    it('Given the email being empty, show an error to the user', async () => {
       const user = userEvent.setup()
       const push = jest.fn();
       render(
@@ -32,8 +36,10 @@ describe('Home', () => {
       )
     
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
+      const pwdInput = screen.getByLabelText(/contraseña/i)
+      await user.type(pwdInput, '1')
       await user.click(signInButton)
-      expect(await screen.findByText(/Correo electrónico inválido/i))
+      expect(await screen.findByText(/Correo electrónico es requerido/i))
     })
 
     it('Given a user filling the email wrong, show invalid email error ', async () => {
@@ -45,6 +51,8 @@ describe('Home', () => {
         </AppRouterContextProviderMock>
       )
     
+      const pwdInput = screen.getByLabelText(/contraseña/i)
+      await user.type(pwdInput, '1')
       const emailInput = screen.getByLabelText(/correo electrónico/i)
       await user.type(emailInput, 'correo-electronico@a')
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
