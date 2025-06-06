@@ -60,7 +60,7 @@ export const LoginCard =  () => {
           <div className="mb-2 block">
             <Label htmlFor="email1">Correo Electrónico</Label>
           </div>
-          <TextInput value={email} id="email1" type="email" placeholder="name@flowbite.com" required onChange={handleEmail} />
+          <TextInput value={email} id="email1" type="email" placeholder="correo-electrónico@gmail.com" required onChange={handleEmail} />
           { emailError && (
             <p className="text-red-500 text-sm mt-1">{emailError}</p>
           )}
