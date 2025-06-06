@@ -10,3 +10,6 @@ export interface FormError {
   path: string[];
   code: string;
 }
+
+// Routes
+export const DASHBOARD_ROUTE = '/dashboard';

@@ -1,5 +1,6 @@
 "use client"
 import { FormEvent, useState, useEffect } from "react";
+import { redirect } from "next/navigation";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -7,6 +8,7 @@ import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError, LoginSchema } from "@/shared/types/Login.types";
 import { LoginData, LoginMutationFn, LoginPayload } from "./LoginCard.utils";
+import { DASHBOARD_ROUTE } from "@/shared/types/Global";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
@@ -23,9 +25,8 @@ export const LoginCard =  () => {
   }
   const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<LoginData, LoginError, LoginPayload>({
     mutationFn: LoginMutationFn,
-    onSuccess: (response) => {
-      // Save data in local storage
-      console.log('response', response)
+    onSuccess: () => {
+      redirect(DASHBOARD_ROUTE)
     }
   })
   const messageError = error?.response?.data?.error?.error
