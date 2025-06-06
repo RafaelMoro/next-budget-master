@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event'
 
 import Home from '../src/app/page'
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
+import { DASHBOARD_ROUTE } from '@/shared/types/Global';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -156,7 +157,7 @@ describe('Home', () => {
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
       await user.click(signInButton)
       await waitFor(() => {
-        expect(push).toHaveBeenCalledWith('/dashboard')
+        expect(push).toHaveBeenCalledWith(DASHBOARD_ROUTE)
       }, { timeout: 2000 })
     })
   })
