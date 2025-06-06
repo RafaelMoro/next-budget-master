@@ -1,14 +1,5 @@
-export interface ZodError {
-  validation: string;
-  code: string;
+export interface YupError {
   message: string;
-  path: string[];
-}
-
-export interface FormError {
-  message: string;
-  path: string[];
-  code: string;
 }
 
 // Routes
