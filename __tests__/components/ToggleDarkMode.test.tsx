@@ -17,4 +17,15 @@ describe('ToggleDarkMode', () => {
     await user.click(button)
     expect(document.documentElement.getAttribute('data-theme')).toBe('light')
   })
+
+  it('Given a user clicking the button twice, it should return to dark mode', async() => {
+    const user = userEvent.setup()
+    render(<ToggleDarkMode />)
+
+    const button = screen.getByTestId('toggle-theme-mode-button')
+    await user.click(button)
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    await user.click(button)
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+  })
 })
