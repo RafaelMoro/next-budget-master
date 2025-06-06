@@ -17,7 +17,7 @@ export interface LoginPayload {
   password: string;
 }
 
-export const LoginMutationFn = (data: LoginPayload) => {
+export const LoginMutationFn = (data: LoginPayload): Promise<LoginData> => {
   const uri = `${process.env.NEXT_PUBLIC_BACKEND_URI}/auth/local`
   return axios.post(uri, data)
 }

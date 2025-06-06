@@ -1,11 +1,13 @@
 "use client"
 import { FormEvent, useState } from "react";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
+import { useMutation } from "@tanstack/react-query";
+
 import { LoginSchema } from "@/shared/types/Login.schema";
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
-import { LoginMutationFn, LoginPayload } from "./LoginCard.utils";
-import { useMutation } from "@tanstack/react-query";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
+import { LoginError } from "@/shared/types/Login.types";
+import { LoginData, LoginMutationFn, LoginPayload } from "./LoginCard.utils";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
@@ -21,15 +23,14 @@ export const LoginCard =  () => {
   const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   }
-
-  const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation({
+  const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<LoginData, LoginError, LoginPayload>({
     mutationFn: LoginMutationFn,
     onSuccess: (response) => {
       // Save data in local storage
       console.log('response', response)
     }
   })
-  const messageError: string = error?.response?.data?.error?.error
+  const messageError = error?.response?.data?.error?.error
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
