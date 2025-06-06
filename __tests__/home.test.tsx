@@ -1,14 +1,22 @@
 import '@testing-library/jest-dom'
+import axios from 'axios';
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Home from '../src/app/page'
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
- 
+
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Home', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
   });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  })
 
   it('Show the login page', () => {
     const push = jest.fn();
@@ -16,7 +24,7 @@ describe('Home', () => {
       <AppRouterContextProviderMock router={{ push }}>
         <Home />
       </AppRouterContextProviderMock>
-  )
+    )
  
     expect(screen.getByRole('heading', { name: /bienvenido de vuelta/i })).toBeInTheDocument()
     expect(screen.getByText(/ingrese sus credenciales para entrar a su cuenta\./i)).toBeInTheDocument()
@@ -72,6 +80,48 @@ describe('Home', () => {
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
       await user.click(signInButton)
       expect(await screen.findByText(/Contraseña es requerida/i))
+    })
+  })
+
+  describe('Send login form validations', () => {
+    it('Given a user entering wrong email or password, show error', async () => {
+      const user = userEvent.setup()
+      const push = jest.fn();
+      mockedAxios.post.mockRejectedValue({
+        code: 'ERR_BAD_REQUEST',
+        config: null,
+        message: 'Request failed with status code 401',
+        name: 'AxiosError',
+        request: null,
+        response: {
+          config: null,
+          data: {
+            data: null,
+            error: {
+              error: 'Unauthorized',
+              message: 'Email or Password incorrect.',
+              statusCode: 401
+            },
+            message: null,
+            success: false,
+            version: '1.2.0'
+          }
+        }
+      })
+
+      render(
+        <AppRouterContextProviderMock router={{ push }}>
+          <Home />
+        </AppRouterContextProviderMock>
+      )
+
+      const pwdInput = screen.getByLabelText(/contraseña/i)
+      await user.type(pwdInput, '123')
+      const emailInput = screen.getByLabelText(/correo electrónico/i)
+      await user.type(emailInput, 'correo-electronico@a.com')
+      const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
+      await user.click(signInButton)
+      expect(await screen.findByText(/Correo electronico o contraseña incorrecta/i))
     })
   })
 })
