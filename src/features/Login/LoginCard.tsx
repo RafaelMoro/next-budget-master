@@ -70,7 +70,7 @@ export const LoginCard =  () => {
           </div>
           <TextInput value={password} onChange={handlePassword} id="password1" type="password" required />
         </div>
-        <Button type="submit">
+        <Button disabled={isPending || isSuccess} type="submit">
           { isIdle && 'Iniciar sesión'}
           { isPending && (<Spinner aria-label="loading login budget master" />) }
           { isSuccess && (<CheckIcon />)}
