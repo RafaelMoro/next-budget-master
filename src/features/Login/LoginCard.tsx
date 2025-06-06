@@ -1,10 +1,11 @@
 "use client"
 import { FormEvent, useState } from "react";
-import { Card, Button, Label, TextInput } from "flowbite-react";
+import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 import { LoginSchema } from "@/shared/types/Login.schema";
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { LoginMutationFn, LoginPayload } from "./LoginCard.utils";
 import { useMutation } from "@tanstack/react-query";
+import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 
 export const LoginCard =  () => {
   const [email, setEmail] = useState("");
@@ -21,7 +22,7 @@ export const LoginCard =  () => {
     setPassword(event.target.value);
   }
 
-  const { mutate: loginMutation, isError, isPending, isSuccess, error } = useMutation({
+  const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation({
     mutationFn: LoginMutationFn,
     onSuccess: (response) => {
       // Save data in local storage
@@ -69,11 +70,13 @@ export const LoginCard =  () => {
           </div>
           <TextInput value={password} onChange={handlePassword} id="password1" type="password" required />
         </div>
-        <Button type="submit">Iniciar sesión</Button>
+        <Button type="submit">
+          { isIdle && 'Iniciar sesión'}
+          { isPending && (<Spinner aria-label="loading login budget master" />) }
+          { isSuccess && (<CheckIcon />)}
+        </Button>
       </form>
-      { isError && (<p>{messageError}</p>)}
-      { isPending && (<p>Loading...</p>)}
-      { isSuccess && (<p>Success!</p>)}
+      { isError && (<p className="text-red-500 text-sm mt-1">{messageError}</p>)}
     </Card>
   )
 }
