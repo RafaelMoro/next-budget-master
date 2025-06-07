@@ -52,7 +52,7 @@ export type InputsPersonalInformation = {
 
 export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> = object({
   firstName: string().required('Primer nombre es requerido').min(2, 'El primer nombre debe tener al menos 2 caracteres'),
-  middleName: string().min(2, 'El segundo nombre debe tener al menos 2 caracteres'),
+  middleName: string().optional(),
   lastName: string().required('Apellido es requerido').min(2, 'El apellido debe tener al menos 2 caracteres')
 })
 
