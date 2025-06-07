@@ -1,15 +1,15 @@
-export interface AccountBank {
+export type AccountBank<TType, TAmount = number> = {
   _id: string;
-  title: string;
+  title: TType;
   accountType: string;
   backgroundColor: string;
   color: string;
-  amount: number;
+  amount: TAmount;
   sub: string;
 }
 
 export type GetAccountResponse = {
   data: {
-    accounts: AccountBank[];
+    accounts: AccountBank<string, number>[];
   }
 }
