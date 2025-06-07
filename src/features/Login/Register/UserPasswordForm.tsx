@@ -1,16 +1,17 @@
 "use client"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation } from "@tanstack/react-query";
 import { Card, Button, Label, TextInput } from "flowbite-react";
 
-import { CreateUserData, CreateUserError, InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.types";
+import { InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.types";
 
 interface UserRegistrationFormProps {
   goBack: () => void;
+  goNext: () => void;
+  updateUserPasswordInfo: (data: InputsUserPassword) => void;
 }
 
-export const UserRegistrationForm = ({ goBack }: UserRegistrationFormProps) => {
+export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, goNext }: UserRegistrationFormProps) => {
   const {
     register,
     handleSubmit,
@@ -19,16 +20,10 @@ export const UserRegistrationForm = ({ goBack }: UserRegistrationFormProps) => {
     resolver: yupResolver(UserAndPasswordSchema)
   })
 
-  const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateUserData, CreateUserError, InputsUserPassword>({
-      mutationFn: LoginMutationFn,
-      onSuccess: () => {
-        // setTimeout(() => {
-        //   router.push(DASHBOARD_ROUTE)
-        // }, 1000)
-      }
-    })
-
-  const onSubmit: SubmitHandler<InputsUserPassword> = () => {}
+  const onSubmit: SubmitHandler<InputsUserPassword> = (data) => {
+    updateUserPasswordInfo(data)
+    goNext()
+  }
 
   return (
     <Card className="max-w-sm">
