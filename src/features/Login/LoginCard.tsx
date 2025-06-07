@@ -9,7 +9,7 @@ import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { ERROR_EMAIL_REQUIRED, ERROR_INVALID_EMAIL, ERROR_PASSWORD_REQUIRED, ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError, LoginSchema } from "@/shared/types/Login.types";
 import { LoginMutationFn } from "./LoginCard.utils";
-import { DASHBOARD_ROUTE } from "@/shared/types/Global";
+import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { LoginData, LoginPayload } from "@/shared/types/Login.types";
 
 export const LoginCard =  () => {
