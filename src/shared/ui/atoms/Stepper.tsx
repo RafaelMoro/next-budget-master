@@ -19,13 +19,13 @@ export const Stepper = ({ steps, currentStep }: StepperProps) => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 md:px-0">
-      <ul aria-label="Steps" className="items-center text-gray-600 font-medium md:flex">
+      <ul aria-label="Steps" className="items-center text-gray-600 dark:text-gray-400 font-medium md:flex">
         {stepState.allSteps.map((item, index) => (
           <li key={item} aria-current={stepState.currentStep === index + 1 ? "step" : false} className="flex-1 last:flex-none flex md:items-center">
               <div className="flex gap-x-3">
                   <div className="flex items-center flex-col gap-x-2">
-                      <div className={`w-8 h-8 rounded-full border-2 flex-none flex items-center justify-center ${stepState.currentStep > index + 1 && "bg-indigo-600 border-indigo-600" || stepState.currentStep === index + 1 && "border-indigo-600"}`}>
-                          <span className={` ${stepState.currentStep > index + 1 && "hidden" || stepState.currentStep === index + 1 && "text-indigo-600"}`}>
+                      <div className={`w-8 h-8 rounded-full border-2 flex-none flex items-center justify-center ${stepState.currentStep > index + 1 && "bg-indigo-600 dark:bg-indigo-500 border-indigo-600 dark:border-indigo-500" || stepState.currentStep === index + 1 && "border-indigo-600"}`}>
+                          <span className={` ${stepState.currentStep > index + 1 && "hidden" || stepState.currentStep === index + 1 && "text-indigo-600 dark:text-indigo-400"}`}>
                               {index + 1}
                           </span>
                           {
@@ -37,13 +37,13 @@ export const Stepper = ({ steps, currentStep }: StepperProps) => {
                           }
                       </div>
                       <div className={`h-12 flex items-center md:hidden ${index + 1 === stepState.allSteps.length && "hidden"}`}>
-                          <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-500">
+                          <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-500 dark:text-gray-400">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                           </svg>
                       </div>
                   </div>
                   <div className="h-8 flex items-center md:h-auto">
-                      <h3 className={`text-sm ${stepState.currentStep == index + 1 && "text-indigo-600"}`}>
+                      <h3 className={`text-sm ${stepState.currentStep == index + 1 && "text-indigo-600 dark:text-indigo-500"}`}>
                           {item}
                       </h3>
                   </div>
