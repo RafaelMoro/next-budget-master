@@ -7,10 +7,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { InputsPersonalInformation, PersonalInformationSchema } from "@/shared/types/Login.types";
 
 interface PersonalInformationProps {
+  updatePersonalInformation: (data: InputsPersonalInformation) => void;
   nextCb: () => void;
 }
 
-export const PersonalInformation = ({ nextCb }: PersonalInformationProps) => {
+export const PersonalInformation = ({ nextCb, updatePersonalInformation }: PersonalInformationProps) => {
   const {
     register,
     handleSubmit,
@@ -19,7 +20,7 @@ export const PersonalInformation = ({ nextCb }: PersonalInformationProps) => {
     resolver: yupResolver(PersonalInformationSchema)
   })
   const onSubmit: SubmitHandler<InputsPersonalInformation> = (data) => {
-    console.log(data)
+    updatePersonalInformation(data)
     nextCb()
   }
 

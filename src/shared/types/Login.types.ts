@@ -50,6 +50,10 @@ export type InputsPersonalInformation = {
   lastName: string
 }
 
+export type FormDataRegister = {
+  personalInformation: InputsPersonalInformation | null
+}
+
 export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> = object({
   firstName: string().required('Primer nombre es requerido').min(2, 'El primer nombre debe tener al menos 2 caracteres'),
   middleName: string().optional(),
