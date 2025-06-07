@@ -32,18 +32,27 @@ export const UserRegistrationForm = ({ goBack }: UserRegistrationFormProps) => {
             <Label htmlFor="email">Correo electrónico</Label>
           </div>
           <TextInput id="email" type="email" {...register("email")} />
+          { errors?.email?.message && (
+            <p className="text-red-500 text-sm mt-1">{errors?.email?.message}</p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="password">Contraseña</Label>
           </div>
           <TextInput id="password" type="password" {...register("password")} />
+          { errors?.password?.message && (
+            <p className="text-red-500 text-sm mt-1">{errors?.password?.message}</p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="confirmPasswprd">Confirmar Contraseña</Label>
           </div>
           <TextInput type="password" id="confirmPassword" {...register("confirmPassword")} />
+          { errors?.confirmPassword?.message && (
+            <p className="text-red-500 text-sm mt-1">{errors?.confirmPassword?.message}</p>
+          )}
         </div>
         <Button className="hover:cursor-pointer" outline onClick={goBack}>Regresar</Button>
         <Button type="submit" className="hover:cursor-pointer">
