@@ -3,6 +3,7 @@ import { useState } from "react"
 
 import { Stepper } from "@/shared/ui/atoms/Stepper"
 import { Header } from "@/shared/ui/organisms/Header"
+import { PersonalInformation } from "@/features/Login/Register/PersonalInformation"
 
 export default function RegisterPage() {
   const steps = new Set(["Personal Information", "Set user and password"])
@@ -11,9 +12,12 @@ export default function RegisterPage() {
   const prevStep = () => setCurrentStep((prev) => prev - 1)
 
   return (
-    <div>
+    <div className="min-h-screen w-full flex flex-col">
       <Header />
       <Stepper steps={steps} currentStep={currentStep} />
+      <div className="flex-1 flex justify-center items-center">
+        { currentStep === 1 && (<PersonalInformation />)}
+      </div>
     </div>
   )
 }

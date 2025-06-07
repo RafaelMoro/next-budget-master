@@ -16,9 +16,10 @@ export const PersonalInformation = () => {
 
   return (
     <Card className="max-w-sm">
-      <h5 className="text-2xl text-gray-900 dark:text-white">
-        Ingrese sus credenciales para entrar a su cuenta.
+      <h5 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+        Crear cuenta.
       </h5>
+      <p className="text-xl text-black dark:text-white">Llene la siguiente información para crear su cuenta.</p>
       <form onSubmit={(event) => handleSubmit(event)} className="flex max-w-md flex-col gap-4">
         <div>
           <div className="mb-2 block">
