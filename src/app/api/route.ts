@@ -1,6 +1,7 @@
 import axios from "axios";
 import { type NextResponse, type NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
+import { parseSetCookie } from "@/shared/utils/parseCookie";
 
 export async function POST(request: NextRequest) {
   const payload = await request.json()
@@ -9,6 +10,8 @@ export async function POST(request: NextRequest) {
   const cookiesReceived = res.headers['set-cookie']
   if (cookiesReceived) {
     const [cookie] = cookiesReceived
+    const cookieTransformed = parseSetCookie(cookie)
+    console.log('cookie', {cookieTransformed})
   }
   return new Response('Logged in', {
     status: 201
