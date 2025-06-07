@@ -25,7 +25,11 @@ export const saveSessionCookie = (session: string): void => {
 
 export const getAccessToken = async () => {
   const secretKey = process.env.SESSION_SECRET_KEY!
-  const session = cookies().get(COOKIE_SESSION_KEY)?.value ?? ''
+  const session = cookies().get(COOKIE_SESSION_KEY)?.value
+  if (!session) {
+    console.log('No session cookie found')
+    return ''
+  }
   const encodedKey = new TextEncoder().encode(secretKey)
   const jwtDecoded = await jwtVerify(session, encodedKey)
   const accessToken = jwtDecoded?.payload?.accessToken as string
