@@ -1,9 +1,10 @@
 import { GetAccountResponse } from '@/shared/types/Accounts.types'
 import { cookies } from 'next/headers'
 import { Card } from "flowbite-react";
+import { COOKIE_SESSION_KEY } from '@/shared/constants/Global.constants';
 
 export default async function DashboardPage () {
-  const accessToken = cookies().get('accessToken')?.value
+  const accessToken = cookies().get(COOKIE_SESSION_KEY)?.value
   const res = await fetch('http://localhost:6006/account-actions', {
     headers: {
       'Authorization': `Bearer ${accessToken}`
