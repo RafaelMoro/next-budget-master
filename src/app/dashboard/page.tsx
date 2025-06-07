@@ -1,10 +1,15 @@
+import { jwtVerify } from 'jose';
 import { GetAccountResponse } from '@/shared/types/Accounts.types'
 import { cookies } from 'next/headers'
 import { Card } from "flowbite-react";
 import { COOKIE_SESSION_KEY } from '@/shared/constants/Global.constants';
 
 export default async function DashboardPage () {
-  const accessToken = cookies().get(COOKIE_SESSION_KEY)?.value
+  const secretKey = process.env.SESSION_SECRET_KEY!
+  const session = cookies().get(COOKIE_SESSION_KEY)?.value ?? ''
+  const encodedKey = new TextEncoder().encode(secretKey)
+  const jwtDecoded = await jwtVerify(session, encodedKey)
+  const accessToken = jwtDecoded?.payload?.accessToken as string
   const res = await fetch('http://localhost:6006/account-actions', {
     headers: {
       'Authorization': `Bearer ${accessToken}`

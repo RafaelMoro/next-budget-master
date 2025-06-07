@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     const secretKey = process.env.SESSION_SECRET_KEY!
     const encodedKey = new TextEncoder().encode(secretKey)
     const expiredAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
-    const session = await new SignJWT({ cookieValue })
+    const session = await new SignJWT({ accessToken: cookieValue })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
       .setExpirationTime(expiredAt)
@@ -27,9 +27,15 @@ export async function POST(request: NextRequest) {
       secure: true,
       sameSite: 'strict',
     })
+    return new Response(JSON.stringify(res.data), {
+      status: 201,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
   }
-  return new Response(JSON.stringify(res.data), {
-    status: 201,
+  return new Response(JSON.stringify({ message: 'missing cookie' }), {
+    status: 400,
     headers: {
       'Content-Type': 'application/json'
     }
