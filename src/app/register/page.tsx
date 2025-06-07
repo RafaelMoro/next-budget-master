@@ -16,7 +16,7 @@ export default function RegisterPage() {
       <Header />
       <Stepper steps={steps} currentStep={currentStep} />
       <div className="flex-1 flex justify-center items-center">
-        { currentStep === 1 && (<PersonalInformation />)}
+        { currentStep === 1 && (<PersonalInformation nextCb={nextStep} />)}
       </div>
     </div>
   )
