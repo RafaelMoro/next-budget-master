@@ -16,14 +16,17 @@ describe('UserRegistrationForm', () => {
   it('should allow typing in the input fields', async () => {
     const user = userEvent.setup()
     render(<UserRegistrationForm goBack={jest.fn()} />)
+  
     const emailInput = screen.getByLabelText(/Correo electrónico/i)
     // Use getAllByLabelText for Contraseña
     const passwordInputs = screen.getAllByLabelText(/Contraseña/i)
     const passwordInput = passwordInputs[0]
     const confirmPasswordInput = screen.getByLabelText(/Confirmar Contraseña/i)
+  
     await user.type(emailInput, 'testuser@example.com')
     await user.type(passwordInput, 'password123')
     await user.type(confirmPasswordInput, 'password123')
+
     expect(emailInput).toHaveValue('testuser@example.com')
     expect(passwordInput).toHaveValue('password123')
     expect(confirmPasswordInput).toHaveValue('password123')
@@ -33,6 +36,7 @@ describe('UserRegistrationForm', () => {
     const user = userEvent.setup()
     const goBack = jest.fn()
     render(<UserRegistrationForm goBack={goBack} />)
+  
     const backButton = screen.getByRole('button', { name: /Regresar/i })
     await user.click(backButton)
     expect(goBack).toHaveBeenCalled()
