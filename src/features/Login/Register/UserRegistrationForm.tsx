@@ -8,10 +8,11 @@ import { InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.
 interface UserRegistrationFormProps {
   goBack: () => void;
   goNext: () => void;
+  submitForm: () => void;
   updateUserPasswordInfo: (data: InputsUserPassword) => void;
 }
 
-export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, goNext }: UserRegistrationFormProps) => {
+export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, goNext, submitForm }: UserRegistrationFormProps) => {
   const {
     register,
     handleSubmit,
@@ -23,6 +24,7 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, goNext }:
   const onSubmit: SubmitHandler<InputsUserPassword> = (data) => {
     updateUserPasswordInfo(data)
     goNext()
+    submitForm()
   }
 
   return (
