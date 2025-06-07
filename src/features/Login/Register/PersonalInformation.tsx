@@ -1,6 +1,7 @@
 "use client"
 import { FormEvent, useState } from "react";
 import { Card, Button, Label, TextInput } from "flowbite-react";
+import Link from "next/link";
 
 export const PersonalInformation = () => {
   const [firstName, setfirstName] = useState("");
@@ -39,7 +40,7 @@ export const PersonalInformation = () => {
           </div>
           <TextInput value={lastName} onChange={handleChangeLasttName} id="middleName" type="text" />
         </div>
-        <Button className="hover:cursor-pointer" outline>Volver</Button>
+        <Link className="relative flex items-center justify-center rounded-lg text-center font-medium focus:outline-none focus:ring-4 h-10 px-5 text-sm border border-primary-700 text-primary-700 hover:border-primary-800 hover:bg-primary-800 hover:text-white focus:ring-primary-300 dark:border-primary-600 dark:text-primary-500 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-800" href="/">Volver</Link>
         <Button className="hover:cursor-pointer">
           Siguiente
         </Button>
