@@ -1,5 +1,5 @@
 import type { AxiosError, AxiosResponse } from "axios";
-import { object, string } from "yup";
+import { object, ObjectSchema, string } from "yup";
 
 export interface LoginData {
   data: {
@@ -42,5 +42,17 @@ export const ERROR_INVALID_EMAIL = 'Correo electrónico inválido';
 export const LoginSchema = object({
   email: string().required(ERROR_EMAIL_REQUIRED).matches(emailRegex, ERROR_INVALID_EMAIL),
   password: string().required(ERROR_PASSWORD_REQUIRED)
+})
+
+export type InputsPersonalInformation = {
+  firstName: string
+  middleName?: string
+  lastName: string
+}
+
+export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> = object({
+  firstName: string().required('Primer nombre es requerido').min(2, 'El primer nombre debe tener al menos 2 caracteres'),
+  middleName: string().min(2, 'El segundo nombre debe tener al menos 2 caracteres'),
+  lastName: string().required('Apellido es requerido').min(2, 'El apellido debe tener al menos 2 caracteres')
 })
 
