@@ -10,7 +10,11 @@ import { FormDataRegister, InputsPersonalInformation } from "@/shared/types/Logi
 export default function RegisterPage() {
   const [currentStep, setCurrentStep] = useState<number>(1)
   const formData = useRef<FormDataRegister>({
-    personalInformation: null
+    personalInformation: {
+      firstName: "",
+      middleName: "",
+      lastName: ""
+    }
   })
   const steps = new Set(["Personal Information", "Set user and password"])
   const nextStep = () => setCurrentStep((prev) => prev + 1)
@@ -25,7 +29,12 @@ export default function RegisterPage() {
       <Header />
       <Stepper steps={steps} currentStep={currentStep} />
       <div className="flex-1 flex justify-center items-center">
-        { currentStep === 1 && (<PersonalInformation nextCb={nextStep} updatePersonalInformation={updatePersonalInformation} />)}
+        { currentStep === 1 && (
+          <PersonalInformation
+            nextCb={nextStep}
+            personalInformation={formData.current.personalInformation}
+            updatePersonalInformation={updatePersonalInformation}
+          />)}
         { currentStep === 2 && (<UserRegistrationForm goBack={prevStep} />) }
       </div>
     </div>

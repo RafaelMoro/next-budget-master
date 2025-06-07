@@ -7,11 +7,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { InputsPersonalInformation, PersonalInformationSchema } from "@/shared/types/Login.types";
 
 interface PersonalInformationProps {
+  personalInformation: InputsPersonalInformation;
   updatePersonalInformation: (data: InputsPersonalInformation) => void;
   nextCb: () => void;
 }
 
-export const PersonalInformation = ({ nextCb, updatePersonalInformation }: PersonalInformationProps) => {
+export const PersonalInformation = ({ nextCb, personalInformation, updatePersonalInformation }: PersonalInformationProps) => {
   const {
     register,
     handleSubmit,
@@ -35,7 +36,7 @@ export const PersonalInformation = ({ nextCb, updatePersonalInformation }: Perso
           <div className="mb-2 block">
             <Label htmlFor="firstName">Primer Nombre</Label>
           </div>
-          <TextInput id="firstName" type="text" {...register("firstName")} />
+          <TextInput defaultValue={personalInformation.firstName} id="firstName" type="text" {...register("firstName")} />
           { errors?.firstName?.message && (
             <p className="text-red-500 text-sm mt-1">{errors?.firstName?.message}</p>
           )}
@@ -44,7 +45,7 @@ export const PersonalInformation = ({ nextCb, updatePersonalInformation }: Perso
           <div className="mb-2 block">
             <Label htmlFor="middleName">Segundo Nombre (Opcional)</Label>
           </div>
-          <TextInput id="middleName" type="text" {...register("middleName")} />
+          <TextInput defaultValue={personalInformation.middleName} id="middleName" type="text" {...register("middleName")} />
           { errors?.middleName?.message && (
             <p className="text-red-500 text-sm mt-1">{errors?.middleName?.message}</p>
           )}
@@ -53,7 +54,7 @@ export const PersonalInformation = ({ nextCb, updatePersonalInformation }: Perso
           <div className="mb-2 block">
             <Label htmlFor="lastName">Apellido</Label>
           </div>
-          <TextInput id="lastName" type="text" {...register("lastName")} />
+          <TextInput id="lastName" defaultValue={personalInformation.lastName} type="text" {...register("lastName")} />
           { errors?.lastName?.message && (
             <p className="text-red-500 text-sm mt-1">{errors?.lastName?.message}</p>
           )}

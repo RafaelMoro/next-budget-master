@@ -51,7 +51,7 @@ export type InputsPersonalInformation = {
 }
 
 export type FormDataRegister = {
-  personalInformation: InputsPersonalInformation | null
+  personalInformation: InputsPersonalInformation
 }
 
 export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> = object({
