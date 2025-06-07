@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Stepper } from "@/shared/ui/atoms/Stepper"
 import { Header } from "@/shared/ui/organisms/Header"
 import { PersonalInformation } from "@/features/Login/Register/PersonalInformation"
+import { UserRegistrationForm } from "@/features/Login/Register/UserPasswordForm"
 
 export default function RegisterPage() {
   const steps = new Set(["Personal Information", "Set user and password"])
@@ -17,6 +18,7 @@ export default function RegisterPage() {
       <Stepper steps={steps} currentStep={currentStep} />
       <div className="flex-1 flex justify-center items-center">
         { currentStep === 1 && (<PersonalInformation nextCb={nextStep} />)}
+        { currentStep === 2 && (<UserRegistrationForm goBack={prevStep} />) }
       </div>
     </div>
   )
