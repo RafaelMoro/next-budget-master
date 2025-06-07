@@ -1,18 +1,31 @@
+import { GetAccountResponse } from '@/shared/types/Accounts.types'
 import { cookies } from 'next/headers'
-export default async function DashboardPage () {
-  const cookie = cookies().get('accessToken')
-  console.log('cookie', cookie)
-  const hardcodedCookie = 'accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTZjZTJhYmZlMzgwNjg0NjY1ZTkyYTMiLCJpYXQiOjE3NDkyNjE3NTgsImV4cCI6MTc0OTY5Mzc1OH0.zd73FvC_HxLA6XpPZ8vRG96x4p1gTixB3OM3MJQy73U; Max-Age=432000; Path=/; Expires=Thu, 12 Jun 2025 02:02:38 GMT; HttpOnly'
+import { Card } from "flowbite-react";
 
-  const data = await fetch('http://localhost:6006/account-actions', {
-    credentials: 'include',
+export default async function DashboardPage () {
+  const accessToken = cookies().get('accessToken')?.value
+  const res = await fetch('http://localhost:6006/account-actions', {
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': hardcodedCookie
+      'Authorization': `Bearer ${accessToken}`
     }
   })
-  console.log('data', data)
+  const data: GetAccountResponse = await res.json()
+  const { data: { accounts } } = data;
+
   return (
-    <h1 className="text-black dark:text-white text-4xl text-center font-bold">Dashboard</h1>
+    <div className='grid grid-col-3 gap-4 justify-items-center'>
+      <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Accounts</h1>
+      { accounts.map((account) => (
+        <Card key={account._id} href="#" className="max-w-sm">
+          <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            {account.title}
+          </h5>
+          <p className="font-normal text-gray-700 dark:text-gray-400">
+            {account.amount}
+          </p>
+        </Card>
+      )) }
+    </div>
   )
 }
+
