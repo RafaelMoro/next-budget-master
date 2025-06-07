@@ -1,6 +1,7 @@
 "use server"
-import { SignJWT } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 import { cookies } from 'next/headers'
+import { COOKIE_SESSION_KEY } from "../constants/Global.constants";
 
 export const encodeAccessToken = async (cookieValue: string): Promise<string> => {
   const secretKey = process.env.SESSION_SECRET_KEY!
@@ -20,4 +21,13 @@ export const saveSessionCookie = (session: string): void => {
     secure: true,
     sameSite: 'strict',
   })
+}
+
+export const getAccessToken = async () => {
+  const secretKey = process.env.SESSION_SECRET_KEY!
+  const session = cookies().get(COOKIE_SESSION_KEY)?.value ?? ''
+  const encodedKey = new TextEncoder().encode(secretKey)
+  const jwtDecoded = await jwtVerify(session, encodedKey)
+  const accessToken = jwtDecoded?.payload?.accessToken as string
+  return accessToken
 }
