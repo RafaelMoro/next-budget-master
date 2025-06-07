@@ -78,8 +78,22 @@ export type InputsUserPassword = {
   confirmPassword: string
 }
 
+export type UserPasswordPayload = {
+  email: string
+  password: string
+}
+
 export type FormDataRegister = {
   personalInformation: InputsPersonalInformation
+  userPasswordInfo: UserPasswordPayload
+}
+
+export type CreateUserPayload = {
+  firstName: string
+  middleName: string
+  lastName: string
+  email: string
+  password: string
 }
 
 export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> = object({
