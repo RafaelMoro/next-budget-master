@@ -1,5 +1,5 @@
 import type { AxiosError, AxiosResponse } from "axios";
-import { object, ObjectSchema, string } from "yup";
+import { object, ObjectSchema, string, ref } from "yup";
 
 export interface LoginData {
   data: {
@@ -50,6 +50,12 @@ export type InputsPersonalInformation = {
   lastName: string
 }
 
+export type InputsUserPassword = {
+  email: string
+  password: string
+  confirmPassword: string
+}
+
 export type FormDataRegister = {
   personalInformation: InputsPersonalInformation
 }
@@ -60,3 +66,30 @@ export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> 
   lastName: string().required('Apellido es requerido').min(2, 'El apellido debe tener al menos 2 caracteres')
 })
 
+const emailValidation = string().email('Correo electronico inválido').required('Por favor, ingrese su correo electrónico');
+
+const passwordValidation = (requiredMessage: string, onlyRequired = false) => {
+  if (onlyRequired) return string().required(requiredMessage);
+  return string()
+    .required(requiredMessage)
+    .min(16, 'La contraseña debe tener al menos 16 caracteres. Ingrese más caracteres')
+    .max(40, 'La contraseña puede tener un máximo de 40 caracteres. Ha excedido los 40 caracteres')
+    .matches(/[A-Z]+/, 'La contraseña debe contener al menos 1 mayúscula')
+    .matches(/[a-z]+/, 'La contraseña debe contener al menos 1 minúscula')
+    .matches(/[0-9]+/, 'La contraseña debe contener al menos 1 número')
+    .matches(/^\S*$/, 'La contraseña no debe contener espacios en blanco.')
+    .matches(
+      /[!@#$%^&*()[\]{}+*\-_.,;:/<>?=`~\\|']+/,
+      'La contraseña debe contener al menos 1 caracter especial como !@#$%^&*()[]{}+*-_.,;:/<>?=`~|\\|',
+    );
+};
+
+const confirmPasswordValidation = string()
+  .required('Por favor, ingrese su contraseña nuevamente')
+  .oneOf([ref('password')], 'Contraseña y confirmar contraseña deben ser iguales.');
+
+export const UserAndPasswordSchema = object({
+  email: emailValidation,
+  password: passwordValidation('Por favor, ingrese una contraseña'),
+  confirmPassword: confirmPasswordValidation,
+});
