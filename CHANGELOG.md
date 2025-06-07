@@ -1,3 +1,9 @@
+## v0.5.0 (2025-06-07)
+
+### Pull Requests
+[#7](https://github.com/RafaelMoro/next-budget-master/pull/7) | Save cookie information from login
+
+
 ## v0.4.0 (2025-06-06)
 
 ### Pull Requests
