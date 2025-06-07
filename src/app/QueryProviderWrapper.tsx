@@ -1,5 +1,5 @@
 "use client"
-import { ReactNode, useState } from 'react'
+import { ReactNode, useRef } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // NEVER DO THIS:
@@ -15,9 +15,9 @@ interface QueryProviderWrapperProps {
 
 export default function QueryProviderWrapper({ children }: QueryProviderWrapperProps) {
   // Instead do this, which ensures each request has its own cache:
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
+  const queryClientRef = useRef<QueryClient>()
+  if (!queryClientRef.current) {
+     queryClientRef.current = new QueryClient({
         defaultOptions: {
           queries: {
             // With SSR, we usually want to set some default staleTime
@@ -25,11 +25,11 @@ export default function QueryProviderWrapper({ children }: QueryProviderWrapperP
             staleTime: 60 * 1000,
           },
         },
-      }),
-  )
+      })
+   }
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClientRef.current!}>
       {children}
     </QueryClientProvider>
   )
