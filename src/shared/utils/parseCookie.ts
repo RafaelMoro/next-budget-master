@@ -1,27 +1,37 @@
 type CookieObject = {
   name: string;
   value: string;
-  attributes: Record<string, string | boolean>;
+  options: Record<string, unknown>;
 };
 
-export function parseSetCookie(setCookieStr: string): CookieObject {
-  const parts = setCookieStr.split(";").map(part => part.trim());
+export function parseSetCookieString(setCookieStr: string): CookieObject {
+  // Split into [name=value, ...attributes]
+  const parts = setCookieStr.split(";").map(s => s.trim());
   const [nameValue, ...attrParts] = parts;
+  const eqIdx = nameValue.indexOf("=");
+  const name = nameValue.substring(0, eqIdx);
+  const value = nameValue.substring(eqIdx + 1);
 
-  // Split cookie name and value
-  const [name, ...valueParts] = nameValue.split("=");
-  const value = valueParts.join("=");
-
-  // Parse attributes
-  const attributes: Record<string, string | boolean> = {};
+  // Parse attributes into an object
+  const attrs: Record<string, string | boolean> = {};
   for (const attr of attrParts) {
-    const [attrName, ...attrValueParts] = attr.split("=");
-    if (attrValueParts.length > 0) {
-      attributes[attrName] = attrValueParts.join("=");
+    const [attrName, ...attrValParts] = attr.split("=");
+    const key = attrName.trim();
+    if (attrValParts.length > 0) {
+      attrs[key] = attrValParts.join("=").trim();
     } else {
-      attributes[attrName] = true; // For boolean flags like HttpOnly, Secure, etc.
+      attrs[key] = true;
     }
   }
 
-  return { name, value, attributes };
+  // Map Set-Cookie attributes to Next.js cookie options
+  const options: Record<string, unknown> = {};
+  if (attrs["Max-Age"]) options.maxAge = Number(attrs["Max-Age"]);
+  if (attrs["Path"]) options.path = attrs["Path"];
+  if (typeof attrs["Expires"] === "string") options.expires = new Date(attrs["Expires"]);
+  if (attrs["HttpOnly"]) options.httpOnly = true;
+  if (attrs["Secure"]) options.secure = true;
+  if (attrs["SameSite"]) options.sameSite = attrs["SameSite"];
+
+  return { name, value, options };
 }

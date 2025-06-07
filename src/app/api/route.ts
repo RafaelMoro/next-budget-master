@@ -1,7 +1,7 @@
 import axios from "axios";
 import { type NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
-import { parseSetCookie } from "@/shared/utils/parseCookie";
+import { parseSetCookieString } from "@/shared/utils/parseCookie";
 
 export async function POST(request: NextRequest) {
   const payload = await request.json()
@@ -11,15 +11,8 @@ export async function POST(request: NextRequest) {
   if (cookiesReceived) {
     const [cookie] = cookiesReceived
     console.log('cookie', cookie)
-    const cookieTransformed = parseSetCookie(cookie)
-    console.log('cookieTransformed', cookieTransformed)
-    const expire = cookieTransformed.attributes?.expires
-    cookies().set(cookieTransformed.name, cookieTransformed.value, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 4,
-      expires: typeof expire === 'string' ? new Date(expire) : new Date(),
-      sameSite: 'lax',
-    })
+    const cookieTransformed = parseSetCookieString(cookie)
+    cookies().set(cookieTransformed.name, cookieTransformed.value, cookieTransformed.options)
   }
   return new Response(JSON.stringify(res.data), {
     status: 201,
