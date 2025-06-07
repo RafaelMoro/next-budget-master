@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 
 import Home from '../src/app/page'
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
-import { DASHBOARD_ROUTE } from '@/shared/types/Global';
+import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
