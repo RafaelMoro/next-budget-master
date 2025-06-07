@@ -1,8 +1,10 @@
 "use client"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
 import { Card, Button, Label, TextInput } from "flowbite-react";
-import { InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.types";
+
+import { CreateUserData, CreateUserError, InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.types";
 
 interface UserRegistrationFormProps {
   goBack: () => void;
@@ -16,7 +18,15 @@ export const UserRegistrationForm = ({ goBack }: UserRegistrationFormProps) => {
   } = useForm<InputsUserPassword>({
     resolver: yupResolver(UserAndPasswordSchema)
   })
-  console.log('errors', errors)
+
+  const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateUserData, CreateUserError, InputsUserPassword>({
+      mutationFn: LoginMutationFn,
+      onSuccess: () => {
+        // setTimeout(() => {
+        //   router.push(DASHBOARD_ROUTE)
+        // }, 1000)
+      }
+    })
 
   const onSubmit: SubmitHandler<InputsUserPassword> = () => {}
 
