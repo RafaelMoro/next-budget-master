@@ -2,15 +2,12 @@
 import Link from "next/link";
 import { Card, Button, Label, TextInput } from "flowbite-react";
 import { useForm, SubmitHandler } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import { InputsPersonalInformation, PersonalInformationSchema } from "@/shared/types/Login.types";
 
 interface PersonalInformationProps {
   nextCb: () => void;
-}
-
-type Inputs = {
-  firstName: string
-  middleName: string
-  lastName: string
 }
 
 export const PersonalInformation = ({ nextCb }: PersonalInformationProps) => {
@@ -18,8 +15,10 @@ export const PersonalInformation = ({ nextCb }: PersonalInformationProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  } = useForm<InputsPersonalInformation>({
+    resolver: yupResolver(PersonalInformationSchema)
+  })
+  const onSubmit: SubmitHandler<InputsPersonalInformation> = (data) => {
     console.log(data)
     nextCb()
   }
