@@ -18,11 +18,33 @@ export interface LoginData {
   version: string;
 }
 
+export interface CreateUserData {
+  data: {
+    userCreated: {
+			email: string;
+			firstName: string;
+      middleName: string;
+      lastName: string;
+		}
+  }
+  error: null;
+  message: null;
+  success: boolean;
+  version: string;
+}
+
 export interface LoginPayload {
   email: string;
   password: string;
 }
 export interface LoginError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      error: string
+    }
+  }>;
+}
+export interface CreateUserError extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       error: string
