@@ -2,6 +2,7 @@ import axios from "axios";
 import { type NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 import { SignJWT } from "jose";
+import { getCookieProps } from "@/shared/utils/parseCookie";
 
 export async function POST(request: NextRequest) {
   const payload = await request.json()
@@ -11,11 +12,12 @@ export async function POST(request: NextRequest) {
 
   if (cookiesReceived) {
     const [cookie] = cookiesReceived
+    const { value: cookieValue } = getCookieProps(cookie)
 
     const secretKey = process.env.SESSION_SECRET_KEY!
     const encodedKey = new TextEncoder().encode(secretKey)
     const expiredAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
-    const session = await new SignJWT({ cookie })
+    const session = await new SignJWT({ cookieValue })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
       .setExpirationTime(expiredAt)
