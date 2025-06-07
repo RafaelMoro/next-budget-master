@@ -12,6 +12,7 @@ describe('PersonalInformation', () => {
     expect(screen.getByRole('link', { name: /Volver/i })).toBeInTheDocument()
   })
 
+  // TODO: Do validations tests instead of just filling the fields
   it.skip('should allow typing in the input fields', async () => {
     const user = userEvent.setup()
     render(<PersonalInformation nextCb={jest.fn()} />)
