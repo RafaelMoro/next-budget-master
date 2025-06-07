@@ -28,9 +28,9 @@ export const LoginCard =  () => {
   const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<LoginData, LoginError, LoginPayload>({
     mutationFn: LoginMutationFn,
     onSuccess: () => {
-      // setTimeout(() => {
-      //   router.push(DASHBOARD_ROUTE)
-      // }, 1000)
+      setTimeout(() => {
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
     }
   })
   const messageError = error?.response?.data?.error?.error
