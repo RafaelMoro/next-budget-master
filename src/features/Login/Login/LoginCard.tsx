@@ -1,10 +1,12 @@
 "use client"
+import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation'
-import { Card, Button, Label, TextInput, Spinner, Alert } from "flowbite-react";
+import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Toaster, toast } from 'sonner'
 
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
@@ -12,12 +14,8 @@ import { ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError,
 import { LoginMutationFn } from "./LoginCard.utils";
 import { DASHBOARD_ROUTE, ERROR_CREATE_USER_TITLE } from "@/shared/constants/Global.constants";
 import { LoginData, LoginPayload } from "@/shared/types/Login.types";
-import { useEffect, useState } from "react";
-import { AlertIcon } from "@/shared/ui/icons/AlertIcon";
 
 export const LoginCard =  () => {
-  const [showError, setShowError] = useState<boolean>(false)
-  const [loginErrorMessage, setLoginErrorMessage] = useState<string>("")
   const router = useRouter()
   const {
     register,
@@ -53,11 +51,10 @@ export const LoginCard =  () => {
   useEffect(() => {
     if (isError && messageError) {
       if (messageError === ERROR_UNAUTHORIZED_LOGIN) {
-        setLoginErrorMessage(ERROR_UNAUTHORIZED_LOGIN_MESSAGE);
-      } else {
-        setLoginErrorMessage(ERROR_CREATE_USER_TITLE);
+        toast.error(ERROR_UNAUTHORIZED_LOGIN_MESSAGE);
+        return
       }
-      setShowError(true)
+      toast.error(ERROR_CREATE_USER_TITLE);
     }
   }, [isError, messageError])
 
@@ -92,11 +89,8 @@ export const LoginCard =  () => {
           { isSuccess && (<CheckIcon />)}
         </Button>
       </form>
-      { (isError && showError) && (
-        <Alert color="red" onDismiss={() => setShowError(false)}>
-          <AlertIcon />
-          {loginErrorMessage}
-        </Alert>
+      { (isError) && (
+        <Toaster position="top-center" />
       )}
     </Card>
   )
