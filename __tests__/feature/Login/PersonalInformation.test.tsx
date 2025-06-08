@@ -58,7 +58,7 @@ describe('PersonalInformation', () => {
   })
 
   // Failing due validation
-  it.skip('should call nextCb when Siguiente button is clicked', async () => {
+  it('should call nextCb when Siguiente button is clicked', async () => {
     const user = userEvent.setup()
     const nextStep = jest.fn()
     const updatePersonalInformation = jest.fn()
@@ -76,6 +76,11 @@ describe('PersonalInformation', () => {
       />
     )
 
+    const firstNameInput = screen.getByLabelText('Primer Nombre')
+    const lastNameInput = screen.getByLabelText('Apellido')
+
+    await user.type(firstNameInput, 'John')
+    await user.type(lastNameInput, 'Doe')
     const button = screen.getByRole('button', { name: /Siguiente/i })
     await user.click(button)
     expect(nextStep).toHaveBeenCalled()
