@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Toaster, toast } from 'sonner'
-import { motion, AnimatePresence } from "motion/react"
+import { AnimatePresence } from "motion/react"
 
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
@@ -15,6 +15,7 @@ import { ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError,
 import { LoginMutationFn } from "./LoginCard.utils";
 import { DASHBOARD_ROUTE, ERROR_CREATE_USER_TITLE } from "@/shared/constants/Global.constants";
 import { LoginData, LoginPayload } from "@/shared/types/Login.types";
+import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 
 export const LoginCard =  () => {
   const router = useRouter()
@@ -72,7 +73,7 @@ export const LoginCard =  () => {
             </div>
             <TextInput id="email" type="email" placeholder="correo-electrónico@gmail.com" {...register("email")} />
             { errors.email?.message && (
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-red-500 text-sm mt-1">{errors.email?.message}</motion.p>
+              <ErrorMessage isAnimated>{errors.email?.message}</ErrorMessage>
             )}
           </div>
           <div>
@@ -81,7 +82,7 @@ export const LoginCard =  () => {
             </div>
             <TextInput id="password" type="password" {...register("password")} />
             { errors.password?.message && (
-              <p className="text-red-500 text-sm mt-1">{errors.password?.message}</p>
+              <ErrorMessage isAnimated>{errors.password?.message}</ErrorMessage>
             )}
           </div>
           <Link className="relative flex items-center justify-center rounded-lg text-center font-medium focus:outline-none focus:ring-4 h-10 px-5 text-sm border border-primary-700 text-primary-700 hover:border-primary-800 hover:bg-primary-800 hover:text-white focus:ring-primary-300 dark:border-primary-600 dark:text-primary-500 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-800" href="/register">Registrarse</Link>
