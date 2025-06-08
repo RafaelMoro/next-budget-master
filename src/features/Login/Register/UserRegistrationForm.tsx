@@ -46,16 +46,16 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitFor
           <div className="mb-2 block">
             <Label htmlFor="password">Contraseña</Label>
           </div>
-          <TextInput id="password" type="password" {...register("password")} />
+          <TextInput data-testid="password" id="password" type="password" {...register("password")} />
           { errors?.password?.message && (
             <p className="text-red-500 text-sm mt-1">{errors?.password?.message}</p>
           )}
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="confirmPasswprd">Confirmar Contraseña</Label>
+            <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
           </div>
-          <TextInput type="password" id="confirmPassword" {...register("confirmPassword")} />
+          <TextInput data-testid="confirmPassword" type="password" id="confirmPassword" {...register("confirmPassword")} />
           { errors?.confirmPassword?.message && (
             <p className="text-red-500 text-sm mt-1">{errors?.confirmPassword?.message}</p>
           )}

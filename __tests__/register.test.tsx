@@ -38,9 +38,9 @@ describe('Register', () => {
   
     expect(await screen.findByText(/Ingrese su correo electronico y contraseña\./i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /crear cuenta/i })).toBeInTheDocument()
-    // There should be two password inputs on the second step
-    const passwordInputs = Array.from(document.querySelectorAll('input[type="password"]'))
-    expect(passwordInputs.length).toBe(2)
+    expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument()
+    expect(screen.getByTestId('password')).toBeInTheDocument()
+    expect(screen.getByTestId(/confirmPassword/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /crear cuenta/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /regresar/i })).toBeInTheDocument()
   })
