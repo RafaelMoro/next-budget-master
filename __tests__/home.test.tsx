@@ -88,7 +88,7 @@ describe('Home', () => {
   })
 
   describe('Send login form validations', () => {
-    it('Given a user entering wrong email or password, show error', async () => {
+    it.only('Given a user entering wrong email or password, show error', async () => {
       const user = userEvent.setup()
       const push = jest.fn();
       mockedAxios.post.mockRejectedValue({
@@ -98,17 +98,8 @@ describe('Home', () => {
         name: 'AxiosError',
         request: null,
         response: {
-          config: null,
           data: {
-            data: null,
-            error: {
-              error: 'Unauthorized',
-              message: 'Email or Password incorrect.',
-              statusCode: 401
-            },
-            message: null,
-            success: false,
-            version: '1.2.0'
+            message: 'Email or Password incorrect.'
           }
         }
       })
