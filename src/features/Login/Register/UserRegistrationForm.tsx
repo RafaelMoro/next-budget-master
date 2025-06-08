@@ -5,6 +5,7 @@ import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 
 import { InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.types";
 import { AnimateBox } from "@/shared/ui/atoms/AnimateBox";
+import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 
 interface UserRegistrationFormProps {
   goBack: () => void;
@@ -42,7 +43,7 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitFor
             </div>
             <TextInput id="email" type="email" {...register("email")} />
             { errors?.email?.message && (
-              <p className="text-red-500 text-sm mt-1">{errors?.email?.message}</p>
+              <ErrorMessage isAnimated>{errors.email?.message}</ErrorMessage>
             )}
           </div>
           <div>
@@ -51,7 +52,7 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitFor
             </div>
             <TextInput data-testid="password" id="password" type="password" {...register("password")} />
             { errors?.password?.message && (
-              <p className="text-red-500 text-sm mt-1">{errors?.password?.message}</p>
+              <ErrorMessage isAnimated>{errors.password?.message}</ErrorMessage>
             )}
           </div>
           <div>
@@ -60,7 +61,7 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitFor
             </div>
             <TextInput data-testid="confirmPassword" type="password" id="confirmPassword" {...register("confirmPassword")} />
             { errors?.confirmPassword?.message && (
-              <p className="text-red-500 text-sm mt-1">{errors?.confirmPassword?.message}</p>
+              <ErrorMessage isAnimated>{errors.confirmPassword?.message}</ErrorMessage>
             )}
           </div>
           <Button className="hover:cursor-pointer" outline onClick={goBack}>Regresar</Button>
