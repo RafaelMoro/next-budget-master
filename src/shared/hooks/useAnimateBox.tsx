@@ -17,7 +17,6 @@ interface UseAnimateBoxProps {
 
 const useAnimateBox = ({ firstStep, lastStepNumber }: UseAnimateBoxProps) => {
   const [[step, direction], setCounterView] = useState<[number, number]>([firstStep, 0]);
-  console.log('step', step)
 
   const paginate = (newDirection: number) => {
   setCounterView(([currentStep]) => [currentStep + newDirection, newDirection]);

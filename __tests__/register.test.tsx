@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 
 import QueryProviderWrapper from "@/app/QueryProviderWrapper";
 import RegisterPage from "@/app/register/page";
-import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_TITLE } from '@/shared/constants/Global.constants';
+import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_SPAN, SUCCESS_CREATE_USER_TITLE, SUCESS_CREATE_USER_SECONDARY_MESSAGE } from '@/shared/constants/Global.constants';
 import { ERROR_EMAIL_IN_USE } from '@/shared/constants/Login.constants';
 
 jest.mock('axios');
@@ -207,7 +207,9 @@ describe('Register', () => {
       await user.type(confirmPasswordInput, 'UnaContrase;amuylargaparaminuevacuenta!1')
       await user.click(createAccountButton)
       expect(await screen.findByText(SUCCESS_CREATE_USER_TITLE)).toBeInTheDocument()
+      expect(screen.getByText(SUCCESS_CREATE_USER_SPAN)).toBeInTheDocument()
       expect(screen.getByText(SUCCESS_CREATE_USER_MESSAGE)).toBeInTheDocument()
+      expect(screen.getByText(SUCESS_CREATE_USER_SECONDARY_MESSAGE)).toBeInTheDocument()
       const goBackLogin = screen.getByRole('link', { name: /regresar al inicio/i })
       expect(goBackLogin).toBeInTheDocument()
     })

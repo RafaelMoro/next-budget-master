@@ -103,7 +103,6 @@ export default function RegisterPage() {
           <ResultCard
             direction={direction}
             isError={isError}
-            isSuccess={isSuccess}
             title={ERROR_CREATE_USER_TITLE}
             message={messageError}
             resetStep={resetCounterView}
@@ -112,7 +111,6 @@ export default function RegisterPage() {
           <ResultCard
             direction={direction}
             isError={isError}
-            isSuccess={isSuccess}
             title={SUCCESS_CREATE_USER_TITLE}
             message={SUCCESS_CREATE_USER_MESSAGE}
             resetStep={resetCounterView}
