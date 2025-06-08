@@ -25,8 +25,8 @@ describe('Register', () => {
 
     expect(screen.getByRole('heading', { name: /crear cuenta/i })).toBeInTheDocument()
     expect(screen.getByText(/llene la siguiente información para crear su cuenta/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/primer nombre/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/segundo nombre/i)).toBeInTheDocument()
+    expect(screen.getByTestId('firstName')).toBeInTheDocument()
+    expect(screen.getByTestId('middleName')).toBeInTheDocument()
     expect(screen.getByLabelText(/apellido/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /siguiente/i })).toBeInTheDocument()
   })
@@ -38,8 +38,8 @@ describe('Register', () => {
         <RegisterPage />
       </QueryProviderWrapper>
     )
-    const firstNameInput = screen.getByLabelText(/primer nombre/i)
-    const middleNameInput = screen.getByLabelText(/segundo nombre/i)
+    const firstNameInput = screen.getByTestId('firstName')
+    const middleNameInput = screen.getByTestId('middleName')
     const lastNameInput = screen.getByLabelText(/apellido/i)
     const nextButton = screen.getByRole('button', { name: /siguiente/i })
     await user.type(firstNameInput, 'John')
@@ -87,8 +87,8 @@ describe('Register', () => {
         </QueryProviderWrapper>
       )
 
-      const firstNameInput = screen.getByLabelText(/primer nombre/i)
-      const middleNameInput = screen.getByLabelText(/segundo nombre/i)
+      const firstNameInput = screen.getByTestId('firstName')
+      const middleNameInput = screen.getByTestId('middleName')
       const lastNameInput = screen.getByLabelText(/apellido/i)
       const nextButton = screen.getByRole('button', { name: /siguiente/i })
       await user.type(firstNameInput, 'John')
@@ -142,8 +142,8 @@ describe('Register', () => {
         </QueryProviderWrapper>
       )
 
-      const firstNameInput = screen.getByLabelText(/primer nombre/i)
-      const middleNameInput = screen.getByLabelText(/segundo nombre/i)
+      const firstNameInput = screen.getByTestId('firstName')
+      const middleNameInput = screen.getByTestId('middleName')
       const lastNameInput = screen.getByLabelText(/apellido/i)
       const nextButton = screen.getByRole('button', { name: /siguiente/i })
       await user.type(firstNameInput, 'John')
@@ -188,8 +188,8 @@ describe('Register', () => {
         </QueryProviderWrapper>
       )
 
-      const firstNameInput = screen.getByLabelText(/primer nombre/i)
-      const middleNameInput = screen.getByLabelText(/segundo nombre/i)
+      const firstNameInput = screen.getByTestId('firstName')
+      const middleNameInput = screen.getByTestId('middleName')
       const lastNameInput = screen.getByLabelText(/apellido/i)
       const nextButton = screen.getByRole('button', { name: /siguiente/i })
       await user.type(firstNameInput, 'John')

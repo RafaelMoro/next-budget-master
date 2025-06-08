@@ -3,12 +3,23 @@ import axios from 'axios';
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import Home from '../src/app/page'
+import HomePage from '../src/app/page'
+import QueryProviderWrapper from "@/app/QueryProviderWrapper";
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+
+const Home = ({ push }: { push: () => void }) => {
+  return (
+    <QueryProviderWrapper>
+      <AppRouterContextProviderMock router={{ push }}>
+        <HomePage />
+      </AppRouterContextProviderMock>
+    </QueryProviderWrapper>
+  )
+}
 describe('Home', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -22,9 +33,7 @@ describe('Home', () => {
   it('Show the login page', () => {
     const push = jest.fn();
     render(
-      <AppRouterContextProviderMock router={{ push }}>
-        <Home />
-      </AppRouterContextProviderMock>
+      <Home push={push} />
     )
  
     expect(screen.getByRole('heading', { name: /bienvenido de vuelta/i })).toBeInTheDocument()
@@ -39,9 +48,7 @@ describe('Home', () => {
       const user = userEvent.setup()
       const push = jest.fn();
       render(
-        <AppRouterContextProviderMock router={{ push }}>
-          <Home />
-        </AppRouterContextProviderMock>
+        <Home push={push} />
       )
     
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
@@ -55,9 +62,7 @@ describe('Home', () => {
       const user = userEvent.setup()
       const push = jest.fn();
       render(
-        <AppRouterContextProviderMock router={{ push }}>
-          <Home />
-        </AppRouterContextProviderMock>
+        <Home push={push} />
       )
     
       const pwdInput = screen.getByLabelText(/contraseña/i)
@@ -73,9 +78,7 @@ describe('Home', () => {
       const user = userEvent.setup()
       const push = jest.fn();
       render(
-        <AppRouterContextProviderMock router={{ push }}>
-          <Home />
-        </AppRouterContextProviderMock>
+        <Home push={push} />
       )
     
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
@@ -111,9 +114,7 @@ describe('Home', () => {
       })
 
       render(
-        <AppRouterContextProviderMock router={{ push }}>
-          <Home />
-        </AppRouterContextProviderMock>
+        <Home push={push} />
       )
 
       const pwdInput = screen.getByLabelText(/contraseña/i)
@@ -145,9 +146,7 @@ describe('Home', () => {
       })
 
       render(
-        <AppRouterContextProviderMock router={{ push }}>
-          <Home />
-        </AppRouterContextProviderMock>
+        <Home push={push} />
       )
 
       const pwdInput = screen.getByLabelText(/contraseña/i)
