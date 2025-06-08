@@ -15,6 +15,6 @@ export const LinkButton = ({ href, text, isSecondary = false }: LinkButtonProps)
     <Link
       className={butonCSS}
       href={href}
-    >{text}o</Link>
+    >{text}</Link>
   )
 }

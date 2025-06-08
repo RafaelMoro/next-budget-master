@@ -3,6 +3,7 @@ export const COOKIE_SESSION_KEY = 'session'
 
 // Routes
 export const DASHBOARD_ROUTE = '/dashboard';
+export const REGISTER_ROUTE = '/register';
 export const LOGIN_ROUTE = '/';
 
 // Messaging

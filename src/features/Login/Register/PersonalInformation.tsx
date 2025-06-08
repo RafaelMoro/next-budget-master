@@ -2,10 +2,11 @@
 import Link from "next/link";
 import { Card, Button, Label, TextInput } from "flowbite-react";
 import { useForm, SubmitHandler } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from "@hookform/resolvers/yup";;
 
 import { InputsPersonalInformation, PersonalInformationSchema } from "@/shared/types/Login.types";
 import { AnimateBox } from "@/shared/ui/atoms/AnimateBox";
+import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 
 interface PersonalInformationProps {
   personalInformation: InputsPersonalInformation;
@@ -41,7 +42,7 @@ export const PersonalInformation = ({ nextCb, personalInformation, updatePersona
             </div>
             <TextInput data-testid="firstName" defaultValue={personalInformation.firstName} id="firstName" type="text" {...register("firstName")} />
             { errors?.firstName?.message && (
-              <p className="text-red-500 text-sm mt-1">{errors?.firstName?.message}</p>
+              <ErrorMessage isAnimated>{errors.firstName?.message}</ErrorMessage>
             )}
           </div>
           <div>
@@ -56,7 +57,7 @@ export const PersonalInformation = ({ nextCb, personalInformation, updatePersona
             </div>
             <TextInput id="lastName" defaultValue={personalInformation.lastName} type="text" {...register("lastName")} />
             { errors?.lastName?.message && (
-              <p className="text-red-500 text-sm mt-1">{errors?.lastName?.message}</p>
+              <ErrorMessage isAnimated>{errors?.lastName?.message}</ErrorMessage>
             )}
           </div>
           <Link className="relative flex items-center justify-center rounded-lg text-center font-medium focus:outline-none focus:ring-4 h-10 px-5 text-sm border border-primary-700 text-primary-700 hover:border-primary-800 hover:bg-primary-800 hover:text-white focus:ring-primary-300 dark:border-primary-600 dark:text-primary-500 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-800" href="/">Volver</Link>

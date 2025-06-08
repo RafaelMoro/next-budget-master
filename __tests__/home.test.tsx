@@ -98,17 +98,8 @@ describe('Home', () => {
         name: 'AxiosError',
         request: null,
         response: {
-          config: null,
           data: {
-            data: null,
-            error: {
-              error: 'Unauthorized',
-              message: 'Email or Password incorrect.',
-              statusCode: 401
-            },
-            message: null,
-            success: false,
-            version: '1.2.0'
+            message: 'Email or Password incorrect.'
           }
         }
       })

@@ -39,9 +39,7 @@ export interface LoginPayload {
 }
 export interface LoginError extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
-    error: {
-      error: string
-    }
+    message: string;
   }>;
 }
 export interface CreateUserError extends Omit<AxiosError, 'response'> {
@@ -55,7 +53,7 @@ export interface CreateUserError extends Omit<AxiosError, 'response'> {
 const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
 
 // Errors
-export const ERROR_UNAUTHORIZED_LOGIN = 'Unauthorized'
+export const ERROR_UNAUTHORIZED_LOGIN = 'Email or Password incorrect.'
 export const ERROR_UNAUTHORIZED_LOGIN_MESSAGE = 'Correo electronico o contraseña incorrecta.';
 export const ERROR_PASSWORD_REQUIRED = 'Contraseña es requerida'
 export const ERROR_EMAIL_REQUIRED = 'Correo electrónico es requerido';
