@@ -55,9 +55,9 @@ export const ForgotPasswordCard = () => {
 
   return (
     <Card className="max-w-[400px]">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      {/* <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
         Recupera tu cuenta en un momento
-      </h1>
+      </h1> */}
       <p className="text-xl text-black dark:text-white mb-2">Te mandaremos un enlace seguro para que puedas crear una nueva contraseña.</p>
       <form
         // onSubmit={handleSubmit(onSubmit)}
@@ -76,7 +76,7 @@ export const ForgotPasswordCard = () => {
             <ErrorMessage isAnimated>{errors.email?.message}</ErrorMessage>
           )} */}
         </div>
-        <LinkButton text="Volver" isSecondary href={LOGIN_ROUTE} />
+        <LinkButton className="mt-4" text="Volver" isSecondary href={LOGIN_ROUTE} />
         <Button
           className="hover:cursor-pointer"
           // disabled={isPending || isSuccess}
