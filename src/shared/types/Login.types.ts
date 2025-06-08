@@ -53,11 +53,6 @@ export interface CreateUserError extends Omit<AxiosError, 'response'> {
 
 const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
 
-export const LoginSchema = object({
-  email: string().required(ERROR_EMAIL_REQUIRED).matches(emailRegex, ERROR_INVALID_EMAIL),
-  password: string().required(ERROR_PASSWORD_REQUIRED)
-})
-
 export type InputsPersonalInformation = {
   firstName: string
   middleName?: string
@@ -88,7 +83,12 @@ export type CreateUserPayload = {
   password: string
 }
 
-const emailValidation = string().email(ERROR_INVALID_EMAIL).required(ERROR_EMAIL_REQUIRED);
+const emailValidation = string().email(ERROR_INVALID_EMAIL).required(ERROR_EMAIL_REQUIRED).matches(emailRegex, ERROR_INVALID_EMAIL);
+
+export const LoginSchema = object({
+  email: emailValidation,
+  password: string().required(ERROR_PASSWORD_REQUIRED)
+})
 
 export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> = object({
   firstName: string().required('Nombre es requerido').min(2, 'El nombre debe tener al menos 2 caracteres'),
