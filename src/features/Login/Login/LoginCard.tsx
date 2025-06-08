@@ -1,8 +1,9 @@
 "use client"
 import { FormEvent, useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from 'next/navigation'
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from 'next/navigation'
 
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
@@ -95,7 +96,8 @@ export const LoginCard =  () => {
             <p className="text-red-500 text-sm mt-1">{passwordError}</p>
           )}
         </div>
-        <Button disabled={isPending || isSuccess} type="submit">
+        <Link className="relative flex items-center justify-center rounded-lg text-center font-medium focus:outline-none focus:ring-4 h-10 px-5 text-sm border border-primary-700 text-primary-700 hover:border-primary-800 hover:bg-primary-800 hover:text-white focus:ring-primary-300 dark:border-primary-600 dark:text-primary-500 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-800" href="/register">Registrarse</Link>
+        <Button className="hover:cursor-pointer" disabled={isPending || isSuccess} type="submit">
           { (isIdle || isError) && 'Iniciar sesión'}
           { isPending && (<Spinner aria-label="loading login budget master" />) }
           { isSuccess && (<CheckIcon />)}

@@ -1,0 +1,1 @@
+export const ERROR_EMAIL_IN_USE = 'Try with other email.'
