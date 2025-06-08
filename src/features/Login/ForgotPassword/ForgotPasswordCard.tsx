@@ -7,6 +7,8 @@ import { toast, Toaster } from "sonner";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { useMutation } from "@tanstack/react-query";
+import { LinkButton } from "@/shared/ui/atoms/LinkButton";
+import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
 
 export const ForgotPasswordCard = () => {
   // const router = useRouter()
@@ -52,10 +54,11 @@ export const ForgotPasswordCard = () => {
   // }, [isError, messageError])
 
   return (
-    <Card className="max-w-sm">
-      <h5 className="text-2xl text-gray-900 dark:text-white">
-        Ingrese sus credenciales para entrar a su cuenta.
-      </h5>
+    <Card className="max-w-[400px]">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        Recupera tu cuenta en un momento
+      </h1>
+      <p className="text-xl text-black dark:text-white mb-2">Te mandaremos un enlace seguro para que puedas crear una nueva contraseña.</p>
       <form
         // onSubmit={handleSubmit(onSubmit)}
         className="flex max-w-md flex-col gap-4">
@@ -73,12 +76,13 @@ export const ForgotPasswordCard = () => {
             <ErrorMessage isAnimated>{errors.email?.message}</ErrorMessage>
           )} */}
         </div>
+        <LinkButton text="Volver" isSecondary href={LOGIN_ROUTE} />
         <Button
           className="hover:cursor-pointer"
           // disabled={isPending || isSuccess}
           type="submit"
         >
-          Iniciar sesión
+          Enviar
           {/* { (isIdle || isError) && 'Iniciar sesión'}
           { isPending && (<Spinner aria-label="loading login budget master" />) }
           { isSuccess && (<CheckIcon />)} */}
