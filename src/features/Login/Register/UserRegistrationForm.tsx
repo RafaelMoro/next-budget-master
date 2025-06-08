@@ -4,15 +4,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 
 import { InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.types";
+import { AnimateBox } from "@/shared/ui/atoms/AnimateBox";
 
 interface UserRegistrationFormProps {
   goBack: () => void;
   submitForm: () => void;
   updateUserPasswordInfo: (data: InputsUserPassword) => void;
   isLoading: boolean;
+  direction: number;
 }
 
-export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitForm, isLoading }: UserRegistrationFormProps) => {
+export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitForm, isLoading, direction }: UserRegistrationFormProps) => {
   const {
     register,
     handleSubmit,
@@ -27,50 +29,52 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitFor
   }
 
   return (
-    <Card className="max-w-sm">
-      <h5 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
-        Crear cuenta.
-      </h5>
-      <p className="text-xl text-black dark:text-white">Ingrese su correo electronico y contraseña.</p>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-md flex-col gap-4">
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="email">Correo electrónico</Label>
+    <AnimateBox direction={direction} >
+      <Card className="max-w-sm">
+        <h5 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+          Crear cuenta.
+        </h5>
+        <p className="text-xl text-black dark:text-white">Ingrese su correo electronico y contraseña.</p>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-md flex-col gap-4">
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="email">Correo electrónico</Label>
+            </div>
+            <TextInput id="email" type="email" {...register("email")} />
+            { errors?.email?.message && (
+              <p className="text-red-500 text-sm mt-1">{errors?.email?.message}</p>
+            )}
           </div>
-          <TextInput id="email" type="email" {...register("email")} />
-          { errors?.email?.message && (
-            <p className="text-red-500 text-sm mt-1">{errors?.email?.message}</p>
-          )}
-        </div>
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="password">Contraseña</Label>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="password">Contraseña</Label>
+            </div>
+            <TextInput data-testid="password" id="password" type="password" {...register("password")} />
+            { errors?.password?.message && (
+              <p className="text-red-500 text-sm mt-1">{errors?.password?.message}</p>
+            )}
           </div>
-          <TextInput data-testid="password" id="password" type="password" {...register("password")} />
-          { errors?.password?.message && (
-            <p className="text-red-500 text-sm mt-1">{errors?.password?.message}</p>
-          )}
-        </div>
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
+            </div>
+            <TextInput data-testid="confirmPassword" type="password" id="confirmPassword" {...register("confirmPassword")} />
+            { errors?.confirmPassword?.message && (
+              <p className="text-red-500 text-sm mt-1">{errors?.confirmPassword?.message}</p>
+            )}
           </div>
-          <TextInput data-testid="confirmPassword" type="password" id="confirmPassword" {...register("confirmPassword")} />
-          { errors?.confirmPassword?.message && (
-            <p className="text-red-500 text-sm mt-1">{errors?.confirmPassword?.message}</p>
-          )}
-        </div>
-        <Button className="hover:cursor-pointer" outline onClick={goBack}>Regresar</Button>
-        <Button disabled={isLoading} aria-disabled={isLoading} type="submit" className="hover:cursor-pointer disabled:opacity-50 inline-flex gap-3">
-          { isLoading && (
-            <>
-              <Spinner aria-label="loading creating user" light />
-              Creando usuario...
-            </>
-          )}
-          { !isLoading && 'Crear cuenta' }
-        </Button>
-      </form>
-    </Card>
+          <Button className="hover:cursor-pointer" outline onClick={goBack}>Regresar</Button>
+          <Button disabled={isLoading} aria-disabled={isLoading} type="submit" className="hover:cursor-pointer disabled:opacity-50 inline-flex gap-3">
+            { isLoading && (
+              <>
+                <Spinner aria-label="loading creating user" light />
+                Creando usuario...
+              </>
+            )}
+            { !isLoading && 'Crear cuenta' }
+          </Button>
+        </form>
+      </Card>
+    </AnimateBox>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 import { useMutation } from "@tanstack/react-query"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 
 import { createUserCb } from "@/features/Login/Login/LoginCard.utils"
 import { PersonalInformation } from "@/features/Login/Register/PersonalInformation"
@@ -14,13 +14,13 @@ import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER
 import { AxiosResponse } from "axios"
 import { GeneralError } from "@/shared/types/Global"
 import { ERROR_EMAIL_IN_USE } from "@/shared/constants/Login.constants"
+import { useAnimateBox } from "@/shared/hooks/useAnimateBox"
 
 
 export default function RegisterPage() {
-  const [currentStep, setCurrentStep] = useState<number>(1)
-  const nextStep = () => setCurrentStep((prev) => prev + 1)
-  const prevStep = () => setCurrentStep((prev) => prev - 1)
-  const resetStep = () => setCurrentStep(1)
+  const {
+    direction, step, goPreviousView, goNextView, resetCounterView,
+  } = useAnimateBox({ firstStep: 1, lastStepNumber: 3 });
   const {
       mutate: createUserMutation,
       isError,
@@ -30,10 +30,10 @@ export default function RegisterPage() {
     } = useMutation<CreateUserData, AxiosResponse<CreateUserError>, CreateUserPayload>({
     mutationFn: createUserCb,
     onError: () => {
-      nextStep()
+      goNextView()
     },
     onSuccess: () => {
-      nextStep()
+      goNextView()
     }
   })
 
@@ -82,36 +82,40 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen w-full flex flex-col">
       <Header />
-      <Stepper steps={steps} currentStep={currentStep} />
+      <Stepper steps={steps} currentStep={step} />
       <div className="flex-1 flex justify-center items-center">
-        { currentStep === 1 && (
+        { step === 1 && (
           <PersonalInformation
-            nextCb={nextStep}
+            nextCb={goNextView}
+            direction={direction}
             personalInformation={formData.current.personalInformation}
             updatePersonalInformation={updatePersonalInformation}
           />)}
-        { currentStep === 2 && (
+        { step === 2 && (
           <UserRegistrationForm
-            goBack={prevStep}
+            direction={direction}
+            goBack={goPreviousView}
             updateUserPasswordInfo={updateUserPassword}
             submitForm={handleSubmit}
             isLoading={isPending}
           />) }
-        { (currentStep === 3 && isError) && (
+        { (step === 3 && isError) && (
           <ResultCard
+            direction={direction}
             isError={isError}
             isSuccess={isSuccess}
             title={ERROR_CREATE_USER_TITLE}
             message={messageError}
-            resetStep={resetStep}
+            resetStep={resetCounterView}
           />)}
-        { (currentStep === 3 && isSuccess) && (
+        { (step === 3 && isSuccess) && (
           <ResultCard
+            direction={direction}
             isError={isError}
             isSuccess={isSuccess}
             title={SUCCESS_CREATE_USER_TITLE}
             message={SUCCESS_CREATE_USER_MESSAGE}
-            resetStep={resetStep}
+            resetStep={resetCounterView}
           />)}
       </div>
     </div>
