@@ -1,18 +1,18 @@
 "use client"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Card, Button, Label, TextInput } from "flowbite-react";
+import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 
 import { InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.types";
 
 interface UserRegistrationFormProps {
   goBack: () => void;
-  goNext: () => void;
   submitForm: () => void;
   updateUserPasswordInfo: (data: InputsUserPassword) => void;
+  isLoading: boolean;
 }
 
-export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, goNext, submitForm }: UserRegistrationFormProps) => {
+export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitForm, isLoading }: UserRegistrationFormProps) => {
   const {
     register,
     handleSubmit,
@@ -23,7 +23,6 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, goNext, s
 
   const onSubmit: SubmitHandler<InputsUserPassword> = (data) => {
     updateUserPasswordInfo(data)
-    goNext()
     submitForm()
   }
 
@@ -62,8 +61,14 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, goNext, s
           )}
         </div>
         <Button className="hover:cursor-pointer" outline onClick={goBack}>Regresar</Button>
-        <Button type="submit" className="hover:cursor-pointer">
-          Crear cuenta
+        <Button disabled={isLoading} aria-disabled={isLoading} type="submit" className="hover:cursor-pointer disabled:opacity-50 inline-flex gap-3">
+          { isLoading && (
+            <>
+              <Spinner aria-label="loading creating user" light />
+              Creando usuario
+            </>
+          )}
+          { !isLoading && 'Crear cuenta' }
         </Button>
       </form>
     </Card>

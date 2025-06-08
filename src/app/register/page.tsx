@@ -88,8 +88,8 @@ export default function RegisterPage() {
           <UserRegistrationForm
             goBack={prevStep}
             updateUserPasswordInfo={updateUserPassword}
-            goNext={nextStep}
             submitForm={handleSubmit}
+            isLoading={isPending}
           />) }
         { currentStep === 3 && (<p>Loading...</p>)}
       </div>
