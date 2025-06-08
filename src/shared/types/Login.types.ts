@@ -97,7 +97,7 @@ export type CreateUserPayload = {
 }
 
 export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> = object({
-  firstName: string().required('Primer nombre es requerido').min(2, 'El primer nombre debe tener al menos 2 caracteres'),
+  firstName: string().required('Nombre es requerido').min(2, 'El nombre debe tener al menos 2 caracteres'),
   middleName: string().optional(),
   lastName: string().required('Apellido es requerido').min(2, 'El apellido debe tener al menos 2 caracteres')
 })

@@ -34,9 +34,9 @@ export const PersonalInformation = ({ nextCb, personalInformation, updatePersona
       <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-md flex-col gap-4">
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="firstName">Primer Nombre</Label>
+            <Label htmlFor="firstName">Nombre</Label>
           </div>
-          <TextInput defaultValue={personalInformation.firstName} id="firstName" type="text" {...register("firstName")} />
+          <TextInput data-testid="firstName" defaultValue={personalInformation.firstName} id="firstName" type="text" {...register("firstName")} />
           { errors?.firstName?.message && (
             <p className="text-red-500 text-sm mt-1">{errors?.firstName?.message}</p>
           )}
@@ -45,10 +45,7 @@ export const PersonalInformation = ({ nextCb, personalInformation, updatePersona
           <div className="mb-2 block">
             <Label htmlFor="middleName">Segundo Nombre (Opcional)</Label>
           </div>
-          <TextInput defaultValue={personalInformation.middleName} id="middleName" type="text" {...register("middleName")} />
-          { errors?.middleName?.message && (
-            <p className="text-red-500 text-sm mt-1">{errors?.middleName?.message}</p>
-          )}
+          <TextInput data-testid="middleName" defaultValue={personalInformation.middleName} id="middleName" type="text" {...register("middleName")} />
         </div>
         <div>
           <div className="mb-2 block">
