@@ -1,5 +1,6 @@
 import type { AxiosError, AxiosResponse } from "axios";
 import { object, ObjectSchema, string, ref } from "yup";
+import { ERROR_EMAIL_REQUIRED, ERROR_INVALID_EMAIL, ERROR_PASSWORD_REQUIRED } from "../constants/Login.constants";
 
 export interface LoginData {
   data: {
@@ -52,13 +53,6 @@ export interface CreateUserError extends Omit<AxiosError, 'response'> {
 
 const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
 
-// Errors
-export const ERROR_UNAUTHORIZED_LOGIN = 'Email or Password incorrect.'
-export const ERROR_UNAUTHORIZED_LOGIN_MESSAGE = 'Correo electronico o contraseña incorrecta.';
-export const ERROR_PASSWORD_REQUIRED = 'Contraseña es requerida'
-export const ERROR_EMAIL_REQUIRED = 'Correo electrónico es requerido';
-export const ERROR_INVALID_EMAIL = 'Correo electrónico inválido';
-
 export const LoginSchema = object({
   email: string().required(ERROR_EMAIL_REQUIRED).matches(emailRegex, ERROR_INVALID_EMAIL),
   password: string().required(ERROR_PASSWORD_REQUIRED)
@@ -94,13 +88,18 @@ export type CreateUserPayload = {
   password: string
 }
 
+const emailValidation = string().email(ERROR_INVALID_EMAIL).required(ERROR_EMAIL_REQUIRED);
+
 export const PersonalInformationSchema: ObjectSchema<InputsPersonalInformation> = object({
   firstName: string().required('Nombre es requerido').min(2, 'El nombre debe tener al menos 2 caracteres'),
   middleName: string().optional(),
   lastName: string().required('Apellido es requerido').min(2, 'El apellido debe tener al menos 2 caracteres')
 })
 
-const emailValidation = string().email('Correo electronico inválido').required('Por favor, ingrese su correo electrónico');
+export const ForgotPasswordSchema = object({
+  email: emailValidation
+})
+
 
 const passwordValidation = (requiredMessage: string, onlyRequired = false) => {
   if (onlyRequired) return string().required(requiredMessage);

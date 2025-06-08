@@ -10,9 +10,10 @@ import { AnimatePresence } from "motion/react"
 
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
-import { ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError, LoginSchema } from "@/shared/types/Login.types";
+import { LoginError, LoginSchema } from "@/shared/types/Login.types";
 import { LoginMutationFn } from "./LoginCard.utils";
-import { DASHBOARD_ROUTE, ERROR_CREATE_USER_TITLE, FORGOT_PASSWORD_ROUTE, REGISTER_ROUTE } from "@/shared/constants/Global.constants";
+import { DASHBOARD_ROUTE, FORGOT_PASSWORD_ROUTE, REGISTER_ROUTE } from "@/shared/constants/Global.constants";
+import { ERROR_CREATE_USER_TITLE, ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE } from "@/shared/constants/Login.constants";
 import { LoginData, LoginPayload } from "@/shared/types/Login.types";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
