@@ -37,11 +37,8 @@ export default function RegisterPage() {
     }
   })
 
-  console.log('error', error)
   const currentMessageError = (error as unknown as GeneralError)?.response?.data?.error?.message
-  console.log('currentMessageError', currentMessageError)
   const messageError = currentMessageError === ERROR_EMAIL_IN_USE ? 'Intente con otro correo electrónico' : ERROR_CREATE_USER_MESSAGE
-  console.log('messageError ', messageError)
 
   const formData = useRef<FormDataRegister>({
     personalInformation: {
