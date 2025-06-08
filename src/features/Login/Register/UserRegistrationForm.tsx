@@ -65,7 +65,7 @@ export const UserRegistrationForm = ({ goBack, updateUserPasswordInfo, submitFor
           { isLoading && (
             <>
               <Spinner aria-label="loading creating user" light />
-              Creando usuario
+              Creando usuario...
             </>
           )}
           { !isLoading && 'Crear cuenta' }

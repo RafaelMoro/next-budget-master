@@ -1,36 +1,40 @@
 "use client"
-import { useRouter } from 'next/navigation'
 import { useMutation } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 
 import { createUserCb } from "@/features/Login/Login/LoginCard.utils"
 import { PersonalInformation } from "@/features/Login/Register/PersonalInformation"
 import { UserRegistrationForm } from "@/features/Login/Register/UserRegistrationForm"
-import { LOGIN_ROUTE } from "@/shared/constants/Global.constants"
 import { CreateUserData, CreateUserError, CreateUserPayload, FormDataRegister,
   InputsPersonalInformation, InputsUserPassword, UserPasswordPayload } from "@/shared/types/Login.types"
 import { Stepper } from "@/shared/ui/atoms/Stepper"
 import { Header } from "@/shared/ui/organisms/Header"
+import { ResultCard } from "@/features/Login/Register/ResultCard"
+import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_TITLE } from "@/shared/constants/Global.constants"
 
 
 export default function RegisterPage() {
-  const router = useRouter()
   const [currentStep, setCurrentStep] = useState<number>(1)
+  const nextStep = () => setCurrentStep((prev) => prev + 1)
+  const prevStep = () => setCurrentStep((prev) => prev - 1)
+  const resetStep = () => setCurrentStep(1)
   const {
       mutate: createUserMutation,
       isError,
       isPending,
       isSuccess,
-      isIdle,
       error
     } = useMutation<CreateUserData, CreateUserError, CreateUserPayload>({
     mutationFn: createUserCb,
+    onError: () => {
+      nextStep()
+    },
     onSuccess: () => {
-      setTimeout(() => {
-        router.push(LOGIN_ROUTE)
-      }, 2000)
+      nextStep()
     }
   })
+
+  console.log('error', error)
 
   const formData = useRef<FormDataRegister>({
     personalInformation: {
@@ -43,9 +47,7 @@ export default function RegisterPage() {
       password: ""
     }
   })
-  const steps = new Set(["Personal Information", "Set user and password"])
-  const nextStep = () => setCurrentStep((prev) => prev + 1)
-  const prevStep = () => setCurrentStep((prev) => prev - 1)
+  const steps = new Set(["Personal Information", "Set user and password", "Resultado"])
 
   const updatePersonalInformation = (data: InputsPersonalInformation) => {
     formData.current.personalInformation = data
@@ -91,7 +93,22 @@ export default function RegisterPage() {
             submitForm={handleSubmit}
             isLoading={isPending}
           />) }
-        { currentStep === 3 && (<p>Loading...</p>)}
+        { (currentStep === 3 && isError) && (
+          <ResultCard
+            isError={isError}
+            isSuccess={isSuccess}
+            title={ERROR_CREATE_USER_TITLE}
+            message={ERROR_CREATE_USER_MESSAGE}
+            resetStep={resetStep}
+          />)}
+        { (currentStep === 3 && isSuccess) && (
+          <ResultCard
+            isError={isError}
+            isSuccess={isSuccess}
+            title={SUCCESS_CREATE_USER_TITLE}
+            message={SUCCESS_CREATE_USER_MESSAGE}
+            resetStep={resetStep}
+          />)}
       </div>
     </div>
   )
