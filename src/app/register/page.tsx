@@ -11,6 +11,8 @@ import { Stepper } from "@/shared/ui/atoms/Stepper"
 import { Header } from "@/shared/ui/organisms/Header"
 import { ResultCard } from "@/features/Login/Register/ResultCard"
 import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_TITLE } from "@/shared/constants/Global.constants"
+import { AxiosResponse } from "axios"
+import { GeneralError } from "@/shared/types/Global"
 
 
 export default function RegisterPage() {
@@ -24,7 +26,7 @@ export default function RegisterPage() {
       isPending,
       isSuccess,
       error
-    } = useMutation<CreateUserData, CreateUserError, CreateUserPayload>({
+    } = useMutation<CreateUserData, AxiosResponse<CreateUserError>, CreateUserPayload>({
     mutationFn: createUserCb,
     onError: () => {
       nextStep()
@@ -34,7 +36,8 @@ export default function RegisterPage() {
     }
   })
 
-  console.log('error', error)
+  const currentMessageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+  const messageError = currentMessageError ? 'Intente con otro correo electrónico' : ERROR_CREATE_USER_MESSAGE
 
   const formData = useRef<FormDataRegister>({
     personalInformation: {
@@ -98,7 +101,7 @@ export default function RegisterPage() {
             isError={isError}
             isSuccess={isSuccess}
             title={ERROR_CREATE_USER_TITLE}
-            message={ERROR_CREATE_USER_MESSAGE}
+            message={messageError}
             resetStep={resetStep}
           />)}
         { (currentStep === 3 && isSuccess) && (
