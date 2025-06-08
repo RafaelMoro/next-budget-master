@@ -1,3 +1,9 @@
+## v0.6.1 (2025-06-08)
+
+### Pull Requests
+[#9](https://github.com/RafaelMoro/next-budget-master/pull/9) | Add react hook login
+
+
 ## v0.6.0 (2025-06-08)
 
 ### Pull Requests
