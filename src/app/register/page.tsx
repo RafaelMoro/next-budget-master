@@ -47,7 +47,7 @@ export default function RegisterPage() {
       password: ""
     }
   })
-  const steps = new Set(["Personal Information", "Set user and password", "Resultado"])
+  const steps = new Set(["Información Personal", "Usuario y contraseña", "Resultado"])
 
   const updatePersonalInformation = (data: InputsPersonalInformation) => {
     formData.current.personalInformation = data
