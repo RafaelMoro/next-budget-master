@@ -12,10 +12,11 @@ import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError, LoginSchema } from "@/shared/types/Login.types";
 import { LoginMutationFn } from "./LoginCard.utils";
-import { DASHBOARD_ROUTE, ERROR_CREATE_USER_TITLE, REGISTER_ROUTE } from "@/shared/constants/Global.constants";
+import { DASHBOARD_ROUTE, ERROR_CREATE_USER_TITLE, FORGOT_PASSWORD_ROUTE, REGISTER_ROUTE } from "@/shared/constants/Global.constants";
 import { LoginData, LoginPayload } from "@/shared/types/Login.types";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
+import Link from "next/link";
 
 export const LoginCard =  () => {
   const router = useRouter()
@@ -85,6 +86,7 @@ export const LoginCard =  () => {
               <ErrorMessage isAnimated>{errors.password?.message}</ErrorMessage>
             )}
           </div>
+          <Link className="underline" href={FORGOT_PASSWORD_ROUTE}>¿Olvidaste tu contraseña?</Link>
           <LinkButton isSecondary href={REGISTER_ROUTE} text="Registrarse" />
           <Button className="hover:cursor-pointer" disabled={isPending || isSuccess} type="submit">
             { (isIdle || isError) && 'Iniciar sesión'}
