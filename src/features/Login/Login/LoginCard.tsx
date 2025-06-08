@@ -1,31 +1,31 @@
 "use client"
-import { FormEvent, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation'
-import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
+import { Card, Button, Label, TextInput, Spinner, Alert } from "flowbite-react";
 import { useMutation } from "@tanstack/react-query";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
-import { ERROR_EMAIL_REQUIRED, ERROR_INVALID_EMAIL, ERROR_PASSWORD_REQUIRED, ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError, LoginSchema } from "@/shared/types/Login.types";
+import { ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE, LoginError, LoginSchema } from "@/shared/types/Login.types";
 import { LoginMutationFn } from "./LoginCard.utils";
-import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
+import { DASHBOARD_ROUTE, ERROR_CREATE_USER_TITLE } from "@/shared/constants/Global.constants";
 import { LoginData, LoginPayload } from "@/shared/types/Login.types";
+import { useEffect, useState } from "react";
+import { AlertIcon } from "@/shared/ui/icons/AlertIcon";
 
 export const LoginCard =  () => {
+  const [showError, setShowError] = useState<boolean>(false)
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string>("")
   const router = useRouter()
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [errorAuth, setErrorAuth] = useState("");
-
-  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  }
-  const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginPayload>({
+    resolver: yupResolver(LoginSchema)
+  })
   const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<LoginData, LoginError, LoginPayload>({
     mutationFn: LoginMutationFn,
     onSuccess: () => {
@@ -34,66 +34,55 @@ export const LoginCard =  () => {
       }, 1000)
     }
   })
-  const messageError = error?.response?.data?.error?.error
+  const messageError = error?.response?.data?.message
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit: SubmitHandler<LoginPayload> = async (data) => {
     try {
-      event.preventDefault()
-      // Reset errors
-      setErrorAuth("");
-      setEmailError("");
-      setPasswordError("");
-
-      // Validate form
       const dataForm = {
-        email,
-        password
+        email: data.email,
+        password: data.password
       }
-      const data: LoginPayload = await LoginSchema.validate(dataForm, { strict: true })
-      loginMutation(data)
+      loginMutation(dataForm)
     }
     catch (error: unknown) {
       const infoError = handleErrorForm(error);
       console.error('error while logging in =>', infoError)
-      if (infoError.message === ERROR_PASSWORD_REQUIRED) {
-        setPasswordError(infoError.message)
-      }
-      if (infoError.message === ERROR_EMAIL_REQUIRED || infoError.message === ERROR_INVALID_EMAIL) {
-        setEmailError(infoError.message)
-      }
     }
   }
 
   useEffect(() => {
     if (isError && messageError) {
       if (messageError === ERROR_UNAUTHORIZED_LOGIN) {
-        setErrorAuth(ERROR_UNAUTHORIZED_LOGIN_MESSAGE);
+        setLoginErrorMessage(ERROR_UNAUTHORIZED_LOGIN_MESSAGE);
+      } else {
+        setLoginErrorMessage(ERROR_CREATE_USER_TITLE);
       }
+      setShowError(true)
     }
-  }, [messageError, isError])
+  }, [isError, messageError])
 
   return (
     <Card className="max-w-sm">
       <h5 className="text-2xl text-gray-900 dark:text-white">
         Ingrese sus credenciales para entrar a su cuenta.
       </h5>
-      <form onSubmit={(event) => handleSubmit(event)} className="flex max-w-md flex-col gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-md flex-col gap-4">
         <div>
           <div className="mb-2 block">
             <Label htmlFor="email">Correo Electrónico</Label>
           </div>
-          <TextInput value={email} id="email" type="email" placeholder="correo-electrónico@gmail.com" onChange={handleEmail} />
-          { emailError && (
-            <p className="text-red-500 text-sm mt-1">{emailError}</p>
+          <TextInput id="email" type="email" placeholder="correo-electrónico@gmail.com" {...register("email")} />
+          { errors.email?.message && (
+            <p className="text-red-500 text-sm mt-1">{errors.email?.message}</p>
           )}
         </div>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="password">Contraseña</Label>
           </div>
-          <TextInput value={password} onChange={handlePassword} id="password" type="password" />
-          { passwordError && (
-            <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+          <TextInput id="password" type="password" {...register("password")} />
+          { errors.password?.message && (
+            <p className="text-red-500 text-sm mt-1">{errors.password?.message}</p>
           )}
         </div>
         <Link className="relative flex items-center justify-center rounded-lg text-center font-medium focus:outline-none focus:ring-4 h-10 px-5 text-sm border border-primary-700 text-primary-700 hover:border-primary-800 hover:bg-primary-800 hover:text-white focus:ring-primary-300 dark:border-primary-600 dark:text-primary-500 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-800" href="/register">Registrarse</Link>
@@ -103,7 +92,12 @@ export const LoginCard =  () => {
           { isSuccess && (<CheckIcon />)}
         </Button>
       </form>
-      { isError && (<p className="text-red-500 text-sm mt-1">{errorAuth}</p>)}
+      { (isError && showError) && (
+        <Alert color="red" onDismiss={() => setShowError(false)}>
+          <AlertIcon />
+          {loginErrorMessage}
+        </Alert>
+      )}
     </Card>
   )
 }
