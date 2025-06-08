@@ -1,6 +1,6 @@
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
+import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { Button, Card } from "flowbite-react"
-import Link from "next/link";
 
 interface ResultCardProps {
   title: string;
@@ -19,10 +19,7 @@ export const ResultCard = ({ title, message, isError, isSuccess, resetStep }: Re
       <p className="text-xl text-black dark:text-white">{message}</p>
         { isError && (
           <div className="flex justify-between">
-            <Link
-              className="relative flex items-center justify-center rounded-lg text-center font-medium focus:outline-none focus:ring-4 h-10 px-5 text-sm border border-primary-700 text-primary-700 hover:border-primary-800 hover:bg-primary-800 hover:text-white focus:ring-primary-300 dark:border-primary-600 dark:text-primary-500 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-800"
-              href={LOGIN_ROUTE}
-            >Regresar al inicio</Link>
+            <LinkButton href={LOGIN_ROUTE} isSecondary text="Regresar al inicio" />
             <Button onClick={resetStep} className="hover:cursor-pointer">
               Volver a intentar.
             </Button>
@@ -30,10 +27,7 @@ export const ResultCard = ({ title, message, isError, isSuccess, resetStep }: Re
         )}
         { isSuccess && (
           <div className="w-full flex justify-center">
-            <Link
-              className="relative flex items-center justify-center rounded-lg text-center font-medium focus:outline-none focus:ring-4 h-10 px-5 text-sm bg-primary-700 text-white hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 hover:cursor-pointer"
-              href={LOGIN_ROUTE}
-            >Regresar al inicio</Link>
+            <LinkButton href={LOGIN_ROUTE} text="Regresar al inicio" />
           </div>
         )}
     </Card>
