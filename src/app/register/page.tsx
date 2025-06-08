@@ -13,6 +13,7 @@ import { ResultCard } from "@/features/Login/Register/ResultCard"
 import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_TITLE } from "@/shared/constants/Global.constants"
 import { AxiosResponse } from "axios"
 import { GeneralError } from "@/shared/types/Global"
+import { ERROR_EMAIL_IN_USE } from "@/shared/constants/Login.constants"
 
 
 export default function RegisterPage() {
@@ -36,8 +37,11 @@ export default function RegisterPage() {
     }
   })
 
+  console.log('error', error)
   const currentMessageError = (error as unknown as GeneralError)?.response?.data?.error?.message
-  const messageError = currentMessageError ? 'Intente con otro correo electrónico' : ERROR_CREATE_USER_MESSAGE
+  console.log('currentMessageError', currentMessageError)
+  const messageError = currentMessageError === ERROR_EMAIL_IN_USE ? 'Intente con otro correo electrónico' : ERROR_CREATE_USER_MESSAGE
+  console.log('messageError ', messageError)
 
   const formData = useRef<FormDataRegister>({
     personalInformation: {
