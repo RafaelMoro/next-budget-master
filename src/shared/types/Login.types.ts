@@ -2,6 +2,7 @@ import type { AxiosError, AxiosResponse } from "axios";
 import { object, ObjectSchema, string, ref } from "yup";
 import { ERROR_EMAIL_REQUIRED, ERROR_INVALID_EMAIL, ERROR_PASSWORD_REQUIRED } from "../constants/Login.constants";
 
+// Data interface
 export interface LoginData {
   data: {
     user: {
@@ -34,6 +35,14 @@ export interface CreateUserData {
   version: string;
 }
 
+export interface ForgotPasswordData {
+  data: null
+  error: null;
+  message: 'Email Sent';
+  success: boolean;
+  version: string;
+}
+
 export interface LoginPayload {
   email: string;
   password: string;
@@ -50,6 +59,13 @@ export interface CreateUserError extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       error: string
+    }
+  }>;
+}
+export interface ForgotPasswordError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
     }
   }>;
 }

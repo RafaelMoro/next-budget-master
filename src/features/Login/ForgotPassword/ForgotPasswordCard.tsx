@@ -11,11 +11,13 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
-import { ForgotPasswordPayload, ForgotPasswordSchema } from "@/shared/types/Login.types";
+import { ForgotPasswordData, ForgotPasswordError, ForgotPasswordPayload, ForgotPasswordSchema } from "@/shared/types/Login.types";
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
+import { forgotPasswordCb } from "../Login/LoginCard.utils";
+import { GeneralError } from "@/shared/types/Global";
 
 export const ForgotPasswordCard = () => {
-  // const router = useRouter()
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -23,24 +25,20 @@ export const ForgotPasswordCard = () => {
   } = useForm<ForgotPasswordPayload>({
     resolver: yupResolver(ForgotPasswordSchema)
   })
-  // const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<LoginData, LoginError, LoginPayload>({
-  //   mutationFn: LoginMutationFn,
-  //   onSuccess: () => {
-  //     setTimeout(() => {
-  //       router.push(DASHBOARD_ROUTE)
-  //     }, 1000)
-  //   }
-  // })
-  // const messageError = error?.response?.data?.message
+  const { mutate: forgotPwdMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<ForgotPasswordData, ForgotPasswordError, ForgotPasswordPayload>({
+    mutationFn: forgotPasswordCb,
+    onSuccess: () => {
+      setTimeout(() => {
+        router.push(LOGIN_ROUTE)
+      }, 1000)
+    }
+  })
+  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+  console.log('messageError =>', messageError)
 
   const onSubmit: SubmitHandler<ForgotPasswordPayload> = async (data) => {
     try {
-      console.log(data)
-      // const dataForm = {
-      //   email: data.email,
-      //   password: data.password
-      // }
-      // loginMutation(dataForm)
+      forgotPwdMutation(data)
     }
     catch (error: unknown) {
       const infoError = handleErrorForm(error);
@@ -82,13 +80,12 @@ export const ForgotPasswordCard = () => {
           <LinkButton className="mt-4" text="Volver" isSecondary href={LOGIN_ROUTE} />
           <Button
             className="hover:cursor-pointer"
-            // disabled={isPending || isSuccess}
+            disabled={isPending || isSuccess}
             type="submit"
           >
-            Enviar
-            {/* { (isIdle || isError) && 'Iniciar sesión'}
+            { (isIdle || isError) && 'Enviar'}
             { isPending && (<Spinner aria-label="loading login budget master" />) }
-            { isSuccess && (<CheckIcon />)} */}
+            { isSuccess && (<CheckIcon />)}
           </Button>
         </form>
         {/* { (isError) && (
