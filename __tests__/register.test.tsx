@@ -1,10 +1,20 @@
 import '@testing-library/jest-dom'
-import QueryProviderWrapper from "@/app/QueryProviderWrapper";
-import RegisterPage from "@/app/register/page";
+import axios from 'axios';
 import { render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event'
 
+import QueryProviderWrapper from "@/app/QueryProviderWrapper";
+import RegisterPage from "@/app/register/page";
+import { SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_TITLE } from '@/shared/constants/Global.constants';
+
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Register', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  })
+
   it ('Show register page', () => {
     render(
       <QueryProviderWrapper>
@@ -43,5 +53,51 @@ describe('Register', () => {
     expect(screen.getByTestId(/confirmPassword/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /crear cuenta/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /regresar/i })).toBeInTheDocument()
+  })
+
+  describe('Test creation of user', () => {
+    it.only('should show the result screen after successfully creating a user', async () => {
+      const user = userEvent.setup()
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: null,
+        success: true,
+        version: "v1.2.0",
+        data: {
+          userCreated: {
+            email: "rafa10@mail.com",
+            sub: "6844b5aa39dceaf18bde61a2"
+          }
+        }
+      })
+
+      render(
+        <QueryProviderWrapper>
+          <RegisterPage />
+        </QueryProviderWrapper>
+      )
+
+      const firstNameInput = screen.getByLabelText(/primer nombre/i)
+      const middleNameInput = screen.getByLabelText(/segundo nombre/i)
+      const lastNameInput = screen.getByLabelText(/apellido/i)
+      const nextButton = screen.getByRole('button', { name: /siguiente/i })
+      await user.type(firstNameInput, 'John')
+      await user.type(middleNameInput, 'Paul')
+      await user.type(lastNameInput, 'Doe')
+      await user.click(nextButton)
+
+      const emailInput = screen.getByLabelText(/correo electrónico/i)
+      const passwordInput = screen.getByTestId('password')
+      const confirmPasswordInput = screen.getByTestId('confirmPassword')
+      const createAccountButton = screen.getByRole('button', { name: /crear cuenta/i })
+      
+      await user.type(emailInput, 'rafa@example.com')
+      await user.type(passwordInput, 'UnaContrase;amuylargaparaminuevacuenta!1')
+      await user.type(confirmPasswordInput, 'UnaContrase;amuylargaparaminuevacuenta!1')
+      await user.click(createAccountButton)
+      expect(await screen.findByText(SUCCESS_CREATE_USER_TITLE)).toBeInTheDocument()
+      expect(screen.getByText(SUCCESS_CREATE_USER_MESSAGE)).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /regresar al inicio/i })).toBeInTheDocument()
+    })
   })
 })
