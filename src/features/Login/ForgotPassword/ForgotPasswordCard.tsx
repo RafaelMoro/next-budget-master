@@ -15,6 +15,7 @@ import { ForgotPasswordData, ForgotPasswordError, ForgotPasswordPayload, ForgotP
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { forgotPasswordCb } from "../Login/LoginCard.utils";
 import { GeneralError } from "@/shared/types/Global";
+import { ERROR_CREATE_USER_TITLE } from "@/shared/constants/Login.constants";
 
 export const ForgotPasswordCard = () => {
   const router = useRouter()
@@ -46,15 +47,12 @@ export const ForgotPasswordCard = () => {
     }
   }
 
-  // useEffect(() => {
-  //   if (isError && messageError) {
-  //     if (messageError === ERROR_UNAUTHORIZED_LOGIN) {
-  //       toast.error(ERROR_UNAUTHORIZED_LOGIN_MESSAGE);
-  //       return
-  //     }
-  //     toast.error(ERROR_CREATE_USER_TITLE);
-  //   }
-  // }, [isError, messageError])
+  useEffect(() => {
+    if (isError && messageError) {
+      toast.error(ERROR_CREATE_USER_TITLE);
+      return
+    }
+  }, [isError, messageError])
 
   return (
     <AnimatePresence>
@@ -88,9 +86,9 @@ export const ForgotPasswordCard = () => {
             { isSuccess && (<CheckIcon />)}
           </Button>
         </form>
-        {/* { (isError) && (
+        { (isError) && (
           <Toaster position="top-center" />
-        )} */}
+        )}
       </Card>
     </AnimatePresence>
   )
