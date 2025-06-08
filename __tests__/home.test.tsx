@@ -88,7 +88,7 @@ describe('Home', () => {
   })
 
   describe('Send login form validations', () => {
-    it.only('Given a user entering wrong email or password, show error', async () => {
+    it('Given a user entering wrong email or password, show error', async () => {
       const user = userEvent.setup()
       const push = jest.fn();
       mockedAxios.post.mockRejectedValue({
