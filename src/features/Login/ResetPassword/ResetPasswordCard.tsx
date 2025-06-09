@@ -42,7 +42,6 @@ export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswor
       const payload: ResetPasswordPayload = {
         password: data.password
       }
-      console.log(data)
       resetPwdMutation(payload)
     } catch (error) {
       console.log('error resetting password', error)
