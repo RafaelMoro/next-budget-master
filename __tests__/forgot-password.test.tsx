@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ForgotPasswordPage from '@/app/forgot-password/page'
 import QueryProviderWrapper from '@/app/QueryProviderWrapper'
@@ -40,6 +40,21 @@ describe('ForgotPasswordPage', () => {
       await user.click(button)
 
       expect(await screen.findByText(/Por favor, ingrese su correo electrónico/i)).toBeInTheDocument()
+    })
+
+    it ('Given a user leaving the email input empty, show error', async () => {
+      const user = userEvent.setup()
+      const push = jest.fn();
+      render(
+        <ForgotPassword push={push} />
+      )
+
+      const button = screen.getByRole('button', { name: /enviar/i })
+      const email = screen.getByLabelText(/correo electrónico/i)
+      await user.type(email, 'a@a')
+      await user.click(button)
+
+      expect(await screen.findByText(/Correo electrónico inválido/i)).toBeInTheDocument()
     })
   })
   it('should allow typing in the email field', async () => {
