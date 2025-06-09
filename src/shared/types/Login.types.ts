@@ -102,6 +102,11 @@ export type CreateUserPayload = {
   password: string
 }
 
+export type ResetPasswordFormData = {
+  password: string
+  confirmPassword: string
+}
+
 const emailValidation = string().email(ERROR_INVALID_EMAIL).required(ERROR_EMAIL_REQUIRED).matches(emailRegex, ERROR_INVALID_EMAIL);
 
 export const LoginSchema = object({
@@ -145,3 +150,8 @@ export const UserAndPasswordSchema = object({
   password: passwordValidation('Por favor, ingrese una contraseña'),
   confirmPassword: confirmPasswordValidation,
 });
+
+export const ResetPasswordSchema = object({
+  password: passwordValidation('Por favor, ingrese una contraseña'),
+  confirmPassword: confirmPasswordValidation,
+})
