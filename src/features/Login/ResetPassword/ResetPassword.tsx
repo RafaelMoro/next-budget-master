@@ -23,7 +23,16 @@ export const ResetPasswordView = ({ slug }: ResetPasswordProps) => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 flex flex-col justify-center items-center gap-20 min-h-full">
-        <h1 className="text-black dark:text-white text-4xl text-center font-bold">Estás a un paso de volver</h1>
+        { !messageCardState.show && (
+          <h1 className="text-black dark:text-white text-4xl text-center font-bold">
+            Estás a un paso de volver
+          </h1>
+        ) }
+        { messageCardState.show && (
+          <h1 className="text-black dark:text-white text-4xl text-center font-bold">
+            { messageCardState.status === "success" ? "🟢 ¡Contraseña cambiada con éxito!" : "🚫 No pudimos restablecer tu contraseña"}
+          </h1>
+        ) }
         { !messageCardState.show && (<ResetPasswordCard slug={slug} toggleMessageCardState={toggleMessageCardState} />) }
         { messageCardState.show && (<PasswordResetStatusCard status={messageCardState.status} />) }
       </main>

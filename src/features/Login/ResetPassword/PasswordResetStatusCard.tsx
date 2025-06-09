@@ -9,17 +9,23 @@ interface PasswordResetStatusCardProps {
 
 export const PasswordResetStatusCard =({ status }: PasswordResetStatusCardProps) => {
   return (
-    <Card className="max-w-[400px] flex flex-col gap-8">
-      <h5 className="text-2xl font-bold text-center text-gray-900 dark:text-white text-balance">
-        { status === "success" ? "🟢 ¡Contraseña cambiada con éxito!" : "🚫 No pudimos restablecer tu contraseña"}
-      </h5>
-      <p className="text-xl text-black dark:text-white text-pretty">
-        { status === 'success' ?
-          "Tu nueva contraseña ya está activa. Inicia sesión y sigue conquistando tus finanzas."
-          : "Parece que hubo un problema. Vuelve a iniciar el proceso desde “Olvidé mi contraseña” y lo resolvemos en segundos." }
-      </p>
-      { status === "error" && (<LinkButton href={FORGOT_PASSWORD_ROUTE} text="Ir a olvidé mi contraseña" />) }
-      <LinkButton href={LOGIN_ROUTE} isSecondary={status === "error"} text="Regresar al inicio" />
+    <Card className="max-w-[400px]">
+      <div className="flex flex-col gap-12">
+        <p className="text-xl text-black dark:text-white text-pretty">
+          { status === 'success' ?
+            "Tu nueva contraseña ya está activa."
+            : "Parece que hubo un problema." }
+        </p>
+        <p className="text-xl text-black dark:text-white text-pretty">
+          { status === 'success' ?
+            "Inicia sesión y sigue conquistando tus finanzas."
+            : "Vuelve a iniciar el proceso desde “Olvidé mi contraseña” y lo resolvemos en segundos." }
+        </p>
+        <div>
+          { status === "error" && (<LinkButton className="mb-5" href={FORGOT_PASSWORD_ROUTE} text="Ir a olvidé mi contraseña" />) }
+          <LinkButton href={LOGIN_ROUTE} isSecondary={status === "error"} text="Regresar al inicio" />
+        </div>
+      </div>
     </Card>
   )
 }
