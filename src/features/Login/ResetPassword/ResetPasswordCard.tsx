@@ -100,9 +100,6 @@ export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswor
             { isSuccess && (<CheckIcon />)}
           </Button>
         </form>
-        {/* { (isError) && (
-          <Toaster position="top-center" />
-        )} */}
       </Card>
     </AnimatePresence>
   )
