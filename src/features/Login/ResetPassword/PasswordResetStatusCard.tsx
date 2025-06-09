@@ -9,7 +9,7 @@ interface PasswordResetStatusCardProps {
 
 export const PasswordResetStatusCard =({ status }: PasswordResetStatusCardProps) => {
   return (
-    <Card className="max-w-[400px] gap-8">
+    <Card className="max-w-[400px] flex flex-col gap-8">
       <h5 className="text-2xl font-bold text-center text-gray-900 dark:text-white text-balance">
         { status === "success" ? "🟢 ¡Contraseña cambiada con éxito!" : "🚫 No pudimos restablecer tu contraseña"}
       </h5>

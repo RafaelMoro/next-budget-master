@@ -36,6 +36,7 @@ export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswor
     }
   })
   const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+  console.log('messageError', messageError)
 
   const onSubmit: SubmitHandler<ResetPasswordFormData> = async (data) => {
     try {
