@@ -3,7 +3,6 @@ import { AnimatePresence } from "motion/react"
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
-import { useRouter } from 'next/navigation'
 
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
@@ -16,9 +15,10 @@ import { GeneralError } from "@/shared/types/Global";
 
 interface ResetPasswordCardProps {
   slug: string;
+  toggleMessageCard: () => void;
 }
 
-export const ResetPasswordCard = ({ slug }: ResetPasswordCardProps) => {
+export const ResetPasswordCard = ({ slug, toggleMessageCard }: ResetPasswordCardProps) => {
   const {
     register,
     handleSubmit,
@@ -28,11 +28,12 @@ export const ResetPasswordCard = ({ slug }: ResetPasswordCardProps) => {
   })
   const { mutate: resetPwdMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<ResetPasswordData, ResetPasswordError, ResetPasswordPayload>({
     mutationFn: (data) => resetPasswordCb(data, slug),
-    // onSuccess: () => {
-    //   setTimeout(() => {
-    //     router.push(LOGIN_ROUTE)
-    //   }, 1000)
-    // }
+    onError: () => {
+      toggleMessageCard()
+    },
+    onSuccess: () => {
+      toggleMessageCard()
+    }
   })
   const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
 
