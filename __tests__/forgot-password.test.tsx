@@ -5,15 +5,21 @@ import ForgotPasswordPage from '@/app/forgot-password/page'
 import QueryProviderWrapper from '@/app/QueryProviderWrapper'
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock'
 
+const ForgotPassword = ({ push }: { push: () => void }) => {
+  return (
+    <QueryProviderWrapper>
+      <AppRouterContextProviderMock router={{ push }}>
+        <ForgotPasswordPage />
+      </AppRouterContextProviderMock>
+    </QueryProviderWrapper>
+  )
+}
+
 describe('ForgotPasswordPage', () => {
   it('should render the forgot password page', () => {
     const push = jest.fn();
     render(
-      <QueryProviderWrapper>
-        <AppRouterContextProviderMock router={{ push }}>
-          <ForgotPasswordPage />
-        </AppRouterContextProviderMock>
-      </QueryProviderWrapper>
+      <ForgotPassword push={push} />
     )
     expect(screen.getByRole('heading', { name: /recupera tu cuenta en un momento/i })).toBeInTheDocument()
     expect(screen.getByText(/te mandaremos un enlace seguro/i)).toBeInTheDocument()
@@ -26,12 +32,9 @@ describe('ForgotPasswordPage', () => {
     const user = userEvent.setup()
     const push = jest.fn();
     render(
-      <QueryProviderWrapper>
-        <AppRouterContextProviderMock router={{ push }}>
-          <ForgotPasswordPage />
-        </AppRouterContextProviderMock>
-      </QueryProviderWrapper>
+      <ForgotPassword push={push} />
     )
+
     const emailInput = screen.getByLabelText(/correo electrónico/i)
     await user.type(emailInput, 'test@example.com')
     expect(emailInput).toHaveValue('test@example.com')
