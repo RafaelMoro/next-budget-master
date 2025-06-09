@@ -13,7 +13,6 @@ import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
 import { ResetPasswordData, ResetPasswordError, ResetPasswordFormData, ResetPasswordPayload,
   ResetPasswordSchema, ResetPasswordStatus } from "@/shared/types/Login.types";
 import { resetPasswordCb } from "../Login/LoginCard.utils";
-import { GeneralError } from "@/shared/types/Global";
 
 interface ResetPasswordCardProps {
   slug: string;
@@ -28,7 +27,7 @@ export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswor
   } = useForm<ResetPasswordFormData>({
     resolver: yupResolver(ResetPasswordSchema)
   })
-  const { mutate: resetPwdMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<ResetPasswordData, ResetPasswordError, ResetPasswordPayload>({
+  const { mutate: resetPwdMutation, isError, isPending, isSuccess, isIdle } = useMutation<ResetPasswordData, ResetPasswordError, ResetPasswordPayload>({
     mutationFn: (data) => resetPasswordCb(data, slug),
     onError: () => {
       toggleMessageCardState("error")
@@ -37,8 +36,6 @@ export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswor
       toggleMessageCardState("success")
     }
   })
-  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
-  console.log('messageError', messageError)
 
   const onSubmit: SubmitHandler<ResetPasswordFormData> = async (data) => {
     try {
