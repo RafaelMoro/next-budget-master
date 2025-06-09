@@ -43,6 +43,14 @@ export interface ForgotPasswordData {
   version: string;
 }
 
+export interface ResetPasswordData {
+  data: null
+  error: null;
+  message: 'Reset password successfully';
+  success: boolean;
+  version: string;
+}
+
 export interface LoginPayload {
   email: string;
   password: string;
@@ -63,6 +71,13 @@ export interface CreateUserError extends Omit<AxiosError, 'response'> {
   }>;
 }
 export interface ForgotPasswordError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
+    }
+  }>;
+}
+export interface ResetPasswordError extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;
@@ -105,6 +120,9 @@ export type CreateUserPayload = {
 export type ResetPasswordFormData = {
   password: string
   confirmPassword: string
+}
+export type ResetPasswordPayload = {
+  password: string
 }
 
 const emailValidation = string().email(ERROR_INVALID_EMAIL).required(ERROR_EMAIL_REQUIRED).matches(emailRegex, ERROR_INVALID_EMAIL);
