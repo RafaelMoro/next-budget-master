@@ -173,3 +173,9 @@ export const ResetPasswordSchema = object({
   password: passwordValidation('Por favor, ingrese una contraseña'),
   confirmPassword: confirmPasswordValidation,
 })
+
+export type ResetPasswordStatus = "idle" | "success" | "error"
+export type MessageCardState = {
+  show: boolean;
+  status: ResetPasswordStatus;
+}
