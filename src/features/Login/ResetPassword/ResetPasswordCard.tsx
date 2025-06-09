@@ -6,7 +6,7 @@ import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
-import { ResetPasswordData, ResetPasswordError, ResetPasswordFormData, ResetPasswordPayload, ResetPasswordSchema } from "@/shared/types/Login.types";
+import { ResetPasswordData, ResetPasswordError, ResetPasswordFormData, ResetPasswordPayload, ResetPasswordSchema, ResetPasswordStatus } from "@/shared/types/Login.types";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { resetPasswordCb } from "../Login/LoginCard.utils";
@@ -15,10 +15,10 @@ import { GeneralError } from "@/shared/types/Global";
 
 interface ResetPasswordCardProps {
   slug: string;
-  toggleMessageCard: () => void;
+  toggleMessageCardState: (state: ResetPasswordStatus) => void
 }
 
-export const ResetPasswordCard = ({ slug, toggleMessageCard }: ResetPasswordCardProps) => {
+export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswordCardProps) => {
   const {
     register,
     handleSubmit,
@@ -29,18 +29,21 @@ export const ResetPasswordCard = ({ slug, toggleMessageCard }: ResetPasswordCard
   const { mutate: resetPwdMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<ResetPasswordData, ResetPasswordError, ResetPasswordPayload>({
     mutationFn: (data) => resetPasswordCb(data, slug),
     onError: () => {
-      toggleMessageCard()
+      toggleMessageCardState("error")
     },
     onSuccess: () => {
-      toggleMessageCard()
+      toggleMessageCardState("success")
     }
   })
   const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
 
   const onSubmit: SubmitHandler<ResetPasswordFormData> = async (data) => {
     try {
+      const payload: ResetPasswordPayload = {
+        password: data.password
+      }
       console.log(data)
-      resetPwdMutation(data)
+      resetPwdMutation(payload)
     } catch (error) {
       console.log('error resetting password', error)
     }
