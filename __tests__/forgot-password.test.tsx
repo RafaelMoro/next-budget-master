@@ -28,6 +28,20 @@ describe('ForgotPasswordPage', () => {
     expect(screen.getByRole('link', { name: /volver/i })).toBeInTheDocument()
   })
 
+  describe('Form validation', () => {
+    it ('Given a user leaving the email input empty, show error', async () => {
+      const user = userEvent.setup()
+      const push = jest.fn();
+      render(
+        <ForgotPassword push={push} />
+      )
+
+      const button = screen.getByRole('button', { name: /enviar/i })
+      await user.click(button)
+
+      expect(await screen.findByText(/Por favor, ingrese su correo electrónico/i)).toBeInTheDocument()
+    })
+  })
   it('should allow typing in the email field', async () => {
     const user = userEvent.setup()
     const push = jest.fn();
