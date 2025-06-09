@@ -55,7 +55,7 @@ describe('Home', () => {
       const pwdInput = screen.getByLabelText(/contraseña/i)
       await user.type(pwdInput, '1')
       await user.click(signInButton)
-      expect(await screen.findByText(/Correo electrónico es requerido/i))
+      expect(await screen.findByText(/Por favor, ingrese su correo electrónico/i))
     })
 
     it('Given a user filling the email wrong, show invalid email error ', async () => {
@@ -83,7 +83,7 @@ describe('Home', () => {
     
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
       await user.click(signInButton)
-      expect(await screen.findByText(/Contraseña es requerida/i))
+      expect(await screen.findByText(/Por favor, ingrese su contraseña/i))
     })
   })
 

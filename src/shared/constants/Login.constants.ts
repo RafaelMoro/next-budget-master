@@ -3,7 +3,7 @@ export const ERROR_EMAIL_IN_USE = 'Try with other email.'
 // Errors
 export const ERROR_UNAUTHORIZED_LOGIN = 'Email or Password incorrect.'
 export const ERROR_UNAUTHORIZED_LOGIN_MESSAGE = 'Correo electronico o contraseña incorrecta.';
-export const ERROR_PASSWORD_REQUIRED = 'Contraseña es requerida'
+export const ERROR_PASSWORD_REQUIRED = 'Por favor, ingrese su contraseña'
 export const ERROR_EMAIL_REQUIRED = 'Por favor, ingrese su correo electrónico';
 export const ERROR_INVALID_EMAIL = 'Correo electrónico inválido';
 export const ERROR_CREATE_USER_TITLE = 'Oops! Algo no salió como esperabamos.';
