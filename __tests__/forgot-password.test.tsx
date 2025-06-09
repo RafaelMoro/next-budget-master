@@ -84,5 +84,41 @@ describe('ForgotPasswordPage', () => {
         expect(push).toHaveBeenCalledWith('/')
       }, { timeout: 2000 })
     })
+
+    it('Given a user entering a correct email, and something goes wrong, show error message', async () => {
+      const user = userEvent.setup()
+      const push = jest.fn();
+      mockedAxios.post.mockRejectedValue({
+        code: 'ERR_BAD_REQUEST',
+        config: null,
+        message: 'Request failed with status code 401',
+        name: 'AxiosError',
+        request: null,
+        response: {
+          config: null,
+          data: {
+            data: null,
+            error: {
+              error: 'Bad Request',
+              message: 'Something went wrong.',
+              statusCode: 403
+            },
+            message: null,
+            success: false,
+            version: '1.2.0'
+          }
+        }
+      })
+      render(
+        <ForgotPassword push={push} />
+      )
+  
+      const button = screen.getByRole('button', { name: /enviar/i })
+      const email = screen.getByLabelText(/correo electrónico/i)
+      await user.type(email, 'example@example.com')
+      await user.click(button)
+  
+      expect(await screen.findByText(/Oops! Algo no salió como esperabamos./i)).toBeInTheDocument()
+    })
   })
 })
