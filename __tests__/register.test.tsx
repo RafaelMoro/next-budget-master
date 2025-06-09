@@ -5,7 +5,9 @@ import userEvent from '@testing-library/user-event'
 
 import QueryProviderWrapper from "@/app/QueryProviderWrapper";
 import RegisterPage from "@/app/register/page";
-import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_SPAN, SUCCESS_CREATE_USER_TITLE, SUCESS_CREATE_USER_SECONDARY_MESSAGE } from '@/shared/constants/Global.constants';
+import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_SPAN,
+  SUCCESS_CREATE_USER_TITLE, SUCESS_CREATE_USER_SECONDARY_MESSAGE
+ } from '@/shared/constants/Login.constants';
 import { ERROR_EMAIL_IN_USE } from '@/shared/constants/Login.constants';
 
 jest.mock('axios');
