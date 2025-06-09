@@ -35,7 +35,6 @@ export const ForgotPasswordCard = () => {
     }
   })
   const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
-  console.log('messageError =>', messageError)
 
   const onSubmit: SubmitHandler<ForgotPasswordPayload> = async (data) => {
     try {
