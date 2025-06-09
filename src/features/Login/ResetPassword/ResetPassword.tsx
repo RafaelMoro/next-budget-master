@@ -1,15 +1,16 @@
 "use client"
+import { useState } from "react"
+
 import { Header } from "@/shared/ui/organisms/Header"
 import { ResetPasswordCard } from "./ResetPasswordCard"
-import { useState } from "react"
-import { MessageCardState, ResetPasswordStatus } from "@/shared/types/Login.types"
 import { PasswordResetStatusCard } from "./PasswordResetStatusCard"
+import { MessageCardState, ResetPasswordStatus } from "@/shared/types/Login.types"
 
 export interface ResetPasswordProps {
   slug: string
 }
 
-export const ResetPassword = ({ slug }: ResetPasswordProps) => {
+export const ResetPasswordView = ({ slug }: ResetPasswordProps) => {
   const [messageCardState, setmessageCardState] = useState<MessageCardState>({
     show: false,
     status: "idle"

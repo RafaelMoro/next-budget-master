@@ -1,4 +1,4 @@
-import { ResetPassword } from "@/features/Login/ResetPassword/ResetPassword"
+import { ResetPasswordView } from "@/features/Login/ResetPassword/ResetPassword"
 import { Suspense } from "react"
 
 export default async function ResetPasswordPage({
@@ -10,7 +10,7 @@ export default async function ResetPasswordPage({
  
   return (
     <Suspense fallback={<p>Fallback reset password</p>}>
-      <ResetPassword slug={slug} />
+      <ResetPasswordView slug={slug} />
     </Suspense>
   )
 }

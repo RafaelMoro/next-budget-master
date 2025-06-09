@@ -3,14 +3,16 @@ import { AnimatePresence } from "motion/react"
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
+import { useMutation } from "@tanstack/react-query";
 
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
-import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
-import { ResetPasswordData, ResetPasswordError, ResetPasswordFormData, ResetPasswordPayload, ResetPasswordSchema, ResetPasswordStatus } from "@/shared/types/Login.types";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
-import { useMutation } from "@tanstack/react-query";
-import { resetPasswordCb } from "../Login/LoginCard.utils";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
+
+import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
+import { ResetPasswordData, ResetPasswordError, ResetPasswordFormData, ResetPasswordPayload,
+  ResetPasswordSchema, ResetPasswordStatus } from "@/shared/types/Login.types";
+import { resetPasswordCb } from "../Login/LoginCard.utils";
 import { GeneralError } from "@/shared/types/Global";
 
 interface ResetPasswordCardProps {
