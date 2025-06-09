@@ -3,24 +3,43 @@ import { AnimatePresence } from "motion/react"
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
+import { useRouter } from 'next/navigation'
 
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
-import { ResetPasswordFormData, ResetPasswordSchema } from "@/shared/types/Login.types";
+import { ResetPasswordData, ResetPasswordError, ResetPasswordFormData, ResetPasswordPayload, ResetPasswordSchema } from "@/shared/types/Login.types";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { resetPasswordCb } from "../Login/LoginCard.utils";
+import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
+import { GeneralError } from "@/shared/types/Global";
 
-export const ResetPasswordCard = () => {
+interface ResetPasswordCardProps {
+  slug: string;
+}
+
+export const ResetPasswordCard = ({ slug }: ResetPasswordCardProps) => {
   const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<ResetPasswordFormData>({
-      resolver: yupResolver(ResetPasswordSchema)
-    })
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetPasswordFormData>({
+    resolver: yupResolver(ResetPasswordSchema)
+  })
+  const { mutate: resetPwdMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<ResetPasswordData, ResetPasswordError, ResetPasswordPayload>({
+    mutationFn: (data) => resetPasswordCb(data, slug),
+    // onSuccess: () => {
+    //   setTimeout(() => {
+    //     router.push(LOGIN_ROUTE)
+    //   }, 1000)
+    // }
+  })
+  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
 
   const onSubmit: SubmitHandler<ResetPasswordFormData> = async (data) => {
     try {
       console.log(data)
+      resetPwdMutation(data)
     } catch (error) {
       console.log('error resetting password', error)
     }
@@ -67,13 +86,12 @@ export const ResetPasswordCard = () => {
             <LinkButton className="mt-4" text="Volver al inicio" isSecondary href={LOGIN_ROUTE} />
             <Button
               className="hover:cursor-pointer"
-              // disabled={isPending || isSuccess}
+              disabled={isPending || isSuccess}
               type="submit"
               >
-              Reestablecer contraseña
-            {/* { (isIdle || isError) && 'Enviar'}
-            { isPending && (<Spinner aria-label="loading login budget master" />) }
-            { isSuccess && (<CheckIcon />)} */}
+            { (isIdle || isError) && 'Reestablecer contraseña'}
+            { isPending && (<Spinner aria-label="loading reset password budget master" />) }
+            { isSuccess && (<CheckIcon />)}
           </Button>
         </form>
         {/* { (isError) && (

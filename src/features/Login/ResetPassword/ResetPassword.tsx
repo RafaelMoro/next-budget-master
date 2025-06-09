@@ -12,7 +12,7 @@ export const ResetPassword = ({ slug }: ResetPasswordProps) => {
       <Header />
       <main className="flex-1 flex flex-col justify-center items-center gap-20 min-h-full">
         <h1 className="text-black dark:text-white text-4xl text-center font-bold">Estás a un paso de volver</h1>
-        <ResetPasswordCard />
+        <ResetPasswordCard slug={slug} />
       </main>
     </div>
   )
