@@ -1,10 +1,13 @@
 import '@testing-library/jest-dom'
+import axios from 'axios';
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ForgotPasswordPage from '@/app/forgot-password/page'
 import QueryProviderWrapper from '@/app/QueryProviderWrapper'
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock'
 
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 const ForgotPassword = ({ push }: { push: () => void }) => {
   return (
     <QueryProviderWrapper>
@@ -57,15 +60,29 @@ describe('ForgotPasswordPage', () => {
       expect(await screen.findByText(/Correo electrónico inválido/i)).toBeInTheDocument()
     })
   })
-  it('should allow typing in the email field', async () => {
-    const user = userEvent.setup()
-    const push = jest.fn();
-    render(
-      <ForgotPassword push={push} />
-    )
-
-    const emailInput = screen.getByLabelText(/correo electrónico/i)
-    await user.type(emailInput, 'test@example.com')
-    expect(emailInput).toHaveValue('test@example.com')
+  describe('Send form data', () => {
+    it('Given a user entering a correct email, redirect to home', async () => {
+      const user = userEvent.setup()
+      const push = jest.fn();
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: 'Email sent',
+        success: true,
+        version: "v1.2.0",
+        data: null,
+      })
+      render(
+        <ForgotPassword push={push} />
+      )
+  
+      const button = screen.getByRole('button', { name: /enviar/i })
+      const email = screen.getByLabelText(/correo electrónico/i)
+      await user.type(email, 'example@example.com')
+      await user.click(button)
+  
+      await waitFor(() => {
+        expect(push).toHaveBeenCalledWith('/')
+      }, { timeout: 2000 })
+    })
   })
 })
