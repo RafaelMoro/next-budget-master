@@ -31,8 +31,6 @@ describe('ResetPasswordCard', () => {
         </QueryProviderWrapper>
       )
 
-      // const pwdInput = screen.getByTestId('password')
-      // const confirmPwdInput = screen.getByTestId('confirmPassword')
       const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
       await user.click(resetButton)
       expect(await screen.findByText(/Por favor, ingrese una contraseña/i)).toBeInTheDocument()
@@ -88,6 +86,42 @@ describe('ResetPasswordCard', () => {
       await user.type(pwdInput, 'alotofcharactersonpasswordA')
       await user.click(resetButton)
       expect(await screen.findByText(/La contraseña debe contener al menos 1 número/i)).toBeInTheDocument()
+    })
+
+    it('Given a user entering a password with at least 16 characters lower case, 1 upper case, 1 number, show error validation to enter 1 special character', async () => {
+      const user = userEvent.setup()
+      const mockToggleMessageCardState = jest.fn()
+      const mockSlug = 'test-slug'
+      render(
+        <QueryProviderWrapper>
+          <ResetPasswordCard slug={mockSlug} toggleMessageCardState={mockToggleMessageCardState}  />
+        </QueryProviderWrapper>
+      )
+
+      const pwdInput = screen.getByTestId('password')
+      const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
+      await user.type(pwdInput, 'alotofcharactersonpasswordA1')
+      await user.click(resetButton)
+      expect(await screen.findByText(/La contraseña debe contener al menos 1 caracter especial/i)).toBeInTheDocument()
+    })
+
+    it('Given a user entering a strong password, then enters a confirm password different, show error validation', async () => {
+      const user = userEvent.setup()
+      const mockToggleMessageCardState = jest.fn()
+      const mockSlug = 'test-slug'
+      render(
+        <QueryProviderWrapper>
+          <ResetPasswordCard slug={mockSlug} toggleMessageCardState={mockToggleMessageCardState}  />
+        </QueryProviderWrapper>
+      )
+
+      const pwdInput = screen.getByTestId('password')
+      const confirmPwdInput = screen.getByTestId('confirmPassword')
+      const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
+      await user.type(pwdInput, 'alotofcharactersonpasswordA1')
+      await user.type(confirmPwdInput, 'alotofcharactersonpasswordA2')
+      await user.click(resetButton)
+      expect(await screen.findByText(/Contraseña y confirmar contraseña deben ser iguales\./i)).toBeInTheDocument()
     })
 
   })
