@@ -1,10 +1,19 @@
 import { screen, render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import axios from 'axios';
 
 import QueryProviderWrapper from '@/app/QueryProviderWrapper'
 import { ResetPasswordCard } from '@/features/Login/ResetPassword/ResetPasswordCard'
 
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+
 describe('ResetPasswordCard', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  })
+
   it('Show reset password card', () => {
     const mockToggleMessageCardState = jest.fn()
     const mockSlug = 'test-slug'
@@ -118,11 +127,40 @@ describe('ResetPasswordCard', () => {
       const pwdInput = screen.getByTestId('password')
       const confirmPwdInput = screen.getByTestId('confirmPassword')
       const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
-      await user.type(pwdInput, 'alotofcharactersonpasswordA1')
+      await user.type(pwdInput, 'alotofcharactersonpasswordA1@')
       await user.type(confirmPwdInput, 'alotofcharactersonpasswordA2')
       await user.click(resetButton)
       expect(await screen.findByText(/Contraseña y confirmar contraseña deben ser iguales\./i)).toBeInTheDocument()
     })
+  })
 
+  describe('Reset Password submit', () => {
+    it('Given a user password and confirm password, see tick in button', async () => {
+      const user = userEvent.setup()
+      const mockToggleMessageCardState = jest.fn()
+      const mockSlug = 'test-slug'
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: 'Reset Password Successfully',
+        success: true,
+        version: "v1.2.0",
+        data: null,
+      })
+
+      render(
+        <QueryProviderWrapper>
+          <ResetPasswordCard slug={mockSlug} toggleMessageCardState={mockToggleMessageCardState}  />
+        </QueryProviderWrapper>
+      )
+
+      const pwdInput = screen.getByTestId('password')
+      const confirmPwdInput = screen.getByTestId('confirmPassword')
+      const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
+      await user.type(pwdInput, 'alotofcharactersonpasswordA1@')
+      await user.type(confirmPwdInput, 'alotofcharactersonpasswordA1@')
+      await user.click(resetButton)
+
+      expect(await screen.findByTestId('check-icon')).toBeInTheDocument()
+    })
   })
 })
