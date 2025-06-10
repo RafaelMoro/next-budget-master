@@ -11,6 +11,7 @@ describe('UserRegistrationForm', () => {
 
     render(
       <UserRegistrationForm
+        direction={1}
         goBack={goBack}
         updateUserPasswordInfo={updateUserPassword}
         submitForm={handleSubmit}
@@ -34,6 +35,7 @@ describe('UserRegistrationForm', () => {
 
     render(
       <UserRegistrationForm
+        direction={1}
         goBack={goBack}
         updateUserPasswordInfo={updateUserPassword}
         submitForm={handleSubmit}
@@ -64,6 +66,7 @@ describe('UserRegistrationForm', () => {
 
     render(
       <UserRegistrationForm
+        direction={1}
         goBack={goBack}
         updateUserPasswordInfo={updateUserPassword}
         submitForm={handleSubmit}
