@@ -1,4 +1,4 @@
-import { ResetPasswordView } from "@/features/Login/ResetPassword/ResetPassword"
+import { ResetPasswordView } from "@/features/Login/ResetPassword/ResetPasswordView"
 import { Suspense } from "react"
 
 export default async function ResetPasswordPage({
