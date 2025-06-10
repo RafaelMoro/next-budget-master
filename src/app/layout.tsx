@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans"
 import "./globals.css";
+import QueryProviderWrapper from "./QueryProviderWrapper";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,11 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark">
       <body
-        className={`${GeistSans.className} antialiased bg-white text-gray-950 dark:text-gray-100 dark:bg-gray-950 color scheme-dark`}
+        className={`${GeistSans.className} antialiased bg-white text-gray-950 dark:text-gray-100 dark:bg-gray-950 transition-colors`}
       >
-        {children}
+        <QueryProviderWrapper>
+          {children}
+        </QueryProviderWrapper>
       </body>
     </html>
   );

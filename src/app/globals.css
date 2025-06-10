@@ -1,4 +1,6 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@plugin 'flowbite-react/plugin/tailwindcss';
+@source '../../.flowbite-react/class-list.json';
 @plugin "@tailwindcss/forms";
 
 @theme {
@@ -124,6 +126,8 @@
     }
   }
 }
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
