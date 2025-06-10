@@ -38,5 +38,40 @@ describe('ResetPasswordCard', () => {
       expect(await screen.findByText(/Por favor, ingrese una contraseña/i)).toBeInTheDocument()
       expect(screen.getByText(/Por favor, ingrese su contraseña nuevamente/i)).toBeInTheDocument()
     })
+
+    it('Given a user entering a short password, show error validation', async () => {
+      const user = userEvent.setup()
+      const mockToggleMessageCardState = jest.fn()
+      const mockSlug = 'test-slug'
+      render(
+        <QueryProviderWrapper>
+          <ResetPasswordCard slug={mockSlug} toggleMessageCardState={mockToggleMessageCardState}  />
+        </QueryProviderWrapper>
+      )
+
+      const pwdInput = screen.getByTestId('password')
+      const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
+      await user.type(pwdInput, '1234')
+      await user.click(resetButton)
+      expect(await screen.findByText(/La contraseña debe tener al menos 16 caracteres. Ingrese más caracteres/i)).toBeInTheDocument()
+    })
+
+    it('Given a user entering a password only lower case characters, show error validation to enter 1 upper case character', async () => {
+      const user = userEvent.setup()
+      const mockToggleMessageCardState = jest.fn()
+      const mockSlug = 'test-slug'
+      render(
+        <QueryProviderWrapper>
+          <ResetPasswordCard slug={mockSlug} toggleMessageCardState={mockToggleMessageCardState}  />
+        </QueryProviderWrapper>
+      )
+
+      const pwdInput = screen.getByTestId('password')
+      const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
+      await user.type(pwdInput, 'alotofcharactersonpassword')
+      await user.click(resetButton)
+      expect(await screen.findByText(/La contraseña debe contener al menos 1 mayúscula/i)).toBeInTheDocument()
+    })
+
   })
 })
