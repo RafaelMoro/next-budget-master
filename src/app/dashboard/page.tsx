@@ -2,6 +2,8 @@ import { GetAccountResponse } from '@/shared/types/Accounts.types'
 
 import { getAccessToken } from '@/shared/lib/auth';
 import { ShowAccounts } from '@/features/Accounts/ShowAccounts';
+import { AreaChartTypeExample } from '@/components/AreaChartTest';
+import { Header } from '@/shared/ui/organisms/Header';
 
 export default async function DashboardPage () {
   const accessToken = await getAccessToken()
@@ -14,10 +16,14 @@ export default async function DashboardPage () {
   const { data: { accounts } } = data;
 
   return (
-    <div className='grid grid-col-3 gap-4 justify-items-center'>
-      <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Accounts</h1>
-      <ShowAccounts accounts={accounts} />
-    </div>
+    <>
+      <Header />
+      <div className='grid grid-col-3 gap-4 justify-items-center'>
+        <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Accounts</h1>
+        <ShowAccounts accounts={accounts} />
+      </div>
+      <AreaChartTypeExample />
+    </>
   )
 }
 
