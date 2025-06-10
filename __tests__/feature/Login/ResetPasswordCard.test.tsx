@@ -1,4 +1,4 @@
-import { screen, render } from '@testing-library/react'
+import { screen, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios';
 
@@ -135,6 +135,50 @@ describe('ResetPasswordCard', () => {
   })
 
   describe('Reset Password submit', () => {
+    it('Given a user password and confirm password, then something goes wrong', async () => {
+      const user = userEvent.setup()
+      const mockToggleMessageCardState = jest.fn()
+      const mockSlug = 'test-slug'
+      mockedAxios.post.mockRejectedValue({
+        code: 'ERR_BAD_REQUEST',
+        config: null,
+        message: 'Request failed with status code 401',
+        name: 'AxiosError',
+        request: null,
+        response: {
+          config: null,
+          data: {
+            data: null,
+            error: {
+              error: 'Bad Request',
+              message: 'Something went wrong.',
+              statusCode: 403
+            },
+            message: null,
+            success: false,
+            version: '1.2.0'
+          }
+        }
+      })
+
+      render(
+        <QueryProviderWrapper>
+          <ResetPasswordCard slug={mockSlug} toggleMessageCardState={mockToggleMessageCardState}  />
+        </QueryProviderWrapper>
+      )
+
+      const pwdInput = screen.getByTestId('password')
+      const confirmPwdInput = screen.getByTestId('confirmPassword')
+      const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
+      await user.type(pwdInput, 'alotofcharactersonpasswordA1@')
+      await user.type(confirmPwdInput, 'alotofcharactersonpasswordA1@')
+      await user.click(resetButton)
+
+      await waitFor(() => {
+        expect(mockedAxios.post).toHaveBeenCalled()
+      })
+    })
+
     it('Given a user password and confirm password, see tick in button', async () => {
       const user = userEvent.setup()
       const mockToggleMessageCardState = jest.fn()
