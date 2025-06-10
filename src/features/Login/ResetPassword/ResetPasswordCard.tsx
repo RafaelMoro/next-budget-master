@@ -37,15 +37,11 @@ export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswor
     }
   })
 
-  const onSubmit: SubmitHandler<ResetPasswordFormData> = async (data) => {
-    try {
-      const payload: ResetPasswordPayload = {
-        password: data.password
-      }
-      resetPwdMutation(payload)
-    } catch (error) {
-      console.log('error resetting password', error)
+  const onSubmit: SubmitHandler<ResetPasswordFormData> = (data) => {
+    const payload: ResetPasswordPayload = {
+      password: data.password
     }
+    resetPwdMutation(payload)
   }
 
   return (
