@@ -73,5 +73,22 @@ describe('ResetPasswordCard', () => {
       expect(await screen.findByText(/La contraseña debe contener al menos 1 mayúscula/i)).toBeInTheDocument()
     })
 
+    it('Given a user entering a password with at least 16 characters lower case and 1 upper case, show error validation to enter 1 number character', async () => {
+      const user = userEvent.setup()
+      const mockToggleMessageCardState = jest.fn()
+      const mockSlug = 'test-slug'
+      render(
+        <QueryProviderWrapper>
+          <ResetPasswordCard slug={mockSlug} toggleMessageCardState={mockToggleMessageCardState}  />
+        </QueryProviderWrapper>
+      )
+
+      const pwdInput = screen.getByTestId('password')
+      const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
+      await user.type(pwdInput, 'alotofcharactersonpasswordA')
+      await user.click(resetButton)
+      expect(await screen.findByText(/La contraseña debe contener al menos 1 número/i)).toBeInTheDocument()
+    })
+
   })
 })
