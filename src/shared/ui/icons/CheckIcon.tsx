@@ -1,6 +1,7 @@
 export const CheckIcon = () => {
   return (
-    <svg 
+    <svg
+      data-testid="check-icon"
       width="24"
       height="24"
       viewBox="0 0 24 24"

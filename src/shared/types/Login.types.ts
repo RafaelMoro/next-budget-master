@@ -43,6 +43,14 @@ export interface ForgotPasswordData {
   version: string;
 }
 
+export interface ResetPasswordData {
+  data: null
+  error: null;
+  message: 'Reset password successfully';
+  success: boolean;
+  version: string;
+}
+
 export interface LoginPayload {
   email: string;
   password: string;
@@ -63,6 +71,13 @@ export interface CreateUserError extends Omit<AxiosError, 'response'> {
   }>;
 }
 export interface ForgotPasswordError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
+    }
+  }>;
+}
+export interface ResetPasswordError extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;
@@ -99,6 +114,14 @@ export type CreateUserPayload = {
   middleName: string
   lastName: string
   email: string
+  password: string
+}
+
+export type ResetPasswordFormData = {
+  password: string
+  confirmPassword: string
+}
+export type ResetPasswordPayload = {
   password: string
 }
 
@@ -145,3 +168,14 @@ export const UserAndPasswordSchema = object({
   password: passwordValidation('Por favor, ingrese una contraseña'),
   confirmPassword: confirmPasswordValidation,
 });
+
+export const ResetPasswordSchema = object({
+  password: passwordValidation('Por favor, ingrese una contraseña'),
+  confirmPassword: confirmPasswordValidation,
+})
+
+export type ResetPasswordStatus = "idle" | "success" | "error"
+export type MessageCardState = {
+  show: boolean;
+  status: ResetPasswordStatus;
+}

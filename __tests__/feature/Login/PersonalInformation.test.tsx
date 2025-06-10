@@ -14,6 +14,7 @@ describe('PersonalInformation', () => {
 
     render(
       <PersonalInformation
+        direction={1}
         nextCb={nextStep}
         personalInformation={personalInformation}
         updatePersonalInformation={updatePersonalInformation}
@@ -39,6 +40,7 @@ describe('PersonalInformation', () => {
 
     render(
       <PersonalInformation
+        direction={1}
         nextCb={nextStep}
         personalInformation={personalInformation}
         updatePersonalInformation={updatePersonalInformation}
@@ -72,6 +74,7 @@ describe('PersonalInformation', () => {
   
       render(
         <PersonalInformation
+          direction={1}
           nextCb={nextStep}
           personalInformation={personalInformation}
           updatePersonalInformation={updatePersonalInformation}
@@ -97,6 +100,7 @@ describe('PersonalInformation', () => {
   
       render(
         <PersonalInformation
+          direction={1}
           nextCb={nextStep}
           personalInformation={personalInformation}
           updatePersonalInformation={updatePersonalInformation}
