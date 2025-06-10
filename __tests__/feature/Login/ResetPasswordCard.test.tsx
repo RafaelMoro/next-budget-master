@@ -1,6 +1,8 @@
+import { screen, render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+
 import QueryProviderWrapper from '@/app/QueryProviderWrapper'
 import { ResetPasswordCard } from '@/features/Login/ResetPassword/ResetPasswordCard'
-import { screen, render } from '@testing-library/react'
 
 describe('ResetPasswordCard', () => {
   it('Show reset password card', () => {
@@ -16,5 +18,25 @@ describe('ResetPasswordCard', () => {
     expect(screen.getByTestId('confirmPassword')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /volver al inicio/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /reestablecer contraseña/i })).toBeInTheDocument()
+  })
+
+  describe('Form Validation', () => {
+    it('Password fields are required', async () => {
+      const user = userEvent.setup()
+      const mockToggleMessageCardState = jest.fn()
+      const mockSlug = 'test-slug'
+      render(
+        <QueryProviderWrapper>
+          <ResetPasswordCard slug={mockSlug} toggleMessageCardState={mockToggleMessageCardState}  />
+        </QueryProviderWrapper>
+      )
+
+      // const pwdInput = screen.getByTestId('password')
+      // const confirmPwdInput = screen.getByTestId('confirmPassword')
+      const resetButton = screen.getByRole('button', { name: /reestablecer contraseña/i })
+      await user.click(resetButton)
+      expect(await screen.findByText(/Por favor, ingrese una contraseña/i)).toBeInTheDocument()
+      expect(screen.getByText(/Por favor, ingrese su contraseña nuevamente/i)).toBeInTheDocument()
+    })
   })
 })
