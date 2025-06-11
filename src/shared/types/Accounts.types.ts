@@ -1,15 +1,22 @@
-export type AccountBank<TType, TAmount = number> = {
+export type AccountBank = {
   _id: string;
-  title: TType;
+  title: string;
   accountType: string;
   backgroundColor: string;
   color: string;
-  amount: TAmount;
+  amount: number;
   sub: string;
 }
 
-export type GetAccountResponse = {
+// Response from backend
+export type FetchAccountsResponse = {
   data: {
-    accounts: AccountBank<string, number>[];
+    accounts: AccountBank[];
   }
+}
+
+// Response from the function getAccounts
+export type GetAccountsResponse = {
+  message: string;
+  accounts: AccountBank[];
 }
