@@ -1,4 +1,4 @@
-import { FetchAccountsResponse, GetAccountsResponse } from "../types/Accounts.types";
+import { FetchAccountsResponse, GetAccountsResponse } from "../types/accounts.types";
 
 export const fetchAccounts = async ({ accessToken }: { accessToken: string }): Promise<GetAccountsResponse> => {
   try {

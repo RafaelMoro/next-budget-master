@@ -1,5 +1,5 @@
 "use client"
-import { AccountBank } from "@/shared/types/Accounts.types";
+import { AccountBank } from "@/shared/types/accounts.types";
 import { Card } from "flowbite-react";
 
 interface AccountsProps {
