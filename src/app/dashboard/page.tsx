@@ -1,23 +1,20 @@
-import { GetAccountResponse } from '@/shared/types/Accounts.types'
-
 import { getAccessToken } from '@/shared/lib/auth';
 import { ShowAccounts } from '@/features/Accounts/ShowAccounts';
 import { AreaChartTypeExample } from '@/components/AreaChartTest';
 import { Header } from '@/shared/ui/organisms/Header';
 import { DashboardAside } from '@/shared/ui/organisms/DashboardAside';
+import { fetchAccounts } from '@/shared/lib/dashboard.lib';
+import { LoginRequiredModal } from '@/shared/ui/organisms/LoginRequiredModal';
 
 export default async function DashboardPage () {
   const accessToken = await getAccessToken()
-  const res = await fetch('http://localhost:6006/account-actions', {
-    headers: {
-      'Authorization': `Bearer ${accessToken}`
-    }
-  })
-  const data: GetAccountResponse = await res.json()
-  const { data: { accounts } } = data;
+
+  const { message, accounts } = await fetchAccounts({ accessToken })
+  console.log('message', message)
 
   return (
     <>
+      <LoginRequiredModal show={!accessToken} />
       <div className="w-full min-h-screen max-w-screen-2xl flex justify-center gap-5">
         <DashboardAside>
           <Header isHeaderAside />
