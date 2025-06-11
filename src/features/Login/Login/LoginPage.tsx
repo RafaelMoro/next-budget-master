@@ -1,9 +1,19 @@
 "use client"
+import { useRouter } from 'next/navigation'
 import { LoginCard } from "./LoginCard";
 import { Header } from "@/shared/ui/organisms/Header";
+import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants';
 
+interface LoginPageProps {
+  accessToken: string;
+}
 
-export const LoginPage = () => {
+export const LoginPage = ({ accessToken }: LoginPageProps) => {
+  const router = useRouter()
+  if (accessToken) {
+    router.push(DASHBOARD_ROUTE)
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
