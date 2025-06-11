@@ -8,9 +8,7 @@ import { LoginRequiredModal } from '@/shared/ui/organisms/LoginRequiredModal';
 
 export default async function DashboardPage () {
   const accessToken = await getAccessToken()
-
-  const { message, accounts } = await fetchAccounts({ accessToken })
-  console.log('message', message)
+  const { accounts } = await fetchAccounts({ accessToken })
 
   return (
     <>
