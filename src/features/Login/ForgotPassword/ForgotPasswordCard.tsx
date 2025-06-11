@@ -11,7 +11,7 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
-import { ForgotPasswordData, ForgotPasswordError, ForgotPasswordPayload, ForgotPasswordSchema } from "@/shared/types/Login.types";
+import { ForgotPasswordData, ForgotPasswordError, ForgotPasswordPayload, ForgotPasswordSchema } from "@/shared/types/login.types";
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { forgotPasswordCb } from "../Login/LoginCard.utils";
 import { GeneralError } from "@/shared/types/global.types";

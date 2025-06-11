@@ -6,7 +6,7 @@ import { createUserCb } from "@/features/Login/Login/LoginCard.utils"
 import { PersonalInformation } from "@/features/Login/Register/PersonalInformation"
 import { UserRegistrationForm } from "@/features/Login/Register/UserRegistrationForm"
 import { CreateUserData, CreateUserError, CreateUserPayload, FormDataRegister,
-  InputsPersonalInformation, InputsUserPassword, UserPasswordPayload } from "@/shared/types/Login.types"
+  InputsPersonalInformation, InputsUserPassword, UserPasswordPayload } from "@/shared/types/login.types"
 import { Stepper } from "@/shared/ui/atoms/Stepper"
 import { Header } from "@/shared/ui/organisms/Header"
 import { ResultCard } from "@/features/Login/Register/ResultCard"

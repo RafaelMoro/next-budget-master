@@ -11,7 +11,7 @@ import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
 import { ResetPasswordData, ResetPasswordError, ResetPasswordFormData, ResetPasswordPayload,
-  ResetPasswordSchema, ResetPasswordStatus } from "@/shared/types/Login.types";
+  ResetPasswordSchema, ResetPasswordStatus } from "@/shared/types/login.types";
 import { resetPasswordCb } from "../Login/LoginCard.utils";
 
 interface ResetPasswordCardProps {

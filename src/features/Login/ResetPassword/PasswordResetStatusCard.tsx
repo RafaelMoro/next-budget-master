@@ -1,5 +1,5 @@
 import { FORGOT_PASSWORD_ROUTE, LOGIN_ROUTE } from "@/shared/constants/Global.constants";
-import { ResetPasswordStatus } from "@/shared/types/Login.types";
+import { ResetPasswordStatus } from "@/shared/types/login.types";
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { Card } from "flowbite-react";
 

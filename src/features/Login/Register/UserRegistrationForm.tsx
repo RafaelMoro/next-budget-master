@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Card, Button, Label, TextInput, Spinner } from "flowbite-react";
 
-import { InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/Login.types";
+import { InputsUserPassword, UserAndPasswordSchema } from "@/shared/types/login.types";
 import { AnimateBox } from "@/shared/ui/atoms/AnimateBox";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 

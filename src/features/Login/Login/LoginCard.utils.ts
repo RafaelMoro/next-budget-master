@@ -1,4 +1,4 @@
-import { CreateUserData, CreateUserPayload, ForgotPasswordData, ForgotPasswordPayload, LoginData, LoginPayload, ResetPasswordData, ResetPasswordPayload } from "@/shared/types/Login.types";
+import { CreateUserData, CreateUserPayload, ForgotPasswordData, ForgotPasswordPayload, LoginData, LoginPayload, ResetPasswordData, ResetPasswordPayload } from "@/shared/types/login.types";
 import axios from "axios";
 
 export const LoginMutationCb = (data: LoginPayload): Promise<LoginData> => {
