@@ -1,7 +1,8 @@
+"use client"
+import { LoginPage } from '@/features/Login/Login/LoginPage';
+
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <LoginPage />
   );
 }
