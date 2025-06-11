@@ -1,4 +1,3 @@
-"use client";
 import { HomeIcon } from "../icons/HomeIcon"
 import { CreditCardIcon } from "../icons/CreditCardIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"

@@ -1,3 +1,4 @@
+"use client"
 import { Dropdown, DropdownItem } from "flowbite-react"
 import { RiExpandUpDownLine } from "@remixicon/react";
 
