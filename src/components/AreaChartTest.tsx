@@ -78,7 +78,7 @@ export const AreaChartTypeExample = () => {
     <div className="flex flex-col gap-16">
       {types.map((type, index) => (
         <div key={index} className="flex flex-col gap-4">
-          <p className="mx-auto font-mono text-sm font-medium">type="{type}"</p>
+          <p className="mx-auto font-mono text-sm font-medium">type=&quot;{type}&quot;</p>
           <AreaChart
             key={index}
             type={type}
