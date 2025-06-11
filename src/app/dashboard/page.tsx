@@ -1,4 +1,4 @@
-import { getAccessToken } from '@/shared/lib/auth';
+import { getAccessToken } from '@/shared/lib/auth.lib';
 import { ShowAccounts } from '@/features/Accounts/ShowAccounts';
 import { AreaChartTypeExample } from '@/components/AreaChartTest';
 import { Header } from '@/shared/ui/organisms/Header';
