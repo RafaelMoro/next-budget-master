@@ -3,6 +3,8 @@ import { HomeIcon } from "../icons/HomeIcon"
 import { CreditCardIcon } from "../icons/CreditCardIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ReactNode } from "react"
+import { DashboardAsideLink } from "../atoms/DashboardAsideLink"
+import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 
 interface DashboardAsideProps {
   children: ReactNode;
@@ -13,18 +15,18 @@ export const DashboardAside = ({ children }: DashboardAsideProps) => {
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
       {children}
       <nav className="flex flex-col">
-        <Link className="text-indigo-400 hover:text-white flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm transition hover:bg-gray-900  focus-visible:outline-2" href="/">
+        <DashboardAsideLink href={DASHBOARD_ROUTE}>
             <HomeIcon />
             Overview
-        </Link>
-        <Link className="text-indigo-400 hover:text-white flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm transition hover:bg-gray-900  focus-visible:outline-2" href="/">
+        </DashboardAsideLink>
+        <DashboardAsideLink href={DASHBOARD_ROUTE}>
             <CreditCardIcon />
             Accounts
-        </Link>
-        <Link className="text-indigo-400 hover:text-white flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm transition hover:bg-gray-900  focus-visible:outline-2" href="/">
+        </DashboardAsideLink>
+        <DashboardAsideLink href={DASHBOARD_ROUTE}>
             <AccountRecordsIcon />
             All records
-        </Link>
+        </DashboardAsideLink>
       </nav>
     </aside>
   )
