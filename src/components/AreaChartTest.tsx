@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { AreaChart } from "@/components/tremor/AreaChart"
+import { AreaChart } from "@/shared/ui/tremor/AreaChart"
 
 const chartdata = [
   {
