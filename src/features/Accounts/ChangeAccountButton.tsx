@@ -11,7 +11,7 @@ interface ChangeAccountButtonProps {
  */
 export const ChangeAccoubntButton = ({ title, amount, type }: ChangeAccountButtonProps) => {
   return (
-    <button
+    <article
       className="flex justify-between w-full items-center gap-x-2.5 rounded-md border border-gray-300 bg-white p-2 text-sm shadow-sm transition-all hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-950 hover:dark:bg-gray-900 focus:ring-2 focus:ring-indigo-200 focus:dark:ring-indigo-700/30 focus:border-indigo-500 focus:dark:border-indigo-700"
       >
       <div className="flex flex-col gap-2 items-start">
@@ -22,6 +22,6 @@ export const ChangeAccoubntButton = ({ title, amount, type }: ChangeAccountButto
         </span>
       </div>
       <RiExpandUpDownLine className="cursor-pointer" strokeWidth={1} />
-    </button>
+    </article>
   )
 }
