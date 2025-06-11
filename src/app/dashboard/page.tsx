@@ -12,7 +12,7 @@ export default async function DashboardPage () {
   return (
     <>
       <LoginRequiredModal show={!accessToken} />
-      <div className="w-full min-h-screen max-w-screen-2xl flex justify-center gap-5">
+      <div className="w-full min-h-screen max-w-screen-2xl flex">
         <DashboardAside>
           <Header isHeaderAside />
         </DashboardAside>
