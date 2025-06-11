@@ -1,3 +1,9 @@
+## v0.8.1 (2025-06-11)
+
+### Pull Requests
+[#12](https://github.com/RafaelMoro/next-budget-master/pull/12) | Change engine version requirements for node and pnpm
+
+
 ## v0.8.0 (2025-06-10)
 
 ### Pull Requests
