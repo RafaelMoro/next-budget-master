@@ -17,15 +17,15 @@ export const DashboardAside = ({ children }: DashboardAsideProps) => {
       <nav className="flex flex-col">
         <DashboardAsideLink href={DASHBOARD_ROUTE}>
             <HomeIcon />
-            Overview
+            Panorama
         </DashboardAsideLink>
         <DashboardAsideLink href={DASHBOARD_ROUTE}>
             <CreditCardIcon />
-            Accounts
+            Cuentas
         </DashboardAsideLink>
         <DashboardAsideLink href={DASHBOARD_ROUTE}>
             <AccountRecordsIcon />
-            All records
+            Transacciones
         </DashboardAsideLink>
       </nav>
     </aside>

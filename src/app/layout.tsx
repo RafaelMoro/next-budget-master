@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="es" data-theme="dark">
       <body
         className={`${GeistSans.className} antialiased bg-white text-gray-950 dark:text-gray-100 dark:bg-gray-950 transition-colors`}
       >
