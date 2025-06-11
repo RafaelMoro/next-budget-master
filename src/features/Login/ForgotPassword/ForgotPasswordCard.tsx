@@ -14,7 +14,7 @@ import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
 import { ForgotPasswordData, ForgotPasswordError, ForgotPasswordPayload, ForgotPasswordSchema } from "@/shared/types/Login.types";
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { forgotPasswordCb } from "../Login/LoginCard.utils";
-import { GeneralError } from "@/shared/types/Global";
+import { GeneralError } from "@/shared/types/global.types";
 import { ERROR_CREATE_USER_TITLE } from "@/shared/constants/Login.constants";
 
 export const ForgotPasswordCard = () => {

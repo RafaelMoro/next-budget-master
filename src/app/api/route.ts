@@ -3,7 +3,7 @@ import { type NextRequest } from 'next/server'
 
 import { getCookieProps } from "@/shared/utils/parseCookie";
 import { encodeAccessToken, saveSessionCookie } from "@/shared/lib/auth.lib";
-import { GeneralError } from "@/shared/types/Global";
+import { GeneralError } from "@/shared/types/global.types";
 
 export async function POST(request: NextRequest) {
   try {

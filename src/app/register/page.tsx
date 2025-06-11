@@ -12,7 +12,7 @@ import { Header } from "@/shared/ui/organisms/Header"
 import { ResultCard } from "@/features/Login/Register/ResultCard"
 import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_TITLE } from "@/shared/constants/Login.constants"
 import { AxiosResponse } from "axios"
-import { GeneralError } from "@/shared/types/Global"
+import { GeneralError } from "@/shared/types/global.types"
 import { ERROR_EMAIL_IN_USE } from "@/shared/constants/Login.constants"
 import { useAnimateBox } from "@/shared/hooks/useAnimateBox"
 
