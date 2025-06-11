@@ -27,9 +27,9 @@ import {
   getYAxisDomain,
   hasOnlyOneValueForKey,
   type AvailableChartColorsKeys,
-} from "@/lib/tremor-chart-utils"
+} from "@/shared/lib/tremor/tremor-chart-utils"
 import { useOnWindowResize } from "@/hooks/useOnWindowResize"
-import { cx } from "@/lib/tremor-utils"
+import { cx } from "@/shared/lib/tremor/tremor-utils"
 
 //#region Legend
 
