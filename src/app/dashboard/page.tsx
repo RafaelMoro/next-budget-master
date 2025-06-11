@@ -1,6 +1,5 @@
 import { getAccessToken } from '@/shared/lib/auth.lib';
 import { ShowAccounts } from '@/features/Accounts/ShowAccounts';
-import { AreaChartTypeExample } from '@/components/AreaChartTest';
 import { Header } from '@/shared/ui/organisms/Header';
 import { DashboardAside } from '@/shared/ui/organisms/DashboardAside';
 import { fetchAccounts } from '@/shared/lib/dashboard.lib';
@@ -22,7 +21,6 @@ export default async function DashboardPage () {
           <ShowAccounts accounts={accounts} />
         </main>
       </div>
-      <AreaChartTypeExample />
     </>
   )
 }
