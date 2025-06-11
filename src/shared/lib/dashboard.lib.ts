@@ -1,4 +1,5 @@
 import { FetchAccountsResponse, GetAccountsResponse } from "../types/accounts.types";
+import { ErrorCatched } from "../types/global.types";
 
 export const fetchAccounts = async ({ accessToken }: { accessToken: string }): Promise<GetAccountsResponse> => {
   try {
@@ -21,6 +22,9 @@ export const fetchAccounts = async ({ accessToken }: { accessToken: string }): P
     }
   } catch (error: unknown) {
     console.error('Error fetching accounts:', error);
-    throw new Error('Failed to fetch accounts');
+    return {
+      message: (error as ErrorCatched)?.message,
+      accounts: []
+    }
   }
 }

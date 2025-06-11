@@ -11,3 +11,7 @@ export type GeneralError = {
     }
   }
 }
+
+export type ErrorCatched = {
+  message: string;
+}
