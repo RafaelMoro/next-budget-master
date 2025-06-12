@@ -10,6 +10,7 @@ import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount
 import { MenuMobileLink } from "./MenuMobileLink"
 import { CreditCardIcon } from "../icons/CreditCardIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
+import { ToggleDarkMode } from "./ToggleDarkMode"
 
 interface HeaderMenuMobileProps {
   accounts: AccountBank[];
@@ -36,6 +37,7 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
                 accounts={accounts}
               />
             )}
+            <ToggleDarkMode cssClass="w-full my-5" />
             <div className="flex h-full flex-col justify-between py-2">
               <div>
                 <SidebarItems>
