@@ -1,6 +1,6 @@
 "use client"
 export const useMediaQuery = () => {
-  const isMobile = window.matchMedia('(min-width: 40rem) and (max-width: 48rem)').matches;
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
   return {
     isMobile
   }
