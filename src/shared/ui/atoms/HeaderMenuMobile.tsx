@@ -34,6 +34,7 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
             { accounts.length > 0 && (
               <DropdownSelectAccount
                 accounts={accounts}
+                cssClass="mt-10"
               />
             )}
             <ToggleDarkMode cssClass="w-full my-5" />
