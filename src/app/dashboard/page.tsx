@@ -13,7 +13,7 @@ export default async function DashboardPage () {
     <>
       <LoginRequiredModal show={!accessToken} />
       <div className="w-full min-h-screen max-w-screen-2xl flex">
-        <DashboardAside>
+        <DashboardAside accounts={accounts}>
           <Header isHeaderAside />
         </DashboardAside>
         <main className='min-w-xl mt-3 flex flex-col gap-4"'>
