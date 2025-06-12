@@ -53,7 +53,7 @@ export const DropdownSelectAccount = ({ accounts }: DropdownSelectAccountProps) 
         >
         <div className="flex flex-col gap-2 items-start">
           <p className="text-sm">{selectedAccount?.name}</p>
-          <p className="text-xs text-gray-400">{selectedAccount?.amount}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">{selectedAccount?.amount}</p>
           <span className="bg-blue-100 max-w-min text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
             {selectedAccount?.type}
           </span>
@@ -62,8 +62,12 @@ export const DropdownSelectAccount = ({ accounts }: DropdownSelectAccountProps) 
       </article>
     )}>
       { accountsOptions.length > 0 && accountsOptions.map((acc) => (
-          <DropdownItem onClick={() => handleSelectAccount(acc.accountId)} key={acc.accountId}>
-            {acc.name}
+          <DropdownItem className="flex justify-between" onClick={() => handleSelectAccount(acc.accountId)} key={acc.accountId}>
+            <div className="flex flex-col gap-1 items-start">
+              <span>{acc.name}</span>
+              <span className="text-xs text-gray-600 dark:text-gray-400">{acc.type}</span>
+            </div>
+            <span>{acc.amount}</span>
           </DropdownItem>
       )) }
     </Dropdown>
