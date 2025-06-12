@@ -1,17 +1,20 @@
 "use client"
 import Image from "next/image"
 import { ToggleDarkMode } from "../atoms/ToggleDarkMode"
-import { HeaderMenuMobile } from "../atoms/HeaderMenuMobile";
-import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
+import { ReactNode } from "react";
 
-export const HeaderDashboard = () => {
-  const { isMobile } = useMediaQuery()
+interface HeaderDashboardProps {
+  isMobile: boolean;
+  children?: ReactNode
+}
+
+export const HeaderDashboard = ({ isMobile, children }: HeaderDashboardProps) => {
 
   if (isMobile) {
     return (
       <header className="p-4 flex flex-row justify-between items-center">
         <Image className="rounded-full" src="/img/logo-no-bg.webp" alt="Budget Master Logo" width={70} height={70} />
-        <HeaderMenuMobile />
+        { children }
       </header>
     )
   }

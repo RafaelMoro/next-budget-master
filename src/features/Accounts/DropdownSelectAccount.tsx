@@ -9,7 +9,9 @@ interface DropdownSelectAccountProps {
   accounts: AccountBank[];
 }
 /**
- * This button component is shown in desktop in the aside bar of the dashboard to select other account.
+ * Component Description:
+ * For desktop, This button component is shown in the aside bar of the dashboard to select other account.
+ * For mobile, it's shown in the drawer menu of the header
  * 
  * Caveats: I cannot have the custom element of the prop renderTrigger in a separate component as the dropdown when clicked,
  * it does not trigger the onclick event.

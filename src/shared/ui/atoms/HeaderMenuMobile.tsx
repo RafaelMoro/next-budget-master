@@ -5,8 +5,14 @@ import { RiMenuLine } from "@remixicon/react"
 import { useState } from "react"
 import Link from "next/link"
 import { HomeIcon } from "../icons/HomeIcon"
+import { AccountBank } from "@/shared/types/accounts.types"
+import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
 
-export const HeaderMenuMobile = () => {
+interface HeaderMenuMobileProps {
+  accounts: AccountBank[];
+}
+
+export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const toggleDrawer = () => setOpenDrawer((prev) => !prev)
 
@@ -22,6 +28,11 @@ export const HeaderMenuMobile = () => {
             aria-label="Sidebar with multi-level dropdown example"
             className="[&>div]:bg-transparent [&>div]:p-0"
           >
+            { accounts.length > 0 && (
+              <DropdownSelectAccount
+                accounts={accounts}
+              />
+            )}
             <div className="flex h-full flex-col justify-between py-2">
               <div>
                 <SidebarItems>
