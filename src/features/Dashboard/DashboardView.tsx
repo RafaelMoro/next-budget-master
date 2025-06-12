@@ -20,7 +20,7 @@ export const DashboardView = ({ accounts }: DashboardViewProps) => {
 
   if (isMobile) {
     return (
-      <main className='min-w-xl mt-3 flex flex-col gap-4"'>
+      <main className='mt-3 flex flex-col gap-4"'>
         <HeaderDashboard isMobile>
           <HeaderMenuMobile accounts={accounts} />
         </HeaderDashboard>
