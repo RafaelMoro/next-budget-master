@@ -35,3 +35,7 @@ export const getAccessToken = async () => {
   const accessToken = jwtDecoded?.payload?.accessToken as string
   return accessToken
 }
+
+export const deleteSession = async () => {
+  await cookies().delete(COOKIE_SESSION_KEY)
+}
