@@ -15,7 +15,7 @@ interface DropdownSelectAccountProps {
  * it does not trigger the onclick event.
  */
 export const DropdownSelectAccount = ({ accounts }: DropdownSelectAccountProps) => {
-  // const [accountsDisplay, setAccountsDisplay] = useState<AccountsDisplay[]>([])
+  const [accountsDisplay, setAccountsDisplay] = useState<AccountsDisplay[]>([])
   const [selectedAccount, setSelectedAccount] = useState<AccountsDisplay | null>(null)
   const [accountsOptions, setAccountsOptions] = useState<AccountsDisplay[]>([])
 
@@ -27,7 +27,7 @@ export const DropdownSelectAccount = ({ accounts }: DropdownSelectAccountProps) 
         amount: formatNumberToCurrency(account.amount),
         type: account.accountType
       }))
-      // setAccountsDisplay(formattedAccounts)
+      setAccountsDisplay(formattedAccounts)
       const [firstAccount] = formattedAccounts;
       setSelectedAccount(firstAccount)
       const options = formattedAccounts.filter(acc => acc.accountId !== firstAccount.accountId)
@@ -35,6 +35,16 @@ export const DropdownSelectAccount = ({ accounts }: DropdownSelectAccountProps) 
     }
   }, [accounts])
 
+  const handleSelectAccount = (accountId: string) => {
+    const selected = accountsOptions.find(acc => acc.accountId === accountId)
+    if (!selected) {
+      console.warn('Account not found in options:', accountId);
+      return;
+    }
+    const newOptions = accountsDisplay.filter(acc => acc.accountId !== accountId)
+    setAccountsOptions(newOptions)
+    setSelectedAccount(selected)
+  }
 
   return (
     <Dropdown aria-label="Select other account" label="" renderTrigger={() => (
@@ -52,7 +62,9 @@ export const DropdownSelectAccount = ({ accounts }: DropdownSelectAccountProps) 
       </article>
     )}>
       { accountsOptions.length > 0 && accountsOptions.map((acc) => (
-          <DropdownItem key={acc.accountId}>{acc.name}</DropdownItem>
+          <DropdownItem onClick={() => handleSelectAccount(acc.accountId)} key={acc.accountId}>
+            {acc.name}
+          </DropdownItem>
       )) }
     </Dropdown>
   )
