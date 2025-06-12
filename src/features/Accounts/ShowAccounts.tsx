@@ -3,7 +3,7 @@ import { AccountBank } from "@/shared/types/accounts.types";
 import { Card } from "flowbite-react";
 
 interface AccountsProps {
-  accounts: AccountBank<string, number>[]
+  accounts: AccountBank[]
 }
 export const ShowAccounts = ({ accounts }: AccountsProps) => {
   return accounts.map((account) => (
