@@ -4,7 +4,6 @@ import { RiExpandUpDownLine } from "@remixicon/react";
 import { AccountBank, AccountsDisplay } from "@/shared/types/accounts.types";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
 import { useEffect, useState } from "react";
-import { div } from "motion/react-client";
 
 interface DropdownSelectAccountProps {
   accounts: AccountBank[];
