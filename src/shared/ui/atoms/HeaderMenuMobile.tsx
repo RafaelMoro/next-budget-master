@@ -3,7 +3,6 @@
 import { Button, Drawer, DrawerHeader, DrawerItems, Sidebar, SidebarItemGroup, SidebarItems } from "flowbite-react"
 import { RiMenuLine } from "@remixicon/react"
 import { useState } from "react"
-import Link from "next/link"
 import { HomeIcon } from "../icons/HomeIcon"
 import { AccountBank } from "@/shared/types/accounts.types"
 import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
