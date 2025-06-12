@@ -74,7 +74,7 @@ export const ForgotPasswordCard = () => {
               <ErrorMessage isAnimated>{errors.email?.message}</ErrorMessage>
             )}
           </div>
-          <LinkButton className="mt-4" text="Volver" isSecondary href={LOGIN_ROUTE} />
+          <LinkButton className="mt-4" text="Volver" type="secondary" href={LOGIN_ROUTE} />
           <Button
             className="hover:cursor-pointer"
             disabled={isPending || isSuccess}
