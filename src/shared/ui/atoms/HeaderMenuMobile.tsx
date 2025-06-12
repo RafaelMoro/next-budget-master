@@ -7,6 +7,9 @@ import Link from "next/link"
 import { HomeIcon } from "../icons/HomeIcon"
 import { AccountBank } from "@/shared/types/accounts.types"
 import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
+import { MenuMobileLink } from "./MenuMobileLink"
+import { CreditCardIcon } from "../icons/CreditCardIcon"
+import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 
 interface HeaderMenuMobileProps {
   accounts: AccountBank[];
@@ -37,18 +40,18 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
               <div>
                 <SidebarItems>
                   <SidebarItemGroup>
-                    <Link href="#" className="flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                    <MenuMobileLink href="#" >
                       <HomeIcon />
                       Panorama
-                    </Link>
-                    <Link href="#" className="flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                      <HomeIcon />
+                    </MenuMobileLink>
+                    <MenuMobileLink href="#" >
+                      <CreditCardIcon />
                       Cuentas
-                    </Link>
-                    <Link href="#" className="flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                      <HomeIcon />
+                    </MenuMobileLink>
+                    <MenuMobileLink href="#" >
+                      <AccountRecordsIcon />
                       Transacciones
-                    </Link>
+                    </MenuMobileLink>
                   </SidebarItemGroup>
                 </SidebarItems>
               </div>
