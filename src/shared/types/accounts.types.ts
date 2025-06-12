@@ -8,6 +8,13 @@ export type AccountBank = {
   sub: string;
 }
 
+export type AccountsDisplay = {
+  accountId: string;
+  name: string;
+  amount: string;
+  type: string;
+}
+
 // Response from backend
 export type FetchAccountsResponse = {
   data: {
