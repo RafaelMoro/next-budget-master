@@ -10,6 +10,7 @@ import { MenuMobileLink } from "./MenuMobileLink"
 import { CreditCardIcon } from "../icons/CreditCardIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ToggleDarkMode } from "./ToggleDarkMode"
+import { LinkButton } from "./LinkButton"
 
 interface HeaderMenuMobileProps {
   accounts: AccountBank[];
@@ -31,16 +32,18 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
             aria-label="Sidebar with multi-level dropdown example"
             className="[&>div]:bg-transparent [&>div]:p-0"
           >
-            { accounts.length > 0 && (
-              <DropdownSelectAccount
-                accounts={accounts}
-                cssClass="mt-10"
-              />
-            )}
-            <ToggleDarkMode cssClass="w-full my-5" />
             <div className="flex h-full flex-col justify-between py-2">
               <div>
                 <SidebarItems>
+                    { accounts.length > 0 && (
+                      <SidebarItemGroup>
+                        <DropdownSelectAccount
+                          accounts={accounts}
+                          cssClass="mt-10"
+                        />
+                      </SidebarItemGroup>
+                    )}
+
                   <SidebarItemGroup>
                     <MenuMobileLink href="#" >
                       <HomeIcon />
@@ -54,6 +57,11 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
                       <AccountRecordsIcon />
                       Transacciones
                     </MenuMobileLink>
+                  </SidebarItemGroup>
+
+                  <SidebarItemGroup>
+                    <ToggleDarkMode cssClass="w-full my-5" />
+                    <LinkButton text="Cerrar sesión" type="darkRed" className="w-full" href="/api/auth/sign-out" />
                   </SidebarItemGroup>
                 </SidebarItems>
               </div>
