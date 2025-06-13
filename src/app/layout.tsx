@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans"
 import "./globals.css";
 import QueryProviderWrapper from "./QueryProviderWrapper";
-import { getThemePreference } from "@/shared/lib/preferences.lib";
+import { getThemePreference, saveThemeApi } from "@/shared/lib/preferences.lib";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,16 +14,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let currentTheme = null
   const theme = await getThemePreference()
-  if (!theme) {
-    currentTheme = "dark";
-  } else {
-    currentTheme = theme;
-  }
 
   return (
-    <html lang="es" data-theme={currentTheme ?? 'dark'}>
+    <html lang="es" data-theme={theme}>
       <body
         className={`${GeistSans.className} antialiased bg-white text-gray-950 dark:text-gray-100 dark:bg-gray-950 transition-colors`}
       >

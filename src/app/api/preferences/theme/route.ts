@@ -1,4 +1,4 @@
-import { saveThemeMode } from "@/shared/lib/preferences.lib"
+import { saveThemeCookie } from "@/shared/lib/preferences.lib"
 import { ErrorCatched } from "@/shared/types/global.types"
 import { NextRequest } from "next/server"
 
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    await saveThemeMode(theme)
+    await saveThemeCookie(theme)
     return new Response(JSON.stringify({ success: true, themeChangedTo: theme }), {
         status: 201,
         headers: {
