@@ -8,6 +8,8 @@ export type AccountBank = {
   sub: string;
 }
 
+export type AccountProvider = "mastercard" | "visa" | "americanExpress"
+
 export type AccountsDisplay = {
   accountId: string;
   name: string;
