@@ -5,6 +5,7 @@ import { AccountBank } from "@/shared/types/accounts.types"
 import { HeaderMenuMobile } from "@/shared/ui/atoms/HeaderMenuMobile"
 import { DashboardAside } from "@/shared/ui/organisms/DashboardAside"
 import { HeaderDashboard } from "@/shared/ui/organisms/HeaderDashboard"
+import { Account } from "../Accounts/Accounts"
 
 interface DashboardViewProps {
   accounts: AccountBank[];
@@ -35,6 +36,7 @@ export const DashboardView = ({ accounts }: DashboardViewProps) => {
       </DashboardAside>
       <main className='min-w-xl mt-3 flex flex-col gap-4"'>
         <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Welcome User</h1>
+        <Account />
       </main>
     </div>
   )
