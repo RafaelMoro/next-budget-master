@@ -165,5 +165,20 @@
       ),
       linear-gradient(to bottom, transparent 0%, transparent 60%, #1a1a1a 100%);
     background-blend-mode: multiply;
+    opacity: 1;
+    transition: opacity 500ms ease-in-out;
+  }
+
+  .card-gradient-bg:hover {
+    background: linear-gradient(
+        110deg,
+        #333333 0%,
+        /* lighter than #1a1a1a */ #333333 49.9%,
+        #757575 50%,
+        /* lighter than #515151 */ #757575 100%
+      ),
+      linear-gradient(to bottom, transparent 0%, transparent 70%, #1a1a1a 100%);
+    background-blend-mode: multiply;
+    opacity: 0.8;
   }
 }
