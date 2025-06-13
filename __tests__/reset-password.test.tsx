@@ -3,6 +3,12 @@ import { render, screen } from "@testing-library/react"
 import ResetPasswordPage from "@/app/reset-password/[slug]/page"
 import QueryProviderWrapper from "@/app/QueryProviderWrapper"
 
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => ({
+    get: jest.fn(() => ({ value: 'mocked-theme' })),
+    set: jest.fn(),
+  })),
+}));
 
 describe('ResetPasswordPage', () => {
   it('Show reset password page', async () => {
