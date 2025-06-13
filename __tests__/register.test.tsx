@@ -12,6 +12,13 @@ import { ERROR_EMAIL_IN_USE } from '@/shared/constants/Login.constants';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => ({
+    get: jest.fn(() => ({ value: 'mocked-theme' })),
+    set: jest.fn(),
+  })),
+}));
+
 describe('Register', () => {
   afterEach(() => {
     jest.clearAllMocks();
