@@ -155,4 +155,13 @@
   body {
     font-family: Arial, Helvetica, sans-serif;
   }
+  .card-gradient-bg {
+    background: linear-gradient(
+      110deg,
+      #1a1a1a 0%,
+      #1a1a1a 49.9%,
+      #515151 50%,
+      #515151 100%
+    );
+  }
 }
