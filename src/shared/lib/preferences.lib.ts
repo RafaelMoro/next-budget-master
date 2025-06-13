@@ -41,3 +41,17 @@ export const saveAccountCookie = async (accountId: string): Promise<void> => {
     sameSite: 'strict',
   })
 }
+
+/**
+ * This function gets the value of the account in the cookie.
+ * @returns string or null if not found
+ */
+export const getAccountCookie = async () => {
+  const cookieStore = cookies()
+  const account = await cookieStore.get('account')?.value
+  if (!account) {
+    // Return default
+    return null
+  }
+  return account
+}

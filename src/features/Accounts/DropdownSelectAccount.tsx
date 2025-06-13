@@ -1,9 +1,12 @@
 "use client"
+import { useEffect, useState } from "react";
 import { Dropdown, DropdownItem } from "flowbite-react"
 import { RiExpandUpDownLine } from "@remixicon/react";
+
 import { AccountBank, AccountsDisplay } from "@/shared/types/accounts.types";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
-import { useEffect, useState } from "react";
+import { getAccountCookie } from "@/shared/lib/preferences.lib";
+import { saveAccountApi } from "@/shared/utils/user-info.utils";
 
 interface DropdownSelectAccountProps {
   accounts: AccountBank[];
@@ -31,20 +34,40 @@ export const DropdownSelectAccount = ({ accounts, cssClass }: DropdownSelectAcco
         type: account.accountType
       }))
       setAccountsDisplay(formattedAccounts)
+
       const [firstAccount] = formattedAccounts;
-      setSelectedAccount(firstAccount)
-      const options = formattedAccounts.filter(acc => acc.accountId !== firstAccount.accountId)
-      setAccountsOptions(options)
+
+      // Get cookie
+      getAccountCookie().then((acc) => {
+        // If cookie exists, find account
+        if (acc) {
+          const foundAccount = formattedAccounts.find(account => account.accountId === acc);
+          // If account found, set selected account and update options
+          if (foundAccount) {
+            setSelectedAccount(foundAccount);
+            const options = formattedAccounts.filter(acc => acc.accountId !== foundAccount.accountId);
+            setAccountsOptions(options);
+          }
+          return
+        }
+
+        // If cookie does not exist, set first account as selected
+        setSelectedAccount(firstAccount)
+        const options = formattedAccounts.filter(acc => acc.accountId !== firstAccount.accountId)
+        setAccountsOptions(options)
+      })
     }
   }, [accounts])
 
-  const handleSelectAccount = (accountId: string) => {
+  const handleSelectAccount = async (accountId: string) => {
     const selected = accountsOptions.find(acc => acc.accountId === accountId)
     if (!selected) {
       console.warn('Account not found in options:', accountId);
       return;
     }
     const newOptions = accountsDisplay.filter(acc => acc.accountId !== accountId)
+    // Save the account selected into the cookie
+    await saveAccountApi(selected.accountId)
     setAccountsOptions(newOptions)
     setSelectedAccount(selected)
   }
