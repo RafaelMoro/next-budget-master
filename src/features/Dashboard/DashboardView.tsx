@@ -38,7 +38,7 @@ export const DashboardView = ({ accounts }: DashboardViewProps) => {
       <DashboardAside accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
-      <main className='min-w-xl mt-3 flex flex-col gap-4"'>
+      <main className="w-full min-w-xl mt-3 flex flex-col gap-4">
         <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Bienvenido de vuelta</h1>
         <AccountsView accounts={accounts} />
       </main>
