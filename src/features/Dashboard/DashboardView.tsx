@@ -25,6 +25,9 @@ export const DashboardView = ({ accounts }: DashboardViewProps) => {
         <HeaderDashboard isMobile>
           <HeaderMenuMobile accounts={accounts} />
         </HeaderDashboard>
+        <Account name="Santander" balance="$12,640.54" accountType="Credito" accountProvider="mastercard" />
+        <Account name="HSBC oro" balance="$24,780.08" accountType="Credito" accountProvider="visa" />
+        <Account name="Gold Elite" balance="$78,050.10" accountType="Credito" accountProvider="americanExpress" />
       </main>
     )
   }
