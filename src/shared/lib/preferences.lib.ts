@@ -28,3 +28,16 @@ export const saveThemeCookie = async (theme: ThemeMode): Promise<void> => {
     sameSite: 'strict',
   })
 }
+
+/**
+ * This function saves the selected account into the cookie
+ * @param theme - The theme mode to save
+ * @returns Promise<void>
+ */
+export const saveAccountCookie = async (accountId: string): Promise<void> => {
+  await cookies().set('account', accountId, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  })
+}
