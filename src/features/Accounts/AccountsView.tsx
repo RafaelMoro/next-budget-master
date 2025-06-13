@@ -4,6 +4,7 @@ import { AccountBank, AccountsDisplay } from "@/shared/types/accounts.types";
 import { Account } from "./Accounts";
 import { getAccountProvider } from "@/shared/lib/accounts.lib";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
+import { Button } from "flowbite-react";
 
 interface AccountsViewProps {
   accounts: AccountBank[];
@@ -26,15 +27,26 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
   }, [accounts])
 
   if (accountsDisplay.length > 0) {
-    return accountsDisplay.map((acc) => (
-      <Account
-        key={acc.accountId}
-        name={acc.name}
-        balance={acc.amount}
-        accountType={acc.type}
-        // Adding default mastercard value as accountProvider is a optional prop in the interface AccountsDisplay
-        accountProvider={acc.accountProvider ?? 'mastercard'}
-      />
-    ))
+    return (
+      <section className="w-full grid grid-cols-4 gap-4">
+        { accountsDisplay.map((acc) => (
+          <Account
+            key={acc.accountId}
+            name={acc.name}
+            balance={acc.amount}
+            accountType={acc.type}
+            // Adding default mastercard value as accountProvider is a optional prop in the interface AccountsDisplay
+            accountProvider={acc.accountProvider ?? 'mastercard'}
+          />
+        )) }
+      </section>
+    )
   }
+
+  return (
+    <section>
+      <h2>No tienes cuentas creadas aún.</h2>
+      <Button>Crear cuenta</Button>
+    </section>
+  )
 }

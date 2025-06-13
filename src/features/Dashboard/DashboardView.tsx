@@ -38,8 +38,9 @@ export const DashboardView = ({ accounts }: DashboardViewProps) => {
       <DashboardAside accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
-      <main className="w-full min-w-xl mt-3 flex flex-col gap-4">
-        <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Bienvenido de vuelta</h1>
+      <main className="w-full pl-4 pt-4 min-w-xl mt-3 flex flex-col gap-4">
+        <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Cuentas bancarias</h1>
+        <p className="text-center text-xl">Haz click en cualquiera de tus cuentas para ver más en detalle la informacion</p>
         <AccountsView accounts={accounts} />
       </main>
     </div>
