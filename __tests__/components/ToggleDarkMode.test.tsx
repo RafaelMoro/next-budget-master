@@ -2,6 +2,13 @@ import { ToggleDarkMode } from '@/shared/ui/atoms/ToggleDarkMode'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => ({
+    get: jest.fn(() => ({ value: 'mocked-theme' })),
+    set: jest.fn(),
+  })),
+}));
+
 describe('ToggleDarkMode', () => {
   it('Should show toggle dark mode button', () => {
     render(<ToggleDarkMode />)
