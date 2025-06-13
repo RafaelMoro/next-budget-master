@@ -18,15 +18,15 @@ export const ToggleDarkMode = ({ cssClass }: ToggleDarkModeProps) => {
     const htmlElement = document.documentElement;
 
     if (mode === 'light') {
-      setMode('dark')
-      await saveThemeApi('dark')
       htmlElement.setAttribute("data-theme", "dark");
+      await saveThemeApi('dark')
+      setMode('dark')
       return
     }
 
-    setMode('light')
-    await saveThemeApi('light')
     htmlElement.setAttribute("data-theme", "light");
+    await saveThemeApi('light')
+    setMode('light')
   }
 
   useEffect(() => {
