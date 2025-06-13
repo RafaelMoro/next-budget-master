@@ -1,16 +1,17 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "flowbite-react";
 import { NightIcon } from "@/shared/ui/icons/Nights";
 import { ThemeMode } from "@/shared/constants/Global.constants";
+import { getThemePreference } from "@/shared/lib/preferences.lib";
 
 interface ToggleDarkModeProps {
-  theme: ThemeMode;
   cssClass?: string;
 }
 
-export const ToggleDarkMode = ({ cssClass, theme }: ToggleDarkModeProps) => {
-  const [mode, setMode] = useState<ThemeMode>(theme);
+export const ToggleDarkMode = ({ cssClass }: ToggleDarkModeProps) => {
+  const [mode, setMode] = useState<ThemeMode | null>(null);
+  
 
   const toggleDarkMode = async () => {
     const htmlElement = document.documentElement;
@@ -38,6 +39,10 @@ export const ToggleDarkMode = ({ cssClass, theme }: ToggleDarkModeProps) => {
     })
     htmlElement.setAttribute("data-theme", "light");
   }
+
+  useEffect(() => {
+    getThemePreference().then((theme) => setMode(theme as ThemeMode))
+  }, [])
 
   return (
     <Button className={cssClass && cssClass} data-testid="toggle-theme-mode-button" onClick={toggleDarkMode} color="dark" outline>
