@@ -11,12 +11,14 @@ import { CreditCardIcon } from "../icons/CreditCardIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ToggleDarkMode } from "./ToggleDarkMode"
 import { LinkButton } from "./LinkButton"
+import { ThemeMode } from "@/shared/constants/Global.constants"
 
 interface HeaderMenuMobileProps {
+  theme: ThemeMode;
   accounts: AccountBank[];
 }
 
-export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
+export const HeaderMenuMobile = ({ accounts, theme }: HeaderMenuMobileProps) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const toggleDrawer = () => setOpenDrawer((prev) => !prev)
 
@@ -60,7 +62,7 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
                   </SidebarItemGroup>
 
                   <SidebarItemGroup>
-                    <ToggleDarkMode cssClass="w-full my-5" />
+                    <ToggleDarkMode theme={theme} cssClass="w-full my-5" />
                     <LinkButton text="Cerrar sesión" type="darkRed" className="w-full" href="/api/auth/sign-out" />
                   </SidebarItemGroup>
                 </SidebarItems>
