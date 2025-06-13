@@ -16,12 +16,12 @@ export async function POST(request: NextRequest) {
     }
 
     await saveThemeMode(theme)
-    return new Response(JSON.stringify({ message: 'missing cookie' }), {
-      status: 400,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    return new Response(JSON.stringify({ success: true, themeChangedTo: theme }), {
+        status: 201,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
   } catch (error: unknown) {
     const currentError = error as ErrorCatched
     return new Response(JSON.stringify({ message: currentError?.message }), {
