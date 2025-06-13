@@ -6,6 +6,7 @@ import { DashboardAsideLink } from "../atoms/DashboardAsideLink"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
 import { AccountBank } from "@/shared/types/accounts.types"
+import { LinkButton } from "../atoms/LinkButton"
 
 interface DashboardAsideProps {
   children: ReactNode;
@@ -21,7 +22,7 @@ export const DashboardAside = ({ children, accounts }: DashboardAsideProps) => {
           accounts={accounts}
         />
       )}
-      <nav className="flex flex-col mt-10">
+      <nav className="mt-10 flex flex-col">
         <DashboardAsideLink href={DASHBOARD_ROUTE}>
             <HomeIcon />
             Panorama
@@ -35,6 +36,10 @@ export const DashboardAside = ({ children, accounts }: DashboardAsideProps) => {
             Transacciones
         </DashboardAsideLink>
       </nav>
+
+      <section className="flex flex-col gap-2">
+        <LinkButton text="Cerrar sesión" type="darkRed" className="w-full" href="/api/auth/sign-out" />
+      </section>
     </aside>
   )
 }
