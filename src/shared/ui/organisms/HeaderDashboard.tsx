@@ -9,7 +9,6 @@ interface HeaderDashboardProps {
 }
 
 export const HeaderDashboard = ({ isMobile, children }: HeaderDashboardProps) => {
-
   if (isMobile) {
     return (
       <header className="p-4 flex flex-row justify-between items-center">
