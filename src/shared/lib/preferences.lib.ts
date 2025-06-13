@@ -9,8 +9,8 @@ export const getThemePreference = async () => {
   return theme
 }
 
-export const saveThemeMode = (theme: string): void => {
-  cookies().set('theme', theme, {
+export const saveThemeMode = async (theme: string): Promise<void> => {
+  await cookies().set('theme', theme, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
