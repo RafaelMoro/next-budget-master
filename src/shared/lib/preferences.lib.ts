@@ -1,6 +1,6 @@
 "use server"
 import { cookies } from 'next/headers'
-import { ThemeMode } from '../constants/Global.constants'
+import { ACCOUNT_COOKIE_KEY, THEME_COOKIE_KEY, ThemeMode } from '../constants/Global.constants'
 
 /**
  * This function gets the value of the theme in the cookie. It sets the cookie if it doesn't exist
@@ -8,7 +8,7 @@ import { ThemeMode } from '../constants/Global.constants'
  */
 export const getThemePreference = async () => {
   const cookieStore = cookies()
-  const theme = await cookieStore.get('theme')?.value
+  const theme = await cookieStore.get(THEME_COOKIE_KEY)?.value
   if (!theme) {
     // Return default
     return 'dark'
@@ -22,7 +22,7 @@ export const getThemePreference = async () => {
  * @returns Promise<void>
  */
 export const saveThemeCookie = async (theme: ThemeMode): Promise<void> => {
-  await cookies().set('theme', theme, {
+  await cookies().set(THEME_COOKIE_KEY, theme, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
@@ -35,7 +35,7 @@ export const saveThemeCookie = async (theme: ThemeMode): Promise<void> => {
  * @returns Promise<void>
  */
 export const saveAccountCookie = async (accountId: string): Promise<void> => {
-  await cookies().set('account', accountId, {
+  await cookies().set(ACCOUNT_COOKIE_KEY, accountId, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
@@ -48,7 +48,7 @@ export const saveAccountCookie = async (accountId: string): Promise<void> => {
  */
 export const getAccountCookie = async () => {
   const cookieStore = cookies()
-  const account = await cookieStore.get('account')?.value
+  const account = await cookieStore.get(ACCOUNT_COOKIE_KEY)?.value
   if (!account) {
     // Return default
     return null
