@@ -4,6 +4,7 @@ import { Button } from "flowbite-react";
 import { NightIcon } from "@/shared/ui/icons/Nights";
 import { ThemeMode } from "@/shared/constants/Global.constants";
 import { getThemePreference } from "@/shared/lib/preferences.lib";
+import { saveThemeApi } from "@/shared/utils/preferences.utils";
 
 interface ToggleDarkModeProps {
   cssClass?: string;
@@ -18,25 +19,13 @@ export const ToggleDarkMode = ({ cssClass }: ToggleDarkModeProps) => {
 
     if (mode === 'light') {
       setMode('dark')
-      await fetch('/api/preferences/theme', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ theme: 'dark' }),
-      })
+      await saveThemeApi('dark')
       htmlElement.setAttribute("data-theme", "dark");
       return
     }
 
     setMode('light')
-    await fetch('/api/preferences/theme', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ theme: 'light' }),
-    })
+    await saveThemeApi('light')
     htmlElement.setAttribute("data-theme", "light");
   }
 
