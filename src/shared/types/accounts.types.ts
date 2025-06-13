@@ -6,6 +6,7 @@ export type AccountBank = {
   color: string;
   amount: number;
   sub: string;
+  accountProvider?: string;
 }
 
 export type AccountProvider = "mastercard" | "visa" | "americanExpress"
@@ -15,6 +16,7 @@ export type AccountsDisplay = {
   name: string;
   amount: string;
   type: string;
+  accountProvider?: AccountProvider;
 }
 
 // Response from backend

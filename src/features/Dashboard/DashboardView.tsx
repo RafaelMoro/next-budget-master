@@ -6,6 +6,7 @@ import { HeaderMenuMobile } from "@/shared/ui/atoms/HeaderMenuMobile"
 import { DashboardAside } from "@/shared/ui/organisms/DashboardAside"
 import { HeaderDashboard } from "@/shared/ui/organisms/HeaderDashboard"
 import { Account } from "../Accounts/Accounts"
+import { AccountsView } from "../Accounts/AccountsView"
 
 interface DashboardViewProps {
   accounts: AccountBank[];
@@ -39,9 +40,7 @@ export const DashboardView = ({ accounts }: DashboardViewProps) => {
       </DashboardAside>
       <main className='min-w-xl mt-3 flex flex-col gap-4"'>
         <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Welcome User</h1>
-        <Account name="Santander" balance="$12,640.54" accountType="Credito" accountProvider="mastercard" />
-        <Account name="HSBC oro" balance="$24,780.08" accountType="Credito" accountProvider="visa" />
-        <Account name="Gold Elite" balance="$78,050.10" accountType="Credito" accountProvider="americanExpress" />
+        <AccountsView accounts={accounts} />
       </main>
     </div>
   )
