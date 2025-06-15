@@ -10,16 +10,24 @@ import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => ({
+    get: jest.fn(() => ({ session: 'session-mock' })),
+    set: jest.fn(),
+  })),
+}));
 
-const Home = ({ push }: { push: () => void }) => {
+const Home = async ({ push }: { push: () => void }) => {
+  const Page = await HomePage()
   return (
     <QueryProviderWrapper>
       <AppRouterContextProviderMock router={{ push }}>
-        <HomePage />
+        {Page}
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>
   )
 }
+
 describe('Home', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -30,11 +38,9 @@ describe('Home', () => {
     jest.restoreAllMocks();
   })
 
-  it('Show the login page', () => {
+  it('Show the login page', async () => {
     const push = jest.fn();
-    render(
-      <Home push={push} />
-    )
+    render(await Home({ push }))
  
     expect(screen.getByRole('heading', { name: /bienvenido de vuelta/i })).toBeInTheDocument()
     expect(screen.getByText(/ingrese sus credenciales para entrar a su cuenta\./i)).toBeInTheDocument()
@@ -47,9 +53,7 @@ describe('Home', () => {
     it('Given the email being empty, show an error to the user', async () => {
       const user = userEvent.setup()
       const push = jest.fn();
-      render(
-        <Home push={push} />
-      )
+      render(await Home({ push }))
     
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
       const pwdInput = screen.getByLabelText(/contraseña/i)
@@ -61,9 +65,7 @@ describe('Home', () => {
     it('Given a user filling the email wrong, show invalid email error ', async () => {
       const user = userEvent.setup()
       const push = jest.fn();
-      render(
-        <Home push={push} />
-      )
+      render(await Home({ push }))
     
       const pwdInput = screen.getByLabelText(/contraseña/i)
       await user.type(pwdInput, '1')
@@ -77,9 +79,7 @@ describe('Home', () => {
     it('Given a user leaving the password empty, show password required error', async () => {
       const user = userEvent.setup()
       const push = jest.fn();
-      render(
-        <Home push={push} />
-      )
+      render(await Home({ push }))
     
       const signInButton = screen.getByRole('button', { name: /iniciar sesión/i })
       await user.click(signInButton)
@@ -104,9 +104,7 @@ describe('Home', () => {
         }
       })
 
-      render(
-        <Home push={push} />
-      )
+      render(await Home({ push }))
 
       const pwdInput = screen.getByLabelText(/contraseña/i)
       await user.type(pwdInput, '123')
@@ -136,9 +134,7 @@ describe('Home', () => {
         }
       })
 
-      render(
-        <Home push={push} />
-      )
+      render(await Home({ push }))
 
       const pwdInput = screen.getByLabelText(/contraseña/i)
       await user.type(pwdInput, '123')
