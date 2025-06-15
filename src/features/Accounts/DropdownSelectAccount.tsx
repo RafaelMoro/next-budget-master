@@ -89,7 +89,7 @@ export const DropdownSelectAccount = ({ accounts, cssClass }: DropdownSelectAcco
         </article>
       )}>
         { accountsOptions.length > 0 && accountsOptions.map((acc) => (
-            <DropdownItem className="flex justify-between" onClick={() => handleSelectAccount(acc.accountId)} key={acc.accountId}>
+            <DropdownItem data-testid={`option-${acc.accountId}`} className="flex justify-between" onClick={() => handleSelectAccount(acc.accountId)} key={acc.accountId}>
               <div className="flex flex-col gap-1 items-start">
                 <span>{acc.name}</span>
                 <span className="text-xs text-gray-600 dark:text-gray-400">{acc.type}</span>

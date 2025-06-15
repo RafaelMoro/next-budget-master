@@ -34,28 +34,8 @@ jest.mock('next/headers', () => ({
   })),
 }));
 
-// jest.mock('../../src/shared/lib/preferences.lib', () => ({
-//   getAccountCookie: jest.fn(() => Promise.resolve(null)),
-// }));
-
-// jest.mock('../../src/shared/utils/user-info.utils', () => ({
-//   saveAccountApi: jest.fn(() => Promise.resolve()),
-// }));
-
-// jest.mock('flowbite-react', () => ({
-//   Dropdown: ({ children, renderTrigger }: { children: any, renderTrigger: any }) => (
-//     <div data-testid="dropdown">
-//       <div data-testid="dropdown-trigger" onClick={() => {}}>{renderTrigger()}</div>
-//       <div data-testid="dropdown-items">{children}</div>
-//     </div>
-//   ),
-//   DropdownItem: ({ children, onClick }: { children: any, onClick: any }) => (
-//     <div data-testid="dropdown-item" onClick={onClick}>{children}</div>
-//   ),
-// }));
-
 describe('DropdownSelectAccount', () => {
-  it('renders the dropdown with the first account selected', async () => {
+  it('Show the dropdown select account with the first account info', async () => {
     render(
       <DropdownSelectAccount accounts={mockAccounts} />
     );
@@ -65,7 +45,7 @@ describe('DropdownSelectAccount', () => {
     expect(screen.getByTestId('dropdown-icon')).toBeInTheDocument();
   });
 
-  it('shows account options in the dropdown', async () => {
+  it('Given a user clicking the dropdown, show the options', async () => {
     const user = userEvent.setup();
     render(
       <DropdownSelectAccount accounts={mockAccounts} />
@@ -75,6 +55,21 @@ describe('DropdownSelectAccount', () => {
     const button = screen.getByTestId('dropdown-icon')
     await user.click(button)
     expect(await screen.findByText('HSBC oro')).toBeInTheDocument();
+  });
+
+  it('Given a user selecting other account, show account selected', async () => {
+    const user = userEvent.setup();
+    render(
+      <DropdownSelectAccount accounts={mockAccounts} />
+    );
+
+    expect(await screen.findByText('Santander')).toBeInTheDocument();
+    const button = screen.getByTestId('dropdown-icon')
+    await user.click(button)
+    expect(await screen.findByText('HSBC oro')).toBeInTheDocument();
+    await user.click(screen.getByText('HSBC oro'));
+    expect(await screen.findByText('HSBC oro')).toBeInTheDocument();
+    expect(screen.queryByText('Santander')).not.toBeInTheDocument();
   });
 
   it.skip('calls saveAccountApi and updates selected account when an option is clicked', async () => {
