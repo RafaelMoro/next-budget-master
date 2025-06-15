@@ -21,4 +21,13 @@ describe('AccountsView', () => {
     expect(screen.getByText(/Credito/i)).toBeInTheDocument()
     expect(screen.getByAltText('Account Provider Logo')).toBeInTheDocument()
   })
+
+  it('Show accounts view with no accounts', () => {
+    render(<AccountsView accounts={[]} />)
+
+    expect(screen.getByText('Aún no tienes cuentas registradas')).toBeInTheDocument()
+    expect(screen.getByText('¡Todo empieza aquí! Agrega una cuenta bancaria y empieza a organizar tus finanzas sin estrés.')).toBeInTheDocument()
+    expect(screen.getByAltText('No accounts found')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Crear cuenta' })).toBeInTheDocument()
+  })
 })
