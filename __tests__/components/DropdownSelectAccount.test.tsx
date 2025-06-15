@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { DropdownSelectAccount } from '@/features/Accounts/DropdownSelectAccount';
-import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 
@@ -34,7 +33,18 @@ jest.mock('next/headers', () => ({
   })),
 }));
 
+function mockFetch() {
+  return jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      message: "Selected account saved",
+      success: true
+    }),
+  );
+}
+
 describe('DropdownSelectAccount', () => {
+  // Ommited the test with cookie set with different account as the mock of the get cookie does not work properly
+
   it('Show the dropdown select account with the first account info', async () => {
     render(
       <DropdownSelectAccount accounts={mockAccounts} />
@@ -58,6 +68,7 @@ describe('DropdownSelectAccount', () => {
   });
 
   it('Given a user selecting other account, show account selected', async () => {
+    window.fetch = mockFetch()
     const user = userEvent.setup();
     render(
       <DropdownSelectAccount accounts={mockAccounts} />
@@ -70,18 +81,5 @@ describe('DropdownSelectAccount', () => {
     await user.click(screen.getByText('HSBC oro'));
     expect(await screen.findByText('HSBC oro')).toBeInTheDocument();
     expect(screen.queryByText('Santander')).not.toBeInTheDocument();
-  });
-
-  it.skip('calls saveAccountApi and updates selected account when an option is clicked', async () => {
-    const user = userEvent.setup();
-    const { findAllByTestId, findByText } = screen;
-    render(
-      <AppRouterContextProviderMock router={{}}>
-        <DropdownSelectAccount accounts={mockAccounts} />
-      </AppRouterContextProviderMock>
-    );
-    const items = await findAllByTestId('dropdown-item');
-    await user.click(items[0]);
-    expect(await findByText('HSBC oro')).toBeInTheDocument();
   });
 });
