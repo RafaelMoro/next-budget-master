@@ -1,7 +1,7 @@
-import { CreateUserData, CreateUserPayload, ForgotPasswordData, ForgotPasswordPayload, LoginData, LoginPayload, ResetPasswordData, ResetPasswordPayload } from "@/shared/types/Login.types";
+import { CreateUserData, CreateUserPayload, ForgotPasswordData, ForgotPasswordPayload, LoginData, LoginPayload, ResetPasswordData, ResetPasswordPayload } from "@/shared/types/login.types";
 import axios from "axios";
 
-export const LoginMutationFn = (data: LoginPayload): Promise<LoginData> => {
+export const LoginMutationCb = (data: LoginPayload): Promise<LoginData> => {
   return axios.post('/api', data)
 }
 

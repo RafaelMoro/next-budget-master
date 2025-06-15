@@ -2,7 +2,8 @@ import type { AxiosError, AxiosResponse } from "axios";
 import { object, ObjectSchema, string, ref } from "yup";
 import { ERROR_EMAIL_REQUIRED, ERROR_INVALID_EMAIL, ERROR_PASSWORD_REQUIRED } from "../constants/Login.constants";
 
-// Data interface
+
+//#region Data interfaces
 export interface LoginData {
   data: {
     user: {
@@ -85,6 +86,7 @@ export interface ResetPasswordError extends Omit<AxiosError, 'response'> {
   }>;
 }
 
+//#region Validations
 const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
 
 export type InputsPersonalInformation = {

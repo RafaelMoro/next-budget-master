@@ -2,6 +2,22 @@ import { ToggleDarkMode } from '@/shared/ui/atoms/ToggleDarkMode'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => ({
+    get: jest.fn(() => ({ value: 'mocked-theme' })),
+    set: jest.fn(),
+  })),
+}));
+
+function mockFetch() {
+  return jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      success: true,
+      themeChangedTo: "light"
+    }),
+  );
+}
+
 describe('ToggleDarkMode', () => {
   it('Should show toggle dark mode button', () => {
     render(<ToggleDarkMode />)
@@ -11,6 +27,7 @@ describe('ToggleDarkMode', () => {
 
   it('Should change to light mode when clicked', async() => {
     const user = userEvent.setup()
+    window.fetch = mockFetch()
     render(<ToggleDarkMode />)
 
     const button = screen.getByTestId('toggle-theme-mode-button')
@@ -20,6 +37,7 @@ describe('ToggleDarkMode', () => {
 
   it('Given a user clicking the button twice, it should return to dark mode', async() => {
     const user = userEvent.setup()
+    window.fetch = mockFetch()
     render(<ToggleDarkMode />)
 
     const button = screen.getByTestId('toggle-theme-mode-button')

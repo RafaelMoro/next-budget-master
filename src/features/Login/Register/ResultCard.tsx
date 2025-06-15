@@ -22,7 +22,7 @@ export const ResultCard = ({ title, message, direction, isError, resetStep }: Re
           </h5>
           <p className="text-xl text-black dark:text-white text-pretty">{message}</p>
           <div className="flex justify-between">
-            <LinkButton href={LOGIN_ROUTE} isSecondary text="Regresar al inicio" />
+            <LinkButton href={LOGIN_ROUTE} type="secondary" text="Regresar al inicio" />
             <Button onClick={resetStep} className="hover:cursor-pointer">
               Volver a intentar.
             </Button>

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Header } from "@/shared/ui/organisms/Header"
 import { ResetPasswordCard } from "./ResetPasswordCard"
 import { PasswordResetStatusCard } from "./PasswordResetStatusCard"
-import { MessageCardState, ResetPasswordStatus } from "@/shared/types/Login.types"
+import { MessageCardState, ResetPasswordStatus } from "@/shared/types/login.types"
 
 export interface ResetPasswordProps {
   slug: string

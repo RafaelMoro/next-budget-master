@@ -8,6 +8,13 @@ import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterCon
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => ({
+    get: jest.fn(() => ({ value: 'mocked-theme' })),
+    set: jest.fn(),
+  })),
+}));
+
 const ForgotPassword = ({ push }: { push: () => void }) => {
   return (
     <QueryProviderWrapper>
