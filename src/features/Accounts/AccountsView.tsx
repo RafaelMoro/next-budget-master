@@ -4,8 +4,9 @@ import { AccountBank, AccountsDisplay } from "@/shared/types/accounts.types";
 import { Account } from "./Accounts";
 import { getAccountProvider } from "@/shared/lib/accounts.lib";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
-import { Button } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import Image from "next/image";
+import { AccountDetails } from "./AccountDetails";
 
 interface AccountsViewProps {
   accounts: AccountBank[];
@@ -13,6 +14,15 @@ interface AccountsViewProps {
 
 export const AccountsView = ({ accounts }: AccountsViewProps) => {
   const [accountsDisplay, setAccountsDisplay] = useState<AccountsDisplay[]>([])
+  const [openAccModal, setOpenAccModal] = useState<boolean>(false)
+  const [accDetails, setAccDetails] = useState<AccountsDisplay | null>(null)
+
+  const toggleAccModal = () => setOpenAccModal((prev) => !prev)
+  const updateAccDetails = (acc: AccountsDisplay) => setAccDetails(acc)
+  const closeModal = () => {
+    toggleAccModal()
+    setAccDetails(null)
+  }
 
   useEffect(() => {
     if (accounts.length > 0) {
@@ -33,13 +43,22 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
         { accountsDisplay.map((acc) => (
           <Account
             key={acc.accountId}
-            name={acc.name}
-            balance={acc.amount}
-            accountType={acc.type}
-            // Adding default mastercard value as accountProvider is a optional prop in the interface AccountsDisplay
-            accountProvider={acc.accountProvider ?? 'mastercard'}
+            account={acc}
+            toggleAccModal={toggleAccModal}
+            updateAccDetails={updateAccDetails}
           />
         )) }
+        { accDetails && (
+          <Modal show={openAccModal} onClose={closeModal}>
+            <AccountDetails
+              accountId={accDetails.accountId}
+              name={accDetails.name}
+              balance={accDetails.amount}
+              accountType={accDetails.type}
+              accountProvider={accDetails.accountProvider}
+            />
+          </Modal>
+        ) }
       </section>
     )
   }
