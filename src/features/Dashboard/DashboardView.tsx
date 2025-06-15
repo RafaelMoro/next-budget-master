@@ -5,7 +5,6 @@ import { AccountBank } from "@/shared/types/accounts.types"
 import { HeaderMenuMobile } from "@/shared/ui/atoms/HeaderMenuMobile"
 import { DashboardAside } from "@/shared/ui/organisms/DashboardAside"
 import { HeaderDashboard } from "@/shared/ui/organisms/HeaderDashboard"
-import { Account } from "../Accounts/Accounts"
 import { AccountsView } from "../Accounts/AccountsView"
 
 interface DashboardViewProps {
@@ -26,9 +25,6 @@ export const DashboardView = ({ accounts }: DashboardViewProps) => {
         <HeaderDashboard isMobile>
           <HeaderMenuMobile accounts={accounts} />
         </HeaderDashboard>
-        <Account name="Santander" balance="$12,640.54" accountType="Credito" accountProvider="mastercard" />
-        <Account name="HSBC oro" balance="$24,780.08" accountType="Credito" accountProvider="visa" />
-        <Account name="Gold Elite" balance="$78,050.10" accountType="Credito" accountProvider="americanExpress" />
       </main>
     )
   }
