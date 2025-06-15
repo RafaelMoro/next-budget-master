@@ -30,4 +30,19 @@ describe('AccountsView', () => {
     expect(screen.getByAltText('No accounts found')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Crear cuenta' })).toBeInTheDocument()
   })
+
+  it('Given an account with no account provider, show mastercard as default', () => {
+    const account: AccountBank = {
+      _id: '1',
+      title: 'Santander',
+      amount: 12640.54,
+      accountType: 'Credito',
+      backgroundColor: 'blue',
+      color: 'white',
+      sub: '123-456'
+    }
+    render(<AccountsView accounts={[account]} />)
+
+    expect(screen.getByAltText('Account Provider Logo')).toBeInTheDocument()
+  })
 })
