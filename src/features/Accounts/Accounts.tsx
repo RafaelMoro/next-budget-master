@@ -22,7 +22,7 @@ export const Account = ({ name, balance, accountType, accountProvider = 'masterc
         <h5 className="text-2xl text-gray-200 font-semibold">{balance}</h5>
         <div className="flex justify-between mx-2 mb-1">
           <p className="text-sm text-gray-300 dark:text-gray-400">{accountType} **0762</p>
-          <Image src={accProviderImg[accountProvider]} alt="Budget Master Logo" width={40} height={40} />
+          <Image src={accProviderImg[accountProvider]} alt="Account Provider Logo" width={40} height={40} />
         </div>
       </div>
     </button>
