@@ -1,3 +1,9 @@
+## v0.9.0 (2025-06-15)
+
+### Pull Requests
+[#14](https://github.com/RafaelMoro/next-budget-master/pull/14) | Add tremor, signout, view accounts and header mobile
+
+
 ## v0.8.1 (2025-06-11)
 
 ### Pull Requests
