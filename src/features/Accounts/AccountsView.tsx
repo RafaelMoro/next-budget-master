@@ -5,6 +5,7 @@ import { Account } from "./Accounts";
 import { getAccountProvider } from "@/shared/lib/accounts.lib";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
 import { Button } from "flowbite-react";
+import Image from "next/image";
 
 interface AccountsViewProps {
   accounts: AccountBank[];
@@ -44,9 +45,13 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
   }
 
   return (
-    <section>
-      <h2>No tienes cuentas creadas aún.</h2>
-      <Button>Crear cuenta</Button>
+    <section className="mt-10 flex flex-col items-center gap-8">
+      <h2 className="text-2xl  font-semibold">Aún no tienes cuentas registradas</h2>
+      <p className="text-xl text-gray-600 dark:text-gray-400">¡Todo empieza aquí! Agrega una cuenta bancaria y empieza a organizar tus finanzas sin estrés.</p>
+      <Image src="/img/no-accounts-found.webp" width={289} height={296} alt="No accounts found" />
+      <div>
+        <Button>Crear cuenta</Button>
+      </div>
     </section>
   )
 }
