@@ -85,7 +85,7 @@ export const DropdownSelectAccount = ({ accounts, cssClass }: DropdownSelectAcco
               {selectedAccount?.type}
             </span>
           </div>
-          <RiExpandUpDownLine className="cursor-pointer" strokeWidth={1} />
+          <RiExpandUpDownLine data-testid="dropdown-icon" className="cursor-pointer" strokeWidth={1} />
         </article>
       )}>
         { accountsOptions.length > 0 && accountsOptions.map((acc) => (
