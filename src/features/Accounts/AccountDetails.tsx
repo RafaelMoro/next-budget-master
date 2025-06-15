@@ -1,5 +1,5 @@
 import { AccountProvider } from "@/shared/types/accounts.types";
-import { ModalBody, ModalHeader } from "flowbite-react"
+import { Button, ModalBody, ModalHeader } from "flowbite-react"
 
 interface AccountDetailsProps {
   accountId: string
@@ -18,6 +18,10 @@ export const AccountDetails = ({ name, balance, accountType, accountProvider }: 
           <p className="text-xl font-bold">Balance: {balance}</p>
           <p className="text-base text-gray-400">Tipo de cuenta: {accountType}</p>
           <p className="text-gray-400">Tarjeta emitida por: {accountProvider} </p>
+          <div className="flex justify-between">
+            <Button>Editar</Button>
+            <Button color="red" outline className="ml-2">Eliminar</Button>
+          </div>
         </div>
       </ModalBody>
     </>
