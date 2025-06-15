@@ -29,6 +29,10 @@ export const saveThemeCookie = async (theme: ThemeMode): Promise<void> => {
   })
 }
 
+export const deleteThemeCookie = async () => {
+  await cookies().delete(THEME_COOKIE_KEY)
+}
+
 /**
  * This function saves the selected account into the cookie
  * @param theme - The theme mode to save
@@ -40,6 +44,10 @@ export const saveAccountCookie = async (accountId: string): Promise<void> => {
     secure: true,
     sameSite: 'strict',
   })
+}
+
+export const removeAccountCookie = async () => {
+  await cookies().delete(ACCOUNT_COOKIE_KEY)
 }
 
 /**
