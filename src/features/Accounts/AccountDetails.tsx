@@ -1,25 +1,22 @@
-import { AccountProvider } from "@/shared/types/accounts.types";
+import { AccountsDisplay } from "@/shared/types/accounts.types";
 import { Button, ModalBody, ModalHeader } from "flowbite-react"
 
 interface AccountDetailsProps {
-  accountId: string
-  name: string;
-  balance: string;
-  accountType: string;
-  accountProvider?: AccountProvider;
+  account: AccountsDisplay
+  showEditAccount: () => void
 }
 
-export const AccountDetails = ({ name, balance, accountType, accountProvider }: AccountDetailsProps) => {
+export const AccountDetails = ({ account, showEditAccount }: AccountDetailsProps) => {
   return (
     <>
-      <ModalHeader>{name}</ModalHeader>
+      <ModalHeader>{account.name}</ModalHeader>
       <ModalBody>
         <div className="space-y-4">
-          <p className="text-xl font-bold">Balance: {balance}</p>
-          <p className="text-base text-gray-400">Tipo de cuenta: {accountType}</p>
-          <p className="text-gray-400">Tarjeta emitida por: {accountProvider} </p>
+          <p className="text-xl font-bold">Balance: {account.amount}</p>
+          <p className="text-base text-gray-400">Tipo de cuenta: {account.type}</p>
+          <p className="text-gray-400">Tarjeta emitida por: {account.accountProvider} </p>
           <div className="flex justify-between">
-            <Button>Editar</Button>
+            <Button onClick={showEditAccount}>Editar</Button>
             <Button color="red" outline className="ml-2">Eliminar</Button>
           </div>
         </div>

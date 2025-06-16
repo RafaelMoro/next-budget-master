@@ -1,12 +1,13 @@
 "use client"
 import { useState, useEffect } from "react";
-import { AccountBank, AccountsDisplay } from "@/shared/types/accounts.types";
+import { AccountBank, AccountModalAction, AccountsDisplay } from "@/shared/types/accounts.types";
 import { Account } from "./Accounts";
 import { getAccountProvider } from "@/shared/lib/accounts.lib";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
 import { Button, Modal } from "flowbite-react";
 import Image from "next/image";
 import { AccountDetails } from "./AccountDetails";
+import { EditAccount } from "./EditAccount";
 
 interface AccountsViewProps {
   accounts: AccountBank[];
@@ -16,12 +17,21 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
   const [accountsDisplay, setAccountsDisplay] = useState<AccountsDisplay[]>([])
   const [openAccModal, setOpenAccModal] = useState<boolean>(false)
   const [accDetails, setAccDetails] = useState<AccountsDisplay | null>(null)
+  const [accAction, setAccAction] = useState<AccountModalAction | null>(null)
 
   const toggleAccModal = () => setOpenAccModal((prev) => !prev)
-  const updateAccDetails = (acc: AccountsDisplay) => setAccDetails(acc)
+  const openModal = (acc: AccountsDisplay) => {
+    toggleAccModal()
+    setAccAction('view')
+    setAccDetails(acc)
+  }
   const closeModal = () => {
     toggleAccModal()
+    setAccAction(null)
     setAccDetails(null)
+  }
+  const showEditAccount = () => {
+    setAccAction('edit')
   }
 
   useEffect(() => {
@@ -44,19 +54,22 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
           <Account
             key={acc.accountId}
             account={acc}
-            toggleAccModal={toggleAccModal}
-            updateAccDetails={updateAccDetails}
+            openModal={openModal}
           />
         )) }
         { accDetails && (
           <Modal show={openAccModal} onClose={closeModal}>
-            <AccountDetails
-              accountId={accDetails.accountId}
-              name={accDetails.name}
-              balance={accDetails.amount}
-              accountType={accDetails.type}
-              accountProvider={accDetails.accountProvider}
-            />
+            { accAction === 'view' && (
+              <AccountDetails
+                account={accDetails}
+                showEditAccount={showEditAccount}
+              />
+            )}
+            { accAction === 'edit' && (
+              <EditAccount
+                account={accDetails}
+              />
+            )}
           </Modal>
         ) }
       </section>

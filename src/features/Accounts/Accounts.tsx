@@ -3,11 +3,10 @@ import { AccountProvider, AccountsDisplay } from "@/shared/types/accounts.types"
 
 interface AccountProps {
   account: AccountsDisplay
-  toggleAccModal: () => void;
-  updateAccDetails: (acc: AccountsDisplay) => void
+  openModal: (acc: AccountsDisplay) => void
 }
 
-export const Account = ({ account, toggleAccModal, updateAccDetails }: AccountProps) => {
+export const Account = ({ account, openModal }: AccountProps) => {
   const { name, amount, type, accountProvider = 'mastercard' } = account
   const accProviderImg: Record<AccountProvider, string> = {
     mastercard: '/img/mastercard-logo.svg',
@@ -15,13 +14,8 @@ export const Account = ({ account, toggleAccModal, updateAccDetails }: AccountPr
     americanExpress: '/img/amex-logo.svg'
   }
 
-  const handleClick = () => {
-    updateAccDetails(account)
-    toggleAccModal()
-  }
-
   return (
-    <button onClick={handleClick} className="p-2 rounded-3xl card-gradient-bg flex flex-col justify-between max-w-64 min-h-40 text-start cursor-pointer">
+    <button onClick={() => openModal(account)} className="p-2 rounded-3xl card-gradient-bg flex flex-col justify-between max-w-64 min-h-40 text-start cursor-pointer">
       <span className="text-lg text-gray-200">{name}</span>
       <div>
         <h5 className="text-2xl text-gray-200 font-semibold">{amount}</h5>

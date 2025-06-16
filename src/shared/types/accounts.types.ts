@@ -10,6 +10,7 @@ export type AccountBank = {
 }
 
 export type AccountProvider = "mastercard" | "visa" | "americanExpress"
+export type AccountModalAction = 'edit' | 'view' | 'delete'
 
 export type AccountsDisplay = {
   accountId: string;
