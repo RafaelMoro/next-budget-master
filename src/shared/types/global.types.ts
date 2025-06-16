@@ -20,4 +20,12 @@ export type GeneralError = {
 
 export type ErrorCatched = {
   message: string;
+  cause?: {
+    code: string
+  }
+}
+
+export type DetailedError = {
+  message: string;
+  cause?: string;
 }

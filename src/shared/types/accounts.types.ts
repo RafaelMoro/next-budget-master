@@ -1,3 +1,5 @@
+import { DetailedError } from "./global.types";
+
 export type AccountBank = {
   _id: string;
   title: string;
@@ -29,6 +31,6 @@ export type FetchAccountsResponse = {
 
 // Response from the function getAccounts
 export type GetAccountsResponse = {
-  message: string;
+  detailedError: DetailedError | null;
   accounts: AccountBank[];
 }

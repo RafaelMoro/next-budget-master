@@ -5,7 +5,9 @@ export const fetchAccounts = async ({ accessToken }: { accessToken: string }): P
   try {
     if (!accessToken) {
       return {
-        message: 'No access token provided',
+        detailedError: {
+         message: 'No access token provided'
+        },
         accounts: []
       }
     }
@@ -17,13 +19,25 @@ export const fetchAccounts = async ({ accessToken }: { accessToken: string }): P
     const data: FetchAccountsResponse = await res.json()
     const { data: { accounts } } = data;
     return {
-      message: 'Accounts fetched successfully',
+      detailedError: null,
       accounts
     }
   } catch (error: unknown) {
     console.error('Error fetching accounts:', error);
+    if ((error as ErrorCatched)?.cause?.code) {
+      return {
+        detailedError: {
+          message: (error as ErrorCatched)?.message,
+          cause: (error as ErrorCatched)?.cause?.code
+        },
+        accounts: []
+      }
+    }
+
     return {
-      message: (error as ErrorCatched)?.message,
+      detailedError: {
+        message: (error as ErrorCatched)?.message
+      },
       accounts: []
     }
   }

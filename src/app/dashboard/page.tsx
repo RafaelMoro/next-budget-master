@@ -5,12 +5,12 @@ import { DashboardView } from '@/features/Dashboard/DashboardView';
 
 export default async function DashboardPage () {
   const accessToken = await getAccessToken()
-  const { accounts } = await fetchAccounts({ accessToken })
+  const { accounts, detailedError } = await fetchAccounts({ accessToken })
 
   return (
     <>
       <LoginRequiredModal show={!accessToken} />
-      <DashboardView accounts={accounts} />
+      <DashboardView accounts={accounts} detailedError={detailedError} />
     </>
   )
 }
