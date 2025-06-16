@@ -30,8 +30,8 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
     setAccAction(null)
     setAccDetails(null)
   }
-  const showEditAccount = () => {
-    setAccAction('edit')
+  const updateAccAction = (acc: AccountModalAction) => {
+    setAccAction(acc)
   }
 
   useEffect(() => {
@@ -62,12 +62,14 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
             { accAction === 'view' && (
               <AccountDetails
                 account={accDetails}
-                showEditAccount={showEditAccount}
+                updateAccAction={updateAccAction}
               />
             )}
             { accAction === 'edit' && (
               <EditAccount
                 account={accDetails}
+                closeModal={closeModal}
+                updateAccAction={updateAccAction}
               />
             )}
           </Modal>
