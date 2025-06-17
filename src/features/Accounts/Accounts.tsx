@@ -7,7 +7,7 @@ interface AccountProps {
 }
 
 export const Account = ({ account, openModal }: AccountProps) => {
-  const { name, amount, type, accountProvider = 'mastercard' } = account
+  const { name, amount, type, accountProvider = 'mastercard', terminationFourDigits } = account
   const accProviderImg: Record<AccountProvider, string> = {
     mastercard: '/img/mastercard-logo.svg',
     visa: '/img/visa-logo.svg',
@@ -20,7 +20,7 @@ export const Account = ({ account, openModal }: AccountProps) => {
       <div>
         <h5 className="text-2xl text-gray-200 font-semibold">{amount}</h5>
         <div className="flex justify-between mx-2 mb-1">
-          <p className="text-sm text-gray-300 dark:text-gray-400">{type} **0762</p>
+          <p className="text-sm text-gray-300 dark:text-gray-400">{type} {terminationFourDigits}</p>
           <Image src={accProviderImg[accountProvider]} alt="Account Provider Logo" width={40} height={40} />
         </div>
       </div>

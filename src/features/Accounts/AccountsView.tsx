@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { AccountBank, AccountModalAction, AccountsDisplay, AccountTypes } from "@/shared/types/accounts.types";
 import { Account } from "./Accounts";
-import { getAccountProvider } from "@/shared/lib/accounts.lib";
+import { getAccountProvider, getTerminationFormatted } from "@/shared/lib/accounts.lib";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
 import { Button, Modal } from "flowbite-react";
 import Image from "next/image";
@@ -42,6 +42,7 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
         amount: formatNumberToCurrency(account.amount),
         // We're sure the account type is not other string than type AccountTypes
         type: (account.accountType as AccountTypes),
+        terminationFourDigits: getTerminationFormatted(account.terminationFourDigits),
         accountProvider: getAccountProvider(account.accountProvider) // Default to mastercard if not provided
       }))
       setAccountsDisplay(formattedAccounts)
