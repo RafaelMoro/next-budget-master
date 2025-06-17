@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { cleanCurrencyString, formatCurrencyToString, formatNumberToCurrency } from "../utils/formatNumberCurrency.utils";
+import { useState } from "react";
+import { cleanCurrencyString, formatNumberToCurrency, shiftSingleDecimalLeft } from "../utils/formatNumberCurrency.utils";
 
 interface UseCurrencyFieldProps {
   amount: string | null;
@@ -19,6 +19,7 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     const currencyThirdNumber = /^\$0\.[1-9][1-9][0-9]$/;
     const numberWithThousand = /^\$(\d{1,3}(,\d{3})+)\.[1-9]{3}$/
     const numberWithoutThousand = /^\$\d+\.\d{3}$/
+    const deletedNumberRegex = /^\$\d+\.\d$/;
     console.log('value', value)
 
     if (currencyFirstNumber.test(value)) {
@@ -44,6 +45,12 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     }
     if (numberWithThousand.test(value)) {
       const valueCleaned = cleanCurrencyString(value);
+      const valueTransformed = formatNumberToCurrency(valueCleaned);
+      setCurrencyState(valueTransformed);
+      return;
+    }
+    if (deletedNumberRegex.test(value)) {
+      const valueCleaned = shiftSingleDecimalLeft(value)
       const valueTransformed = formatNumberToCurrency(valueCleaned);
       setCurrencyState(valueTransformed);
       return;
