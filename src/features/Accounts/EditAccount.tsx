@@ -53,7 +53,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
 
   return (
     <AnimatePresence>
-      <div className="flex justify-between items-start rounded-t border-b p-5 dark:border-gray-600">
+      <div key={`edit-acc-${account.accountId}`} className="flex justify-between items-start rounded-t border-b p-5 dark:border-gray-600">
         <Button onClick={() => updateAccAction('view')} color="gray" outline>
           <RiArrowLeftLine />
           Volver
