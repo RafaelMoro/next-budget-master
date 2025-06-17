@@ -4,7 +4,7 @@ export function getAccountProvider(provider: string | undefined): AccountProvide
   return (
     provider === "mastercard" ||
     provider === "visa" ||
-    provider === "americanExpress"
+    provider === "american-express"
   )
     ? provider as AccountProvider
     : "mastercard";
