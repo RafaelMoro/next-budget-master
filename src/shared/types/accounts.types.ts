@@ -28,7 +28,8 @@ export type AccountsDisplay = {
   amount: string;
   type: AccountTypes;
   accountProvider?: AccountProvider;
-  terminationFourDigits?: string;
+  terminationFourDigits?: number;
+  terminationFourDigitsTransformed?: string;
   alias?: string;
 }
 

@@ -43,7 +43,8 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
         // We're sure the account type is not other string than type AccountTypes
         type: (account.accountType as AccountTypes),
         alias: account.alias,
-        terminationFourDigits: getTerminationFormatted(account.terminationFourDigits),
+        terminationFourDigits: account.terminationFourDigits,
+        terminationFourDigitsTransformed: getTerminationFormatted(account.terminationFourDigits),
         accountProvider: getAccountProvider(account.accountProvider) // Default to mastercard if not provided
       }))
       setAccountsDisplay(formattedAccounts)
