@@ -78,6 +78,21 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             value={currencyState}
             handleChange={handleChange}
           />
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="terminationNumber">Terminación de la cuenta</Label>
+            </div>
+            <TextInput
+              data-testid="terminationNumber"
+              defaultValue={account.terminationFourDigits ?? 0}
+              id="terminationNumber"
+              type="number"
+              {...register("terminationFourDigits")}
+              />
+            { errors?.terminationFourDigits?.message && (
+              <ErrorMessage isAnimated>{errors.terminationFourDigits?.message}</ErrorMessage>
+            )}
+          </div>
           <AccountTypeDropdown selectedAccountType={selectedAccountType} changeSelectedAccountType={changeSelectedAccountType} />
           <AccountProviderDropdown selectedProvider={selectedProvider} changeSelectedProviderType={changeSelectedProviderType}  />
           <div className="flex justify-between">

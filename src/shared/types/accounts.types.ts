@@ -1,4 +1,4 @@
-import { object, string } from "yup";
+import { number, object, string } from "yup";
 import { DetailedError } from "./global.types";
 
 export type AccountBank = {
@@ -62,6 +62,7 @@ export type GetAccountsResponse = {
 
 export type EditAccountFormData = {
   title: string;
+  terminationFourDigits: number;
 }
 
 // Excluding amount as it can't be empty
@@ -69,5 +70,10 @@ export const EditAccountSchema = object({
   title: string()
     .required("Por favor, ingrese el título de la cuenta")
     .min(2, "El título debe tener al menos 2 caracteres")
-    .max(50, "El título no puede exceder los 50 caracteres")
+    .max(50, "El título no puede exceder los 50 caracteres"),
+  terminationFourDigits: number()
+    .typeError("Debe ingresar los 4 dígitos finales")
+    .required("Debe ingresar los 4 dígitos finales")
+    .min(1000, "Debe ser un número de 4 dígitos")
+    .max(9999, "Debe ser un número de 4 dígitos"),
 })
