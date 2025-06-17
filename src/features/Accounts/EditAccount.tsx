@@ -1,6 +1,9 @@
-import { AccountModalAction, AccountsDisplay, TYPE_OF_ACCOUNTS } from "@/shared/types/accounts.types"
+"use client"
+import { useEffect, useMemo, useState } from "react";
 import { Button, Dropdown, DropdownItem, Label, ModalBody, TextInput } from "flowbite-react"
 import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react"
+
+import { AccountModalAction, AccountsDisplay, TYPE_OF_ACCOUNTS } from "@/shared/types/accounts.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField";
 
@@ -11,10 +14,26 @@ interface EditAccountProps {
 }
 
 export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccountProps) => {
+  const typeAccounts = useMemo(() => [...TYPE_OF_ACCOUNTS], []);
+  const [selectedAccountType, setSelectedAccountType] = useState<string>(account.type)
+  const [filteredAccountTypes, setFilteredAccountTypes] = useState<string[]>(typeAccounts)
+
+  const handleSelectAccountType = (newAccType: string) => {
+    setSelectedAccountType(newAccType)
+    const fileteredTypes = typeAccounts.filter(type => type !== newAccType)
+    setFilteredAccountTypes(fileteredTypes)
+  }
+
+  useEffect(() => {
+    if (account.type) {
+      const fileteredTypes = typeAccounts.filter(type => type !== account.type)
+      setFilteredAccountTypes(fileteredTypes)
+    }
+  }, [account.type, typeAccounts])
+
   const { handleChange, currencyState } = useCurrencyField({
     amount: account.amount
   })
-  const typeAccounts = [...TYPE_OF_ACCOUNTS]
 
   return (
     <>
@@ -52,9 +71,9 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             value={currencyState}
             handleChange={handleChange}
           />
-          <Dropdown label={`Tipo de cuenta: ${account.type}`} inline>
-            { typeAccounts.map((type) => (
-              <DropdownItem value={type} key={type}>{type}</DropdownItem>
+          <Dropdown label={`Tipo de cuenta: ${selectedAccountType}`} inline>
+            { filteredAccountTypes.map((type) => (
+              <DropdownItem onClick={() => handleSelectAccountType(type)} value={type} key={type}>{type}</DropdownItem>
             ))}
           </Dropdown>
         </form>
