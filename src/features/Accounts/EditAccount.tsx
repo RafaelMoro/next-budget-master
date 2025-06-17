@@ -1,11 +1,15 @@
 "use client"
 import { useEffect, useMemo, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { AnimatePresence } from "motion/react"
 import { Button, Dropdown, DropdownItem, Label, ModalBody, TextInput } from "flowbite-react"
 import { RiArrowLeftLine, RiCloseFill, RiArrowDownSLine } from "@remixicon/react"
 
-import { AccountModalAction, AccountsDisplay, TYPE_OF_ACCOUNTS } from "@/shared/types/accounts.types"
+import { AccountModalAction, AccountsDisplay, EditAccountFormData, EditAccountSchema, TYPE_OF_ACCOUNTS } from "@/shared/types/accounts.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField";
+import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 
 interface EditAccountProps {
   account: AccountsDisplay
@@ -24,6 +28,18 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     setFilteredAccountTypes(fileteredTypes)
   }
 
+  const { handleChange, currencyState } = useCurrencyField({
+    amount: account.amount
+  })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EditAccountFormData>({
+    resolver: yupResolver(EditAccountSchema)
+  })
+
   useEffect(() => {
     if (account.type) {
       const fileteredTypes = typeAccounts.filter(type => type !== account.type)
@@ -31,12 +47,12 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     }
   }, [account.type, typeAccounts])
 
-  const { handleChange, currencyState } = useCurrencyField({
-    amount: account.amount
-  })
+  const onSubmit: SubmitHandler<EditAccountFormData> = (data) => {
+      console.log('data', data)
+    }
 
   return (
-    <>
+    <AnimatePresence>
       <div className="flex justify-between items-start rounded-t border-b p-5 dark:border-gray-600">
         <Button onClick={() => updateAccAction('view')} color="gray" outline>
           <RiArrowLeftLine />
@@ -48,21 +64,21 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
         </Button>
       </div>
       <ModalBody>
-        <form className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="name">Titulo de la cuenta</Label>
+              <Label htmlFor="title">Titulo de la cuenta</Label>
             </div>
             <TextInput
-              data-testid="name"
+              data-testid="title"
               defaultValue={account.name}
-              id="name"
+              id="title"
               type="text"
-              // {...register("firstName")}
+              {...register("title")}
               />
-            {/* { errors?.firstName?.message && (
-              <ErrorMessage isAnimated>{errors.firstName?.message}</ErrorMessage>
-            )} */}
+            { errors?.title?.message && (
+              <ErrorMessage isAnimated>{errors.title?.message}</ErrorMessage>
+            )}
           </div>
           <CurrencyField
             labelName="Saldo de la cuenta"
@@ -77,12 +93,20 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
               <RiArrowDownSLine />
             </Button>
           )}>
-            { filteredAccountTypes.map((type) => (
-              <DropdownItem onClick={() => handleSelectAccountType(type)} value={type} key={type}>{type}</DropdownItem>
+            { filteredAccountTypes.map((type, index) => (
+              <DropdownItem
+                onClick={() => handleSelectAccountType(type)}
+                value={type}
+                key={`${type}-${index}-${account.accountId}`}
+              >{type}</DropdownItem>
             ))}
           </Dropdown>
+          <Button className="hover:cursor-pointer" type="submit">Edit</Button>
+          <Button color="alternative" onClick={closeModal}>
+            Cancel
+          </Button>
         </form>
       </ModalBody>
-    </>
+    </AnimatePresence>
   )
 }
