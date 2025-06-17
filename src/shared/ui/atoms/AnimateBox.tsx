@@ -34,7 +34,7 @@ interface AnimateCardProps {
   direction: number;
 }
 
-/*
+/**
 * This component has to be used as a wrapper of the child component that
 * want to be animated.
 
