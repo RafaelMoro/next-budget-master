@@ -1,3 +1,4 @@
+import { object, string } from "yup";
 import { DetailedError } from "./global.types";
 
 export type AccountBank = {
@@ -36,3 +37,15 @@ export type GetAccountsResponse = {
   detailedError: DetailedError | null;
   accounts: AccountBank[];
 }
+
+export type EditAccountFormData = {
+  title: string;
+}
+
+// Excluding amount as it can't be empty
+export const EditAccountSchema = object({
+  title: string()
+    .required("Por favor, ingrese el título de la cuenta")
+    .min(2, "El título debe tener al menos 2 caracteres")
+    .max(50, "El título no puede exceder los 50 caracteres")
+})
