@@ -16,6 +16,7 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     // Matches values between $0.001 and $0.009 inclusive
     const currencyFirstNumber = /^\$0\.00[1-9]$/;
     const currencySecondNumber = /^\$0\.0[1-9][0-9]$/;
+    const currencyThirdNumber = /^\$0\.[1-9][1-9][0-9]$/;
     console.log('value', value)
 
     if (currencyFirstNumber.test(value)) {
@@ -24,8 +25,13 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
       return;
     }
     if (currencySecondNumber.test(value)) {
-      const newValue = `$0.${value.charAt(4)}${value.charAt(6)}`
+      const newValue = `$0.${value.charAt(4)}${value.charAt(5)}`
       setCurrencyState(newValue);
+      return;
+    }
+    if (currencyThirdNumber.test(value)) {
+      const newValue = `$${value.charAt(3)}.${value.charAt(4)}${value.charAt(5)}`
+      setCurrencyState(newValue)
       return;
     }
     const startsWithDollarSign = value.startsWith('$');
