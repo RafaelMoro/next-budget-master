@@ -36,5 +36,25 @@ describe('CurrencyField', () => {
 
       expect(input).toHaveValue('$0.01')
     })
+
+    it('Given a user typing 12, expect the input to have value $0.12', async () => {
+      const user = userEvent.setup();
+      render(<CurrencyFieldWrapper />)
+  
+      const input = screen.getByTestId('amount')
+      await user.type(input, '12')
+
+      expect(input).toHaveValue('$0.12')
+    })
+
+    it('Given a user typing 123, expect the input to have value $1.23', async () => {
+      const user = userEvent.setup();
+      render(<CurrencyFieldWrapper />)
+  
+      const input = screen.getByTestId('amount')
+      await user.type(input, '123')
+
+      expect(input).toHaveValue('$1.23')
+    })
   })
 })
