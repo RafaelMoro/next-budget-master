@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/react"
+import userEvent from '@testing-library/user-event';
+
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 
@@ -23,5 +25,16 @@ describe('CurrencyField', () => {
     render(<CurrencyFieldWrapper />)
 
     expect(screen.getByTestId('amount')).toBeInTheDocument()
+  })
+  describe('Currency field validations', () => {
+    it('Given a user typing 1, expect the input to have value $0.01', async () => {
+      const user = userEvent.setup();
+      render(<CurrencyFieldWrapper />)
+  
+      const input = screen.getByTestId('amount')
+      await user.type(input, '1')
+
+      expect(input).toHaveValue('$0.01')
+    })
   })
 })
