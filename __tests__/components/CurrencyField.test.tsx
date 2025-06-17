@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { cleanCurrencyString, shiftSingleDecimalLeft } from '@/shared/utils/formatNumberCurrency.utils';
+import { cleanCurrencyString, shiftSingleDecimalLeft, shiftThousandSingleDecimalLeft } from '@/shared/utils/formatNumberCurrency.utils';
 
 const CurrencyFieldWrapper = ({ amount = null }: { amount?: string | null }) => {
   const { currencyState, handleChange } = useCurrencyField({
@@ -149,6 +149,12 @@ describe('CurrencyField', () => {
       expect(shiftSingleDecimalLeft('$12.3')).toBe(1.23);
       expect(shiftSingleDecimalLeft('$123.4')).toBe(12.34);
       expect(shiftSingleDecimalLeft('$1,234.5')).toBe(123.45);
+    });
+    it('should shift the decimal left for a thousand+ number with a single decimal in shiftThousandSingleDecimalLeft', () => {
+      expect(shiftThousandSingleDecimalLeft('$1,302.3')).toBe(130.23);
+      expect(shiftThousandSingleDecimalLeft('$232,456.1')).toBe(23245.61);
+      expect(shiftThousandSingleDecimalLeft('$1,567,290.3')).toBe(156729.03);
+      expect(shiftThousandSingleDecimalLeft('$1,000.5')).toBe(100.05);
     });
   })
 })
