@@ -63,6 +63,7 @@ export type GetAccountsResponse = {
 export type EditAccountFormData = {
   title: string;
   terminationFourDigits: number;
+  alias: string
 }
 
 // Excluding amount as it can't be empty
@@ -71,6 +72,10 @@ export const EditAccountSchema = object({
     .required("Por favor, ingrese el título de la cuenta")
     .min(2, "El título debe tener al menos 2 caracteres")
     .max(50, "El título no puede exceder los 50 caracteres"),
+  alias: string()
+    .required("Por favor, ingrese el título de la cuenta")
+    .min(2, "El título debe tener al menos 2 caracteres")
+    .max(30, "El título no puede exceder los 30 caracteres"),
   terminationFourDigits: number()
     .typeError("Debe ingresar los 4 dígitos finales")
     .required("Debe ingresar los 4 dígitos finales")

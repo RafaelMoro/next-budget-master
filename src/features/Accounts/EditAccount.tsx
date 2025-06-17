@@ -71,13 +71,21 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
               <ErrorMessage isAnimated>{errors.title?.message}</ErrorMessage>
             )}
           </div>
-          <CurrencyField
-            labelName="Saldo de la cuenta"
-            dataTestId="amount"
-            fieldId="amount"
-            value={currencyState}
-            handleChange={handleChange}
-          />
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="alias">Alias</Label>
+            </div>
+            <TextInput
+              data-testid="alias"
+              defaultValue={account.alias}
+              id="alias"
+              type="text"
+              {...register("alias")}
+              />
+            { errors?.alias?.message && (
+              <ErrorMessage isAnimated>{errors.alias?.message}</ErrorMessage>
+            )}
+          </div>
           <div>
             <div className="mb-2 block">
               <Label htmlFor="terminationNumber">Terminación de la cuenta</Label>
@@ -93,6 +101,13 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
               <ErrorMessage isAnimated>{errors.terminationFourDigits?.message}</ErrorMessage>
             )}
           </div>
+          <CurrencyField
+            labelName="Saldo de la cuenta"
+            dataTestId="amount"
+            fieldId="amount"
+            value={currencyState}
+            handleChange={handleChange}
+          />
           <AccountTypeDropdown selectedAccountType={selectedAccountType} changeSelectedAccountType={changeSelectedAccountType} />
           <AccountProviderDropdown selectedProvider={selectedProvider} changeSelectedProviderType={changeSelectedProviderType}  />
           <div className="flex justify-between">
