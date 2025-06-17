@@ -14,6 +14,8 @@ export type AccountBank = {
 export type AccountProvider = "mastercard" | "visa" | "americanExpress"
 export type AccountModalAction = 'edit' | 'view' | 'delete'
 
+export const TYPE_OF_ACCOUNTS = ['Crédito', 'Débito', 'Vales de comida', 'Vales de restaurante', 'Cuenta de ahorro'] as const;
+
 export type AccountsDisplay = {
   accountId: string;
   name: string;
