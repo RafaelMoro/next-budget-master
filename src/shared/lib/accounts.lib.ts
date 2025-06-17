@@ -9,3 +9,10 @@ export function getAccountProvider(provider: string | undefined): AccountProvide
     ? provider as AccountProvider
     : "mastercard";
 }
+
+export function getTerminationFormatted(terminationNumber: number | undefined) {
+  if (terminationNumber) {
+    return `**${terminationNumber}`
+  }
+  return "**XXXX";
+}
