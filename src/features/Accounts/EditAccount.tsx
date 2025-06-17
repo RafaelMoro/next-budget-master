@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useMemo, useState } from "react";
 import { Button, Dropdown, DropdownItem, Label, ModalBody, TextInput } from "flowbite-react"
-import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react"
+import { RiArrowLeftLine, RiCloseFill, RiArrowDownSLine } from "@remixicon/react"
 
 import { AccountModalAction, AccountsDisplay, TYPE_OF_ACCOUNTS } from "@/shared/types/accounts.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
@@ -48,7 +48,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
         </Button>
       </div>
       <ModalBody>
-        <form>
+        <form className="flex flex-col gap-4">
           <div>
             <div className="mb-2 block">
               <Label htmlFor="name">Titulo de la cuenta</Label>
@@ -71,7 +71,12 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             value={currencyState}
             handleChange={handleChange}
           />
-          <Dropdown label={`Tipo de cuenta: ${selectedAccountType}`} inline>
+          <Dropdown label="" renderTrigger={() => (
+            <Button color="dark">
+              Tipo de cuenta: {selectedAccountType}
+              <RiArrowDownSLine />
+            </Button>
+          )}>
             { filteredAccountTypes.map((type) => (
               <DropdownItem onClick={() => handleSelectAccountType(type)} value={type} key={type}>{type}</DropdownItem>
             ))}
