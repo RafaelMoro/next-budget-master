@@ -10,8 +10,8 @@ import { AccountModalAction, AccountProvider, AccountsDisplay, AccountTypes, Edi
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
-import { AccountTypeDropdown } from "@/shared/ui/atoms/AccountTypeDropdown";
-import { AccountProviderDropdown } from "@/shared/ui/atoms/AccountProviderDropdown";
+import { AccountTypeDropdown } from "@/features/Accounts/AccountTypeDropdown";
+import { AccountProviderDropdown } from "@/features/Accounts/AccountProviderDropdown";
 
 interface EditAccountProps {
   account: AccountsDisplay
