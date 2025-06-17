@@ -3,7 +3,6 @@ import { cleanCurrencyString, formatNumberToCurrency, shiftSingleDecimalLeft, sh
 
 interface UseCurrencyFieldProps {
   amount: string | null;
-  fieldName: string;
 }
 
 export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
@@ -21,7 +20,6 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     const numberWithoutThousand = /^\$\d+\.\d{3}$/
     const deletedNumberRegex = /^\$\d+\.\d$/;
     const deletedNumberThousandRegex = /^\$(\d{1,3}(,\d{3})+)\.\d$/
-    console.log('value', value)
 
     if (currencyFirstNumber.test(value)) {
       const newValue = `$0.0${value.charAt(5)}`
