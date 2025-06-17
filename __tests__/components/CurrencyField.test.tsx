@@ -4,9 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 
-const CurrencyFieldWrapper = () => {
+const CurrencyFieldWrapper = ({ amount = null }: { amount?: string | null }) => {
   const { currencyState, handleChange } = useCurrencyField({
-    amount: null,
+    amount,
   })
 
   return (
@@ -26,6 +26,14 @@ describe('CurrencyField', () => {
 
     expect(screen.getByTestId('amount')).toBeInTheDocument()
   })
+
+  it('Given the case where we pass an amount $123.45, expect to see the input to have the value $123.45', () => {
+    render(<CurrencyFieldWrapper amount="$123.45" />)
+
+    expect(screen.getByTestId('amount')).toBeInTheDocument()
+    expect(screen.getByTestId('amount')).toHaveValue('$123.45')
+  })
+
   describe('Currency field validations', () => {
     it('Given a user typing 1, expect the input to have value $0.01', async () => {
       const user = userEvent.setup();
