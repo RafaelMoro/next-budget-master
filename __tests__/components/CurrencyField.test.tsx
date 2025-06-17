@@ -115,5 +115,15 @@ describe('CurrencyField', () => {
       await user.type(input, '{backspace}{backspace}{backspace}{backspace}{backspace}')
       expect(input).toHaveValue('$0.00')
     })
+
+    it('Given a user typing a character, special character, then expect the input to have $0.00', async () => {
+      const user = userEvent.setup();
+      render(<CurrencyFieldWrapper />)
+  
+      const input = screen.getByTestId('amount')
+      await user.type(input, 'a@/>#$%^&*()')
+
+      expect(input).toHaveValue('$0.00')
+    })
   })
 })
