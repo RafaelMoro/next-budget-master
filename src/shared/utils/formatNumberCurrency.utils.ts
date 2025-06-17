@@ -35,3 +35,16 @@ export const shiftSingleDecimalLeft = (currency: string): number => {
   }
   return parseFloat(cleaned);
 };
+export const shiftThousandSingleDecimalLeft = (currency: string): number => {
+  // Elimina el signo de dólar y comas
+  const cleaned = currency.replace(/[$,]/g, '');
+  // Busca el patrón de un solo decimal
+  const match = cleaned.match(/^(\d+)\.(\d)$/);
+  if (match) {
+    // Une los dígitos y coloca el punto antes de los dos últimos
+    const allDigits = match[1] + match[2];
+    const result = allDigits.slice(0, -2) + '.' + allDigits.slice(-2);
+    return parseFloat(result);
+  }
+  return parseFloat(cleaned);
+};
