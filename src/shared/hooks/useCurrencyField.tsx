@@ -63,8 +63,6 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     
   }
 
-  
-
   return {
     handleChange,
     currencyState,
