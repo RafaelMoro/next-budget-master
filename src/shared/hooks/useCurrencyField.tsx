@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { cleanCurrencyString, formatCurrencyToString } from "../utils/formatNumberCurrency.utils";
+import { cleanCurrencyString, formatCurrencyToString, formatNumberToCurrency } from "../utils/formatNumberCurrency.utils";
 
 interface UseCurrencyFieldProps {
   amount: string | null;
@@ -17,7 +17,7 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     const currencyFirstNumber = /^\$0\.00[1-9]$/;
     const currencySecondNumber = /^\$0\.0[1-9][0-9]$/;
     const currencyThirdNumber = /^\$0\.[1-9][1-9][0-9]$/;
-    const numberWithDecimalsRegex = /^\$(\d{1,3}(,\d{3})+)\.[1-9]{3}$/
+    const numberWithThousand = /^\$(\d{1,3}(,\d{3})+)\.[1-9]{3}$/
     const numberWithoutThousand = /^\$\d+\.\d{3}$/
     console.log('value', value)
 
@@ -37,10 +37,15 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
       return;
     }
     if (numberWithoutThousand.test(value)) {
-      console.log('here')
       const valueCleaned = cleanCurrencyString(value);
-      console.log('valueCleaned', valueCleaned)
-      setCurrencyState(value);
+      const valueTransformed = formatNumberToCurrency(valueCleaned);
+      setCurrencyState(valueTransformed);
+      return;
+    }
+    if (numberWithThousand.test(value)) {
+      const valueCleaned = cleanCurrencyString(value);
+      const valueTransformed = formatNumberToCurrency(valueCleaned);
+      setCurrencyState(valueTransformed);
       return;
     }
     const startsWithDollarSign = value.startsWith('$');
