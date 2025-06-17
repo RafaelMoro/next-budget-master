@@ -13,6 +13,7 @@ export type AccountBank = {
 }
 
 export type AccountProvider = "mastercard" | "visa" | "american-express"
+export type AccountProviderDisplay = 'Mastercard' | 'Visa' | 'American Express'
 export type AccountTypes = 'Crédito' | 'Débito' | 'Vales de comida' | 'Vales de restaurante' | 'Cuenta de ahorro'
 export type AccountModalAction = 'edit' | 'view' | 'delete'
 
