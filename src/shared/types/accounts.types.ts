@@ -25,6 +25,17 @@ export type AccountsDisplay = {
   accountProvider?: AccountProvider;
 }
 
+//#region Data interfaces
+
+export type EditAccountPayload = {
+  accountId: string
+  title: string;
+  accountType: string;
+  amount: number;
+  backgroundColor: string;
+  color: string;
+}
+
 // Response from backend
 export type FetchAccountsResponse = {
   data: {
@@ -37,6 +48,8 @@ export type GetAccountsResponse = {
   detailedError: DetailedError | null;
   accounts: AccountBank[];
 }
+
+//#region Validations
 
 export type EditAccountFormData = {
   title: string;
