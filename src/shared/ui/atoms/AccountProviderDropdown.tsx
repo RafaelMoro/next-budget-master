@@ -5,23 +5,28 @@ import { RiArrowDownSLine } from "@remixicon/react"
 import { ACCOUNT_PROVIDERS, AccountProvider } from "@/shared/types/accounts.types";
 
 interface AccountProviderDropdownProps {
-  provider?: AccountProvider;
+  selectedProvider: AccountProvider;
+  changeSelectedProviderType: (newProvider: AccountProvider) => void
 }
 
-export const AccountProviderDropdown = ({ provider }: AccountProviderDropdownProps) => {
+/**
+ * Component Description:
+ * The component needs as param a state with its handler to update it
+ * @params selectedProvider: AccountProvider state - changeSelectedProviderType: handler to update the state
+ */
+export const AccountProviderDropdown = ({ selectedProvider, changeSelectedProviderType }: AccountProviderDropdownProps) => {
   const typeProviders = useMemo(() => [...ACCOUNT_PROVIDERS], []);
-  const [selectedProvider, setSelectedProvider] = useState<AccountProvider>(provider ?? 'mastercard')
   const [filteredProviders, setFilteredAccountTypes] = useState<AccountProvider[]>(typeProviders)
 
   useEffect(() => {
-      if (provider) {
-        const newFilteredProviders = typeProviders.filter(prov => prov !== provider)
+      if (selectedProvider) {
+        const newFilteredProviders = typeProviders.filter(prov => prov !== selectedProvider)
         setFilteredAccountTypes(newFilteredProviders)
       }
-    }, [provider, typeProviders])
+    }, [selectedProvider, typeProviders])
 
   const handleSelectAccountType = (newAccProvider: AccountProvider) => {
-    setSelectedProvider(newAccProvider)
+    changeSelectedProviderType(newAccProvider)
     const fileteredTypes = typeProviders.filter(prov => prov !== newAccProvider)
     setFilteredAccountTypes(fileteredTypes)
   }

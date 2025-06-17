@@ -6,11 +6,12 @@ import { AnimatePresence } from "motion/react"
 import { Button, Label, ModalBody, TextInput } from "flowbite-react"
 import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react"
 
-import { AccountModalAction, AccountsDisplay, AccountTypes, EditAccountFormData, EditAccountSchema } from "@/shared/types/accounts.types"
+import { AccountModalAction, AccountProvider, AccountsDisplay, AccountTypes, EditAccountFormData, EditAccountSchema } from "@/shared/types/accounts.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { AccountTypeDropdown } from "@/shared/ui/atoms/AccountTypeDropdown";
+import { AccountProviderDropdown } from "@/shared/ui/atoms/AccountProviderDropdown";
 
 interface EditAccountProps {
   account: AccountsDisplay
@@ -20,7 +21,11 @@ interface EditAccountProps {
 
 export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccountProps) => {
   const [selectedAccountType, setSelectedAccountType] = useState<AccountTypes>(account.type)
+  const [selectedProvider, setSelectedProvider] = useState<AccountProvider>(account.accountProvider ?? 'mastercard')
+
   const changeSelectedAccountType = (newAccType: AccountTypes) => setSelectedAccountType(newAccType)
+  const changeSelectedProviderType = (newProvider: AccountProvider) => setSelectedProvider(newProvider)
+
   const { handleChange, currencyState } = useCurrencyField({
     amount: account.amount
   })
@@ -74,6 +79,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             handleChange={handleChange}
           />
           <AccountTypeDropdown selectedAccountType={selectedAccountType} changeSelectedAccountType={changeSelectedAccountType} />
+          <AccountProviderDropdown selectedProvider={selectedProvider} changeSelectedProviderType={changeSelectedProviderType}  />
           <div className="flex justify-between">
             <Button color="alternative" onClick={closeModal}>
               Cancel
