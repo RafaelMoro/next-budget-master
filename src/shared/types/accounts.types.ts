@@ -11,6 +11,7 @@ export type AccountBank = {
   sub: string;
   accountProvider?: string;
   terminationFourDigits?: number;
+  alias?: string;
 }
 
 export type AccountProvider = "mastercard" | "visa" | "american-express"
@@ -28,6 +29,7 @@ export type AccountsDisplay = {
   type: AccountTypes;
   accountProvider?: AccountProvider;
   terminationFourDigits?: string;
+  alias?: string;
 }
 
 //#region Data interfaces

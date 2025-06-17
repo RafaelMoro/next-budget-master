@@ -2,7 +2,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Dropdown, DropdownItem } from "flowbite-react"
 import { RiArrowDownSLine } from "@remixicon/react"
-import { ACCOUNT_PROVIDERS, AccountProvider, AccountProviderDisplay } from "@/shared/types/accounts.types";
+import { ACCOUNT_PROVIDERS, AccountProvider } from "@/shared/types/accounts.types";
+import { TYPE_PROVIDER_DICT } from "@/shared/constants/accounts.constants";
 
 interface AccountProviderDropdownProps {
   selectedProvider: AccountProvider;
@@ -16,11 +17,7 @@ interface AccountProviderDropdownProps {
  */
 export const AccountProviderDropdown = ({ selectedProvider, changeSelectedProviderType }: AccountProviderDropdownProps) => {
   const typeProviders = useMemo(() => [...ACCOUNT_PROVIDERS], []);
-  const typeAccountsDict: Record<AccountProvider, AccountProviderDisplay> = {
-    mastercard: 'Mastercard',
-    visa: 'Visa',
-    'american-express': 'American Express',
-  }
+  
   const [filteredProviders, setFilteredAccountTypes] = useState<AccountProvider[]>(typeProviders)
 
   useEffect(() => {
@@ -39,7 +36,7 @@ export const AccountProviderDropdown = ({ selectedProvider, changeSelectedProvid
   return (
     <Dropdown label="" renderTrigger={() => (
       <Button color="dark">
-        Tipo de cuenta: {typeAccountsDict[selectedProvider]}
+        Tipo de cuenta: {TYPE_PROVIDER_DICT[selectedProvider]}
         <RiArrowDownSLine />
       </Button>
     )}>
@@ -48,7 +45,7 @@ export const AccountProviderDropdown = ({ selectedProvider, changeSelectedProvid
           onClick={() => handleSelectAccountType(prov)}
           value={prov}
           key={`${prov}-${index}`}
-        >{typeAccountsDict[prov]}</DropdownItem>
+        >{TYPE_PROVIDER_DICT[prov]}</DropdownItem>
       ))}
     </Dropdown>
   )
