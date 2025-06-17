@@ -11,7 +11,7 @@ export const Account = ({ account, openModal }: AccountProps) => {
   const accProviderImg: Record<AccountProvider, string> = {
     mastercard: '/img/mastercard-logo.svg',
     visa: '/img/visa-logo.svg',
-    americanExpress: '/img/amex-logo.svg'
+    'american-express': '/img/amex-logo.svg'
   }
 
   return (
