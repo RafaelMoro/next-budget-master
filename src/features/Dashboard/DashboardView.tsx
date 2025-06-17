@@ -30,7 +30,7 @@ export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) =
     } else if (detailedError?.message) {
       toast.error(GENERAL_ERROR_TITLE);
     }
-  }, [detailedError?.message])
+  }, [detailedError?.cause, detailedError?.message])
 
   if (isMobile) {
     return (
