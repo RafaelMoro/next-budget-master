@@ -101,10 +101,12 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
               >{type}</DropdownItem>
             ))}
           </Dropdown>
-          <Button className="hover:cursor-pointer" type="submit">Edit</Button>
-          <Button color="alternative" onClick={closeModal}>
-            Cancel
-          </Button>
+          <div className="flex justify-between">
+            <Button color="alternative" onClick={closeModal}>
+              Cancel
+            </Button>
+            <Button className="hover:cursor-pointer" type="submit">Edit</Button>
+          </div>
         </form>
       </ModalBody>
     </AnimatePresence>
