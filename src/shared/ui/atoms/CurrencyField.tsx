@@ -26,6 +26,8 @@ export const CurrencyField = ({
         id={fieldId}
         value={value}
         type="text"
+        pattern="[0-9]*"
+        inputMode="numeric"
         onChange={handleChange}
         // {...register("firstName")}
         />
