@@ -13,16 +13,17 @@ export type AccountBank = {
 }
 
 export type AccountProvider = "mastercard" | "visa" | "american-express"
+export type AccountTypes = 'Crédito' | 'Débito' | 'Vales de comida' | 'Vales de restaurante' | 'Cuenta de ahorro'
 export type AccountModalAction = 'edit' | 'view' | 'delete'
 
-export const TYPE_OF_ACCOUNTS = ['Crédito', 'Débito', 'Vales de comida', 'Vales de restaurante', 'Cuenta de ahorro'] as const;
+export const TYPE_OF_ACCOUNTS: readonly AccountTypes[] = ['Crédito', 'Débito', 'Vales de comida', 'Vales de restaurante', 'Cuenta de ahorro'] as const;
 export const ACCOUNT_PROVIDERS: readonly AccountProvider[] = ['mastercard', 'visa', 'american-express'] as const;
 
 export type AccountsDisplay = {
   accountId: string;
   name: string;
   amount: string;
-  type: string;
+  type: AccountTypes;
   accountProvider?: AccountProvider;
 }
 

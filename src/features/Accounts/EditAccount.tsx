@@ -1,15 +1,16 @@
 "use client"
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { AnimatePresence } from "motion/react"
-import { Button, Dropdown, DropdownItem, Label, ModalBody, TextInput } from "flowbite-react"
-import { RiArrowLeftLine, RiCloseFill, RiArrowDownSLine } from "@remixicon/react"
+import { Button, Label, ModalBody, TextInput } from "flowbite-react"
+import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react"
 
-import { AccountModalAction, AccountsDisplay, EditAccountFormData, EditAccountSchema, TYPE_OF_ACCOUNTS } from "@/shared/types/accounts.types"
+import { AccountModalAction, AccountsDisplay, AccountTypes, EditAccountFormData, EditAccountSchema } from "@/shared/types/accounts.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
+import { AccountTypeDropdown } from "@/shared/ui/atoms/AccountTypeDropdown";
 
 interface EditAccountProps {
   account: AccountsDisplay
@@ -18,16 +19,8 @@ interface EditAccountProps {
 }
 
 export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccountProps) => {
-  const typeAccounts = useMemo(() => [...TYPE_OF_ACCOUNTS], []);
-  const [selectedAccountType, setSelectedAccountType] = useState<string>(account.type)
-  const [filteredAccountTypes, setFilteredAccountTypes] = useState<string[]>(typeAccounts)
-
-  const handleSelectAccountType = (newAccType: string) => {
-    setSelectedAccountType(newAccType)
-    const fileteredTypes = typeAccounts.filter(type => type !== newAccType)
-    setFilteredAccountTypes(fileteredTypes)
-  }
-
+  const [selectedAccountType, setSelectedAccountType] = useState<AccountTypes>(account.type)
+  const changeSelectedAccountType = (newAccType: AccountTypes) => setSelectedAccountType(newAccType)
   const { handleChange, currencyState } = useCurrencyField({
     amount: account.amount
   })
@@ -40,16 +33,9 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     resolver: yupResolver(EditAccountSchema)
   })
 
-  useEffect(() => {
-    if (account.type) {
-      const fileteredTypes = typeAccounts.filter(type => type !== account.type)
-      setFilteredAccountTypes(fileteredTypes)
-    }
-  }, [account.type, typeAccounts])
-
   const onSubmit: SubmitHandler<EditAccountFormData> = (data) => {
-      console.log('data', data)
-    }
+    console.log('data', data)
+  }
 
   return (
     <AnimatePresence>
@@ -87,20 +73,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             value={currencyState}
             handleChange={handleChange}
           />
-          <Dropdown label="" renderTrigger={() => (
-            <Button color="dark">
-              Tipo de cuenta: {selectedAccountType}
-              <RiArrowDownSLine />
-            </Button>
-          )}>
-            { filteredAccountTypes.map((type, index) => (
-              <DropdownItem
-                onClick={() => handleSelectAccountType(type)}
-                value={type}
-                key={`${type}-${index}-${account.accountId}`}
-              >{type}</DropdownItem>
-            ))}
-          </Dropdown>
+          <AccountTypeDropdown selectedAccountType={selectedAccountType} changeSelectedAccountType={changeSelectedAccountType} />
           <div className="flex justify-between">
             <Button color="alternative" onClick={closeModal}>
               Cancel
