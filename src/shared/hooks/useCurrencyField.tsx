@@ -18,6 +18,8 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     const currencyThirdNumber = /^\$0\.[1-9][1-9][0-9]$/;
     const numberWithThousand = /^\$(\d{1,3}(,\d{3})+)\.[1-9]{3}$/
     const numberWithoutThousand = /^\$\d+\.\d{3}$/
+    const numberDoubleZeroDecimals = /^\$[\d,]+\.\d00$/
+    const numberZeroSecondDecimalAndNonZeroThird = /^\$[\d,]+\.\d0[1-9]$/
     const deletedNumberRegex = /^\$\d+\.\d$/;
     const deletedNumberThousandRegex = /^\$(\d{1,3}(,\d{3})+)\.\d$/
 
@@ -43,6 +45,18 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
       return;
     }
     if (numberWithThousand.test(value)) {
+      const valueCleaned = cleanCurrencyString(value);
+      const valueTransformed = formatNumberToCurrency(valueCleaned);
+      setCurrencyState(valueTransformed);
+      return;
+    }
+    if (numberDoubleZeroDecimals.test(value)) {
+      const valueCleaned = cleanCurrencyString(value);
+      const valueTransformed = formatNumberToCurrency(valueCleaned);
+      setCurrencyState(valueTransformed);
+      return;
+    }
+    if (numberZeroSecondDecimalAndNonZeroThird.test(value)) {
       const valueCleaned = cleanCurrencyString(value);
       const valueTransformed = formatNumberToCurrency(valueCleaned);
       setCurrencyState(valueTransformed);
