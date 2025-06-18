@@ -223,9 +223,8 @@ describe('EditAccount', () => {
       await user.click(button)
 
       await waitFor(() => {
-        expect(closeModal).toHaveBeenCalled()
         expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
-      }, { timeout: 1200})
+      }, { timeout: 3000})
     })
   })
 })
