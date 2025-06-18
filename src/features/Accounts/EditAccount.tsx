@@ -154,7 +154,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             <Button disabled={isPending || isSuccess} className="hover:cursor-pointer" type="submit">
               { (isIdle || isError) && 'Editar'}
               { isPending && (<Spinner aria-label="loading create account budget master" />) }
-              { isSuccess && (<CheckIcon />)}
+              { isSuccess && (<CheckIcon data-testid="success-button" />)}
             </Button>
           </div>
         </form>

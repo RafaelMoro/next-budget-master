@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Modal } from "flowbite-react"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 
 import QueryProviderWrapper from "@/app/QueryProviderWrapper"
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
@@ -45,6 +46,9 @@ const EditAccountWrapper = ({
     </QueryProviderWrapper>
   )
 }
+
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('EditAccount', () => {
   it('Show edit account', () => {
@@ -145,6 +149,49 @@ describe('EditAccount', () => {
       await user.click(button)
 
       expect(await screen.findByText(/Por favor, ingrese el título de la cuenta/i)).toBeInTheDocument()
+    })
+  })
+
+  describe('Form submission', () => {
+    it('Given a user editing correctly the account, the modal should be closed and the tick should appear in the submit button', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn()
+      const closeModal = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: 'Account updated',
+        success: true,
+        version: "v1.2.0",
+        data: {
+          account: {
+            _id: "12345",
+            title: "Cuenta modificada",
+            alias: "Ahorros Modificados",
+            terminationFourDigits: 1234,
+            amount: 1000,
+            accountType: "Crédito",
+            accountProvider: "visa"
+          }
+        },
+      })
+
+      render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+
+      const titleInput = screen.getByLabelText('Titulo de la cuenta')
+      const button = screen.getByRole('button', { name: /Editar/i })
+
+      await user.clear(titleInput)
+      await user.type(titleInput, 'Cuenta modificada')
+      await user.click(button)
+
+      await waitFor(() => {
+        expect(closeModal).toHaveBeenCalled()
+        expect(screen.getByTestId('success-button')).toBeInTheDocument()
+        // expect(push).toHaveBeenCalled()
+      }, { timeout: 2000})
     })
   })
 })
