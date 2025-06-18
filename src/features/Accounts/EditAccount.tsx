@@ -149,7 +149,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
           <AccountProviderDropdown selectedProvider={selectedProvider} changeSelectedProviderType={changeSelectedProviderType}  />
           <div className="flex justify-between">
             <Button disabled={isPending || isSuccess} color="alternative" onClick={closeModal}>
-              Cancel
+              Cancelar
             </Button>
             <Button disabled={isPending || isSuccess} className="hover:cursor-pointer" type="submit">
               { (isIdle || isError) && 'Editar'}
