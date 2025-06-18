@@ -1,6 +1,7 @@
 import { number, object, string } from "yup";
 import { DetailedError } from "./global.types";
 import { AxiosError, AxiosResponse } from "axios";
+import { hasFourDigits as hasFourDigitsFn } from "../utils/general.utils";
 
 export type AccountBank = {
   _id: string;
@@ -101,6 +102,13 @@ export const EditAccountSchema = object({
   terminationFourDigits: number()
     .typeError("Debe ingresar los 4 dígitos finales")
     .required("Debe ingresar los 4 dígitos finales")
-    .min(1000, "Debe ser un número de 4 dígitos")
-    .max(9999, "Debe ser un número de 4 dígitos"),
+    .test({
+      name: 'isFourDigits',
+      test(value, ctx) {
+        const hasFourDigits = hasFourDigitsFn(value)
+        if (!hasFourDigits) {
+          return ctx.createError({ message: "Ingrese los últimos 4 dígitos (ejemplo: 0011). Use ceros a la izquierda si es necesario." })
+        }
+      }
+    })
 })
