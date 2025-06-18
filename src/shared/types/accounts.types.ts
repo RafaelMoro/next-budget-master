@@ -1,5 +1,6 @@
 import { number, object, string } from "yup";
 import { DetailedError } from "./global.types";
+import { AxiosError, AxiosResponse } from "axios";
 
 export type AccountBank = {
   _id: string;
@@ -38,11 +39,31 @@ export type AccountsDisplay = {
 export type EditAccountPayload = {
   accountId: string
   title: string;
+  alias: string;
   accountType: string;
   accountProvider: AccountProvider;
   amount: number;
   backgroundColor: string;
   color: string;
+}
+
+export interface EditAccountData {
+  data: {
+    account: AccountBank;
+  }
+  error: null;
+  message: null;
+  success: boolean;
+  version: string;
+}
+
+export interface EditAccountError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string | string[];
+      statusCode: number
+    }
+  }>;
 }
 
 // Response from backend

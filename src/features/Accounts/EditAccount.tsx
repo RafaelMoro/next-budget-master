@@ -3,15 +3,18 @@ import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { AnimatePresence } from "motion/react"
-import { Button, Label, ModalBody, TextInput } from "flowbite-react"
+import { Button, CheckIcon, Label, ModalBody, Spinner, TextInput } from "flowbite-react"
 import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react"
 
-import { AccountModalAction, AccountProvider, AccountsDisplay, AccountTypes, EditAccountFormData, EditAccountSchema } from "@/shared/types/accounts.types"
+import { AccountModalAction, AccountProvider, AccountsDisplay, AccountTypes, EditAccountData, EditAccountError, EditAccountFormData, EditAccountPayload, EditAccountSchema } from "@/shared/types/accounts.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { AccountTypeDropdown } from "@/features/Accounts/AccountTypeDropdown";
 import { AccountProviderDropdown } from "@/features/Accounts/AccountProviderDropdown";
+import { useMutation } from "@tanstack/react-query";
+import { editBankAccountCb } from "@/shared/lib/accounts.lib";
+import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils";
 
 interface EditAccountProps {
   account: AccountsDisplay
@@ -38,8 +41,30 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     resolver: yupResolver(EditAccountSchema)
   })
 
+  const { mutate, isError, isPending, isSuccess, isIdle , error} = useMutation<EditAccountData, EditAccountError, EditAccountPayload>({
+    mutationFn: (data) => editBankAccountCb(data),
+    // onError: () => {
+    //   toggleMessageCardState("error")
+    // },
+    // onSuccess: () => {
+    //   toggleMessageCardState("success")
+    // }
+  })
+  console.log('error', error)
+
   const onSubmit: SubmitHandler<EditAccountFormData> = (data) => {
-    console.log('data', data)
+    const amountNumber = cleanCurrencyString(currencyState)
+    const payload: EditAccountPayload = {
+      accountId: account.accountId,
+      title: data.title,
+      alias: data.alias,
+      accountType: selectedAccountType,
+      accountProvider: selectedProvider,
+      amount: amountNumber,
+      backgroundColor: 'Dark Orange',
+      color: 'white'
+    }
+    mutate(payload)
   }
 
   return (
@@ -111,10 +136,14 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
           <AccountTypeDropdown selectedAccountType={selectedAccountType} changeSelectedAccountType={changeSelectedAccountType} />
           <AccountProviderDropdown selectedProvider={selectedProvider} changeSelectedProviderType={changeSelectedProviderType}  />
           <div className="flex justify-between">
-            <Button color="alternative" onClick={closeModal}>
+            <Button disabled={isPending || isSuccess} color="alternative" onClick={closeModal}>
               Cancel
             </Button>
-            <Button className="hover:cursor-pointer" type="submit">Edit</Button>
+            <Button disabled={isPending || isSuccess} className="hover:cursor-pointer" type="submit">
+              { (isIdle || isError) && 'Editar'}
+              { isPending && (<Spinner aria-label="loading create account budget master" />) }
+              { isSuccess && (<CheckIcon />)}
+            </Button>
           </div>
         </form>
       </ModalBody>
