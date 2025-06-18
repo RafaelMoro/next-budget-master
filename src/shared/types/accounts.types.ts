@@ -101,9 +101,13 @@ export const EditAccountSchema = object({
     .max(30, "El título no puede exceder los 30 caracteres"),
   terminationFourDigits: number()
     .required("Debe ingresar los 4 dígitos finales")
+    .typeError("Debe ingresar los 4 dígitos finales")
     .test({
       name: 'isFourDigits',
       test(value, ctx) {
+        if (!value) {
+          return ctx.createError({ message: "Debe ingresar los 4 dígitos finales" })
+        }
         const hasFourDigits = hasFourDigitsFn(value)
         if (!hasFourDigits) {
           return ctx.createError({ message: "Ingrese los últimos 4 dígitos (ejemplo: 0011). Use ceros a la izquierda si es necesario." })

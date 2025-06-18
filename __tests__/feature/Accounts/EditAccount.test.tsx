@@ -122,7 +122,7 @@ describe('EditAccount', () => {
 
       const accountTerminationInput = screen.getByTestId('terminationNumber')
       const button = screen.getByRole('button', { name: /Editar/i })
-      await user.clear(accountTerminationInput)
+      await user.type(accountTerminationInput, '{backspace}{backspace}{backspace}{backspace}')
       await user.click(button)
 
       expect(await screen.findByText(/Debe ingresar los 4 dígitos finales/i)).toBeInTheDocument()
@@ -190,7 +190,6 @@ describe('EditAccount', () => {
       await waitFor(() => {
         expect(closeModal).toHaveBeenCalled()
         expect(screen.getByTestId('success-button')).toBeInTheDocument()
-        // expect(push).toHaveBeenCalled()
       }, { timeout: 2000})
     })
   })
