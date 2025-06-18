@@ -53,7 +53,7 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
 
   if (accountsDisplay.length > 0) {
     return (
-      <section className="w-full grid lg:grid-cols-3 grid-cols-4 gap-4">
+      <section className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         { accountsDisplay.map((acc) => (
           <Account
             key={acc.accountId}
