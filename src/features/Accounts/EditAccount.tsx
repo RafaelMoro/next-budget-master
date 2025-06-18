@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react";
+import { useRouter } from 'next/navigation'
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { AnimatePresence } from "motion/react"
@@ -23,6 +24,7 @@ interface EditAccountProps {
 }
 
 export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccountProps) => {
+  const router = useRouter()
   const [selectedAccountType, setSelectedAccountType] = useState<AccountTypes>(account.type)
   const [selectedProvider, setSelectedProvider] = useState<AccountProvider>(account.accountProvider ?? 'mastercard')
 
@@ -49,12 +51,14 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     onSuccess: () => {
       setTimeout(() => {
         closeModal()
+        // Refetch data after mutation
+        router.refresh()
       }, 1000)
     }
   })
   console.log('error', error)
 
-  const onSubmit: SubmitHandler<EditAccountFormData> = (data) => {
+  const onSubmit: SubmitHandler<EditAccountFormData> = async (data) => {
     const amountNumber = cleanCurrencyString(currencyState)
     const payload: EditAccountPayload = {
       accountId: account.accountId,
