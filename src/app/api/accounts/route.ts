@@ -1,9 +1,11 @@
 import axios from "axios";
 import { type NextRequest } from 'next/server'
+import { revalidateTag } from 'next/cache'
 
 import { getAccessToken } from "@/shared/lib/auth.lib";
 import { GeneralError } from "@/shared/types/global.types";
 import { EditAccountPayload } from "@/shared/types/accounts.types";
+import { ACCOUNT_FETCH_TAG } from "@/shared/constants/accounts.constants";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -16,6 +18,7 @@ export async function PUT(request: NextRequest) {
       }
     })
 
+    revalidateTag(ACCOUNT_FETCH_TAG)
     return new Response(JSON.stringify(res.data), {
       status: 200,
       headers: {

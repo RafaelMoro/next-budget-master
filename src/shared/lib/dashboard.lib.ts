@@ -1,3 +1,4 @@
+import { ACCOUNT_FETCH_TAG } from "../constants/accounts.constants";
 import { FetchAccountsResponse, GetAccountsResponse } from "../types/accounts.types";
 import { ErrorCatched } from "../types/global.types";
 
@@ -14,7 +15,10 @@ export const fetchAccounts = async ({ accessToken }: { accessToken: string }): P
     const res = await fetch('http://localhost:6006/account-actions', {
       headers: {
         'Authorization': `Bearer ${accessToken}`
-      }
+      },
+      next: {
+        tags: [ACCOUNT_FETCH_TAG]
+      },
     })
     const data: FetchAccountsResponse = await res.json()
     const { data: { accounts } } = data;
