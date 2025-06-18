@@ -1,16 +1,18 @@
 import { useState } from "react"
 import { render, screen } from "@testing-library/react"
 import { Modal } from "flowbite-react"
+import userEvent from '@testing-library/user-event';
 
 import { AccountDetails } from "@/features/Accounts/AccountDetails"
 import { AccountModalAction, AccountsDisplay } from "@/shared/types/accounts.types"
 
-const AccountDetailsWrapper = () => {
+const AccountDetailsWrapper = ({
+  updateAccAction
+}: {
+  updateAccAction: (acc: AccountModalAction) => void
+}) => {
   const [openAccModal, setOpenAccModal] = useState<boolean>(true)
   const toggleAccModal = () => setOpenAccModal((prev) => !prev)
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
 
   const account: AccountsDisplay = {
     accountId: "12345",
@@ -35,7 +37,9 @@ const AccountDetailsWrapper = () => {
 
 describe('AccountDetails', () => {
   it('Show account details', () => {
-    render(<AccountDetailsWrapper />)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+    render(<AccountDetailsWrapper updateAccAction={updateAccAction} />)
 
     expect(screen.getByRole('heading', { name: /HSBC clasica/i })).toBeInTheDocument()
     expect(screen.getByText(/Balance: \$1,000.00/i)).toBeInTheDocument()
@@ -45,5 +49,16 @@ describe('AccountDetails', () => {
     expect(screen.getByText(/Tarjeta emitida por: Mastercard/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Eliminar/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Editar/i })).toBeInTheDocument()
+  })
+
+  it('Given a user clicking on edit button, expect the function being called with edit action', async () => {
+    const user = userEvent.setup();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+    render(<AccountDetailsWrapper updateAccAction={updateAccAction} />)
+
+    const editButton = screen.getByRole('button', { name: /Editar/i })
+    await user.click(editButton)
+    expect(updateAccAction).toHaveBeenCalledWith('edit')
   })
 })
