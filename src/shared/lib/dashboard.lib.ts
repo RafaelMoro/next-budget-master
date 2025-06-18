@@ -12,7 +12,11 @@ export const fetchAccounts = async ({ accessToken }: { accessToken: string }): P
         accounts: []
       }
     }
-    const res = await fetch('http://localhost:6006/account-actions', {
+    const uri = process.env.NEXT_PUBLIC_BACKEND_URI
+    if (!uri) {
+      throw new Error("Backend URI is not defined");
+    }
+    const res = await fetch(`${uri}/account-actions`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       },
