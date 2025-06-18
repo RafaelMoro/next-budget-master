@@ -46,9 +46,11 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     // onError: () => {
     //   toggleMessageCardState("error")
     // },
-    // onSuccess: () => {
-    //   toggleMessageCardState("success")
-    // }
+    onSuccess: () => {
+      setTimeout(() => {
+        closeModal()
+      }, 1000)
+    }
   })
   console.log('error', error)
 
