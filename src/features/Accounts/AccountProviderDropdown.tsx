@@ -36,7 +36,7 @@ export const AccountProviderDropdown = ({ selectedProvider, changeSelectedProvid
   return (
     <Dropdown label="" renderTrigger={() => (
       <Button color="dark">
-        Tipo de cuenta: {TYPE_PROVIDER_DICT[selectedProvider]}
+        Proveedor: {TYPE_PROVIDER_DICT[selectedProvider]}
         <RiArrowDownSLine />
       </Button>
     )}>
