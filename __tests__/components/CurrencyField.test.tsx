@@ -86,6 +86,7 @@ describe('CurrencyField', () => {
       expect(input).toHaveValue('$1,230.70')
     })
 
+    // Verify given a number with double zero, push the rest of numbers
     it('Given a user typing 1239800, expect the input to have value $12,398.00', async () => {
       const user = userEvent.setup();
       render(<CurrencyFieldWrapper />)
@@ -94,6 +95,17 @@ describe('CurrencyField', () => {
       await user.type(input, '1239800')
 
       expect(input).toHaveValue('$12,398.00')
+    })
+
+    // Verify given a number with decimal .0X, where X is any number from 1 to 9
+    it('Given a user typing 1239807, expect the input to have value $12,398.07', async () => {
+      const user = userEvent.setup();
+      render(<CurrencyFieldWrapper />)
+  
+      const input = screen.getByTestId('amount')
+      await user.type(input, '1239807')
+
+      expect(input).toHaveValue('$12,398.07')
     })
 
     it(`Given a user typing 1234477, then expect the input to have value $12,344.77,
