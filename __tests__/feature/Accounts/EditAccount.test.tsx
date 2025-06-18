@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Modal } from "flowbite-react"
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from '@testing-library/user-event';
 
 import QueryProviderWrapper from "@/app/QueryProviderWrapper"
@@ -59,7 +59,7 @@ describe('EditAccount', () => {
     expect(screen.getByRole('button', { name: /Volver/i })).toBeInTheDocument()
     expect(screen.getByLabelText('Titulo de la cuenta')).toBeInTheDocument()
     expect(screen.getByLabelText('Alias')).toBeInTheDocument()
-    expect(screen.getByLabelText('Terminación de la cuenta')).toBeInTheDocument()
+    expect(screen.getByTestId('terminationNumber')).toBeInTheDocument()
     expect(screen.getByLabelText('Saldo de la cuenta')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Tipo de cuenta: Crédito' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Proveedor: Visa' })).toBeInTheDocument()
@@ -83,6 +83,23 @@ describe('EditAccount', () => {
       await user.click(button)
 
       expect(screen.getByText(/Por favor, ingrese el título de la cuenta/i)).toBeInTheDocument()
+    })
+
+    it('Given a user deleting the account termination number, clicks on edit, then show an error message', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn()
+      const closeModal = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+
+      render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+
+      const accountTerminationInput = screen.getByTestId('terminationNumber')
+      const button = screen.getByRole('button', { name: /Editar/i })
+      await user.clear(accountTerminationInput)
+      await user.click(button)
+
+      expect(await screen.findByText(/Debe ingresar los 4 dígitos finales/i)).toBeInTheDocument()
     })
   })
 })
