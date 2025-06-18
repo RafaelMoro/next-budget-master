@@ -19,9 +19,5 @@ export function getTerminationFormatted(terminationNumber: number | undefined) {
 }
 
 export const editBankAccountCb = (data: EditAccountPayload): Promise<EditAccountData> => {
-  const uri = process.env.NEXT_PUBLIC_BACKEND_URI
-  if (!uri) {
-    throw new Error("Backend URI is not defined");
-  }
-  return axios.put(`${uri}/account-actions/`, data)
+  return axios.put('api/accounts', data)
 }
