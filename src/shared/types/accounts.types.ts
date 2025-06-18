@@ -100,7 +100,6 @@ export const EditAccountSchema = object({
     .min(2, "El título debe tener al menos 2 caracteres")
     .max(30, "El título no puede exceder los 30 caracteres"),
   terminationFourDigits: number()
-    .typeError("Debe ingresar los 4 dígitos finales")
     .required("Debe ingresar los 4 dígitos finales")
     .test({
       name: 'isFourDigits',
@@ -109,6 +108,7 @@ export const EditAccountSchema = object({
         if (!hasFourDigits) {
           return ctx.createError({ message: "Ingrese los últimos 4 dígitos (ejemplo: 0011). Use ceros a la izquierda si es necesario." })
         }
+        return true;
       }
     })
 })
