@@ -5,7 +5,7 @@ import { DashboardView } from '@/features/Dashboard/DashboardView';
 
 export default async function DashboardPage () {
   const accessToken = await getAccessToken()
-  const { accounts, detailedError } = await fetchAccounts({ accessToken })
+  const { accounts, detailedError } = await fetchAccounts()
 
   return (
     <>

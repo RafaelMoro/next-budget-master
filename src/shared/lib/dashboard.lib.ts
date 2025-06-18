@@ -1,9 +1,12 @@
+"use server"
 import { ACCOUNT_FETCH_TAG } from "../constants/accounts.constants";
 import { FetchAccountsResponse, GetAccountsResponse } from "../types/accounts.types";
 import { ErrorCatched } from "../types/global.types";
+import { getAccessToken } from "./auth.lib";
 
-export const fetchAccounts = async ({ accessToken }: { accessToken: string }): Promise<GetAccountsResponse> => {
+export const fetchAccounts = async (): Promise<GetAccountsResponse> => {
   try {
+    const accessToken = await getAccessToken()
     if (!accessToken) {
       return {
         detailedError: {
@@ -16,6 +19,7 @@ export const fetchAccounts = async ({ accessToken }: { accessToken: string }): P
     if (!uri) {
       throw new Error("Backend URI is not defined");
     }
+
     const res = await fetch(`${uri}/account-actions`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
