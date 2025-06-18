@@ -1,3 +1,9 @@
+## v0.10.1 (2025-06-18)
+
+### Pull Requests
+[#16](https://github.com/RafaelMoro/next-budget-master/pull/16) | Add edit account and see account details fix
+
+
 ## v0.10.0 (2025-06-15)
 
 ### Pull Requests
