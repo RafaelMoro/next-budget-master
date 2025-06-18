@@ -160,7 +160,7 @@ describe('EditAccount', () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
 
-      mockedAxios.post.mockResolvedValue({
+      mockedAxios.put.mockResolvedValue({
         error: null,
         message: 'Account updated',
         success: true,
@@ -191,6 +191,41 @@ describe('EditAccount', () => {
         expect(closeModal).toHaveBeenCalled()
         expect(screen.getByTestId('success-button')).toBeInTheDocument()
       }, { timeout: 2000})
+    })
+
+    it('Given a user editing correctly the account, then something went wrong, should show error message', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn()
+      const closeModal = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+
+      mockedAxios.put.mockRejectedValue({
+        code: 'ERR_BAD_REQUEST',
+        config: null,
+        message: 'Request failed with status code 401',
+        name: 'AxiosError',
+        request: null,
+        response: {
+          data: {
+            message: 'Something went wrong'
+          }
+        }
+      })
+
+      render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+
+      const titleInput = screen.getByLabelText('Titulo de la cuenta')
+      const button = screen.getByRole('button', { name: /Editar/i })
+
+      await user.clear(titleInput)
+      await user.type(titleInput, 'Cuenta modificada')
+      await user.click(button)
+
+      await waitFor(() => {
+        expect(closeModal).toHaveBeenCalled()
+        expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+      }, { timeout: 1200})
     })
   })
 })
