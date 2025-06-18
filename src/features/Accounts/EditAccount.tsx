@@ -45,9 +45,6 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
 
   const { mutate, isError, isPending, isSuccess, isIdle , error} = useMutation<EditAccountData, EditAccountError, EditAccountPayload>({
     mutationFn: (data) => editBankAccountCb(data),
-    // onError: () => {
-    //   toggleMessageCardState("error")
-    // },
     onSuccess: () => {
       setTimeout(() => {
         closeModal()
