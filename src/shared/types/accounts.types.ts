@@ -43,6 +43,7 @@ export type EditAccountPayload = {
   accountType: string;
   accountProvider: AccountProvider;
   amount: number;
+  terminationFourDigits: number;
   backgroundColor: string;
   color: string;
 }

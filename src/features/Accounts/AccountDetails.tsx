@@ -16,7 +16,7 @@ export const AccountDetails = ({ account, updateAccAction }: AccountDetailsProps
           <p className="text-xl font-bold">Balance: {account.amount}</p>
           <p className="text-base text-gray-400">Tipo de cuenta: {account.type}</p>
           { account.terminationFourDigits && (
-            <p className="text-base text-gray-400">Terminación: {account.terminationFourDigits}</p>
+            <p className="text-base text-gray-400">Terminación: {account.terminationFourDigitsTransformed}</p>
           ) }
           { account.alias && (
             <p className="text-base text-gray-400">Alias: {account.alias}</p>
