@@ -68,17 +68,16 @@ describe('EditAccount', () => {
   })
 
   describe('Form Validations', () => {
-    // beforeEach(() => {
-
-    // })
-    it('Given a user deleting the title, clicks on edit, then show an error message', async () => {
-      const user = userEvent.setup();
+    beforeEach(() => {
       const push = jest.fn()
       const closeModal = jest.fn()
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
-
       render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+    })
+
+    it('Given a user deleting the title, clicks on edit, then show an error message', async () => {
+      const user = userEvent.setup();
 
       const titleInput = screen.getByLabelText('Titulo de la cuenta')
       const button = screen.getByRole('button', { name: /Editar/i })
@@ -90,12 +89,6 @@ describe('EditAccount', () => {
 
     it('Given a user deleting the account termination number, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
-      const push = jest.fn()
-      const closeModal = jest.fn()
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
-
-      render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
 
       const accountTerminationInput = screen.getByTestId('terminationNumber')
       const button = screen.getByRole('button', { name: /Editar/i })
@@ -107,12 +100,6 @@ describe('EditAccount', () => {
 
     it('Given a user deleting the alias, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
-      const push = jest.fn()
-      const closeModal = jest.fn()
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
-
-      render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
 
       const aliasInput = screen.getByTestId('alias')
       const button = screen.getByRole('button', { name: /Editar/i })
