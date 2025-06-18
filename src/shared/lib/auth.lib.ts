@@ -16,8 +16,8 @@ export const encodeAccessToken = async (cookieValue: string): Promise<string> =>
   return session
 }
 
-export const saveSessionCookie = (session: string): void => {
-  cookies().set('session', session, {
+export const saveSessionCookie = async (session: string): Promise<void> => {
+  await cookies().set('session', session, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',

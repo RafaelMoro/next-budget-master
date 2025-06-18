@@ -1,11 +1,13 @@
 "use client"
 import { useState, useEffect } from "react";
-import { AccountBank, AccountsDisplay } from "@/shared/types/accounts.types";
+import { AccountBank, AccountModalAction, AccountsDisplay, AccountTypes } from "@/shared/types/accounts.types";
 import { Account } from "./Accounts";
-import { getAccountProvider } from "@/shared/lib/accounts.lib";
+import { getAccountProvider, getTerminationFormatted } from "@/shared/lib/accounts.lib";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
-import { Button } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import Image from "next/image";
+import { AccountDetails } from "./AccountDetails";
+import { EditAccount } from "./EditAccount";
 
 interface AccountsViewProps {
   accounts: AccountBank[];
@@ -13,6 +15,24 @@ interface AccountsViewProps {
 
 export const AccountsView = ({ accounts }: AccountsViewProps) => {
   const [accountsDisplay, setAccountsDisplay] = useState<AccountsDisplay[]>([])
+  const [openAccModal, setOpenAccModal] = useState<boolean>(false)
+  const [accDetails, setAccDetails] = useState<AccountsDisplay | null>(null)
+  const [accAction, setAccAction] = useState<AccountModalAction | null>(null)
+
+  const toggleAccModal = () => setOpenAccModal((prev) => !prev)
+  const openModal = (acc: AccountsDisplay) => {
+    toggleAccModal()
+    setAccAction('view')
+    setAccDetails(acc)
+  }
+  const closeModal = () => {
+    toggleAccModal()
+    setAccAction(null)
+    setAccDetails(null)
+  }
+  const updateAccAction = (acc: AccountModalAction) => {
+    setAccAction(acc)
+  }
 
   useEffect(() => {
     if (accounts.length > 0) {
@@ -20,7 +40,11 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
         accountId: account._id,
         name: account.title,
         amount: formatNumberToCurrency(account.amount),
-        type: account.accountType,
+        // We're sure the account type is not other string than type AccountTypes
+        type: (account.accountType as AccountTypes),
+        alias: account.alias,
+        terminationFourDigits: account.terminationFourDigits,
+        terminationFourDigitsTransformed: getTerminationFormatted(account.terminationFourDigits),
         accountProvider: getAccountProvider(account.accountProvider) // Default to mastercard if not provided
       }))
       setAccountsDisplay(formattedAccounts)
@@ -29,17 +53,31 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
 
   if (accountsDisplay.length > 0) {
     return (
-      <section className="w-full grid grid-cols-4 gap-4">
+      <section className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         { accountsDisplay.map((acc) => (
           <Account
             key={acc.accountId}
-            name={acc.name}
-            balance={acc.amount}
-            accountType={acc.type}
-            // Adding default mastercard value as accountProvider is a optional prop in the interface AccountsDisplay
-            accountProvider={acc.accountProvider ?? 'mastercard'}
+            account={acc}
+            openModal={openModal}
           />
         )) }
+        { accDetails && (
+          <Modal show={openAccModal} onClose={closeModal}>
+            { accAction === 'view' && (
+              <AccountDetails
+                account={accDetails}
+                updateAccAction={updateAccAction}
+              />
+            )}
+            { accAction === 'edit' && (
+              <EditAccount
+                account={accDetails}
+                closeModal={closeModal}
+                updateAccAction={updateAccAction}
+              />
+            )}
+          </Modal>
+        ) }
       </section>
     )
   }

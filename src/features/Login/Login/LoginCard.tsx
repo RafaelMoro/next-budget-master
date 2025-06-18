@@ -8,7 +8,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Toaster, toast } from 'sonner'
 import { AnimatePresence } from "motion/react"
 
-import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { LoginError, LoginSchema } from "@/shared/types/login.types";
 import { LoginMutationCb } from "./LoginCard.utils";
@@ -38,18 +37,12 @@ export const LoginCard =  () => {
   })
   const messageError = error?.response?.data?.message
 
-  const onSubmit: SubmitHandler<LoginPayload> = async (data) => {
-    try {
-      const dataForm = {
-        email: data.email,
-        password: data.password
-      }
-      loginMutation(dataForm)
+  const onSubmit: SubmitHandler<LoginPayload> = (data) => {
+    const dataForm = {
+      email: data.email,
+      password: data.password
     }
-    catch (error: unknown) {
-      const infoError = handleErrorForm(error);
-      console.error('error while logging in =>', infoError)
-    }
+    loginMutation(dataForm)
   }
 
   useEffect(() => {

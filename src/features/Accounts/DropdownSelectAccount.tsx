@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Dropdown, DropdownItem } from "flowbite-react"
 import { RiExpandUpDownLine } from "@remixicon/react";
 
-import { AccountBank, AccountsDisplay } from "@/shared/types/accounts.types";
+import { AccountBank, AccountsDisplay, AccountTypes } from "@/shared/types/accounts.types";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
 import { getAccountCookie } from "@/shared/lib/preferences.lib";
 import { saveAccountApi } from "@/shared/utils/user-info.utils";
@@ -31,7 +31,7 @@ export const DropdownSelectAccount = ({ accounts, cssClass }: DropdownSelectAcco
         accountId: account._id,
         name: account.title,
         amount: formatNumberToCurrency(account.amount),
-        type: account.accountType
+        type: (account.accountType as AccountTypes)
       }))
       setAccountsDisplay(formattedAccounts)
 

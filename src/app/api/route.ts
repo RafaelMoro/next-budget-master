@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       const [cookie] = cookiesReceived
       const { value: cookieValue } = getCookieProps(cookie)
       const session = await encodeAccessToken(cookieValue)
-      saveSessionCookie(session)
+      await saveSessionCookie(session)
       
       return new Response(JSON.stringify(res.data), {
         status: 201,

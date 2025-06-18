@@ -4,6 +4,11 @@ export const THEME_COOKIE_KEY = 'theme'
 // Stands for fintrack selected bank account
 export const ACCOUNT_COOKIE_KEY = 'ftk_sba'
 
+export const ERROR_CONNECTION = 'ECONNREFUSED'
+
+export const ERROR_CONNECTION_MESSAGE = 'Hubo un error con tu red. Revisa tu conexión a internet e intenta nuevamente.'
+export const GENERAL_ERROR_TITLE = 'Oops! Algo no salió como esperabamos.'
+
 // Routes
 export const DASHBOARD_ROUTE = '/dashboard';
 export const REGISTER_ROUTE = '/register';

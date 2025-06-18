@@ -127,6 +127,7 @@ export type ResetPasswordPayload = {
   password: string
 }
 
+//#region Form schemas
 const emailValidation = string().email(ERROR_INVALID_EMAIL).required(ERROR_EMAIL_REQUIRED).matches(emailRegex, ERROR_INVALID_EMAIL);
 
 export const LoginSchema = object({
