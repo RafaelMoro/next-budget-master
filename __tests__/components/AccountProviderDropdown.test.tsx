@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { useState } from "react"
+import userEvent from '@testing-library/user-event';
+
 import { AccountProviderDropdown } from "@/features/Accounts/AccountProviderDropdown"
 import { AccountProvider } from "@/shared/types/accounts.types"
 
@@ -31,5 +33,16 @@ describe('AccountProviderDropdown', () => {
     render(<AccountProviderDropdownWrapper provider="american-express" />)
 
     expect(screen.getByText('Tipo de cuenta: American Express')).toBeInTheDocument()
+  })
+
+  it('Given a user selecting other provider, expect to see new value in dropdown', async () => {
+    const user = userEvent.setup();
+    render(<AccountProviderDropdownWrapper />)
+
+    const button = screen.getByRole('button', { name: 'Tipo de cuenta: Mastercard' })
+    await user.click(button)
+    const dropdownItem = screen.getByRole('button', { name: 'Visa' })
+    await user.click(dropdownItem)
+    expect(screen.getByText('Tipo de cuenta: Visa')).toBeInTheDocument()
   })
 })
