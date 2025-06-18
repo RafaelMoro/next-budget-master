@@ -67,6 +67,32 @@ describe('EditAccount', () => {
     expect(screen.getByRole('button', { name: /Cancelar/i })).toBeInTheDocument()
   })
 
+  it('Given a user clicking on cancel button, the modal should be closed', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn()
+    const closeModal = jest.fn()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+    render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+
+    const cancelButton = screen.getByRole('button', { name: /Cancelar/i })
+    await user.click(cancelButton)
+    expect(closeModal).toHaveBeenCalled()
+  })
+
+  it('Given a user clicking on go back button, the modal action should be view', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn()
+    const closeModal = jest.fn()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+    render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+
+    const goBackButton = screen.getByRole('button', { name: /Volver/i })
+    await user.click(goBackButton)
+    expect(updateAccAction).toHaveBeenCalledWith('view')
+  })
+
   describe('Form Validations', () => {
     beforeEach(() => {
       const push = jest.fn()
