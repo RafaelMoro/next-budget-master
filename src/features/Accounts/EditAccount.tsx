@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { AnimatePresence } from "motion/react"
 import { Button, CheckIcon, Label, ModalBody, Spinner, TextInput } from "flowbite-react"
 import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react"
+import { Toaster, toast } from "sonner";
 
 import { AccountModalAction, AccountProvider, AccountsDisplay, AccountTypes, EditAccountData, EditAccountError, EditAccountFormData, EditAccountPayload, EditAccountSchema } from "@/shared/types/accounts.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
@@ -16,6 +17,7 @@ import { AccountProviderDropdown } from "@/features/Accounts/AccountProviderDrop
 import { useMutation } from "@tanstack/react-query";
 import { editBankAccountCb } from "@/shared/lib/accounts.lib";
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils";
+import { ACCOUNT_UPDATE_ERROR } from "@/shared/constants/accounts.constants";
 
 interface EditAccountProps {
   account: AccountsDisplay
@@ -43,8 +45,12 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     resolver: yupResolver(EditAccountSchema)
   })
 
-  const { mutate, isError, isPending, isSuccess, isIdle , error} = useMutation<EditAccountData, EditAccountError, EditAccountPayload>({
+  const { mutate, isError, isPending, isSuccess, isIdle } = useMutation<EditAccountData, EditAccountError, EditAccountPayload>({
     mutationFn: (data) => editBankAccountCb(data),
+    onError: () => {
+      toast.error(ACCOUNT_UPDATE_ERROR);
+      closeModal()
+    },
     onSuccess: () => {
       setTimeout(() => {
         closeModal()
@@ -53,7 +59,6 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
       }, 1000)
     }
   })
-  console.log('error', error)
 
   const onSubmit: SubmitHandler<EditAccountFormData> = async (data) => {
     const amountNumber = cleanCurrencyString(currencyState)
@@ -73,6 +78,9 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
 
   return (
     <AnimatePresence>
+      { (isError) && (
+          <Toaster position="top-center" />
+        )}
       <div key={`edit-acc-${account.accountId}`} className="flex justify-between items-start rounded-t border-b p-5 dark:border-gray-600">
         <Button onClick={() => updateAccAction('view')} color="gray" outline>
           <RiArrowLeftLine />

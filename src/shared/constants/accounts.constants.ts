@@ -6,4 +6,4 @@ export const TYPE_PROVIDER_DICT: Record<AccountProvider, AccountProviderDisplay>
   'american-express': 'American Express',
 }
 
-export const ACCOUNT_FETCH_TAG = 'accounts'
+export const ACCOUNT_UPDATE_ERROR = 'Oops! No pudimos actualizar la cuenta. Intenta más tarde.'
