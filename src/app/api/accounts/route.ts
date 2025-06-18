@@ -1,6 +1,5 @@
 import axios from "axios";
 import { type NextRequest } from 'next/server'
-import { revalidateTag } from 'next/cache'
 
 import { getAccessToken } from "@/shared/lib/auth.lib";
 import { GeneralError } from "@/shared/types/global.types";
@@ -18,7 +17,6 @@ export async function PUT(request: NextRequest) {
       }
     })
 
-    revalidateTag(ACCOUNT_FETCH_TAG)
     return new Response(JSON.stringify(res.data), {
       status: 200,
       headers: {
