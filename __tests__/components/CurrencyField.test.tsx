@@ -86,6 +86,16 @@ describe('CurrencyField', () => {
       expect(input).toHaveValue('$1,230.70')
     })
 
+    it('Given a user typing 1239800, expect the input to have value $12,398.00', async () => {
+      const user = userEvent.setup();
+      render(<CurrencyFieldWrapper />)
+  
+      const input = screen.getByTestId('amount')
+      await user.type(input, '1239800')
+
+      expect(input).toHaveValue('$12,398.00')
+    })
+
     it(`Given a user typing 1234477, then expect the input to have value $12,344.77,
       then the user delete one number and the input should have the value $1,234.47`, async () => {
       const user = userEvent.setup();
