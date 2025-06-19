@@ -69,7 +69,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
       accountType: selectedAccountType,
       accountProvider: selectedProvider,
       amount: amountNumber,
-      terminationFourDigits: data.terminationFourDigits,
+      terminationFourDigits: Number(data.terminationFourDigits),
       backgroundColor: 'Dark Orange',
       color: 'white'
     }
@@ -131,7 +131,9 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
               data-testid="terminationNumber"
               defaultValue={account.terminationFourDigits ?? 0}
               id="terminationNumber"
-              type="number"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              type="text"
               {...register("terminationFourDigits")}
               />
             { errors?.terminationFourDigits?.message && (

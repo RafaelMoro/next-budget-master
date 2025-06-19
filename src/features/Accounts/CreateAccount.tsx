@@ -63,7 +63,7 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
       accountType: selectedAccountType,
       accountProvider: selectedProvider,
       amount: amountNumber,
-      terminationFourDigits: data.terminationFourDigits,
+      terminationFourDigits: Number(data.terminationFourDigits),
       backgroundColor: 'Dark Orange',
       color: 'white'
     }
@@ -113,7 +113,9 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
             <TextInput
               data-testid="terminationNumber"
               id="terminationNumber"
-              type="number"
+              type="string"
+              inputMode="numeric"
+              pattern="[0-9]*"
               {...register("terminationFourDigits")}
               />
             { errors?.terminationFourDigits?.message && (

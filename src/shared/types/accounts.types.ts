@@ -1,7 +1,6 @@
-import { number, object, string } from "yup";
+import { object, string } from "yup";
 import { DetailedError } from "./global.types";
 import { AxiosError, AxiosResponse } from "axios";
-import { hasFourDigits as hasFourDigitsFn } from "../utils/general.utils";
 
 export type AccountBank = {
   _id: string;
@@ -123,13 +122,13 @@ export type GetAccountsResponse = {
 
 export type EditAccountFormData = {
   title: string;
-  terminationFourDigits: number;
+  terminationFourDigits: string;
   alias: string
 }
 
 export type CreateAccountFormData = {
   title: string;
-  terminationFourDigits: number;
+  terminationFourDigits: string;
   alias: string
 }
 
@@ -143,20 +142,9 @@ export const AccountFormSchema = object({
     .required("Por favor, ingrese el título de la cuenta")
     .min(2, "El título debe tener al menos 2 caracteres")
     .max(30, "El título no puede exceder los 30 caracteres"),
-  terminationFourDigits: number()
+  terminationFourDigits: string()
     .required("Debe ingresar los 4 dígitos finales")
-    .typeError("Debe ingresar los 4 dígitos finales")
-    .test({
-      name: 'isFourDigits',
-      test(value, ctx) {
-        if (!value) {
-          return ctx.createError({ message: "Debe ingresar los 4 dígitos finales" })
-        }
-        const hasFourDigits = hasFourDigitsFn(value)
-        if (!hasFourDigits) {
-          return ctx.createError({ message: "Ingrese los últimos 4 dígitos (ejemplo: 0011). Use ceros a la izquierda si es necesario." })
-        }
-        return true;
-      }
-    })
+    .matches(/^\d+$/, { excludeEmptyString: true, message: "La terminación solo puede contener dígitos" })
+    .min(4, "La terminación no puede tener menos de 4 dígitos")
+    .max(4, "La terminación no puede tener más de 4 dígitos"),
 })
