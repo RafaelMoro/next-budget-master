@@ -36,11 +36,11 @@ export const RecordsView = ({ accountId }: RecordViewProps) => {
                   <p>{record.shortName}</p>
                   <p>{record.description}</p>
                   {record.isPaid ? (
-                    <div>
+                    <div className="max-w-min">
                       <Badge color="green">Paid</Badge>
                     </div>
                   ) : (
-                    <div>
+                    <div className="max-w-min">
                       <Badge color="red">Unpaid</Badge>
                     </div>
                   )}
