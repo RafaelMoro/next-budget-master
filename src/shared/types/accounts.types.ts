@@ -115,7 +115,7 @@ export const AccountFormSchema = object({
     .min(2, "El título debe tener al menos 2 caracteres")
     .max(50, "El título no puede exceder los 50 caracteres"),
   alias: string()
-    .required("Por favor, ingrese el título de la cuenta")
+    .required("Por favor, ingrese el alías de la cuenta")
     .min(2, "El título debe tener al menos 2 caracteres")
     .max(30, "El título no puede exceder los 30 caracteres"),
   terminationFourDigits: string()
