@@ -49,6 +49,17 @@ export type EditAccountPayload = {
   color: string;
 }
 
+export interface OperationAccountError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string | string[];
+      statusCode: number
+    }
+  }>;
+}
+
+export type CreateAccountPayload = Omit<EditAccountPayload, 'accountId'>
+
 export type DeleteAccountPayload = {
   accountId: string
 }
@@ -61,6 +72,10 @@ export interface EditAccountData {
   message: null;
   success: boolean;
   version: string;
+}
+
+export interface CreateAccountData extends Omit<EditAccountData, 'message'> {
+  message: "Account created"
 }
 
 export interface DeleteAccountData {
@@ -112,8 +127,14 @@ export type EditAccountFormData = {
   alias: string
 }
 
+export type CreateAccountFormData = {
+  title: string;
+  terminationFourDigits: number;
+  alias: string
+}
+
 // Excluding amount as it can't be empty
-export const EditAccountSchema = object({
+export const AccountFormSchema = object({
   title: string()
     .required("Por favor, ingrese el título de la cuenta")
     .min(2, "El título debe tener al menos 2 caracteres")

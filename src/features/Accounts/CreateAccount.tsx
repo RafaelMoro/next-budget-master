@@ -1,54 +1,49 @@
-"use client"
-import { useState } from "react";
+import { useState } from "react"
 import { useRouter } from 'next/navigation'
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { AnimatePresence } from "motion/react"
-import { Button, CheckIcon, Label, ModalBody, Spinner, TextInput } from "flowbite-react"
-import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react"
+import { Button, CheckIcon, Label, ModalBody, ModalHeader, Spinner, TextInput } from "flowbite-react"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Toaster, toast } from "sonner";
 
-import { AccountModalAction, AccountProvider, AccountsDisplay, AccountTypes, EditAccountData, EditAccountError, EditAccountFormData, EditAccountPayload, AccountFormSchema } from "@/shared/types/accounts.types"
-import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
-import { useCurrencyField } from "@/shared/hooks/useCurrencyField";
+import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
+import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
+import { AccountTypeDropdown } from "./AccountTypeDropdown"
+import { AccountProviderDropdown } from "./AccountProviderDropdown"
+import { AccountFormSchema, AccountProvider, AccountTypes, CreateAccountData, CreateAccountFormData, CreateAccountPayload, OperationAccountError } from "@/shared/types/accounts.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
-import { AccountTypeDropdown } from "@/features/Accounts/AccountTypeDropdown";
-import { AccountProviderDropdown } from "@/features/Accounts/AccountProviderDropdown";
-import { useMutation } from "@tanstack/react-query";
-import { editBankAccountCb } from "@/shared/lib/accounts.lib";
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils";
-import { ACCOUNT_UPDATE_ERROR } from "@/shared/constants/accounts.constants";
+import { useMutation } from "@tanstack/react-query";
+import { createBankAccountCb } from "@/shared/lib/accounts.lib";
+import { ACCOUNT_CREATE_ERROR } from "@/shared/constants/accounts.constants";
 
-interface EditAccountProps {
-  account: AccountsDisplay
+interface CreateAccountProps {
   closeModal: () => void;
-  updateAccAction: (acc: AccountModalAction) => void;
 }
 
-export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccountProps) => {
+export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
   const router = useRouter()
-  const [selectedAccountType, setSelectedAccountType] = useState<AccountTypes>(account.type)
-  const [selectedProvider, setSelectedProvider] = useState<AccountProvider>(account.accountProvider ?? 'mastercard')
+  const [selectedAccountType, setSelectedAccountType] = useState<AccountTypes>('Crédito')
+  const [selectedProvider, setSelectedProvider] = useState<AccountProvider>('mastercard')
+  const { handleChange, currencyState } = useCurrencyField({
+    amount: null
+  })
 
   const changeSelectedAccountType = (newAccType: AccountTypes) => setSelectedAccountType(newAccType)
   const changeSelectedProviderType = (newProvider: AccountProvider) => setSelectedProvider(newProvider)
-
-  const { handleChange, currencyState } = useCurrencyField({
-    amount: account.amount
-  })
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EditAccountFormData>({
+  } = useForm<CreateAccountFormData>({
     resolver: yupResolver(AccountFormSchema)
   })
 
-  const { mutate, isError, isPending, isSuccess, isIdle } = useMutation<EditAccountData, EditAccountError, EditAccountPayload>({
-    mutationFn: (data) => editBankAccountCb(data),
+  const { mutate, isError, isPending, isSuccess, isIdle } = useMutation<CreateAccountData, OperationAccountError, CreateAccountPayload>({
+    mutationFn: (data) => createBankAccountCb(data),
     onError: () => {
-      toast.error(ACCOUNT_UPDATE_ERROR);
+      toast.error(ACCOUNT_CREATE_ERROR);
       closeModal()
     },
     onSuccess: () => {
@@ -60,10 +55,9 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     }
   })
 
-  const onSubmit: SubmitHandler<EditAccountFormData> = async (data) => {
+  const onSubmit: SubmitHandler<CreateAccountFormData> = async (data) => {
     const amountNumber = cleanCurrencyString(currencyState)
-    const payload: EditAccountPayload = {
-      accountId: account.accountId,
+    const payload: CreateAccountPayload = {
       title: data.title,
       alias: data.alias,
       accountType: selectedAccountType,
@@ -81,16 +75,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
       { (isError) && (
           <Toaster position="top-center" />
         )}
-      <div key={`edit-acc-${account.accountId}`} className="flex justify-between items-start rounded-t border-b p-5 dark:border-gray-600">
-        <Button onClick={() => updateAccAction('view')} color="gray" outline>
-          <RiArrowLeftLine />
-          Volver
-        </Button>
-        <h4 className="text-2xl font-bold">Editar {account.name}</h4>
-        <Button onClick={closeModal} color="gray" outline>
-          <RiCloseFill />
-        </Button>
-      </div>
+      <ModalHeader>Crear cuenta</ModalHeader>
       <ModalBody>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div>
@@ -99,7 +84,6 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             </div>
             <TextInput
               data-testid="title"
-              defaultValue={account.name}
               id="title"
               type="text"
               {...register("title")}
@@ -114,7 +98,6 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             </div>
             <TextInput
               data-testid="alias"
-              defaultValue={account.alias}
               id="alias"
               type="text"
               {...register("alias")}
@@ -129,7 +112,6 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
             </div>
             <TextInput
               data-testid="terminationNumber"
-              defaultValue={account.terminationFourDigits ?? 0}
               id="terminationNumber"
               type="number"
               {...register("terminationFourDigits")}
@@ -152,9 +134,9 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
               Cancelar
             </Button>
             <Button disabled={isPending || isSuccess} className="hover:cursor-pointer" type="submit">
-              { (isIdle || isError) && 'Editar'}
+              { (isIdle || isError) && 'Crear'}
               { isPending && (<Spinner aria-label="loading create account budget master" />) }
-              { isSuccess && (<CheckIcon data-testid="success-button" />)}
+              { isSuccess && (<CheckIcon data-testid="create-acc-success-button" />)}
             </Button>
           </div>
         </form>

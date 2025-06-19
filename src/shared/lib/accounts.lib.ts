@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AccountProvider, DeleteAccountData, DeleteAccountPayload, EditAccountData, EditAccountPayload } from "../types/accounts.types";
+import { AccountProvider, CreateAccountData, CreateAccountPayload, DeleteAccountData, DeleteAccountPayload, EditAccountData, EditAccountPayload } from "../types/accounts.types";
 
 export function getAccountProvider(provider: string | undefined): AccountProvider {
   return (
@@ -20,6 +20,10 @@ export function getTerminationFormatted(terminationNumber: number | undefined) {
 
 export const editBankAccountCb = (data: EditAccountPayload): Promise<EditAccountData> => {
   return axios.put('api/accounts', data)
+}
+
+export const createBankAccountCb = (data: CreateAccountPayload): Promise<CreateAccountData> => {
+  return axios.post('api/accounts', data)
 }
 
 export const deleteBankAccountCb = (data: DeleteAccountPayload): Promise<DeleteAccountData> => {
