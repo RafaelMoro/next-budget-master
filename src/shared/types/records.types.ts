@@ -52,3 +52,9 @@ export type AnyRecord = AccountRecord & {
   linkedBudgets?: Budget[];
   expensesPaid?: ExpensePaid[];
 }
+
+export type GetAccountPayload = {
+  accountId: string;
+  month: string;
+  year: string;
+}

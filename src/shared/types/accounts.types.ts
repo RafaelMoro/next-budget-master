@@ -1,6 +1,7 @@
 import { object, string } from "yup";
 import { DetailedError } from "./global.types";
 import { AxiosError, AxiosResponse } from "axios";
+import { AccountRecord } from "./records.types";
 
 export type AccountBank = {
   _id: string;
@@ -94,10 +95,21 @@ export type FetchAccountsResponse = {
   }
 }
 
+export type FetchRecordsResponse = {
+  data: {
+    records: AccountRecord[];
+  }
+}
+
 // Response from the function getAccounts
 export type GetAccountsResponse = {
   detailedError: DetailedError | null;
   accounts: AccountBank[];
+}
+
+export type GetRecordsResponse = {
+  detailedError: DetailedError | null;
+  records: AccountRecord[];
 }
 
 //#region Validations

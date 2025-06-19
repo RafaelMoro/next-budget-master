@@ -1,6 +1,6 @@
 "use client"
 import { toast, Toaster } from "sonner";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { AccountBank } from "@/shared/types/accounts.types"
@@ -11,6 +11,8 @@ import { AccountsView } from "../Accounts/AccountsView"
 import { DetailedError } from "@/shared/types/global.types"
 import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from "@/shared/constants/Global.constants"
 import { CreateAccButton } from "../Accounts/CreateAccButton";
+import { getAccountCookie } from "@/shared/lib/preferences.lib";
+import { RecordsView } from "../Records/RecordsView";
 
 interface DashboardViewProps {
   accounts: AccountBank[];
@@ -24,6 +26,15 @@ interface DashboardViewProps {
  */
 export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) => {
   const { isMobile } = useMediaQuery()
+  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
+
+  useEffect(() => {
+    getAccountCookie().then ((acc) => {
+      if (acc) {
+        setSelectedAccountId(acc);
+      }
+    })
+  }, [])
 
   useEffect(() => {
     if (detailedError?.cause === ERROR_CONNECTION) {
@@ -60,6 +71,9 @@ export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) =
           </>
           )}
         <AccountsView accounts={accounts} />
+        { selectedAccountId && (
+          <RecordsView accountId={selectedAccountId} />
+        ) }
       </main>
       <Toaster position="top-center" />
     </div>
