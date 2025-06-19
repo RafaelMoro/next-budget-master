@@ -137,7 +137,7 @@ describe('EditAccount', () => {
       await user.type(accountTerminationInput, '123')
       await user.click(button)
 
-      expect(await screen.findByText('Ingrese los últimos 4 dígitos (ejemplo: 0011). Use ceros a la izquierda si es necesario.')).toBeInTheDocument()
+      expect(await screen.findByText('La terminación no puede tener menos de 4 dígitos')).toBeInTheDocument()
     })
 
     it('Given a user deleting the alias, clicks on edit, then show an error message', async () => {
