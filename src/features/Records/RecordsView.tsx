@@ -6,7 +6,7 @@ import axios from "axios";
 import { CURRENT_MONTH_RECORDS_TAG } from "@/shared/constants/Global.constants";
 import { getDateInfo } from "@/shared/utils/getDateInfo";
 import { GetRecordsResponse } from "@/shared/types/records.types";
-import { AccountEntry } from "./AccountEntry";
+import { RecordEntry } from "./RecordEntry";
 import { Fragment } from "react";
 
 interface RecordViewProps {
@@ -34,7 +34,7 @@ export const RecordsView = ({ accountId }: RecordViewProps) => {
           <AccordionContent>
             { records.length > 0 && records.map((record, index) => (
               <Fragment key={record._id}>
-                <AccountEntry record={record} />
+                <RecordEntry record={record} />
                 {index !== (records.length - 1) && <HR />}
               </Fragment>
             ))}

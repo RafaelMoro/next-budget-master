@@ -8,7 +8,7 @@ interface AccountEntryProps {
   record: BankMovement;
 }
 
-export const AccountEntry = ({ record }: AccountEntryProps) => {
+export const RecordEntry = ({ record }: AccountEntryProps) => {
   const priceClass = clsx(
     'col-start-2 col-end-3 row-start-2 row-end-3',
     { "text-red-600": record.typeOfRecord === 'expense' },
