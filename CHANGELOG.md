@@ -1,3 +1,9 @@
+## v0.12.0 (2025-06-19)
+
+### Pull Requests
+[#18](https://github.com/RafaelMoro/next-budget-master/pull/18) | Add create acc modal
+
+
 ## v0.11.0 (2025-06-19)
 
 ### Pull Requests
