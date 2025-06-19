@@ -1,5 +1,6 @@
 import { AccountModalAction, AccountsDisplay } from "@/shared/types/accounts.types"
-import { Button, ModalBody, ModalHeader } from "flowbite-react"
+import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react";
+import { Button, ModalBody } from "flowbite-react"
 
 interface DeleteAccountProps {
   account: AccountsDisplay
@@ -10,10 +11,19 @@ interface DeleteAccountProps {
 export const DeleteAccount = ({ account, closeModal, updateAccAction }: DeleteAccountProps) => {
   return (
     <>
-      <ModalHeader>{account.name}</ModalHeader>
+      <div className="flex justify-between items-start rounded-t border-b p-5 dark:border-gray-600">
+        <Button onClick={() => updateAccAction('view')} color="gray" outline>
+          <RiArrowLeftLine />
+          Volver
+        </Button>
+        <h4 className="text-2xl font-bold">Eliminar {account.name}</h4>
+        <Button onClick={closeModal} color="gray" outline>
+          <RiCloseFill />
+        </Button>
+      </div>
       <ModalBody>
         <form className="flex flex-col gap-4">
-          <h4 className="text-2xl font-bold">Estás por eliminar tu cuenta</h4>
+          <h5 className="text-xl font-semibold">Estás por eliminar tu cuenta</h5>
           <p className="text-base text-gray-400">
             Estás por eliminar tu cuenta de forma permanente. Si estás completamente seguro, continúa.
             No podrás recuperar tu información después.
