@@ -1,12 +1,11 @@
-// import { useRouter } from 'next/navigation'
-import { Fragment } from "react";
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Badge } from "flowbite-react";
+import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import { CURRENT_MONTH_RECORDS_TAG } from "@/shared/constants/Global.constants";
 import { getDateInfo } from "@/shared/utils/getDateInfo";
 import { GetRecordsResponse } from "@/shared/types/records.types";
+import { AccountEntry } from "./AccountEntry";
 
 interface RecordViewProps {
   accountId: string
@@ -32,19 +31,7 @@ export const RecordsView = ({ accountId }: RecordViewProps) => {
         <AccordionTitle>Este mes</AccordionTitle>
           <AccordionContent>
             {(records ?? []).map((record) => (
-              <Fragment key={record._id}>
-                  <p>{record.shortName}</p>
-                  <p>{record.description}</p>
-                  {record.isPaid ? (
-                    <div className="max-w-min">
-                      <Badge color="green">Paid</Badge>
-                    </div>
-                  ) : (
-                    <div className="max-w-min">
-                      <Badge color="red">Unpaid</Badge>
-                    </div>
-                  )}
-              </Fragment>
+              <AccountEntry key={record._id} record={record} />
             ))}
           </AccordionContent>
       </AccordionPanel>
