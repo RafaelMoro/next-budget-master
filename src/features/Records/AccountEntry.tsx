@@ -2,7 +2,7 @@ import { RiHome9Fill } from "@remixicon/react";
 import { Badge } from "flowbite-react";
 import { clsx } from 'clsx';
 
-import { BankMovement } from "@/shared/types/records.types"
+import { BankMovement, TypeOfRecord } from "@/shared/types/records.types"
 
 interface AccountEntryProps {
   record: BankMovement;
@@ -10,16 +10,26 @@ interface AccountEntryProps {
 
 export const AccountEntry = ({ record }: AccountEntryProps) => {
   const priceClass = clsx(
-    'col-start-2 col-end-3 row-start-2 row-end-3 text-lg',
+    'col-start-2 col-end-3 row-start-2 row-end-3',
     { "text-red-600": record.typeOfRecord === 'expense' },
     { "text-green-500": record.typeOfRecord === 'income' },
     { "text-blue-600": record.typeOfRecord === 'transfer' }
   )
 
-  const showPriceDict: Record<string, string> = {
+  const showPriceDict: Record<TypeOfRecord, string> = {
     expense: `- ${record.amountFormatted}`,
     income: `+ ${record.amountFormatted}`,
     transfer: `${record.amountFormatted}`
+  }
+  const showBadgeDict: Record<TypeOfRecord, string> = {
+    expense: 'Unpaid',
+    income: 'Paid',
+    transfer: 'Transfer'
+  }
+  const badgeColorDict: Record<TypeOfRecord, string> = {
+    expense: 'failure',
+    income: 'success',
+    transfer: 'info'
   }
 
   return (
@@ -30,7 +40,7 @@ export const AccountEntry = ({ record }: AccountEntryProps) => {
       <h5 className="col-start-2 col-end-3 row-start-1 row-end-2 text-xl font-bold">{record.shortName}</h5>
       <p className={priceClass}>{showPriceDict[record.typeOfRecord]}</p>
       <div className="max-w-min col-start-3 col-end-4 row-span-2 flex items-center">
-        <Badge color="red">Unpaid</Badge>
+        <Badge color={badgeColorDict[record.typeOfRecord]}>{showBadgeDict[record.typeOfRecord]}</Badge>
       </div>
     </article>
   )
