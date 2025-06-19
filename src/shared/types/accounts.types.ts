@@ -63,7 +63,26 @@ export interface EditAccountData {
   version: string;
 }
 
+export interface DeleteAccountData {
+  data: {
+    accountDeleted: AccountBank;
+  }
+  error: null;
+  message: "Account Deleted";
+  success: boolean;
+  version: string;
+}
+
 export interface EditAccountError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string | string[];
+      statusCode: number
+    }
+  }>;
+}
+
+export interface DeleteAccountError extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string | string[];
