@@ -48,7 +48,10 @@ export type ExpensePaid = {
   date: Date;
 }
 
-export type AnyRecord = AccountRecord & {
+/**
+ * Represents a record of an account transaction, which can be an expense, income, or transfer.
+ */
+export type BankMovement = AccountRecord & {
   isPaid?: boolean;
   linkedBudgets?: Budget[];
   expensesPaid?: ExpensePaid[];
@@ -62,6 +65,6 @@ export type GetAccountPayload = {
 
 export type GetRecordsResponse = Omit<AxiosResponse, 'data'> & {
   data: AxiosResponse<{
-    records: AnyRecord[];
+    records: BankMovement[];
   }>;
 }
