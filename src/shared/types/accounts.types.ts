@@ -49,6 +49,10 @@ export type EditAccountPayload = {
   color: string;
 }
 
+export type DeleteAccountPayload = {
+  accountId: string
+}
+
 export interface EditAccountData {
   data: {
     account: AccountBank;
