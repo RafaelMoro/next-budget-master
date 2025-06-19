@@ -1,4 +1,6 @@
 // import { useRouter } from 'next/navigation'
+import { Fragment } from "react";
+import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Badge } from "flowbite-react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -25,6 +27,27 @@ export const RecordsView = ({ accountId }: RecordViewProps) => {
   console.log('isPending', isPending)
 
   return (
-    <div>Records</div>
+    <Accordion>
+      <AccordionPanel>
+        <AccordionTitle>Este mes</AccordionTitle>
+          <AccordionContent>
+            {(records ?? []).map((record) => (
+              <Fragment key={record._id}>
+                  <p>{record.shortName}</p>
+                  <p>{record.description}</p>
+                  {record.isPaid ? (
+                    <div>
+                      <Badge color="green">Paid</Badge>
+                    </div>
+                  ) : (
+                    <div>
+                      <Badge color="red">Unpaid</Badge>
+                    </div>
+                  )}
+              </Fragment>
+            ))}
+          </AccordionContent>
+      </AccordionPanel>
+    </Accordion>
   )
 }
