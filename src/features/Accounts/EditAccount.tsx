@@ -86,7 +86,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
           <RiArrowLeftLine />
           Volver
         </Button>
-        Editar {account.name}
+        <h4 className="text-2xl font-bold">Editar {account.name}</h4>
         <Button onClick={closeModal} color="gray" outline>
           <RiCloseFill />
         </Button>

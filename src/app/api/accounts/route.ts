@@ -3,7 +3,7 @@ import { type NextRequest } from 'next/server'
 
 import { getAccessToken } from "@/shared/lib/auth.lib";
 import { GeneralError } from "@/shared/types/global.types";
-import { EditAccountPayload } from "@/shared/types/accounts.types";
+import { DeleteAccountPayload, EditAccountPayload } from "@/shared/types/accounts.types";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -24,6 +24,36 @@ export async function PUT(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error updating account:', error);
+    const message = (error as unknown as GeneralError)?.response?.data?.error?.message
+    return new Response(JSON.stringify({ message }), {
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const accessToken = await getAccessToken()
+    const payload: DeleteAccountPayload = await request.json()
+    const uri = `${process.env.NEXT_PUBLIC_BACKEND_URI}/account-actions/`
+    const res = await axios.delete(uri, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      data: payload
+    })
+
+    return new Response(JSON.stringify(res.data), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }  catch (error) {
+    console.error('Error deleting account:', error);
     const message = (error as unknown as GeneralError)?.response?.data?.error?.message
     return new Response(JSON.stringify({ message }), {
       status: 400,
