@@ -10,7 +10,7 @@ interface AccountEntryProps {
 
 export const RecordEntry = ({ record }: AccountEntryProps) => {
   const priceClass = clsx(
-    'col-start-2 col-end-3 row-start-2 row-end-3',
+    'col-start-2 col-end-3 row-start-3 row-end-4',
     { "text-red-600": record.typeOfRecord === 'expense' },
     { "text-green-500": record.typeOfRecord === 'income' },
     { "text-blue-600": record.typeOfRecord === 'transfer' }
@@ -33,13 +33,14 @@ export const RecordEntry = ({ record }: AccountEntryProps) => {
   }
 
   return (
-    <article className="grid grid-rows-2 grid-view-records gap-x-2">
-      <div className="row-span-2 col-start-1 col-end-2 flex items-center">
+    <article className="grid grid-rows-3 grid-view-records gap-x-2">
+      <span className="col-span-3 text-center text-gray-600 dark:text-gray-400 text-sm">{record.fullDate} {record.formattedTime}</span>
+      <div className="col-start-1 col-end-2 row-start-2 row-end-4 flex items-center">
         <RiHome9Fill />
       </div>
-      <h5 className="col-start-2 col-end-3 row-start-1 row-end-2 text-xl font-semibold">{record.shortName}</h5>
+      <h5 className="col-start-2 col-end-3 row-start-2 row-end-3 text-xl font-semibold">{record.shortName}</h5>
       <p className={priceClass}>{showPriceDict[record.typeOfRecord]}</p>
-      <div className="max-w-min col-start-3 col-end-4 row-span-2 flex items-center">
+      <div className="col-start-3 col-end-4 row-span-2 max-w-min flex items-center">
         <Badge color={badgeColorDict[record.typeOfRecord]}>{showBadgeDict[record.typeOfRecord]}</Badge>
       </div>
     </article>
