@@ -19,17 +19,6 @@ const CreateAccountWrapper = ({
   const [openAccModal, setOpenAccModal] = useState<boolean>(true)
   const toggleAccModal = () => setOpenAccModal((prev) => !prev)
 
-  // const account: AccountsDisplay = {
-  //   accountId: "12345",
-  //   name: "HSBC clasica",
-  //   amount: "$1,000.00",
-  //   type: "Crédito",
-  //   alias: "Ahorros",
-  //   terminationFourDigits: 1234,
-  //   terminationFourDigitsTransformed: "**1234",
-  //   accountProvider: "visa"
-  // }
-
   return (
     <QueryProviderWrapper>
       <AppRouterContextProviderMock router={{ push }}>

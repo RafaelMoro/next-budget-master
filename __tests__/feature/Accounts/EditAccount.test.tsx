@@ -148,7 +148,7 @@ describe('EditAccount', () => {
       await user.clear(aliasInput)
       await user.click(button)
 
-      expect(await screen.findByText(/Por favor, ingrese el título de la cuenta/i)).toBeInTheDocument()
+      expect(await screen.findByText(/Por favor, ingrese el alías de la cuenta/i)).toBeInTheDocument()
     })
   })
 
