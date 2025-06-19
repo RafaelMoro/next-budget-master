@@ -78,89 +78,91 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
 
   return (
     <AnimatePresence>
-      { (isError) && (
-          <Toaster position="top-center" />
-        )}
-      <div key={`edit-acc-${account.accountId}`} className="flex justify-between items-start rounded-t border-b p-5 dark:border-gray-600">
-        <Button onClick={() => updateAccAction('view')} color="gray" outline>
-          <RiArrowLeftLine />
-          Volver
-        </Button>
-        <h4 className="text-2xl font-bold">Editar {account.name}</h4>
-        <Button onClick={closeModal} color="gray" outline>
-          <RiCloseFill />
-        </Button>
+      <div key="edit-account-modal">
+        { (isError) && (
+            <Toaster position="top-center" />
+          )}
+        <div key={`edit-acc-${account.accountId}`} className="flex justify-between items-start rounded-t border-b p-5 dark:border-gray-600">
+          <Button onClick={() => updateAccAction('view')} color="gray" outline>
+            <RiArrowLeftLine />
+            Volver
+          </Button>
+          <h4 className="text-2xl font-bold">Editar {account.name}</h4>
+          <Button onClick={closeModal} color="gray" outline>
+            <RiCloseFill />
+          </Button>
+        </div>
+        <ModalBody>
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="title">Titulo de la cuenta</Label>
+              </div>
+              <TextInput
+                data-testid="title"
+                defaultValue={account.name}
+                id="title"
+                type="text"
+                {...register("title")}
+                />
+              { errors?.title?.message && (
+                <ErrorMessage isAnimated>{errors.title?.message}</ErrorMessage>
+              )}
+            </div>
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="alias">Alias</Label>
+              </div>
+              <TextInput
+                data-testid="alias"
+                defaultValue={account.alias}
+                id="alias"
+                type="text"
+                {...register("alias")}
+                />
+              { errors?.alias?.message && (
+                <ErrorMessage isAnimated>{errors.alias?.message}</ErrorMessage>
+              )}
+            </div>
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="terminationNumber">Terminación de la cuenta</Label>
+              </div>
+              <TextInput
+                data-testid="terminationNumber"
+                defaultValue={account.terminationFourDigits ?? 0}
+                id="terminationNumber"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                type="text"
+                {...register("terminationFourDigits")}
+                />
+              { errors?.terminationFourDigits?.message && (
+                <ErrorMessage isAnimated>{errors.terminationFourDigits?.message}</ErrorMessage>
+              )}
+            </div>
+            <CurrencyField
+              labelName="Saldo de la cuenta"
+              dataTestId="amount"
+              fieldId="amount"
+              value={currencyState}
+              handleChange={handleChange}
+            />
+            <AccountTypeDropdown selectedAccountType={selectedAccountType} changeSelectedAccountType={changeSelectedAccountType} />
+            <AccountProviderDropdown selectedProvider={selectedProvider} changeSelectedProviderType={changeSelectedProviderType}  />
+            <div className="flex justify-between">
+              <Button disabled={isPending || isSuccess} color="alternative" onClick={closeModal}>
+                Cancelar
+              </Button>
+              <Button disabled={isPending || isSuccess} className="hover:cursor-pointer" type="submit">
+                { (isIdle || isError) && 'Editar'}
+                { isPending && (<Spinner aria-label="loading create account budget master" />) }
+                { isSuccess && (<CheckIcon data-testid="success-button" />)}
+              </Button>
+            </div>
+          </form>
+        </ModalBody>
       </div>
-      <ModalBody>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="title">Titulo de la cuenta</Label>
-            </div>
-            <TextInput
-              data-testid="title"
-              defaultValue={account.name}
-              id="title"
-              type="text"
-              {...register("title")}
-              />
-            { errors?.title?.message && (
-              <ErrorMessage isAnimated>{errors.title?.message}</ErrorMessage>
-            )}
-          </div>
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="alias">Alias</Label>
-            </div>
-            <TextInput
-              data-testid="alias"
-              defaultValue={account.alias}
-              id="alias"
-              type="text"
-              {...register("alias")}
-              />
-            { errors?.alias?.message && (
-              <ErrorMessage isAnimated>{errors.alias?.message}</ErrorMessage>
-            )}
-          </div>
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="terminationNumber">Terminación de la cuenta</Label>
-            </div>
-            <TextInput
-              data-testid="terminationNumber"
-              defaultValue={account.terminationFourDigits ?? 0}
-              id="terminationNumber"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              type="text"
-              {...register("terminationFourDigits")}
-              />
-            { errors?.terminationFourDigits?.message && (
-              <ErrorMessage isAnimated>{errors.terminationFourDigits?.message}</ErrorMessage>
-            )}
-          </div>
-          <CurrencyField
-            labelName="Saldo de la cuenta"
-            dataTestId="amount"
-            fieldId="amount"
-            value={currencyState}
-            handleChange={handleChange}
-          />
-          <AccountTypeDropdown selectedAccountType={selectedAccountType} changeSelectedAccountType={changeSelectedAccountType} />
-          <AccountProviderDropdown selectedProvider={selectedProvider} changeSelectedProviderType={changeSelectedProviderType}  />
-          <div className="flex justify-between">
-            <Button disabled={isPending || isSuccess} color="alternative" onClick={closeModal}>
-              Cancelar
-            </Button>
-            <Button disabled={isPending || isSuccess} className="hover:cursor-pointer" type="submit">
-              { (isIdle || isError) && 'Editar'}
-              { isPending && (<Spinner aria-label="loading create account budget master" />) }
-              { isSuccess && (<CheckIcon data-testid="success-button" />)}
-            </Button>
-          </div>
-        </form>
-      </ModalBody>
     </AnimatePresence>
   )
 }
