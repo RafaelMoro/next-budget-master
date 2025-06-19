@@ -1,7 +1,8 @@
 import { useState } from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import { Modal } from "flowbite-react"
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
 import QueryProviderWrapper from "@/app/QueryProviderWrapper"
@@ -46,6 +47,9 @@ const DeleteAccountWrapper = ({
   )
 }
 
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+
 describe('DeleteAccount', () => {
   it('Show delete account', () => {
     const push = jest.fn()
@@ -64,28 +68,64 @@ describe('DeleteAccount', () => {
   })
 
   it('Given a user clicking on cancel button, the modal should be closed', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn()
+    const closeModal = jest.fn()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+    render(<DeleteAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+
+    const cancelButton = screen.getByRole('button', { name: /Cancelar/i })
+    await user.click(cancelButton)
+    expect(updateAccAction).toHaveBeenCalledWith('view')
+  })
+
+  it('Given a user clicking on go back button, the modal action should be view', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn()
+    const closeModal = jest.fn()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+    render(<DeleteAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+
+    const goBackButton = screen.getByRole('button', { name: /Volver/i })
+    await user.click(goBackButton)
+    expect(updateAccAction).toHaveBeenCalledWith('view')
+  })
+
+  describe('Form submission', () => {
+    it('Given a user hitting the delete button, the account should be deleted', async () => {
       const user = userEvent.setup();
       const push = jest.fn()
       const closeModal = jest.fn()
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+      mockedAxios.delete.mockResolvedValue({
+        error: null,
+        message: 'Account Deleted',
+        success: true,
+        version: "v1.2.0",
+        data: {
+          accountDeleted: {
+            _id: "12345",
+            title: "Cuenta modificada",
+            alias: "Ahorros Modificados",
+            terminationFourDigits: 1234,
+            amount: 1000,
+            accountType: "Crédito",
+            accountProvider: "visa"
+          }
+        },
+      })
+
       render(<DeleteAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
-  
-      const cancelButton = screen.getByRole('button', { name: /Cancelar/i })
-      await user.click(cancelButton)
-      expect(updateAccAction).toHaveBeenCalledWith('view')
+      const button = screen.getByRole('button', { name: /Eliminar/i })
+      await user.click(button)
+
+      await waitFor(() => {
+        expect(closeModal).toHaveBeenCalled()
+        expect(screen.getByTestId('success-delete-acc-button')).toBeInTheDocument()
+      }, { timeout: 2000})
     })
-  
-    it('Given a user clicking on go back button, the modal action should be view', async () => {
-      const user = userEvent.setup();
-      const push = jest.fn()
-      const closeModal = jest.fn()
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
-      render(<DeleteAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
-  
-      const goBackButton = screen.getByRole('button', { name: /Volver/i })
-      await user.click(goBackButton)
-      expect(updateAccAction).toHaveBeenCalledWith('view')
-    })
+  })
 })
