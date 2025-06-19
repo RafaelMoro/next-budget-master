@@ -1,3 +1,9 @@
+## v0.11.0 (2025-06-19)
+
+### Pull Requests
+[#17](https://github.com/RafaelMoro/next-budget-master/pull/17) | Add Delete account modal
+
+
 ## v0.10.1 (2025-06-18)
 
 ### Pull Requests
