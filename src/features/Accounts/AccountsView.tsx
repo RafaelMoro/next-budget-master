@@ -8,6 +8,7 @@ import { Button, Modal } from "flowbite-react";
 import Image from "next/image";
 import { AccountDetails } from "./AccountDetails";
 import { EditAccount } from "./EditAccount";
+import { DeleteAccount } from "./DeleteAccount";
 
 interface AccountsViewProps {
   accounts: AccountBank[];
@@ -71,6 +72,14 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
             )}
             { accAction === 'edit' && (
               <EditAccount
+                account={accDetails}
+                closeModal={closeModal}
+                updateAccAction={updateAccAction}
+              />
+            )}
+
+            { accAction === 'delete' && (
+              <DeleteAccount
                 account={accDetails}
                 closeModal={closeModal}
                 updateAccAction={updateAccAction}

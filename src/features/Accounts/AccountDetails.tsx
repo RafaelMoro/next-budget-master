@@ -25,7 +25,7 @@ export const AccountDetails = ({ account, updateAccAction }: AccountDetailsProps
             <p className="text-gray-400">Tarjeta emitida por: {TYPE_PROVIDER_DICT[account.accountProvider]} </p>
           ) }
           <div className="flex justify-between">
-            <Button color="red" outline className="ml-2">Eliminar</Button>
+            <Button onClick={() => updateAccAction('delete')} color="red" outline className="ml-2">Eliminar</Button>
             <Button onClick={() => updateAccAction('edit')}>Editar</Button>
           </div>
         </div>
