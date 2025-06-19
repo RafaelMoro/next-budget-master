@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Error updating account:', error);
+    console.error('Error creating account:', error);
     const message = (error as unknown as GeneralError)?.response?.data?.error?.message
     return new Response(JSON.stringify({ message }), {
       status: 400,
