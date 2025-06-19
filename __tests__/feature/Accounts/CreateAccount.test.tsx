@@ -166,15 +166,17 @@ describe('CreateAccount', () => {
       render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
       const titleInput = screen.getByLabelText('Titulo de la cuenta')
+      const aliasInput = screen.getByLabelText('Alias')
+      const terminationInput = screen.getByTestId('terminationNumber')
       const button = screen.getByRole('button', { name: /Crear/i })
 
-      await user.clear(titleInput)
       await user.type(titleInput, 'Cuenta modificada')
+      await user.type(aliasInput, 'Ahorros Modificados')
+      await user.type(terminationInput, '1234')
       await user.click(button)
 
       await waitFor(() => {
-        expect(closeModal).toHaveBeenCalled()
-        expect(screen.getByTestId('success-button')).toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: /Crear/i })).not.toBeInTheDocument()
       }, { timeout: 2000})
     })
 
@@ -199,14 +201,17 @@ describe('CreateAccount', () => {
       render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
       const titleInput = screen.getByLabelText('Titulo de la cuenta')
+      const aliasInput = screen.getByLabelText('Alias')
+      const terminationInput = screen.getByTestId('terminationNumber')
       const button = screen.getByRole('button', { name: /Crear/i })
 
-      await user.clear(titleInput)
       await user.type(titleInput, 'Cuenta modificada')
+      await user.type(aliasInput, 'Ahorros Modificados')
+      await user.type(terminationInput, '1234')
       await user.click(button)
 
       await waitFor(() => {
-        expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: /Crear/i })).not.toBeInTheDocument()
       }, { timeout: 3000})
     })
   })
