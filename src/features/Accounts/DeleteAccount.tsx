@@ -6,7 +6,7 @@ import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react";
 import { Toaster, toast } from "sonner";
 
 import { deleteBankAccountCb } from "@/shared/lib/accounts.lib";
-import { AccountModalAction, AccountsDisplay, DeleteAccountData, DeleteAccountError, DeleteAccountPayload } from "@/shared/types/accounts.types"
+import { AccountModalAction, AccountsDisplay, DeleteAccountData, DeleteAccountPayload, OperationAccountError } from "@/shared/types/accounts.types"
 import { ACCOUNT_DELETE_ERROR } from '@/shared/constants/accounts.constants';
 
 interface DeleteAccountProps {
@@ -18,7 +18,7 @@ interface DeleteAccountProps {
 export const DeleteAccount = ({ account, closeModal, updateAccAction }: DeleteAccountProps) => {
   const router = useRouter()
 
-  const { mutate, isError, isPending, isSuccess, isIdle } = useMutation<DeleteAccountData, DeleteAccountError, DeleteAccountPayload>({
+  const { mutate, isError, isPending, isSuccess, isIdle } = useMutation<DeleteAccountData, OperationAccountError, DeleteAccountPayload>({
     mutationFn: (data) => deleteBankAccountCb(data),
     onError: () => {
       toast.error(ACCOUNT_DELETE_ERROR);

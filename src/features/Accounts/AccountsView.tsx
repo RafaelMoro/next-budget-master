@@ -4,11 +4,12 @@ import { AccountBank, AccountModalAction, AccountsDisplay, AccountTypes } from "
 import { Account } from "./Accounts";
 import { getAccountProvider, getTerminationFormatted } from "@/shared/lib/accounts.lib";
 import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import Image from "next/image";
 import { AccountDetails } from "./AccountDetails";
 import { EditAccount } from "./EditAccount";
 import { DeleteAccount } from "./DeleteAccount";
+import { CreateAccButton } from "./CreateAccButton";
 
 interface AccountsViewProps {
   accounts: AccountBank[];
@@ -97,7 +98,9 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
       <p className="text-xl text-gray-600 dark:text-gray-400">¡Todo empieza aquí! Agrega una cuenta bancaria y empieza a organizar tus finanzas sin estrés.</p>
       <Image src="/img/no-accounts-found.webp" width={289} height={296} alt="No accounts found" />
       <div>
-        <Button>Crear cuenta</Button>
+        <div className="w-full flex justify-center">
+          <CreateAccButton />
+        </div>
       </div>
     </section>
   )

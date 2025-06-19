@@ -6,40 +6,25 @@ import axios from 'axios';
 
 import QueryProviderWrapper from "@/app/QueryProviderWrapper"
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
-import { EditAccount } from "@/features/Accounts/EditAccount"
-import { AccountModalAction, AccountsDisplay } from "@/shared/types/accounts.types"
+import { CreateAccount } from "@/features/Accounts/CreateAccount";
+import { AccountModalAction } from "@/shared/types/accounts.types"
 
-const EditAccountWrapper = ({
+const CreateAccountWrapper = ({
   closeModal,
-  updateAccAction,
   push
 }: {
   closeModal: () => void
-  updateAccAction: (acc: AccountModalAction) => void
   push: () => void
 }) => {
   const [openAccModal, setOpenAccModal] = useState<boolean>(true)
   const toggleAccModal = () => setOpenAccModal((prev) => !prev)
 
-  const account: AccountsDisplay = {
-    accountId: "12345",
-    name: "HSBC clasica",
-    amount: "$1,000.00",
-    type: "Crédito",
-    alias: "Ahorros",
-    terminationFourDigits: 1234,
-    terminationFourDigitsTransformed: "**1234",
-    accountProvider: "visa"
-  }
-
   return (
     <QueryProviderWrapper>
       <AppRouterContextProviderMock router={{ push }}>
         <Modal show={openAccModal} onClose={toggleAccModal}>
-          <EditAccount
-            account={account}
+          <CreateAccount
             closeModal={closeModal}
-            updateAccAction={updateAccAction}
           />
         </Modal>
       </AppRouterContextProviderMock>
@@ -50,24 +35,22 @@ const EditAccountWrapper = ({
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe('EditAccount', () => {
-  it('Show edit account', () => {
+describe('CreateAccount', () => {
+  it('Show create account', () => {
     const push = jest.fn()
     const closeModal = jest.fn()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
 
-    render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+    render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
-    expect(screen.getByText(/HSBC clasica/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Volver/i })).toBeInTheDocument()
+    expect(screen.getByText(/Crear cuenta/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Cancelar/i })).toBeInTheDocument()
     expect(screen.getByLabelText('Titulo de la cuenta')).toBeInTheDocument()
     expect(screen.getByLabelText('Alias')).toBeInTheDocument()
     expect(screen.getByTestId('terminationNumber')).toBeInTheDocument()
     expect(screen.getByLabelText('Saldo de la cuenta')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Tipo de cuenta: Crédito' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Proveedor: Visa' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Editar/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Proveedor: Mastercard' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Crear/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Cancelar/i })).toBeInTheDocument()
   })
 
@@ -77,52 +60,46 @@ describe('EditAccount', () => {
     const closeModal = jest.fn()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
-    render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+    render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
     const cancelButton = screen.getByRole('button', { name: /Cancelar/i })
     await user.click(cancelButton)
     expect(closeModal).toHaveBeenCalled()
   })
 
-  it('Given a user clicking on go back button, the modal action should be view', async () => {
+  it('Given a user clicking on cancel, the modal action should be view', async () => {
     const user = userEvent.setup();
     const push = jest.fn()
     const closeModal = jest.fn()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
-    render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+    render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
-    const goBackButton = screen.getByRole('button', { name: /Volver/i })
+    const goBackButton = screen.getByRole('button', { name: /Cancelar/i })
     await user.click(goBackButton)
-    expect(updateAccAction).toHaveBeenCalledWith('view')
+    expect(closeModal).toHaveBeenCalled()
   })
 
   describe('Form Validations', () => {
     beforeEach(() => {
       const push = jest.fn()
       const closeModal = jest.fn()
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
-      render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+      render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
     })
 
     it('Given a user deleting the title, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
 
       const titleInput = screen.getByLabelText('Titulo de la cuenta')
-      const button = screen.getByRole('button', { name: /Editar/i })
+      const button = screen.getByRole('button', { name: /Crear/i })
       await user.clear(titleInput)
       await user.click(button)
 
       expect(screen.getByText(/Por favor, ingrese el título de la cuenta/i)).toBeInTheDocument()
     })
 
-    it('Given a user deleting the account termination number, clicks on edit, then show an error message', async () => {
+    it('Given a user leaving the account termination number empty, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
 
-      const accountTerminationInput = screen.getByTestId('terminationNumber')
-      const button = screen.getByRole('button', { name: /Editar/i })
-      await user.type(accountTerminationInput, '{backspace}{backspace}{backspace}{backspace}')
+      const button = screen.getByRole('button', { name: /Crear/i })
       await user.click(button)
 
       expect(await screen.findByText(/Debe ingresar los 4 dígitos finales/i)).toBeInTheDocument()
@@ -132,19 +109,18 @@ describe('EditAccount', () => {
       const user = userEvent.setup();
 
       const accountTerminationInput = screen.getByTestId('terminationNumber')
-      const button = screen.getByRole('button', { name: /Editar/i })
-      await user.clear(accountTerminationInput)
+      const button = screen.getByRole('button', { name: /Crear/i })
       await user.type(accountTerminationInput, '123')
       await user.click(button)
 
       expect(await screen.findByText('La terminación no puede tener menos de 4 dígitos')).toBeInTheDocument()
     })
 
-    it('Given a user deleting the alias, clicks on edit, then show an error message', async () => {
+    it('Given a user leaving the alias empty, clicks on create, then show an error message', async () => {
       const user = userEvent.setup();
 
       const aliasInput = screen.getByTestId('alias')
-      const button = screen.getByRole('button', { name: /Editar/i })
+      const button = screen.getByRole('button', { name: /Crear/i })
       await user.clear(aliasInput)
       await user.click(button)
 
@@ -153,16 +129,14 @@ describe('EditAccount', () => {
   })
 
   describe('Form submission', () => {
-    it('Given a user editing correctly the account, the modal should be closed and the tick should appear in the submit button', async () => {
+    it('Given a user creating correctly the account, the modal should be closed and the tick should appear in the submit button', async () => {
       const user = userEvent.setup();
       const push = jest.fn()
       const closeModal = jest.fn()
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
 
-      mockedAxios.put.mockResolvedValue({
+      mockedAxios.post.mockResolvedValue({
         error: null,
-        message: 'Account updated',
+        message: 'Account created',
         success: true,
         version: "v1.2.0",
         data: {
@@ -178,29 +152,29 @@ describe('EditAccount', () => {
         },
       })
 
-      render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+      render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
       const titleInput = screen.getByLabelText('Titulo de la cuenta')
-      const button = screen.getByRole('button', { name: /Editar/i })
+      const aliasInput = screen.getByLabelText('Alias')
+      const terminationInput = screen.getByTestId('terminationNumber')
+      const button = screen.getByRole('button', { name: /Crear/i })
 
-      await user.clear(titleInput)
       await user.type(titleInput, 'Cuenta modificada')
+      await user.type(aliasInput, 'Ahorros Modificados')
+      await user.type(terminationInput, '1234')
       await user.click(button)
 
       await waitFor(() => {
-        expect(closeModal).toHaveBeenCalled()
-        expect(screen.getByTestId('success-button')).toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: /Crear/i })).not.toBeInTheDocument()
       }, { timeout: 2000})
     })
 
-    it('Given a user editing correctly the account, then something went wrong, should show error message', async () => {
+    it('Given a user creating correctly the account, then something went wrong, should show error message', async () => {
       const user = userEvent.setup();
       const push = jest.fn()
       const closeModal = jest.fn()
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
 
-      mockedAxios.put.mockRejectedValue({
+      mockedAxios.post.mockRejectedValue({
         code: 'ERR_BAD_REQUEST',
         config: null,
         message: 'Request failed with status code 401',
@@ -213,17 +187,20 @@ describe('EditAccount', () => {
         }
       })
 
-      render(<EditAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+      render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
       const titleInput = screen.getByLabelText('Titulo de la cuenta')
-      const button = screen.getByRole('button', { name: /Editar/i })
+      const aliasInput = screen.getByLabelText('Alias')
+      const terminationInput = screen.getByTestId('terminationNumber')
+      const button = screen.getByRole('button', { name: /Crear/i })
 
-      await user.clear(titleInput)
       await user.type(titleInput, 'Cuenta modificada')
+      await user.type(aliasInput, 'Ahorros Modificados')
+      await user.type(terminationInput, '1234')
       await user.click(button)
 
       await waitFor(() => {
-        expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: /Crear/i })).not.toBeInTheDocument()
       }, { timeout: 3000})
     })
   })
