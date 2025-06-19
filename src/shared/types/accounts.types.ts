@@ -107,11 +107,6 @@ export type GetAccountsResponse = {
   accounts: AccountBank[];
 }
 
-export type GetRecordsResponse = {
-  detailedError: DetailedError | null;
-  records: AccountRecord[];
-}
-
 //#region Validations
 
 export type AccountFormData = {

@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { CURRENT_MONTH_RECORDS_TAG } from "@/shared/constants/Global.constants";
 import { getDateInfo } from "@/shared/utils/getDateInfo";
+import { GetRecordsResponse } from "@/shared/types/records.types";
 
 interface RecordViewProps {
   accountId: string
@@ -13,14 +14,14 @@ export const RecordsView = ({ accountId }: RecordViewProps) => {
   const {
     month, year,
   } = getDateInfo();
-  const { isPending, data } = useQuery({
+  const { isPending, data: records } = useQuery({
     queryKey: [CURRENT_MONTH_RECORDS_TAG],
     queryFn: async () => {
-      const data = axios.post('api/records', {accountId, month, year })
-      return data
+      const res: GetRecordsResponse = await axios.post('api/records', {accountId, month, year })
+      return res?.data.data.records
     },
   })
-  console.log('data', data)
+  console.log('data', records)
   console.log('isPending', isPending)
 
   return (

@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { Budget } from "./budgets.types";
 import { Category } from "./categories.types";
 
@@ -57,4 +58,10 @@ export type GetAccountPayload = {
   accountId: string;
   month: string;
   year: string;
+}
+
+export type GetRecordsResponse = Omit<AxiosResponse, 'data'> & {
+  data: AxiosResponse<{
+    records: AnyRecord[];
+  }>;
 }
