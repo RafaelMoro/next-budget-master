@@ -33,11 +33,11 @@ export const AccountEntry = ({ record }: AccountEntryProps) => {
   }
 
   return (
-    <article className="grid grid-rows-2 grid-cols-3">
-      <div className="row-span-2 col-start-1 col-end-2 max-w-7">
+    <article className="grid grid-rows-2 grid-view-records gap-x-2">
+      <div className="row-span-2 col-start-1 col-end-2 flex items-center">
         <RiHome9Fill />
       </div>
-      <h5 className="col-start-2 col-end-3 row-start-1 row-end-2 text-xl font-bold">{record.shortName}</h5>
+      <h5 className="col-start-2 col-end-3 row-start-1 row-end-2 text-xl font-semibold">{record.shortName}</h5>
       <p className={priceClass}>{showPriceDict[record.typeOfRecord]}</p>
       <div className="max-w-min col-start-3 col-end-4 row-span-2 flex items-center">
         <Badge color={badgeColorDict[record.typeOfRecord]}>{showBadgeDict[record.typeOfRecord]}</Badge>
