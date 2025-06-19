@@ -87,24 +87,6 @@ export interface DeleteAccountData {
   version: string;
 }
 
-export interface EditAccountError extends Omit<AxiosError, 'response'> {
-  response: AxiosResponse<{
-    error: {
-      message: string | string[];
-      statusCode: number
-    }
-  }>;
-}
-
-export interface DeleteAccountError extends Omit<AxiosError, 'response'> {
-  response: AxiosResponse<{
-    error: {
-      message: string | string[];
-      statusCode: number
-    }
-  }>;
-}
-
 // Response from backend
 export type FetchAccountsResponse = {
   data: {
@@ -120,13 +102,7 @@ export type GetAccountsResponse = {
 
 //#region Validations
 
-export type EditAccountFormData = {
-  title: string;
-  terminationFourDigits: string;
-  alias: string
-}
-
-export type CreateAccountFormData = {
+export type AccountFormData = {
   title: string;
   terminationFourDigits: string;
   alias: string

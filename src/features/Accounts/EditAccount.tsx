@@ -8,7 +8,7 @@ import { Button, CheckIcon, Label, ModalBody, Spinner, TextInput } from "flowbit
 import { RiArrowLeftLine, RiCloseFill } from "@remixicon/react"
 import { Toaster, toast } from "sonner";
 
-import { AccountModalAction, AccountProvider, AccountsDisplay, AccountTypes, EditAccountData, EditAccountError, EditAccountFormData, EditAccountPayload, AccountFormSchema } from "@/shared/types/accounts.types"
+import { AccountModalAction, AccountProvider, AccountsDisplay, AccountTypes, EditAccountData, AccountFormData, EditAccountPayload, AccountFormSchema, OperationAccountError } from "@/shared/types/accounts.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField";
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
@@ -41,11 +41,11 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EditAccountFormData>({
+  } = useForm<AccountFormData>({
     resolver: yupResolver(AccountFormSchema)
   })
 
-  const { mutate, isError, isPending, isSuccess, isIdle } = useMutation<EditAccountData, EditAccountError, EditAccountPayload>({
+  const { mutate, isError, isPending, isSuccess, isIdle } = useMutation<EditAccountData, OperationAccountError, EditAccountPayload>({
     mutationFn: (data) => editBankAccountCb(data),
     onError: () => {
       toast.error(ACCOUNT_UPDATE_ERROR);
@@ -60,7 +60,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
     }
   })
 
-  const onSubmit: SubmitHandler<EditAccountFormData> = async (data) => {
+  const onSubmit: SubmitHandler<AccountFormData> = async (data) => {
     const amountNumber = cleanCurrencyString(currencyState)
     const payload: EditAccountPayload = {
       accountId: account.accountId,

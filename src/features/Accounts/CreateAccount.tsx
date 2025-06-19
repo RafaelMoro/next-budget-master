@@ -10,7 +10,7 @@ import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { AccountTypeDropdown } from "./AccountTypeDropdown"
 import { AccountProviderDropdown } from "./AccountProviderDropdown"
-import { AccountFormSchema, AccountProvider, AccountTypes, CreateAccountData, CreateAccountFormData, CreateAccountPayload, OperationAccountError } from "@/shared/types/accounts.types"
+import { AccountFormData, AccountFormSchema, AccountProvider, AccountTypes, CreateAccountData, CreateAccountPayload, OperationAccountError } from "@/shared/types/accounts.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils";
 import { useMutation } from "@tanstack/react-query";
@@ -36,7 +36,7 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateAccountFormData>({
+  } = useForm<AccountFormData>({
     resolver: yupResolver(AccountFormSchema)
   })
 
@@ -55,7 +55,7 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
     }
   })
 
-  const onSubmit: SubmitHandler<CreateAccountFormData> = async (data) => {
+  const onSubmit: SubmitHandler<AccountFormData> = async (data) => {
     const amountNumber = cleanCurrencyString(currencyState)
     const payload: CreateAccountPayload = {
       title: data.title,
