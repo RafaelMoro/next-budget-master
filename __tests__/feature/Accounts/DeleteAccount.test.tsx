@@ -127,5 +127,33 @@ describe('DeleteAccount', () => {
         expect(screen.getByTestId('success-delete-acc-button')).toBeInTheDocument()
       }, { timeout: 2000})
     })
+
+    it('Given a user hitting the delete button, something went wrong', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn()
+      const closeModal = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const updateAccAction = jest.fn((_acc: AccountModalAction) => {})
+      mockedAxios.delete.mockRejectedValue({
+        code: 'ERR_BAD_REQUEST',
+        config: null,
+        message: 'Request failed with status code 401',
+        name: 'AxiosError',
+        request: null,
+        response: {
+          data: {
+            message: 'Something went wrong'
+          }
+        }
+      })
+
+      render(<DeleteAccountWrapper closeModal={closeModal} updateAccAction={updateAccAction} push={push} />)
+      const button = screen.getByRole('button', { name: /Eliminar/i })
+      await user.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+      }, { timeout: 3000})
+    })
   })
 })
