@@ -1,13 +1,11 @@
 "use client";
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, HR } from "flowbite-react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import { CURRENT_MONTH_RECORDS_TAG } from "@/shared/constants/Global.constants";
 import { getDateInfo } from "@/shared/utils/getDateInfo";
 import { GetRecordsResponse } from "@/shared/types/records.types";
-import { RecordEntry } from "./RecordEntry";
-import { Fragment } from "react";
+import { MonthAccordionRecords } from "./CurrentMonthAccordionRecords";
 
 interface RecordViewProps {
   accountId: string
@@ -28,18 +26,6 @@ export const RecordsView = ({ accountId }: RecordViewProps) => {
   console.log('isPending', isPending)
 
   return (
-    <Accordion className="max-w-3xl">
-      <AccordionPanel>
-        <AccordionTitle>Este mes</AccordionTitle>
-          <AccordionContent>
-            { records.length > 0 && records.map((record, index) => (
-              <Fragment key={record._id}>
-                <RecordEntry record={record} />
-                {index !== (records.length - 1) && <HR />}
-              </Fragment>
-            ))}
-          </AccordionContent>
-      </AccordionPanel>
-    </Accordion>
+    <MonthAccordionRecords records={records} title="Este mes" />
   )
 }
