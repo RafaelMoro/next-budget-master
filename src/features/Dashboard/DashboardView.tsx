@@ -14,6 +14,7 @@ import { AccountScreen } from "../Accounts/AccountScreen";
 import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { OverviewScreen } from "./OverviewScreen";
 import { BankMovement } from "@/shared/types/records.types";
+import { NoAccountsFoundScreen } from "../Accounts/NoAccountsFoundScreen";
 
 interface DashboardViewProps {
   accounts: AccountBank[];
@@ -66,8 +67,11 @@ export const DashboardView = ({ accounts, detailedError, records }: DashboardVie
       <DashboardAside updateScreen={updateScreen} accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
-      { screen === 'overview' && (<OverviewScreen />) }
-      { screen === 'accounts' && (<AccountScreen accounts={accounts} />) }
+      { accounts.length === 0 && (
+        <NoAccountsFoundScreen screen={screen} />
+      )}
+      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen />) }
+      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
       <Toaster position="top-center" />
     </div>
   )
