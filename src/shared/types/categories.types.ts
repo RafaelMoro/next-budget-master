@@ -3,7 +3,7 @@ export type Category = {
   __v: number;
   categoryName: string;
   subCategories: string[];
-  icon: string;
+  icon: CategoriesIcons;
 }
 
 export type CategoriesIcons = 'foodAndDrink' |

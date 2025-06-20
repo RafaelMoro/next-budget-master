@@ -1,5 +1,5 @@
 import {
-  RiRestaurant2Line,
+  RiRestaurantLine,
   RiHome9Fill,
   RiServiceLine,
   RiBusLine,
@@ -17,7 +17,7 @@ import { PigMoneyIcon } from "../ui/icons/PigMoneyIcon";
 import { CoinsIcon } from "../ui/icons/CoinsIcon";
 
 export const categoryIcons: Record<CategoriesIcons, ElementType> = {
-  foodAndDrink: RiRestaurant2Line,
+  foodAndDrink: RiRestaurantLine,
   house: RiHome9Fill,
   utilities: RiServiceLine,
   subcriptions: BellDollarIcon,
