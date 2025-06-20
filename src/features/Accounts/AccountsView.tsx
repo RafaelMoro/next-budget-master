@@ -15,6 +15,11 @@ interface AccountsViewProps {
   accounts: AccountBank[];
 }
 
+/**
+ * Shows a list of the accounts fetched
+ * @param accounts - Accounts fetched 
+ * @returns List of accounts with modal to edit, delete the account clicked
+ */
 export const AccountsView = ({ accounts }: AccountsViewProps) => {
   const [accountsDisplay, setAccountsDisplay] = useState<AccountsDisplay[]>([])
   const [openAccModal, setOpenAccModal] = useState<boolean>(false)
