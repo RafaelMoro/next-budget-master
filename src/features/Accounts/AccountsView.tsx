@@ -1,25 +1,22 @@
 "use client"
-import { useState, useEffect } from "react";
-import { AccountBank, AccountModalAction, AccountsDisplay, AccountTypes } from "@/shared/types/accounts.types";
+import { useState } from "react";
+import { AccountModalAction, AccountsDisplay } from "@/shared/types/accounts.types";
 import { Account } from "./Accounts";
-import { getAccountProvider, getTerminationFormatted } from "@/shared/lib/accounts.lib";
-import { formatNumberToCurrency } from "@/shared/utils/formatNumberCurrency.utils";
 import { Modal } from "flowbite-react";
 import { AccountDetails } from "./AccountDetails";
 import { EditAccount } from "./EditAccount";
 import { DeleteAccount } from "./DeleteAccount";
-
-interface AccountsViewProps {
-  accounts: AccountBank[];
-}
+import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 
 /**
  * Shows a list of the accounts fetched
  * @param accounts - Accounts fetched 
  * @returns List of accounts with modal to edit, delete the account clicked
  */
-export const AccountsView = ({ accounts }: AccountsViewProps) => {
-  const [accountsDisplay, setAccountsDisplay] = useState<AccountsDisplay[]>([])
+export const AccountsView = () => {
+  const { accountsDisplay } = useDashboardStore(
+    (state) => state
+  )
   const [openAccModal, setOpenAccModal] = useState<boolean>(false)
   const [accDetails, setAccDetails] = useState<AccountsDisplay | null>(null)
   const [accAction, setAccAction] = useState<AccountModalAction | null>(null)
@@ -38,23 +35,6 @@ export const AccountsView = ({ accounts }: AccountsViewProps) => {
   const updateAccAction = (acc: AccountModalAction) => {
     setAccAction(acc)
   }
-
-  useEffect(() => {
-    if (accounts.length > 0) {
-      const formattedAccounts: AccountsDisplay[] = accounts.map((account) => ({
-        accountId: account._id,
-        name: account.title,
-        amount: formatNumberToCurrency(account.amount),
-        // We're sure the account type is not other string than type AccountTypes
-        type: (account.accountType as AccountTypes),
-        alias: account.alias,
-        terminationFourDigits: account.terminationFourDigits,
-        terminationFourDigitsTransformed: getTerminationFormatted(account.terminationFourDigits),
-        accountProvider: getAccountProvider(account.accountProvider) // Default to mastercard if not provided
-      }))
-      setAccountsDisplay(formattedAccounts)
-    }
-  }, [accounts])
 
   if (accountsDisplay.length === 0) {
     return null

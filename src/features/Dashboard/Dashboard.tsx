@@ -3,7 +3,6 @@ import { toast, Toaster } from "sonner";
 import { useEffect, useState } from "react";
 
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
-import { AccountBank } from "@/shared/types/accounts.types"
 import { HeaderMenuMobile } from "@/shared/ui/atoms/HeaderMenuMobile"
 import { DashboardAside } from "@/shared/ui/organisms/DashboardAside"
 import { HeaderDashboard } from "@/shared/ui/organisms/HeaderDashboard"
@@ -12,13 +11,10 @@ import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from 
 import { AccountScreen } from "./Account/AccountScreen";
 import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { OverviewScreen } from "./Overview/OverviewScreen";
-import { BankMovement } from "@/shared/types/records.types";
 import { NoAccountsFoundScreen } from "../Accounts/NoAccountsFoundScreen";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 
 interface DashboardViewProps {
-  accounts: AccountBank[];
-  records: BankMovement[];
   detailedError: DetailedError | null
   message: string | null;
 }
@@ -28,13 +24,11 @@ interface DashboardViewProps {
  * For mobile, the component renders the header and inside the drawer with the show accounts selector
  * For Desktop, the component shows the aside section along with the links and show accounts selector
  */
-export const Dashboard = ({ accounts, detailedError, records, message }: DashboardViewProps) => {
-  console.log('records', records)
+export const Dashboard = ({ detailedError, message }: DashboardViewProps) => {
   const { isMobile } = useMediaQuery()
-  const selectedAccount = useDashboardStore(
-  (state) => state.selectedAccount
+  const { accounts } = useDashboardStore(
+  (state) => state
   )
-  console.log('selectedAccount', selectedAccount)
   const [screen, setScreen] = useState<DashboardScreens>('overview')
 
   const updateScreen = (newScreen: DashboardScreens) => setScreen(newScreen)
@@ -67,7 +61,7 @@ export const Dashboard = ({ accounts, detailedError, records, message }: Dashboa
         <NoAccountsFoundScreen screen={screen} />
       )}
       { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen message={message} />) }
-      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
+      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
       <Toaster position="top-center" />
     </div>
   )
