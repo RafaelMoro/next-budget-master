@@ -7,12 +7,10 @@ import { AccountBank } from "@/shared/types/accounts.types"
 import { HeaderMenuMobile } from "@/shared/ui/atoms/HeaderMenuMobile"
 import { DashboardAside } from "@/shared/ui/organisms/DashboardAside"
 import { HeaderDashboard } from "@/shared/ui/organisms/HeaderDashboard"
-import { AccountsView } from "../Accounts/AccountsView"
 import { DetailedError } from "@/shared/types/global.types"
 import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from "@/shared/constants/Global.constants"
-import { CreateAccButton } from "../Accounts/CreateAccButton";
 import { getAccountCookie } from "@/shared/lib/preferences.lib";
-import { RecordsView } from "../Records/RecordsView";
+import { AccoountScreen } from "../Accounts/AccountScreen";
 
 interface DashboardViewProps {
   accounts: AccountBank[];
@@ -60,21 +58,7 @@ export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) =
       <DashboardAside accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
-      <main className="w-full pl-4 pt-4 min-w-xl mt-3 flex flex-col gap-4">
-        <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">Cuentas bancarias</h1>
-        { accounts.length > 0  && (
-          <>
-            <div className="w-full flex justify-end">
-              <CreateAccButton />
-            </div>
-            <p className="text-center text-xl">Haz click en cualquiera de tus cuentas para ver más en detalle la informacion</p>
-          </>
-          )}
-        <AccountsView accounts={accounts} />
-        { selectedAccountId && (
-          <RecordsView accountId={selectedAccountId} />
-        ) }
-      </main>
+      <AccoountScreen accounts={accounts} />
       <Toaster position="top-center" />
     </div>
   )
