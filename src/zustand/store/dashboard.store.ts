@@ -15,6 +15,7 @@ export type DashboardState = {
 export type DashboardActions = {
   transformAccountsDisplay: (accounts: AccountBank[]) => void
   updateSelectedAccountDisplay: (account: AccountsDisplay) => void
+  updateRecords: (records: BankMovement[]) => void
 }
 
 export type DashboardStore = DashboardState & DashboardActions
@@ -59,11 +60,19 @@ export const createDashboardStore = (
         accountsDisplay: accountsTransformed,
       }
     }),
+
     updateSelectedAccountDisplay: (account) => set((state) => {
       return {
         ...state,
         selectedAccountDisplay: account,
-      }})
+      }}),
+
+      updateRecords: (records) => set((state) => {
+        return {
+          ...state,
+          records,
+        }
+      })
   }))
 }
 

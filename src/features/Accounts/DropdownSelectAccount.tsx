@@ -6,6 +6,7 @@ import { RiExpandUpDownLine } from "@remixicon/react";
 import { AccountsDisplay } from "@/shared/types/accounts.types";
 import { saveAccountApi } from "@/shared/utils/user-info.utils";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
+import { fetchRecordsCurrentMonth } from "@/shared/lib/dashboard.lib";
 
 interface DropdownSelectAccountProps {
   cssClass?: string;
@@ -19,7 +20,7 @@ interface DropdownSelectAccountProps {
  * it does not trigger the onclick event.
  */
 export const DropdownSelectAccount = ({ cssClass }: DropdownSelectAccountProps) => {
-  const { accountsDisplay, selectedAccountDisplay, updateSelectedAccountDisplay } = useDashboardStore(
+  const { accountsDisplay, selectedAccountDisplay, updateSelectedAccountDisplay, updateRecords } = useDashboardStore(
     (state) => state
   )
   const [accountsOptions, setAccountsOptions] = useState<AccountsDisplay[]>([])
@@ -42,6 +43,10 @@ export const DropdownSelectAccount = ({ cssClass }: DropdownSelectAccountProps) 
     await saveAccountApi(selected.accountId)
     setAccountsOptions(newOptions)
     updateSelectedAccountDisplay(selected)
+
+    // Fetch new records of the selected account
+    const { records } = await fetchRecordsCurrentMonth({ accountId: selected.accountId });
+    updateRecords(records);
   }
 
   return (
