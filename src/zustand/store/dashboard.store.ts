@@ -23,11 +23,12 @@ export const initDashboardStore = ({
 }: {
   accounts: AccountBank[]
   records: BankMovement[]
+  selectedAccountId: string
 }): DashboardState => {
   return {
     accounts,
     records,
-    selectedAccount: null,
+    selectedAccount: accounts.find(account => account._id === accounts[0]?._id) || null,
     accountsDisplay: transformAccountsDisplayUtil({ accounts })
   }
 }

@@ -13,7 +13,7 @@ export default async function Page () {
   const { detailedError: errorFetchRecords, message, records } = await fetchRecordsCurrentMonth({ accountId: selectedAccount });
 
   return (
-    <DashboardStoreProvider records={records} accounts={accounts}>
+    <DashboardStoreProvider records={records} accounts={accounts} selectedAccountId={selectedAccount}>
       <LoginRequiredModal show={!accessToken} />
       <Dashboard accounts={accounts} records={records} detailedError={detailedError} message={message} />
     </DashboardStoreProvider>

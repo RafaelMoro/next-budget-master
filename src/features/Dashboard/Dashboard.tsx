@@ -9,7 +9,6 @@ import { DashboardAside } from "@/shared/ui/organisms/DashboardAside"
 import { HeaderDashboard } from "@/shared/ui/organisms/HeaderDashboard"
 import { DetailedError } from "@/shared/types/global.types"
 import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from "@/shared/constants/Global.constants"
-import { getAccountCookie } from "@/shared/lib/preferences.lib";
 import { AccountScreen } from "./Account/AccountScreen";
 import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { OverviewScreen } from "./Overview/OverviewScreen";
@@ -33,21 +32,13 @@ export const Dashboard = ({ accounts, detailedError, records, message }: Dashboa
   console.log('records', records)
   const { isMobile } = useMediaQuery()
   const [selectedAccountId] = useState<string | null>(null);
-  const updateSelectedAccount = useDashboardStore(
-  (state) => state.updateSelectedAccount
+  const selectedAccount = useDashboardStore(
+  (state) => state.selectedAccount
   )
+  console.log('selectedAccount', selectedAccount)
   const [screen, setScreen] = useState<DashboardScreens>('overview')
 
   const updateScreen = (newScreen: DashboardScreens) => setScreen(newScreen)
-
-  useEffect(() => {
-    getAccountCookie().then ((acc) => {
-      if (acc) {
-        updateSelectedAccount(acc);
-      }
-    })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     if (detailedError?.cause === ERROR_CONNECTION) {

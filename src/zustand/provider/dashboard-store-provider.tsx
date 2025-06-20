@@ -10,12 +10,13 @@ interface DashboardStoreProviderProps {
   children: ReactNode
   accounts: AccountBank[];
   records: BankMovement[];
+  selectedAccountId: string
 }
 
-export const DashboardStoreProvider = ({ children, accounts, records }: DashboardStoreProviderProps) => {
+export const DashboardStoreProvider = ({ children, accounts, records, selectedAccountId }: DashboardStoreProviderProps) => {
   const storeRef = useRef<DashboardStoreApi | null>(null)
   if (storeRef.current === null) {
-    storeRef.current = createDashboardStore(initDashboardStore({ accounts, records }))
+    storeRef.current = createDashboardStore(initDashboardStore({ accounts, records, selectedAccountId }))
   }
 
   return (
