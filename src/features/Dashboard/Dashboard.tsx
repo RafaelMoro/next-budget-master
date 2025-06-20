@@ -15,7 +15,7 @@ import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { OverviewScreen } from "./Overview/OverviewScreen";
 import { BankMovement } from "@/shared/types/records.types";
 import { NoAccountsFoundScreen } from "../Accounts/NoAccountsFoundScreen";
-import { DashboardStoreProvider, useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
+import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 
 interface DashboardViewProps {
   accounts: AccountBank[];
@@ -69,18 +69,16 @@ export const Dashboard = ({ accounts, detailedError, records, message }: Dashboa
   }
 
   return (
-    <DashboardStoreProvider records={records} accounts={accounts}>
-      <div className="w-full min-h-screen max-w-screen-2xl flex mx-auto my-0">
-        <DashboardAside updateScreen={updateScreen} accounts={accounts}>
-          <HeaderDashboard isMobile={isMobile} />
-        </DashboardAside>
-        { accounts.length === 0 && (
-          <NoAccountsFoundScreen screen={screen} />
-        )}
-        { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen accounts={accounts} selectedAccountId={selectedAccountId} records={records} message={message} />) }
-        { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
-        <Toaster position="top-center" />
-      </div>
-    </DashboardStoreProvider>
+    <div className="w-full min-h-screen max-w-screen-2xl flex mx-auto my-0">
+      <DashboardAside updateScreen={updateScreen} accounts={accounts}>
+        <HeaderDashboard isMobile={isMobile} />
+      </DashboardAside>
+      { accounts.length === 0 && (
+        <NoAccountsFoundScreen screen={screen} />
+      )}
+      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen accounts={accounts} selectedAccountId={selectedAccountId} records={records} message={message} />) }
+      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
+      <Toaster position="top-center" />
+    </div>
   )
 }
