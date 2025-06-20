@@ -56,7 +56,7 @@ export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) =
   }
 
   return (
-    <div className="w-full min-h-screen max-w-screen-2xl flex">
+    <div className="w-full min-h-screen max-w-screen-2xl flex mx-auto my-0">
       <DashboardAside accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
