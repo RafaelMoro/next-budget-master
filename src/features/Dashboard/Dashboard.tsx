@@ -28,7 +28,7 @@ interface DashboardViewProps {
  * For mobile, the component renders the header and inside the drawer with the show accounts selector
  * For Desktop, the component shows the aside section along with the links and show accounts selector
  */
-export const DashboardView = ({ accounts, detailedError, records, message }: DashboardViewProps) => {
+export const Dashboard = ({ accounts, detailedError, records, message }: DashboardViewProps) => {
   console.log('records', records)
   const { isMobile } = useMediaQuery()
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);

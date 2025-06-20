@@ -1,10 +1,10 @@
 import { getAccessToken } from '@/shared/lib/auth.lib';
 import { fetchAccounts, fetchRecordsCurrentMonth } from '@/shared/lib/dashboard.lib';
 import { LoginRequiredModal } from '@/shared/ui/organisms/LoginRequiredModal';
-import { DashboardView } from '@/features/Dashboard/DashboardView';
+import { Dashboard } from '@/features/Dashboard/Dashboard';
 import { getAccountCookie } from '@/shared/lib/preferences.lib';
 
-export default async function DashboardPage () {
+export default async function Page () {
   const accessToken = await getAccessToken()
   const { accounts, detailedError } = await fetchAccounts()
   const selectedAccountCookie = await getAccountCookie()
@@ -14,7 +14,7 @@ export default async function DashboardPage () {
   return (
     <>
       <LoginRequiredModal show={!accessToken} />
-      <DashboardView accounts={accounts} records={records} detailedError={detailedError} message={message} />
+      <Dashboard accounts={accounts} records={records} detailedError={detailedError} message={message} />
     </>
   )
 }
