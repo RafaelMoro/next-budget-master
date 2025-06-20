@@ -5,3 +5,17 @@ export type Category = {
   subCategories: string[];
   icon: string;
 }
+
+export type CategoriesIcons = 'foodAndDrink' |
+  'house' |
+  'utilities' |
+  'subcriptions' |
+  'transportation' |
+  'debtAndLoans' |
+  'healthCare' |
+  'kids' |
+  'shopping' |
+  'entertainment' |
+  'savings' |
+  'income' |
+  'newCategory'
