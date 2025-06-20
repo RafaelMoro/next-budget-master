@@ -1,13 +1,15 @@
-import { BankMovement } from "@/shared/types/records.types";
 import { IncomeExpensesChart } from "../../../Charts/IncomeExpensesChart"
 import { NO_RECORDS_FOUND } from "@/shared/constants/records.constants";
+import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 
 interface StatisticsViewProps {
-  records: BankMovement[];
   message: string | null;
 }
 
-export const StatisticsSubscreen = ({ records, message }: StatisticsViewProps) => {
+export const StatisticsSubscreen = ({ message }: StatisticsViewProps) => {
+  const records = useDashboardStore(
+    (state) => state.records
+  )
   if (message === NO_RECORDS_FOUND) {
     return (
       <div>

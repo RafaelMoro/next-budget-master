@@ -2,18 +2,13 @@ import { useState } from "react"
 import { OverviewButtonGroup } from "../../Overview/OverviewButtonGroup"
 import { OverviewScreens } from "@/shared/types/dashboard.types"
 import { StatisticsSubscreen } from "./subscreens/StatisticsSubscreen"
-import { BankMovement } from "@/shared/types/records.types"
 import { AccountOverviewSubscreen } from "./subscreens/AccountOverviewSubscreen"
-import { AccountBank } from "@/shared/types/accounts.types"
 
 interface OverViewScreenProps {
-  records: BankMovement[];
-  accounts: AccountBank[];
-  selectedAccountId: string | null
   message: string | null;
 }
 
-export const OverviewScreen = ({ records, message, accounts, selectedAccountId }: OverViewScreenProps) => {
+export const OverviewScreen = ({ message }: OverViewScreenProps) => {
   const [subscreen, setSubscreen] = useState<OverviewScreens>('statistics')
   const updateSubscreen = (newScreen: OverviewScreens) => setSubscreen(newScreen)
 
@@ -25,8 +20,8 @@ export const OverviewScreen = ({ records, message, accounts, selectedAccountId }
         updateAccountScreen={() => updateSubscreen('accountInfo')}
         screen={subscreen}
       />
-      { subscreen === 'statistics' && (<StatisticsSubscreen records={records} message={message} />)}
-      { subscreen === 'accountInfo' && (<AccountOverviewSubscreen accounts={accounts} selectedAccountId={selectedAccountId} records={records} />)}
+      { subscreen === 'statistics' && (<StatisticsSubscreen message={message} />)}
+      { subscreen === 'accountInfo' && (<AccountOverviewSubscreen />)}
     </main>
   )
 }

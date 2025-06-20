@@ -31,7 +31,6 @@ interface DashboardViewProps {
 export const Dashboard = ({ accounts, detailedError, records, message }: DashboardViewProps) => {
   console.log('records', records)
   const { isMobile } = useMediaQuery()
-  const [selectedAccountId] = useState<string | null>(null);
   const selectedAccount = useDashboardStore(
   (state) => state.selectedAccount
   )
@@ -67,7 +66,7 @@ export const Dashboard = ({ accounts, detailedError, records, message }: Dashboa
       { accounts.length === 0 && (
         <NoAccountsFoundScreen screen={screen} />
       )}
-      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen accounts={accounts} selectedAccountId={selectedAccountId} records={records} message={message} />) }
+      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen message={message} />) }
       { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
       <Toaster position="top-center" />
     </div>

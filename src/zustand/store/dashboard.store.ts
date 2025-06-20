@@ -8,6 +8,7 @@ export type DashboardState = {
   accounts: AccountBank[];
   accountsDisplay: AccountsDisplay[];
   selectedAccount: AccountBank | null;
+  selectedAccountDisplay: AccountsDisplay | null;
   records: BankMovement[]
 }
 
@@ -19,17 +20,22 @@ export type DashboardActions = {
 export type DashboardStore = DashboardState & DashboardActions
 
 export const initDashboardStore = ({
-  accounts, records
+  accounts, records, selectedAccountId
 }: {
   accounts: AccountBank[]
   records: BankMovement[]
   selectedAccountId: string
 }): DashboardState => {
+  const newAccountsDisplay = transformAccountsDisplayUtil({ accounts })
+  const newSelectedAccount = accounts.find(account => account._id === selectedAccountId) || null
+  const newSelectedAccountDisplay = newAccountsDisplay.find(account => account.accountId ===selectedAccountId) || null;
+
   return {
     accounts,
     records,
-    selectedAccount: accounts.find(account => account._id === accounts[0]?._id) || null,
-    accountsDisplay: transformAccountsDisplayUtil({ accounts })
+    selectedAccount: newSelectedAccount,
+    selectedAccountDisplay: newSelectedAccountDisplay,
+    accountsDisplay: newAccountsDisplay
   }
 }
 
@@ -37,6 +43,7 @@ export const defaultInitState: DashboardState = {
   accounts: [],
   accountsDisplay: [],
   selectedAccount: null,
+  selectedAccountDisplay: null,
   records: []
 }
 
