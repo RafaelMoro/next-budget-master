@@ -1,5 +1,5 @@
 import { BankMovement } from "@/shared/types/records.types";
-import { IncomeExpensesChart } from "../Charts/IncomeExpensesChart"
+import { IncomeExpensesChart } from "../../../Charts/IncomeExpensesChart"
 import { NO_RECORDS_FOUND } from "@/shared/constants/records.constants";
 
 interface StatisticsViewProps {

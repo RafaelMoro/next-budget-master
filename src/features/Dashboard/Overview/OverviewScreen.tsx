@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { OverviewButtonGroup } from "../../Overview/OverviewButtonGroup"
 import { OverviewScreens } from "@/shared/types/dashboard.types"
-import { StatisticsView } from "../StatisticsView"
+import { StatisticsView } from "./subscreens/StatisticsView"
 import { BankMovement } from "@/shared/types/records.types"
 
 interface OverViewScreenProps {
