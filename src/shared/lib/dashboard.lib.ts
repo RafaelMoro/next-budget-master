@@ -78,7 +78,6 @@ export const fetchRecordsCurrentMonth = async ({ accountId }: { accountId: strin
         'Authorization': `Bearer ${accessToken}`
       }
     })
-    console.log('res', res?.data)
     if (res?.data?.message === 'No incomes or expenses found.') {
       return {
         detailedError: null,
