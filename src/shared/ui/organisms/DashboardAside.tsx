@@ -1,5 +1,5 @@
 import { HomeIcon } from "../icons/HomeIcon"
-import { CreditCardIcon } from "../icons/CreditCardIcon"
+import { CreditCardArrowIcon } from "../icons/CreditCardArrowIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ReactNode } from "react"
 import { DashboardAsideLink } from "../atoms/DashboardAsideLink"
@@ -29,7 +29,7 @@ export const DashboardAside = ({ children, accounts, updateScreen }: DashboardAs
             Panorama
         </DashboardAsideLink>
         <DashboardAsideLink onClickCb={() => updateScreen('accounts')}>
-            <CreditCardIcon />
+            <CreditCardArrowIcon />
             Cuentas
         </DashboardAsideLink>
         <DashboardAsideLink onClickCb={() => updateScreen('transactions')}>

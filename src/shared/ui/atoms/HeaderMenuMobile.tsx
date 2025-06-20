@@ -7,7 +7,7 @@ import { HomeIcon } from "../icons/HomeIcon"
 import { AccountBank } from "@/shared/types/accounts.types"
 import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
 import { MenuMobileLink } from "./MenuMobileLink"
-import { CreditCardIcon } from "../icons/CreditCardIcon"
+import { CreditCardArrowIcon } from "../icons/CreditCardArrowIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ToggleDarkMode } from "./ToggleDarkMode"
 import { LinkButton } from "./LinkButton"
@@ -50,7 +50,7 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
                       Panorama
                     </MenuMobileLink>
                     <MenuMobileLink href="#" >
-                      <CreditCardIcon />
+                      <CreditCardArrowIcon />
                       Cuentas
                     </MenuMobileLink>
                     <MenuMobileLink href="#" >
