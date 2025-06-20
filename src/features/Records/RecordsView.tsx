@@ -28,7 +28,7 @@ export const RecordsView = ({ accountId }: RecordViewProps) => {
   console.log('isPending', isPending)
 
   return (
-    <Accordion>
+    <Accordion className="max-w-3xl">
       <AccordionPanel>
         <AccordionTitle>Este mes</AccordionTitle>
           <AccordionContent>
