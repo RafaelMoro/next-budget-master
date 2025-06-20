@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Budget } from "./budgets.types";
 import { Category } from "./categories.types";
+import { DetailedError } from "./global.types";
 
 export type TypeOfRecord = 'expense' | 'income' | 'transfer';
 
@@ -64,7 +65,15 @@ export type GetAccountPayload = {
 }
 
 export type GetRecordsResponse = Omit<AxiosResponse, 'data'> & {
-  data: AxiosResponse<{
-    records: BankMovement[];
-  }>;
+  data: {
+    data: {
+      records: BankMovement[];
+    }
+    message?: string | null;
+  };
+}
+
+export type GetCurrentMonthRecordsResponse = {
+  detailedError: DetailedError | null;
+  records: BankMovement[];
 }

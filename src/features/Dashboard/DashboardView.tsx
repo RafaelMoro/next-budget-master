@@ -13,9 +13,11 @@ import { getAccountCookie } from "@/shared/lib/preferences.lib";
 import { AccountScreen } from "../Accounts/AccountScreen";
 import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { OverviewScreen } from "./OverviewScreen";
+import { BankMovement } from "@/shared/types/records.types";
 
 interface DashboardViewProps {
   accounts: AccountBank[];
+  records: BankMovement[]
   detailedError: DetailedError | null
 }
 
@@ -24,7 +26,8 @@ interface DashboardViewProps {
  * For mobile, the component renders the header and inside the drawer with the show accounts selector
  * For Desktop, the component shows the aside section along with the links and show accounts selector
  */
-export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) => {
+export const DashboardView = ({ accounts, detailedError, records }: DashboardViewProps) => {
+  console.log('records', records)
   const { isMobile } = useMediaQuery()
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
   const [screen, setScreen] = useState<DashboardScreens>('overview')

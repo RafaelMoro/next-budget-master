@@ -1,7 +1,7 @@
 import { object, string } from "yup";
 import { DetailedError } from "./global.types";
 import { AxiosError, AxiosResponse } from "axios";
-import { AccountRecord } from "./records.types";
+import { BankMovement } from "./records.types";
 
 export type AccountBank = {
   _id: string;
@@ -97,7 +97,7 @@ export type FetchAccountsResponse = {
 
 export type FetchRecordsResponse = {
   data: {
-    records: AccountRecord[];
+    records: BankMovement[];
   }
 }
 
