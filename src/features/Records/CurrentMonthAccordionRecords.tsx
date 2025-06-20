@@ -1,5 +1,5 @@
 import { BankMovement } from "@/shared/types/records.types"
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, HR } from "flowbite-react"
+import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Button, HR } from "flowbite-react"
 import { Fragment } from "react";
 import { RecordEntry } from "./RecordEntry";
 
@@ -25,6 +25,12 @@ export const MonthAccordionRecords = ({ records, title }: CurrentMonthAccordionR
                 {index !== (records.length - 1) && <HR />}
               </Fragment>
             ))}
+            { records.length === 0 && (
+              <div className="flex flex-col gap-5 justify-center">
+                <p>Aún no has registrado movimientos este mes</p>
+                <Button>Registrar movimiento</Button>
+              </div>
+            )}
           </AccordionContent>
       </AccordionPanel>
     </Accordion>
