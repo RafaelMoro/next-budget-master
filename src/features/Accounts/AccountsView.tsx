@@ -7,6 +7,7 @@ import { AccountDetails } from "./AccountDetails";
 import { EditAccount } from "./EditAccount";
 import { DeleteAccount } from "./DeleteAccount";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
+import { useAccountModal } from "@/hooks/useAccountModal";
 
 /**
  * Shows a list of the accounts fetched
@@ -17,24 +18,14 @@ export const AccountsView = () => {
   const { accountsDisplay } = useDashboardStore(
     (state) => state
   )
-  const [openAccModal, setOpenAccModal] = useState<boolean>(false)
-  const [accDetails, setAccDetails] = useState<AccountsDisplay | null>(null)
-  const [accAction, setAccAction] = useState<AccountModalAction | null>(null)
-
-  const toggleAccModal = () => setOpenAccModal((prev) => !prev)
-  const openModal = (acc: AccountsDisplay) => {
-    toggleAccModal()
-    setAccAction('view')
-    setAccDetails(acc)
-  }
-  const closeModal = () => {
-    toggleAccModal()
-    setAccAction(null)
-    setAccDetails(null)
-  }
-  const updateAccAction = (acc: AccountModalAction) => {
-    setAccAction(acc)
-  }
+  const {
+    openAccModal,
+    accDetails,
+    accAction,
+    openModal,
+    closeModal,
+    updateAccAction
+  } = useAccountModal()
 
   if (accountsDisplay.length === 0) {
     return null
