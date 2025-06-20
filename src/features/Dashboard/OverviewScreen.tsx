@@ -12,6 +12,7 @@ export const OverviewScreen = () => {
       <OverviewButtonGroup
         updateStatisticsScreen={() => updateScreen('statistics')}
         updateAccountScreen={() => updateScreen('accountInfo')}
+        screen={screen}
       />
       { screen === 'statistics' && (<p>Estafisticas</p>)}
       { screen === 'accountInfo' && (<p>Informacion de la cuenta</p>)}
