@@ -10,7 +10,7 @@ import { HeaderDashboard } from "@/shared/ui/organisms/HeaderDashboard"
 import { DetailedError } from "@/shared/types/global.types"
 import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from "@/shared/constants/Global.constants"
 import { getAccountCookie } from "@/shared/lib/preferences.lib";
-import { AccoountScreen } from "../Accounts/AccountScreen";
+import { AccountScreen } from "../Accounts/AccountScreen";
 import { DashboardScreens } from "@/shared/types/dashboard.types";
 
 interface DashboardViewProps {
@@ -62,7 +62,7 @@ export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) =
       <DashboardAside updateScreen={updateScreen} accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
-      { screen === 'accounts' && (<AccoountScreen accounts={accounts} />) }
+      { screen === 'accounts' && (<AccountScreen accounts={accounts} />) }
       <Toaster position="top-center" />
     </div>
   )
