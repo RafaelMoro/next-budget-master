@@ -15,10 +15,11 @@ import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { OverviewScreen } from "./Overview/OverviewScreen";
 import { BankMovement } from "@/shared/types/records.types";
 import { NoAccountsFoundScreen } from "../Accounts/NoAccountsFoundScreen";
+import { DashboardStoreProvider, useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 
 interface DashboardViewProps {
   accounts: AccountBank[];
-  records: BankMovement[]
+  records: BankMovement[];
   detailedError: DetailedError | null
   message: string | null;
 }
@@ -31,7 +32,10 @@ interface DashboardViewProps {
 export const Dashboard = ({ accounts, detailedError, records, message }: DashboardViewProps) => {
   console.log('records', records)
   const { isMobile } = useMediaQuery()
-  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
+  const [selectedAccountId] = useState<string | null>(null);
+  const updateSelectedAccount = useDashboardStore(
+  (state) => state.updateSelectedAccount
+  )
   const [screen, setScreen] = useState<DashboardScreens>('overview')
 
   const updateScreen = (newScreen: DashboardScreens) => setScreen(newScreen)
@@ -39,9 +43,10 @@ export const Dashboard = ({ accounts, detailedError, records, message }: Dashboa
   useEffect(() => {
     getAccountCookie().then ((acc) => {
       if (acc) {
-        setSelectedAccountId(acc);
+        updateSelectedAccount(acc);
       }
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -64,16 +69,18 @@ export const Dashboard = ({ accounts, detailedError, records, message }: Dashboa
   }
 
   return (
-    <div className="w-full min-h-screen max-w-screen-2xl flex mx-auto my-0">
-      <DashboardAside updateScreen={updateScreen} accounts={accounts}>
-        <HeaderDashboard isMobile={isMobile} />
-      </DashboardAside>
-      { accounts.length === 0 && (
-        <NoAccountsFoundScreen screen={screen} />
-      )}
-      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen accounts={accounts} selectedAccountId={selectedAccountId} records={records} message={message} />) }
-      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
-      <Toaster position="top-center" />
-    </div>
+    <DashboardStoreProvider records={records} accounts={accounts}>
+      <div className="w-full min-h-screen max-w-screen-2xl flex mx-auto my-0">
+        <DashboardAside updateScreen={updateScreen} accounts={accounts}>
+          <HeaderDashboard isMobile={isMobile} />
+        </DashboardAside>
+        { accounts.length === 0 && (
+          <NoAccountsFoundScreen screen={screen} />
+        )}
+        { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen accounts={accounts} selectedAccountId={selectedAccountId} records={records} message={message} />) }
+        { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
+        <Toaster position="top-center" />
+      </div>
+    </DashboardStoreProvider>
   )
 }

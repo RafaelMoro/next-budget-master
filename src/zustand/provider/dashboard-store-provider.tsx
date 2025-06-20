@@ -1,17 +1,21 @@
 "use client"
 
 import { ReactNode, useRef, useContext  } from "react"
-import { createDashboardStore, DashboardStoreApi, DashboardStoreContext, type DashboardStore } from "../store/dashboard.store"
+import { createDashboardStore, DashboardStoreApi, DashboardStoreContext, initDashboardStore, type DashboardStore } from "../store/dashboard.store"
 import { useStore } from "zustand"
+import { AccountBank } from "@/shared/types/accounts.types"
+import { BankMovement } from "@/shared/types/records.types"
 
 interface DashboardStoreProviderProps {
   children: ReactNode
+  accounts: AccountBank[];
+  records: BankMovement[];
 }
 
-export const DashboardStoreProvider = ({ children }: DashboardStoreProviderProps) => {
+export const DashboardStoreProvider = ({ children, accounts, records }: DashboardStoreProviderProps) => {
   const storeRef = useRef<DashboardStoreApi | null>(null)
   if (storeRef.current === null) {
-    storeRef.current = createDashboardStore()
+    storeRef.current = createDashboardStore(initDashboardStore({ accounts, records }))
   }
 
   return (

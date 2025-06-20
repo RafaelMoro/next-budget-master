@@ -3,6 +3,7 @@ import { fetchAccounts, fetchRecordsCurrentMonth } from '@/shared/lib/dashboard.
 import { LoginRequiredModal } from '@/shared/ui/organisms/LoginRequiredModal';
 import { Dashboard } from '@/features/Dashboard/Dashboard';
 import { getAccountCookie } from '@/shared/lib/preferences.lib';
+import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
 
 export default async function Page () {
   const accessToken = await getAccessToken()
@@ -12,10 +13,10 @@ export default async function Page () {
   const { detailedError: errorFetchRecords, message, records } = await fetchRecordsCurrentMonth({ accountId: selectedAccount });
 
   return (
-    <>
+    <DashboardStoreProvider records={records} accounts={accounts}>
       <LoginRequiredModal show={!accessToken} />
       <Dashboard accounts={accounts} records={records} detailedError={detailedError} message={message} />
-    </>
+    </DashboardStoreProvider>
   )
 }
 
