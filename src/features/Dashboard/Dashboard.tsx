@@ -10,7 +10,7 @@ import { HeaderDashboard } from "@/shared/ui/organisms/HeaderDashboard"
 import { DetailedError } from "@/shared/types/global.types"
 import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from "@/shared/constants/Global.constants"
 import { getAccountCookie } from "@/shared/lib/preferences.lib";
-import { AccountScreen } from "../Accounts/AccountScreen";
+import { AccountScreen } from "./Account/AccountScreen";
 import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { OverviewScreen } from "./Overview/OverviewScreen";
 import { BankMovement } from "@/shared/types/records.types";

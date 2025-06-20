@@ -1,6 +1,6 @@
 import { AccountBank } from "@/shared/types/accounts.types";
-import { CreateAccButton } from "./CreateAccButton";
-import { AccountsView } from "./AccountsView";
+import { CreateAccButton } from "../../Accounts/CreateAccButton";
+import { AccountsView } from "../../Accounts/AccountsView";
 
 interface AccountScreenProps {
   accounts: AccountBank[];
