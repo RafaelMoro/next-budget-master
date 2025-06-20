@@ -7,7 +7,7 @@ interface StatisticsViewProps {
   message: string | null;
 }
 
-export const StatisticsView = ({ records, message }: StatisticsViewProps) => {
+export const StatisticsSubscreen = ({ records, message }: StatisticsViewProps) => {
   if (message === NO_RECORDS_FOUND) {
     return (
       <div>

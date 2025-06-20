@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { OverviewButtonGroup } from "../../Overview/OverviewButtonGroup"
 import { OverviewScreens } from "@/shared/types/dashboard.types"
-import { StatisticsView } from "./subscreens/StatisticsView"
+import { StatisticsSubscreen } from "./subscreens/StatisticsSubscreen"
 import { BankMovement } from "@/shared/types/records.types"
 
 interface OverViewScreenProps {
@@ -21,7 +21,7 @@ export const OverviewScreen = ({ records, message }: OverViewScreenProps) => {
         updateAccountScreen={() => updateScreen('accountInfo')}
         screen={screen}
       />
-      { screen === 'statistics' && (<StatisticsView records={records} message={message} />)}
+      { screen === 'statistics' && (<StatisticsSubscreen records={records} message={message} />)}
       { screen === 'accountInfo' && (<p>Informacion de la cuenta</p>)}
     </main>
   )
