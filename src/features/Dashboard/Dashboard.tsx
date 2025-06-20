@@ -12,7 +12,7 @@ import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from 
 import { getAccountCookie } from "@/shared/lib/preferences.lib";
 import { AccountScreen } from "../Accounts/AccountScreen";
 import { DashboardScreens } from "@/shared/types/dashboard.types";
-import { OverviewScreen } from "./OverviewScreen";
+import { OverviewScreen } from "./Overview/OverviewScreen";
 import { BankMovement } from "@/shared/types/records.types";
 import { NoAccountsFoundScreen } from "../Accounts/NoAccountsFoundScreen";
 
