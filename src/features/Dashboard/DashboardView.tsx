@@ -20,6 +20,7 @@ interface DashboardViewProps {
   accounts: AccountBank[];
   records: BankMovement[]
   detailedError: DetailedError | null
+  message: string | null;
 }
 
 /**
@@ -27,7 +28,7 @@ interface DashboardViewProps {
  * For mobile, the component renders the header and inside the drawer with the show accounts selector
  * For Desktop, the component shows the aside section along with the links and show accounts selector
  */
-export const DashboardView = ({ accounts, detailedError, records }: DashboardViewProps) => {
+export const DashboardView = ({ accounts, detailedError, records, message }: DashboardViewProps) => {
   console.log('records', records)
   const { isMobile } = useMediaQuery()
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
@@ -70,7 +71,7 @@ export const DashboardView = ({ accounts, detailedError, records }: DashboardVie
       { accounts.length === 0 && (
         <NoAccountsFoundScreen screen={screen} />
       )}
-      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen />) }
+      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen records={records} message={message} />) }
       { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
       <Toaster position="top-center" />
     </div>

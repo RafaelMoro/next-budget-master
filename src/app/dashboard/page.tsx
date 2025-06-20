@@ -9,12 +9,12 @@ export default async function DashboardPage () {
   const { accounts, detailedError } = await fetchAccounts()
   const selectedAccountCookie = await getAccountCookie()
   const selectedAccount = selectedAccountCookie ?? accounts[0]?._id ?? null;
-  const { detailedError: errorFetchRecords, records } = await fetchRecordsCurrentMonth({ accountId: selectedAccount });
+  const { detailedError: errorFetchRecords, message, records } = await fetchRecordsCurrentMonth({ accountId: selectedAccount });
 
   return (
     <>
       <LoginRequiredModal show={!accessToken} />
-      <DashboardView accounts={accounts} records={records} detailedError={detailedError} />
+      <DashboardView accounts={accounts} records={records} detailedError={detailedError} message={message} />
     </>
   )
 }

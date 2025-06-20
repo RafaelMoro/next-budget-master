@@ -6,7 +6,7 @@ import { getRecordsCurrentMonthError } from "../utils/dashboard.utils";
 import { getDateInfo } from "../utils/getDateInfo";
 import { getAccessToken } from "./auth.lib";
 import { GetCurrentMonthRecordsResponse, GetRecordsResponse } from "../types/records.types";
-import { GET_EXPENSES_AND_INCOMES_BY_MONTH_ROUTE } from "../constants/records.constants";
+import { GET_EXPENSES_AND_INCOMES_BY_MONTH_ROUTE, NO_RECORDS_FOUND } from "../constants/records.constants";
 
 export const fetchAccounts = async (): Promise<GetAccountsResponse> => {
   try {
@@ -78,15 +78,17 @@ export const fetchRecordsCurrentMonth = async ({ accountId }: { accountId: strin
         'Authorization': `Bearer ${accessToken}`
       }
     })
-    if (res?.data?.message === 'No incomes or expenses found.') {
+    if (res?.data?.message === NO_RECORDS_FOUND) {
       return {
         detailedError: null,
+        message: NO_RECORDS_FOUND,
         records: []
       }
     }
     const records = res?.data.data.records
     return {
       detailedError: null,
+      message: null,
       records
     }
   } catch (error: unknown) {
@@ -97,6 +99,7 @@ export const fetchRecordsCurrentMonth = async ({ accountId }: { accountId: strin
           message: (error as ErrorCatched)?.message,
           cause: (error as ErrorCatched)?.cause?.code
         },
+        message: null,
         records: []
       }
     }
@@ -105,6 +108,7 @@ export const fetchRecordsCurrentMonth = async ({ accountId }: { accountId: strin
       detailedError: {
         message: (error as ErrorCatched)?.message
       },
+      message: null,
       records: []
     }
   }

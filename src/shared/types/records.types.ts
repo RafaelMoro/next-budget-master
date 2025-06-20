@@ -75,5 +75,6 @@ export type GetRecordsResponse = Omit<AxiosResponse, 'data'> & {
 
 export type GetCurrentMonthRecordsResponse = {
   detailedError: DetailedError | null;
+  message: string | null;
   records: BankMovement[];
 }
