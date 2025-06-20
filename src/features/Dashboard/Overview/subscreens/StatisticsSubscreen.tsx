@@ -1,17 +1,12 @@
 import { IncomeExpensesChart } from "../../../Charts/IncomeExpensesChart"
-import { NO_RECORDS_FOUND } from "@/shared/constants/records.constants";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 import { Button } from "flowbite-react";
 
-interface StatisticsViewProps {
-  message: string | null;
-}
-
-export const StatisticsSubscreen = ({ message }: StatisticsViewProps) => {
+export const StatisticsSubscreen = () => {
   const records = useDashboardStore(
     (state) => state.records
   )
-  if (message === NO_RECORDS_FOUND) {
+  if (records.length === 0) {
     return (
       <div className="flex flex-col justify-center gap-5 mt-20">
         <h2 className="text-2xl font-semibold text-center">Sin transacciones, sin gráficas... ¡por el momento!</h2>

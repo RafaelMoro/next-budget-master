@@ -20,7 +20,7 @@ export const OverviewScreen = ({ message }: OverViewScreenProps) => {
         updateAccountScreen={() => updateSubscreen('accountInfo')}
         screen={subscreen}
       />
-      { subscreen === 'statistics' && (<StatisticsSubscreen message={message} />)}
+      { subscreen === 'statistics' && (<StatisticsSubscreen />)}
       { subscreen === 'accountInfo' && (<AccountOverviewSubscreen />)}
     </main>
   )
