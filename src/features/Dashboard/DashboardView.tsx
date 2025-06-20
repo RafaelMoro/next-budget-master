@@ -12,6 +12,7 @@ import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from 
 import { getAccountCookie } from "@/shared/lib/preferences.lib";
 import { AccountScreen } from "../Accounts/AccountScreen";
 import { DashboardScreens } from "@/shared/types/dashboard.types";
+import { OverviewScreen } from "./OverviewScreen";
 
 interface DashboardViewProps {
   accounts: AccountBank[];
@@ -62,6 +63,7 @@ export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) =
       <DashboardAside updateScreen={updateScreen} accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
+      { screen === 'overview' && (<OverviewScreen />) }
       { screen === 'accounts' && (<AccountScreen accounts={accounts} />) }
       <Toaster position="top-center" />
     </div>
