@@ -19,7 +19,7 @@ export default async function RootLayout({
   return (
     <html lang="es" data-theme={theme}>
       <body
-        className={`${GeistSans.className} antialiased bg-white text-gray-950 dark:text-gray-100 dark:bg-gray-950 transition-colors`}
+        className={`${GeistSans.className} antialiased bg-gray-100 text-gray-950 dark:text-gray-100 dark:bg-gray-950 transition-colors`}
       >
         <QueryProviderWrapper>
           {children}
