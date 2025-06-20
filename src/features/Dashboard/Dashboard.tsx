@@ -71,7 +71,7 @@ export const Dashboard = ({ accounts, detailedError, records, message }: Dashboa
       { accounts.length === 0 && (
         <NoAccountsFoundScreen screen={screen} />
       )}
-      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen records={records} message={message} />) }
+      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen accounts={accounts} selectedAccountId={selectedAccountId} records={records} message={message} />) }
       { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accounts={accounts} />) }
       <Toaster position="top-center" />
     </div>
