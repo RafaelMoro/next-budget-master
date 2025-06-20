@@ -11,6 +11,7 @@ import { DetailedError } from "@/shared/types/global.types"
 import { ERROR_CONNECTION, ERROR_CONNECTION_MESSAGE, GENERAL_ERROR_TITLE } from "@/shared/constants/Global.constants"
 import { getAccountCookie } from "@/shared/lib/preferences.lib";
 import { AccoountScreen } from "../Accounts/AccountScreen";
+import { DashboardScreens } from "@/shared/types/dashboard.types";
 
 interface DashboardViewProps {
   accounts: AccountBank[];
@@ -25,6 +26,9 @@ interface DashboardViewProps {
 export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) => {
   const { isMobile } = useMediaQuery()
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
+  const [screen, setScreen] = useState<DashboardScreens>('overview')
+
+  const updateScreen = (newScreen: DashboardScreens) => setScreen(newScreen)
 
   useEffect(() => {
     getAccountCookie().then ((acc) => {
@@ -55,10 +59,10 @@ export const DashboardView = ({ accounts, detailedError }: DashboardViewProps) =
 
   return (
     <div className="w-full min-h-screen max-w-screen-2xl flex mx-auto my-0">
-      <DashboardAside accounts={accounts}>
+      <DashboardAside updateScreen={updateScreen} accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
-      <AccoountScreen accounts={accounts} />
+      { screen === 'accounts' && (<AccoountScreen accounts={accounts} />) }
       <Toaster position="top-center" />
     </div>
   )
