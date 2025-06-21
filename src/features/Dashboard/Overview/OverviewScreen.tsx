@@ -4,11 +4,7 @@ import { OverviewScreens } from "@/shared/types/dashboard.types"
 import { StatisticsSubscreen } from "./subscreens/StatisticsSubscreen"
 import { AccountOverviewSubscreen } from "./subscreens/AccountOverviewSubscreen"
 
-interface OverViewScreenProps {
-  message: string | null;
-}
-
-export const OverviewScreen = ({ message }: OverViewScreenProps) => {
+export const OverviewScreen = () => {
   const [subscreen, setSubscreen] = useState<OverviewScreens>('statistics')
   const updateSubscreen = (newScreen: OverviewScreens) => setSubscreen(newScreen)
 
