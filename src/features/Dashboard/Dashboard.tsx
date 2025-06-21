@@ -51,6 +51,7 @@ export const Dashboard = ({ detailedError, message, accountsFetched }: Dashboard
       }
     }
     updateAccounts(accountsFetched)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountsFetched])
 
   if (isMobile) {
