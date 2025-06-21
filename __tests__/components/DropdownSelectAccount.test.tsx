@@ -4,30 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { DropdownSelectAccount } from '@/features/Accounts/DropdownSelectAccount';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
-import { AccountBank } from '@/shared/types/accounts.types';
-
-const mockAccounts: AccountBank[] = [
-  {
-    _id: '1',
-    title: 'Santander',
-    accountType: 'Credito',
-    backgroundColor: '',
-    color: '',
-    amount: 12640.54,
-    sub: '',
-    accountProvider: 'mastercard',
-  },
-  {
-    _id: '2',
-    title: 'HSBC oro',
-    accountType: 'Credito',
-    backgroundColor: '',
-    color: '',
-    amount: 24780.08,
-    sub: '',
-    accountProvider: 'visa',
-  },
-];
+import { mockAccounts } from '../mocks/accounts.mock';
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(() => ({
