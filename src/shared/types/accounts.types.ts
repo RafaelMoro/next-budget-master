@@ -44,7 +44,7 @@ export type EditAccountPayload = {
   accountType: string;
   accountProvider: AccountProvider;
   amount: number;
-  terminationFourDigits: number;
+  terminationFourDigits: string;
   backgroundColor: string;
   color: string;
 }
