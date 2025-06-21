@@ -15,7 +15,7 @@ export default async function Page () {
   return (
     <DashboardStoreProvider records={records} accounts={accounts} selectedAccountId={selectedAccount}>
       <LoginRequiredModal show={!accessToken} />
-      <Dashboard detailedError={detailedError} message={message} />
+      <Dashboard detailedError={detailedError} message={message} accountsFetched={accounts} />
     </DashboardStoreProvider>
   )
 }

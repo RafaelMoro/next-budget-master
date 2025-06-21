@@ -13,8 +13,10 @@ import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { OverviewScreen } from "./Overview/OverviewScreen";
 import { NoAccountsFoundScreen } from "../Accounts/NoAccountsFoundScreen";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
+import { AccountBank } from "@/shared/types/accounts.types";
 
 interface DashboardViewProps {
+  accountsFetched: AccountBank[]
   detailedError: DetailedError | null
   message: string | null;
 }
@@ -24,9 +26,9 @@ interface DashboardViewProps {
  * For mobile, the component renders the header and inside the drawer with the show accounts selector
  * For Desktop, the component shows the aside section along with the links and show accounts selector
  */
-export const Dashboard = ({ detailedError, message }: DashboardViewProps) => {
+export const Dashboard = ({ detailedError, message, accountsFetched }: DashboardViewProps) => {
   const { isMobile } = useMediaQuery()
-  const { accounts } = useDashboardStore(
+  const { accounts, updateAccounts } = useDashboardStore(
   (state) => state
   )
   const [screen, setScreen] = useState<DashboardScreens>('overview')
@@ -40,6 +42,10 @@ export const Dashboard = ({ detailedError, message }: DashboardViewProps) => {
       toast.error(GENERAL_ERROR_TITLE);
     }
   }, [detailedError?.cause, detailedError?.message])
+
+  useEffect(() => {
+    updateAccounts(accountsFetched)
+  }, [accountsFetched])
 
   if (isMobile) {
     return (
@@ -61,7 +67,7 @@ export const Dashboard = ({ detailedError, message }: DashboardViewProps) => {
         <NoAccountsFoundScreen screen={screen} />
       )}
       { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen message={message} />) }
-      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
+      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accountsFetched={accountsFetched} />) }
       <Toaster position="top-center" />
     </div>
   )
