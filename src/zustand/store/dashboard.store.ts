@@ -17,6 +17,7 @@ export type DashboardActions = {
   updateSelectedAccountDisplay: (account: AccountsDisplay) => void
   updateRecords: (records: BankMovement[]) => void
   updateAccounts: (accounts: AccountBank[]) => void
+  updateSelectedAccount: (account: AccountBank) => void
 }
 
 export type DashboardStore = DashboardState & DashboardActions
@@ -85,6 +86,15 @@ export const createDashboardStore = (
           accounts: accounts,
           accountsDisplay: accountsTransformed,
           selectedAccount: selectedAccount,
+          selectedAccountDisplay: selectedAccountDisplay,
+        }
+      }),
+
+      updateSelectedAccount: (account) => set((state) => {
+        const selectedAccountDisplay = state.accountsDisplay.find(acc => acc.accountId === account._id) || null;
+        return {
+          ...state,
+          selectedAccount: account,
           selectedAccountDisplay: selectedAccountDisplay,
         }
       })

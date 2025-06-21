@@ -28,7 +28,7 @@ interface DashboardViewProps {
  */
 export const Dashboard = ({ detailedError, message, accountsFetched }: DashboardViewProps) => {
   const { isMobile } = useMediaQuery()
-  const { accounts, updateAccounts } = useDashboardStore(
+  const { accounts, updateAccounts, updateSelectedAccount } = useDashboardStore(
   (state) => state
   )
   const [screen, setScreen] = useState<DashboardScreens>('overview')
@@ -44,6 +44,12 @@ export const Dashboard = ({ detailedError, message, accountsFetched }: Dashboard
   }, [detailedError?.cause, detailedError?.message])
 
   useEffect(() => {
+    if (accounts.length !== accountsFetched.length) {
+      const [firstAccount = null] = accountsFetched;
+      if (firstAccount) {
+        updateSelectedAccount(firstAccount)
+      }
+    }
     updateAccounts(accountsFetched)
   }, [accountsFetched])
 
@@ -67,7 +73,7 @@ export const Dashboard = ({ detailedError, message, accountsFetched }: Dashboard
         <NoAccountsFoundScreen screen={screen} />
       )}
       { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen message={message} />) }
-      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen accountsFetched={accountsFetched} />) }
+      { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
       <Toaster position="top-center" />
     </div>
   )
