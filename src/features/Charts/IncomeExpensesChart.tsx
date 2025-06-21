@@ -13,7 +13,7 @@ export const IncomeExpensesChart = ({ records }: IncomeExpensesChartProps) => {
 
   return (
     <Card className="flex flex-col gap-2">
-      <h4 className="text-2xl font-bold">Income vs Expenses</h4>
+      <h4 className="text-2xl font-bold">Ingresos vs Gastos</h4>
       <AreaChart
         className="h-52"
         data={currentData}
