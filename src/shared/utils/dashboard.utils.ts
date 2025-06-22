@@ -5,6 +5,7 @@ export const getRecordsCurrentMonthError = (message: string): GetCurrentMonthRec
     detailedError: {
       message
     },
+    message: null,
     records: []
   }
 }
