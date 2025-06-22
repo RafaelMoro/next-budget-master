@@ -18,7 +18,6 @@ import { AccountBank } from "@/shared/types/accounts.types";
 interface DashboardViewProps {
   accountsFetched: AccountBank[]
   detailedError: DetailedError | null
-  message: string | null;
 }
 
 /**
@@ -26,7 +25,7 @@ interface DashboardViewProps {
  * For mobile, the component renders the header and inside the drawer with the show accounts selector
  * For Desktop, the component shows the aside section along with the links and show accounts selector
  */
-export const Dashboard = ({ detailedError, message, accountsFetched }: DashboardViewProps) => {
+export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps) => {
   const { isMobile } = useMediaQuery()
   const { accounts, updateAccounts, updateSelectedAccount } = useDashboardStore(
   (state) => state
@@ -73,7 +72,7 @@ export const Dashboard = ({ detailedError, message, accountsFetched }: Dashboard
       { accounts.length === 0 && (
         <NoAccountsFoundScreen screen={screen} />
       )}
-      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen message={message} />) }
+      { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen />) }
       { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
       <Toaster position="top-center" />
     </div>
