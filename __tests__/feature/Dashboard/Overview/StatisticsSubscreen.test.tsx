@@ -1,0 +1,32 @@
+import { render, screen } from '@testing-library/react';
+import { StatisticsSubscreen } from '@/features/Dashboard/Overview/subscreens/StatisticsSubscreen';
+import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
+import { mockAccounts } from '../../../mocks/accounts.mock';
+import { recordMock } from '../../../mocks/records.mock';
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}))
+
+describe('StatisticsSubscreen', () => {
+  it('Show no transactions messaging if there are no records', () => {
+    render(
+      <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
+        <StatisticsSubscreen />
+      </DashboardStoreProvider>
+    );
+    expect(screen.getByText(/Sin transacciones, sin gráficas/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Registrar movimiento/i })).toBeInTheDocument();
+  });
+
+  it('Show statistics if there are records', () => {
+    render(
+      <DashboardStoreProvider accounts={mockAccounts} records={[recordMock]} selectedAccountId={mockAccounts[0]._id}>
+        <StatisticsSubscreen />
+      </DashboardStoreProvider>
+    );
+    expect(screen.getByText(/Ingresos vs Gastos/)).toBeInTheDocument();
+  });
+});

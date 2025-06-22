@@ -1,30 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { DropdownSelectAccount } from '@/features/Accounts/DropdownSelectAccount';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 
-const mockAccounts = [
-  {
-    _id: '1',
-    title: 'Santander',
-    accountType: 'Credito',
-    backgroundColor: '',
-    color: '',
-    amount: 12640.54,
-    sub: '',
-    accountProvider: 'mastercard',
-  },
-  {
-    _id: '2',
-    title: 'HSBC oro',
-    accountType: 'Credito',
-    backgroundColor: '',
-    color: '',
-    amount: 24780.08,
-    sub: '',
-    accountProvider: 'visa',
-  },
-];
+import { DropdownSelectAccount } from '@/features/Accounts/DropdownSelectAccount';
+import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
+import { mockAccounts } from '../mocks/accounts.mock';
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(() => ({
@@ -43,12 +23,16 @@ function mockFetch() {
 }
 
 describe('DropdownSelectAccount', () => {
-  // Ommited the test with cookie set with different account as the mock of the get cookie does not work properly
-
-  it('Show the dropdown select account with the first account info', async () => {
+  beforeEach(() => {
     render(
-      <DropdownSelectAccount accounts={mockAccounts} />
+      <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
+        <DropdownSelectAccount />
+      </DashboardStoreProvider>
     );
+  })
+  // Ommited the test with cookie set with different account as the mock of the get cookie does not work properly
+  it('Show the dropdown select account with the first account info', async () => {
+    
     expect(await screen.findByText('Santander')).toBeInTheDocument();
     expect(screen.getByText('$12,640.54')).toBeInTheDocument();
     expect(screen.getByText('Credito')).toBeInTheDocument();
@@ -57,9 +41,6 @@ describe('DropdownSelectAccount', () => {
 
   it('Given a user clicking the dropdown, show the options', async () => {
     const user = userEvent.setup();
-    render(
-      <DropdownSelectAccount accounts={mockAccounts} />
-    );
 
     expect(await screen.findByText('Santander')).toBeInTheDocument();
     const button = screen.getByTestId('dropdown-icon')
@@ -70,9 +51,6 @@ describe('DropdownSelectAccount', () => {
   it('Given a user selecting other account, show account selected', async () => {
     window.fetch = mockFetch()
     const user = userEvent.setup();
-    render(
-      <DropdownSelectAccount accounts={mockAccounts} />
-    );
 
     expect(await screen.findByText('Santander')).toBeInTheDocument();
     const button = screen.getByTestId('dropdown-icon')

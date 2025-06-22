@@ -1,37 +1,36 @@
 import { HomeIcon } from "../icons/HomeIcon"
-import { CreditCardIcon } from "../icons/CreditCardIcon"
+import { CreditCardArrowIcon } from "../icons/CreditCardArrowIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ReactNode } from "react"
 import { DashboardAsideLink } from "../atoms/DashboardAsideLink"
-import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
 import { AccountBank } from "@/shared/types/accounts.types"
 import { LinkButton } from "../atoms/LinkButton"
+import { DashboardScreens } from "@/shared/types/dashboard.types"
 
 interface DashboardAsideProps {
   children: ReactNode;
+  updateScreen: (newScreen: DashboardScreens) => void
   accounts: AccountBank[];
 }
 
-export const DashboardAside = ({ children, accounts }: DashboardAsideProps) => {
+export const DashboardAside = ({ children, accounts, updateScreen }: DashboardAsideProps) => {
   return (
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
       {children}
       { accounts.length > 0 && (
-        <DropdownSelectAccount
-          accounts={accounts}
-        />
+        <DropdownSelectAccount />
       )}
       <nav className="mt-10 flex flex-col">
-        <DashboardAsideLink href={DASHBOARD_ROUTE}>
+        <DashboardAsideLink onClickCb={() => updateScreen('overview')}>
             <HomeIcon />
             Panorama
         </DashboardAsideLink>
-        <DashboardAsideLink href={DASHBOARD_ROUTE}>
-            <CreditCardIcon />
+        <DashboardAsideLink onClickCb={() => updateScreen('accounts')}>
+            <CreditCardArrowIcon />
             Cuentas
         </DashboardAsideLink>
-        <DashboardAsideLink href={DASHBOARD_ROUTE}>
+        <DashboardAsideLink onClickCb={() => updateScreen('transactions')}>
             <AccountRecordsIcon />
             Transacciones
         </DashboardAsideLink>

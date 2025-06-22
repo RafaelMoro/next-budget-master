@@ -1,6 +1,7 @@
 import { object, string } from "yup";
 import { DetailedError } from "./global.types";
 import { AxiosError, AxiosResponse } from "axios";
+import { BankMovement } from "./records.types";
 
 export type AccountBank = {
   _id: string;
@@ -43,7 +44,7 @@ export type EditAccountPayload = {
   accountType: string;
   accountProvider: AccountProvider;
   amount: number;
-  terminationFourDigits: number;
+  terminationFourDigits: string;
   backgroundColor: string;
   color: string;
 }
@@ -91,6 +92,12 @@ export interface DeleteAccountData {
 export type FetchAccountsResponse = {
   data: {
     accounts: AccountBank[];
+  }
+}
+
+export type FetchRecordsResponse = {
+  data: {
+    records: BankMovement[];
   }
 }
 

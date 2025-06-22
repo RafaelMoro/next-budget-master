@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { AccountsView } from "@/features/Accounts/AccountsView"
 import { AccountBank } from "@/shared/types/accounts.types"
+import { DashboardStoreProvider } from "@/zustand/provider/dashboard-store-provider"
 
 describe('AccountsView', () => {
   it('Show accounts view with 1 account', () => {
@@ -14,7 +15,11 @@ describe('AccountsView', () => {
       color: 'white',
       sub: '123-456'
     }
-    render(<AccountsView accounts={[account]} />)
+    render(
+      <DashboardStoreProvider accounts={[account]} records={[]} selectedAccountId={account._id}>
+        <AccountsView/>
+      </DashboardStoreProvider>
+    )
 
     expect(screen.getByText('Santander')).toBeInTheDocument()
     expect(screen.getByText('$12,640.54')).toBeInTheDocument()
@@ -22,13 +27,14 @@ describe('AccountsView', () => {
     expect(screen.getByAltText('Account Provider Logo')).toBeInTheDocument()
   })
 
-  it('Show accounts view with no accounts', () => {
-    render(<AccountsView accounts={[]} />)
+  it('Show nothing if accounts is empty', () => {
+    render(
+      <DashboardStoreProvider accounts={[]} records={[]} selectedAccountId={''}>
+        <AccountsView/>
+      </DashboardStoreProvider>
+    )
 
-    expect(screen.getByText('Aún no tienes cuentas registradas')).toBeInTheDocument()
-    expect(screen.getByText('¡Todo empieza aquí! Agrega una cuenta bancaria y empieza a organizar tus finanzas sin estrés.')).toBeInTheDocument()
-    expect(screen.getByAltText('No accounts found')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Crear cuenta' })).toBeInTheDocument()
+    expect(screen.queryByTestId('accounts-view-section')).not.toBeInTheDocument()
   })
 
   it('Given an account with no account provider, show mastercard as default', () => {
@@ -41,7 +47,11 @@ describe('AccountsView', () => {
       color: 'white',
       sub: '123-456'
     }
-    render(<AccountsView accounts={[account]} />)
+    render(
+      <DashboardStoreProvider accounts={[account]} records={[]} selectedAccountId={account._id}>
+        <AccountsView/>
+      </DashboardStoreProvider>
+    )
 
     expect(screen.getByAltText('Account Provider Logo')).toBeInTheDocument()
   })

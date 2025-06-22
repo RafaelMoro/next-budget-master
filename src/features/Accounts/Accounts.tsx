@@ -15,7 +15,7 @@ export const Account = ({ account, openModal }: AccountProps) => {
   }
 
   return (
-    <button onClick={() => openModal(account)} className="p-2 rounded-3xl card-gradient-bg flex flex-col justify-between max-w-64 min-h-40 text-start cursor-pointer">
+    <button onClick={() => openModal(account)} className="p-2 rounded-3xl card-gradient-bg flex flex-col justify-between max-w-64 min-w-3xs min-h-40 text-start cursor-pointer">
       <span className="text-lg text-gray-200">{name}</span>
       <div>
         <h5 className="text-2xl text-gray-200 font-semibold">{amount}</h5>

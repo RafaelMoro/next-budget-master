@@ -181,4 +181,8 @@
     background-blend-mode: multiply;
     opacity: 0.8;
   }
+
+  .grid-view-records {
+    grid-template-columns: min-content 1fr 1fr;
+  }
 }

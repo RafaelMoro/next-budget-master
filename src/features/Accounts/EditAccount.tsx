@@ -69,7 +69,7 @@ export const EditAccount = ({ account, closeModal, updateAccAction }: EditAccoun
       accountType: selectedAccountType,
       accountProvider: selectedProvider,
       amount: amountNumber,
-      terminationFourDigits: Number(data.terminationFourDigits),
+      terminationFourDigits: data.terminationFourDigits,
       backgroundColor: 'Dark Orange',
       color: 'white'
     }
