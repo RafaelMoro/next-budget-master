@@ -10,7 +10,7 @@ export default async function Page () {
   const { accounts, detailedError } = await fetchAccounts()
   const selectedAccountCookie = await getAccountCookie()
   const selectedAccount = selectedAccountCookie ?? accounts[0]?._id ?? null;
-  const { detailedError: errorFetchRecords, message, records } = await fetchRecordsCurrentMonth({ accountId: selectedAccount });
+  const { message, records } = await fetchRecordsCurrentMonth({ accountId: selectedAccount });
 
   return (
     <DashboardStoreProvider records={records} accounts={accounts} selectedAccountId={selectedAccount}>
