@@ -38,7 +38,6 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
                     { accounts.length > 0 && (
                       <SidebarItemGroup>
                         <DropdownSelectAccount
-                          accounts={accounts}
                           cssClass="mt-10"
                         />
                       </SidebarItemGroup>
