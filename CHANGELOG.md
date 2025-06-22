@@ -1,3 +1,9 @@
+## v0.13.0 (2025-06-22)
+
+### Pull Requests
+[#19](https://github.com/RafaelMoro/next-budget-master/pull/19) | Feature Show records accordion
+
+
 ## v0.12.0 (2025-06-19)
 
 ### Pull Requests
