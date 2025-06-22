@@ -1,4 +1,3 @@
-// import { DashboardScreens } from "@/shared/types/dashboard.types";
 import { ReactNode } from "react";
 
 interface DashboardAsideLinkProps {
