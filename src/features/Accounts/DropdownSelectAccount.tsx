@@ -30,7 +30,7 @@ export const DropdownSelectAccount = ({ cssClass }: DropdownSelectAccountProps) 
       const options = accountsDisplay.filter(acc => acc.accountId !== selectedAccountDisplay.accountId);
       setAccountsOptions(options);
     }
-  }, [])
+  }, [accountsDisplay, selectedAccountDisplay])
 
   const handleSelectAccount = async (accountId: string) => {
     const selected = accountsOptions.find(acc => acc.accountId === accountId)
