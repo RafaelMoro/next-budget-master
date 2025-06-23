@@ -62,6 +62,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
         { accounts.length === 0 && (
           <NoAccountsFoundScreen screen={screen} />
         )}
+        { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen />) }x|
         { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
         <Toaster position="top-center" />
       </main>
