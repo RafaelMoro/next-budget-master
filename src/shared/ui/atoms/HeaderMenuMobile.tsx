@@ -21,6 +21,10 @@ interface HeaderMenuMobileProps {
 export const HeaderMenuMobile = ({ accounts, updateScreen }: HeaderMenuMobileProps) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const toggleDrawer = () => setOpenDrawer((prev) => !prev)
+  const handleClick = (onClickCb: (newScreen: DashboardScreens) => void, newScreen: DashboardScreens) => {
+    onClickCb(newScreen);
+    toggleDrawer();
+  }
 
   return (
     <>
@@ -46,15 +50,15 @@ export const HeaderMenuMobile = ({ accounts, updateScreen }: HeaderMenuMobilePro
                     )}
 
                   <SidebarItemGroup>
-                    <MenuMobileLink onClickCb={() => updateScreen('overview')}>
+                    <MenuMobileLink onClickCb={() => handleClick(updateScreen, 'overview')}>
                       <HomeIcon />
                       Panorama
                     </MenuMobileLink>
-                    <MenuMobileLink onClickCb={() => updateScreen('accounts')}>
+                    <MenuMobileLink onClickCb={() => handleClick(updateScreen,'accounts')}>
                       <CreditCardArrowIcon />
                       Cuentas
                     </MenuMobileLink>
-                    <MenuMobileLink onClickCb={() => updateScreen('transactions')}>
+                    <MenuMobileLink onClickCb={() => handleClick(updateScreen, 'transactions')}>
                       <AccountRecordsIcon />
                       Transacciones
                     </MenuMobileLink>
