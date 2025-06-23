@@ -31,7 +31,6 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
   (state) => state
   )
   const [screen, setScreen] = useState<DashboardScreens>('overview')
-  console.log('screen', screen)
 
   const updateScreen = (newScreen: DashboardScreens) => setScreen(newScreen)
 
@@ -63,6 +62,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
         { accounts.length === 0 && (
           <NoAccountsFoundScreen screen={screen} />
         )}
+        { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
         <Toaster position="top-center" />
       </main>
     )
