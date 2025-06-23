@@ -31,6 +31,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
   (state) => state
   )
   const [screen, setScreen] = useState<DashboardScreens>('overview')
+  console.log('screen', screen)
 
   const updateScreen = (newScreen: DashboardScreens) => setScreen(newScreen)
 
@@ -57,7 +58,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
     return (
       <main className='mt-3 flex flex-col gap-4"'>
         <HeaderDashboard isMobile>
-          <HeaderMenuMobile accounts={accounts} />
+          <HeaderMenuMobile accounts={accounts} updateScreen={updateScreen} />
         </HeaderDashboard>
         <Toaster position="top-center" />
       </main>
