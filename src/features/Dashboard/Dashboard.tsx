@@ -60,6 +60,9 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
         <HeaderDashboard isMobile>
           <HeaderMenuMobile accounts={accounts} updateScreen={updateScreen} />
         </HeaderDashboard>
+        { accounts.length === 0 && (
+          <NoAccountsFoundScreen screen={screen} />
+        )}
         <Toaster position="top-center" />
       </main>
     )
