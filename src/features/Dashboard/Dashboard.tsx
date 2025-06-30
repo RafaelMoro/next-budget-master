@@ -57,8 +57,13 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
     return (
       <main className='mt-3 flex flex-col gap-4"'>
         <HeaderDashboard isMobile>
-          <HeaderMenuMobile accounts={accounts} />
+          <HeaderMenuMobile accounts={accounts} updateScreen={updateScreen} />
         </HeaderDashboard>
+        { accounts.length === 0 && (
+          <NoAccountsFoundScreen screen={screen} />
+        )}
+        { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen />) }
+        { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
         <Toaster position="top-center" />
       </main>
     )

@@ -14,7 +14,7 @@ export const NoAccountsFoundScreen = ({ screen }: NoAccountsFoundScreenProps) =>
     budgets: 'Presupuestos'
   }
   return (
-    <main className="w-full pl-4 pt-4 min-w-xl mt-3 flex flex-col gap-4">
+    <main className="w-full pl-4 pt-4 md:min-w-xl mt-3 flex flex-col gap-4">
       <h1 className="text-black dark:text-white text-4xl text-center font-bold col-span-3">{titleDict[screen]}</h1>
       <section className="mt-10 flex flex-col items-center gap-8">
         <h2 className="text-2xl  font-semibold">Aún no tienes cuentas registradas</h2>

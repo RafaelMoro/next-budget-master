@@ -9,7 +9,6 @@ interface IncomeExpensesChartProps {
 
 export const IncomeExpensesChart = ({ records }: IncomeExpensesChartProps) => {
   const currentData = getExpensesIncomesTotal(records);
-  console.log('currentData', currentData)
 
   return (
     <Card className="flex flex-col gap-2">

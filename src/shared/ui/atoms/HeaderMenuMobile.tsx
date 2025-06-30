@@ -11,14 +11,20 @@ import { CreditCardArrowIcon } from "../icons/CreditCardArrowIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ToggleDarkMode } from "./ToggleDarkMode"
 import { LinkButton } from "./LinkButton"
+import { DashboardScreens } from "@/shared/types/dashboard.types"
 
 interface HeaderMenuMobileProps {
   accounts: AccountBank[];
+  updateScreen: (newScreen: DashboardScreens) => void
 }
 
-export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
+export const HeaderMenuMobile = ({ accounts, updateScreen }: HeaderMenuMobileProps) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const toggleDrawer = () => setOpenDrawer((prev) => !prev)
+  const handleClick = (onClickCb: (newScreen: DashboardScreens) => void, newScreen: DashboardScreens) => {
+    onClickCb(newScreen);
+    toggleDrawer();
+  }
 
   return (
     <>
@@ -44,15 +50,15 @@ export const HeaderMenuMobile = ({ accounts }: HeaderMenuMobileProps) => {
                     )}
 
                   <SidebarItemGroup>
-                    <MenuMobileLink href="#" >
+                    <MenuMobileLink onClickCb={() => handleClick(updateScreen, 'overview')}>
                       <HomeIcon />
                       Panorama
                     </MenuMobileLink>
-                    <MenuMobileLink href="#" >
+                    <MenuMobileLink onClickCb={() => handleClick(updateScreen,'accounts')}>
                       <CreditCardArrowIcon />
                       Cuentas
                     </MenuMobileLink>
-                    <MenuMobileLink href="#" >
+                    <MenuMobileLink onClickCb={() => handleClick(updateScreen, 'transactions')}>
                       <AccountRecordsIcon />
                       Transacciones
                     </MenuMobileLink>

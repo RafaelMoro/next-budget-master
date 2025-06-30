@@ -1,17 +1,16 @@
-import Link from "next/link";
 import { ReactNode } from "react";
 
 interface MenuMobileLinkProps {
-  href: string;
+  onClickCb: () => void;
   children: ReactNode
 }
 
-export const MenuMobileLink = ({ children, href }: MenuMobileLinkProps) => {
+export const MenuMobileLink = ({ children, onClickCb }: MenuMobileLinkProps) => {
   return (
-    <Link
-      href={href}
+    <button
+      onClick={onClickCb}
       className="flex gap-1 rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
       {children}
-    </Link>
+    </button>
   )
 }
