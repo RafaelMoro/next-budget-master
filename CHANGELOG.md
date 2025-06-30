@@ -1,3 +1,9 @@
+## v0.13.1 (2025-06-30)
+
+### Pull Requests
+[#20](https://github.com/RafaelMoro/next-budget-master/pull/20) | Fix mobile menu and styling
+
+
 ## v0.13.0 (2025-06-22)
 
 ### Pull Requests
