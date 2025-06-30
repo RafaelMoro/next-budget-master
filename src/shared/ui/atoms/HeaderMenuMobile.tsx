@@ -19,6 +19,7 @@ interface HeaderMenuMobileProps {
 }
 
 export const HeaderMenuMobile = ({ accounts, updateScreen }: HeaderMenuMobileProps) => {
+  const goAccounts = () => updateScreen('accounts')
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const toggleDrawer = () => setOpenDrawer((prev) => !prev)
   const handleClick = (onClickCb: (newScreen: DashboardScreens) => void, newScreen: DashboardScreens) => {
@@ -45,6 +46,7 @@ export const HeaderMenuMobile = ({ accounts, updateScreen }: HeaderMenuMobilePro
                       <SidebarItemGroup>
                         <DropdownSelectAccount
                           cssClass="mt-10"
+                          goAccounts={goAccounts}
                         />
                       </SidebarItemGroup>
                     )}

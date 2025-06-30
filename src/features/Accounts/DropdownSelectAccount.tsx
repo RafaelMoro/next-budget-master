@@ -10,6 +10,7 @@ import { fetchRecordsCurrentMonth } from "@/shared/lib/dashboard.lib";
 
 interface DropdownSelectAccountProps {
   cssClass?: string;
+  goAccounts: () => void
 }
 /**
  * Component Description:
@@ -19,7 +20,7 @@ interface DropdownSelectAccountProps {
  * Caveats: I cannot have the custom element of the prop renderTrigger in a separate component as the dropdown when clicked,
  * it does not trigger the onclick event.
  */
-export const DropdownSelectAccount = ({ cssClass }: DropdownSelectAccountProps) => {
+export const DropdownSelectAccount = ({ cssClass, goAccounts }: DropdownSelectAccountProps) => {
   const { accountsDisplay, selectedAccountDisplay, updateSelectedAccountDisplay, updateRecords } = useDashboardStore(
     (state) => state
   )
@@ -27,7 +28,9 @@ export const DropdownSelectAccount = ({ cssClass }: DropdownSelectAccountProps) 
 
   useEffect(() => {
     if (selectedAccountDisplay) {
-      const options = accountsDisplay.filter(acc => acc.accountId !== selectedAccountDisplay.accountId);
+      const options = accountsDisplay
+        .filter(acc => acc.accountId !== selectedAccountDisplay.accountId)
+        .slice(0, 10);
       setAccountsOptions(options);
     }
   }, [accountsDisplay, selectedAccountDisplay])
@@ -74,6 +77,11 @@ export const DropdownSelectAccount = ({ cssClass }: DropdownSelectAccountProps) 
               <span>{acc.amount}</span>
             </DropdownItem>
         )) }
+        { accountsDisplay.length > 10 && (
+          <DropdownItem className="flex justify-between" onClick={goAccounts}>
+              Ver todas las cuentas
+            </DropdownItem>
+        ) }
       </Dropdown>
     </div>
   )

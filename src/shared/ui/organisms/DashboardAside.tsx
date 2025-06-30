@@ -15,11 +15,13 @@ interface DashboardAsideProps {
 }
 
 export const DashboardAside = ({ children, accounts, updateScreen }: DashboardAsideProps) => {
+  const goAccounts = () => updateScreen('accounts')
+
   return (
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
       {children}
       { accounts.length > 0 && (
-        <DropdownSelectAccount />
+        <DropdownSelectAccount goAccounts={goAccounts} />
       )}
       <nav className="mt-10 flex flex-col">
         <DashboardAsideLink onClickCb={() => updateScreen('overview')}>
