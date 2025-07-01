@@ -1,23 +1,22 @@
+import { ReactNode } from "react"
+
 import { HomeIcon } from "../icons/HomeIcon"
 import { CreditCardArrowIcon } from "../icons/CreditCardArrowIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
-import { ReactNode, useState } from "react"
 import { DashboardAsideLink } from "../atoms/DashboardAsideLink"
 import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
 import { AccountBank } from "@/shared/types/accounts.types"
 import { LinkButton } from "../atoms/LinkButton"
 import { DashboardScreens } from "@/shared/types/dashboard.types"
-import { SelectAccountDialog } from "@/features/Accounts/SelectAccountDialog"
 
 interface DashboardAsideProps {
   children: ReactNode;
   updateScreen: (newScreen: DashboardScreens) => void
+  toggleSelectAccountModal: () => void
   accounts: AccountBank[];
 }
 
-export const DashboardAside = ({ children, accounts, updateScreen }: DashboardAsideProps) => {
-  const [openSelectAccountModal, setOpenSelectAccountModal] = useState<boolean>(false)
-  const toggleSelectAccountModal = () => setOpenSelectAccountModal((prev) => !prev)
+export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectAccountModal }: DashboardAsideProps) => {
 
   return (
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
@@ -43,7 +42,6 @@ export const DashboardAside = ({ children, accounts, updateScreen }: DashboardAs
       <section className="flex flex-col gap-2">
         <LinkButton text="Cerrar sesión" type="darkRed" className="w-full" href="/api/auth/sign-out" />
       </section>
-      <SelectAccountDialog openModal={openSelectAccountModal} closeModal={toggleSelectAccountModal} />
     </aside>
   )
 }
