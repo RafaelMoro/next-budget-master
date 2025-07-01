@@ -2,6 +2,8 @@ import { AccountDialog } from "@/features/Accounts/AccountDialog";
 import { Account } from "@/features/Accounts/Accounts";
 import { MonthAccordionRecords } from "@/features/Records/CurrentMonthAccordionRecords";
 import { useAccountModal } from "@/hooks/useAccountModal";
+import { CREATE_RECORD_ROUTE } from "@/shared/constants/Global.constants";
+import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 
 /**
@@ -37,6 +39,9 @@ export const AccountOverviewSubscreen = () => {
         closeModal={closeModal}
         updateAccAction={updateAccAction}
       />
+      { records.length > 0 && (
+        <LinkButton text="Registrar movimiento" href={CREATE_RECORD_ROUTE} />
+      ) }
       <MonthAccordionRecords records={records} title="Este mes" />
     </section>
   )

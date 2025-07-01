@@ -1,6 +1,7 @@
+import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { IncomeExpensesChart } from "../../../Charts/IncomeExpensesChart"
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
-import { Button } from "flowbite-react";
+import { CREATE_RECORD_ROUTE } from "@/shared/constants/Global.constants";
 
 export const StatisticsSubscreen = () => {
   const records = useDashboardStore(
@@ -12,7 +13,7 @@ export const StatisticsSubscreen = () => {
         <h2 className="text-2xl font-semibold text-center">Sin transacciones, sin gráficas... ¡por el momento!</h2>
         <p className="text-gray-400 text-center mb-5">Aún no podemos generar gráficas sin movimientos... ¡empieza a registrar y verás el cambio!</p>
         <div className="mx-auto my-0">
-          <Button>Registrar movimiento</Button>
+          <LinkButton text="Registrar movimiento" href={CREATE_RECORD_ROUTE} />
         </div>
       </div>
     )
