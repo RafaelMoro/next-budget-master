@@ -6,7 +6,7 @@ import { render, screen } from "@testing-library/react"
 const DashboardWrapper = () => {
   return (
     <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
-      <Dashboard detailedError={null} message={null} accountsFetched={mockAccounts} />
+      <Dashboard detailedError={null} accountsFetched={mockAccounts} />
     </DashboardStoreProvider>
   )
 }
