@@ -23,9 +23,9 @@ export const RecordEntry = ({ record }: AccountEntryProps) => {
     transfer: `${record.amountFormatted}`
   }
   const showBadgeDict: Record<TypeOfRecord, string> = {
-    expense: 'Unpaid',
-    income: 'Paid',
-    transfer: 'Transfer'
+    expense: 'Sin pagar',
+    income: 'Pagado',
+    transfer: 'Transferencia'
   }
   const badgeColorDict: Record<TypeOfRecord, string> = {
     expense: 'failure',
