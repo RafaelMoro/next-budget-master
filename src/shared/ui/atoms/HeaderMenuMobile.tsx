@@ -16,9 +16,10 @@ import { DashboardScreens } from "@/shared/types/dashboard.types"
 interface HeaderMenuMobileProps {
   accounts: AccountBank[];
   updateScreen: (newScreen: DashboardScreens) => void
+  toggleSelectAccountModal: () => void
 }
 
-export const HeaderMenuMobile = ({ accounts, updateScreen }: HeaderMenuMobileProps) => {
+export const HeaderMenuMobile = ({ accounts, updateScreen, toggleSelectAccountModal }: HeaderMenuMobileProps) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const toggleDrawer = () => setOpenDrawer((prev) => !prev)
   const handleClick = (onClickCb: (newScreen: DashboardScreens) => void, newScreen: DashboardScreens) => {
@@ -45,6 +46,7 @@ export const HeaderMenuMobile = ({ accounts, updateScreen }: HeaderMenuMobilePro
                       <SidebarItemGroup>
                         <DropdownSelectAccount
                           cssClass="mt-10"
+                          goAccounts={toggleSelectAccountModal}
                         />
                       </SidebarItemGroup>
                     )}

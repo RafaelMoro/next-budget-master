@@ -1,7 +1,8 @@
+import { ReactNode } from "react"
+
 import { HomeIcon } from "../icons/HomeIcon"
 import { CreditCardArrowIcon } from "../icons/CreditCardArrowIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
-import { ReactNode } from "react"
 import { DashboardAsideLink } from "../atoms/DashboardAsideLink"
 import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
 import { AccountBank } from "@/shared/types/accounts.types"
@@ -11,15 +12,17 @@ import { DashboardScreens } from "@/shared/types/dashboard.types"
 interface DashboardAsideProps {
   children: ReactNode;
   updateScreen: (newScreen: DashboardScreens) => void
+  toggleSelectAccountModal: () => void
   accounts: AccountBank[];
 }
 
-export const DashboardAside = ({ children, accounts, updateScreen }: DashboardAsideProps) => {
+export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectAccountModal }: DashboardAsideProps) => {
+
   return (
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
       {children}
       { accounts.length > 0 && (
-        <DropdownSelectAccount />
+        <DropdownSelectAccount goAccounts={toggleSelectAccountModal} />
       )}
       <nav className="mt-10 flex flex-col">
         <DashboardAsideLink onClickCb={() => updateScreen('overview')}>

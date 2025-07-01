@@ -14,6 +14,7 @@ import { OverviewScreen } from "./Overview/OverviewScreen";
 import { NoAccountsFoundScreen } from "../Accounts/NoAccountsFoundScreen";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 import { AccountBank } from "@/shared/types/accounts.types";
+import { SelectAccountDialog } from "../Accounts/SelectAccountDialog";
 
 interface DashboardViewProps {
   accountsFetched: AccountBank[]
@@ -31,8 +32,10 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
   (state) => state
   )
   const [screen, setScreen] = useState<DashboardScreens>('overview')
+  const [openSelectAccountModal, setOpenSelectAccountModal] = useState<boolean>(false)
 
   const updateScreen = (newScreen: DashboardScreens) => setScreen(newScreen)
+  const toggleSelectAccountModal = () => setOpenSelectAccountModal((prev) => !prev)
 
   useEffect(() => {
     if (detailedError?.cause === ERROR_CONNECTION) {
@@ -57,7 +60,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
     return (
       <main className='mt-3 flex flex-col gap-4"'>
         <HeaderDashboard isMobile>
-          <HeaderMenuMobile accounts={accounts} updateScreen={updateScreen} />
+          <HeaderMenuMobile accounts={accounts} updateScreen={updateScreen} toggleSelectAccountModal={toggleSelectAccountModal} />
         </HeaderDashboard>
         { accounts.length === 0 && (
           <NoAccountsFoundScreen screen={screen} />
@@ -65,13 +68,14 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
         { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen />) }
         { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
         <Toaster position="top-center" />
+        <SelectAccountDialog openModal={openSelectAccountModal} closeModal={toggleSelectAccountModal} />
       </main>
     )
   }
 
   return (
     <div className="w-full min-h-screen max-w-screen-2xl flex mx-auto my-0">
-      <DashboardAside updateScreen={updateScreen} accounts={accounts}>
+      <DashboardAside toggleSelectAccountModal={toggleSelectAccountModal} updateScreen={updateScreen} accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
       { accounts.length === 0 && (
@@ -80,6 +84,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
       { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen />) }
       { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
       <Toaster position="top-center" />
+      <SelectAccountDialog openModal={openSelectAccountModal} closeModal={toggleSelectAccountModal} />
     </div>
   )
 }
