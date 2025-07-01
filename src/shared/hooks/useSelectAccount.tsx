@@ -6,7 +6,7 @@ import { fetchRecordsCurrentMonth } from "../lib/dashboard.lib"
 
 interface SelectAccountProps {
   limit10Accounts?: boolean;
-  closeModal: () => void;
+  closeModal?: () => void;
 }
 
 export const useSelectAccount = ({ limit10Accounts = false, closeModal }: SelectAccountProps) => {
@@ -14,6 +14,7 @@ export const useSelectAccount = ({ limit10Accounts = false, closeModal }: Select
     (state) => state
   )
   const [accountsOptions, setAccountsOptions] = useState<AccountsDisplay[]>([])
+  const hasMore10Accounts = accountsDisplay.length > 10
 
   useEffect(() => {
     if (selectedAccountDisplay) {
@@ -39,11 +40,13 @@ export const useSelectAccount = ({ limit10Accounts = false, closeModal }: Select
     // Fetch new records of the selected account
     const { records } = await fetchRecordsCurrentMonth({ accountId: selected.accountId });
     updateRecords(records);
-    closeModal()
+    if (closeModal) closeModal()
   }
 
   return {
     accountsOptions,
+    selectedAccountDisplay,
+    hasMore10Accounts,
     handleSelectAccount
   }
 }

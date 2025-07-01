@@ -1,12 +1,8 @@
 "use client"
-import { useEffect, useState } from "react";
 import { Dropdown, DropdownItem } from "flowbite-react"
 import { RiExpandUpDownLine } from "@remixicon/react";
 
-import { AccountsDisplay } from "@/shared/types/accounts.types";
-import { saveAccountApi } from "@/shared/utils/user-info.utils";
-import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
-import { fetchRecordsCurrentMonth } from "@/shared/lib/dashboard.lib";
+import { useSelectAccount } from "@/shared/hooks/useSelectAccount";
 
 interface DropdownSelectAccountProps {
   cssClass?: string;
@@ -21,36 +17,7 @@ interface DropdownSelectAccountProps {
  * it does not trigger the onclick event.
  */
 export const DropdownSelectAccount = ({ cssClass, goAccounts }: DropdownSelectAccountProps) => {
-  const { accountsDisplay, selectedAccountDisplay, updateSelectedAccountDisplay, updateRecords } = useDashboardStore(
-    (state) => state
-  )
-  const [accountsOptions, setAccountsOptions] = useState<AccountsDisplay[]>([])
-
-  useEffect(() => {
-    if (selectedAccountDisplay) {
-      const options = accountsDisplay
-        .filter(acc => acc.accountId !== selectedAccountDisplay.accountId)
-        .slice(0, 10);
-      setAccountsOptions(options);
-    }
-  }, [accountsDisplay, selectedAccountDisplay])
-
-  const handleSelectAccount = async (accountId: string) => {
-    const selected = accountsOptions.find(acc => acc.accountId === accountId)
-    if (!selected) {
-      console.warn('Account not found in options:', accountId);
-      return;
-    }
-    const newOptions = accountsDisplay.filter(acc => acc.accountId !== accountId)
-    // Save the account selected into the cookie
-    await saveAccountApi(selected.accountId)
-    setAccountsOptions(newOptions)
-    updateSelectedAccountDisplay(selected)
-
-    // Fetch new records of the selected account
-    const { records } = await fetchRecordsCurrentMonth({ accountId: selected.accountId });
-    updateRecords(records);
-  }
+  const { accountsOptions, selectedAccountDisplay, handleSelectAccount, hasMore10Accounts } = useSelectAccount({ limit10Accounts: true })
 
   return (
     <div className={cssClass && cssClass}>
@@ -77,7 +44,7 @@ export const DropdownSelectAccount = ({ cssClass, goAccounts }: DropdownSelectAc
               <span>{acc.amount}</span>
             </DropdownItem>
         )) }
-        { accountsDisplay.length > 10 && (
+        { hasMore10Accounts && (
           <DropdownItem className="flex justify-between" onClick={goAccounts}>
               Ver todas las cuentas
             </DropdownItem>
