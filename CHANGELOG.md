@@ -1,3 +1,9 @@
+## v0.14.0 (2025-07-01)
+
+### Pull Requests
+[#21](https://github.com/RafaelMoro/next-budget-master/pull/21) | Add select account dialog
+
+
 ## v0.13.1 (2025-06-30)
 
 ### Pull Requests
