@@ -1,3 +1,9 @@
+## v0.14.1 (2025-07-01)
+
+### Pull Requests
+[#22](https://github.com/RafaelMoro/next-budget-master/pull/22) | Translate tags and fix styles
+
+
 ## v0.14.0 (2025-07-01)
 
 ### Pull Requests
