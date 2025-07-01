@@ -41,7 +41,7 @@ export const RecordEntry = ({ record }: AccountEntryProps) => {
       </div>
       <h5 className="col-start-2 col-end-3 row-start-2 row-end-3 text-xl font-semibold capitalize">{record.shortName}</h5>
       <p className={priceClass}>{showPriceDict[record.typeOfRecord]}</p>
-      <div className="col-start-3 col-end-4 row-span-2 max-w-min flex items-center">
+      <div className="col-start-3 col-end-4 row-span-2 w-full flex items-center justify-center">
         <Badge color={badgeColorDict[record.typeOfRecord]}>{showBadgeDict[record.typeOfRecord]}</Badge>
       </div>
     </article>
