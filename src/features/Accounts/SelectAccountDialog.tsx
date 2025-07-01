@@ -21,7 +21,6 @@ export const SelectAccountDialog = ({ openModal, closeModal }: SelectAccountProp
       if (selectedAccountDisplay) {
         const options = accountsDisplay
           .filter(acc => acc.accountId !== selectedAccountDisplay.accountId)
-          .slice(0, 10)
         setAccountsOptions(options);
       }
     }, [accountsDisplay, selectedAccountDisplay])
