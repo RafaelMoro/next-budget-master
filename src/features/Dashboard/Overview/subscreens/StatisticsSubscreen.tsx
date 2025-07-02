@@ -19,6 +19,11 @@ export const StatisticsSubscreen = () => {
     )
   }
   return (
-    <IncomeExpensesChart records={records} />
+    <section className="grid grid-cols-1 gap-4">
+      <div className="justify-self-end max-w-48">
+        <LinkButton text="Registrar movimiento" href={CREATE_RECORD_ROUTE} />
+      </div>
+      <IncomeExpensesChart records={records} />
+    </section>
   )
 }
