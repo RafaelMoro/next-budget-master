@@ -29,7 +29,8 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
     name: '',
     categoryId: ''
   })
-  console.log('categorySelected', categorySelected)
+  const [subcategory, setSubcategory] = useState<string | null>(null)
+  const subcategories = categories.find(cat => cat._id === categorySelected.categoryId)?.subCategories ?? []
 
   const { handleChange, currencyState } = useCurrencyField({
     amount: null
@@ -93,10 +94,17 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
               </DropdownItem>
             )) }
           </Dropdown>
-          <Dropdown aria-label="Select subcategory" label="Subcategorias">
-            <DropdownItem className="flex justify-between">
-              Una categoria
-            </DropdownItem>
+          <Dropdown disabled={subcategories.length === 0} aria-label="Select subcategory" label="Subcategorias" renderTrigger={() => (
+            <Button color="dark">
+              Subcategoria: {subcategory}
+              <RiArrowDownSLine />
+            </Button>
+          )}>
+            { (subcategories.length > 0) && subcategories.map((subcat) => (
+              <DropdownItem key={subcat} onClick={() => setSubcategory(subcat)} className="flex justify-between">
+                {subcat}
+              </DropdownItem>
+            )) }
           </Dropdown>
         </form>
       </main>
