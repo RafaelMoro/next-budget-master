@@ -1,3 +1,5 @@
+import { DetailedError } from "./global.types";
+
 export type Category = {
   _id: string;
   __v: number;
@@ -19,3 +21,14 @@ export type CategoriesIcons = 'foodAndDrink' |
   'savings' |
   'income' |
   'newCategory'
+
+export type GetCategoriesResponse = {
+  detailedError: DetailedError | null;
+  categories: Category[];
+}
+
+export type FetchCategoriesResponse = {
+  data: {
+    categories: Category[];
+  }
+}

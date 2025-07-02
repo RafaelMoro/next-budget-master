@@ -8,8 +8,14 @@ import { Header } from "@/shared/ui/organisms/Header"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
+import { Category } from "@/shared/types/categories.types"
 
-export const TransactionManager = () => {
+interface TransactionManagerProps {
+  categories: Category[]
+}
+
+export const TransactionManager = ({ categories }: TransactionManagerProps) => {
+  console.log('categories', categories)
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
   const updateExpenseScreen = () => setSubscreen('expense')
   const updateIncomeScreen = () => setSubscreen('income')
