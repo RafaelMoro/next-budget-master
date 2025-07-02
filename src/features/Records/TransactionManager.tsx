@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
-import { DatePickerTimeExample } from "@/shared/ui/tremor-example/DatePickerTimeExample"
+import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 
 export const TransactionManager = () => {
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
@@ -18,7 +18,9 @@ export const TransactionManager = () => {
         updateIncomeScreen={updateIncomeScreen}
         updateTransferScreen={updateTransferScreen}
       />
-      <DatePickerTimeExample />
+      <form className="max-w-xs mx-auto">
+        <DateTimePicker />
+      </form>
     </>
 
   )
