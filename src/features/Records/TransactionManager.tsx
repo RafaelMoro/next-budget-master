@@ -7,7 +7,7 @@ import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { Header } from "@/shared/ui/organisms/Header"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { Label, Textarea, TextInput } from "flowbite-react"
+import { Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
 
 export const TransactionManager = () => {
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
@@ -36,7 +36,7 @@ export const TransactionManager = () => {
           updateIncomeScreen={updateIncomeScreen}
           updateTransferScreen={updateTransferScreen}
         />
-        <form className="max-w-xs mx-auto flex flex-col gap-4">
+        <form className="max-w-3xs mx-auto flex flex-col gap-4">
           <DateTimePicker />
           <CurrencyField
             labelName="Cantidad"
@@ -65,6 +65,16 @@ export const TransactionManager = () => {
             </div>
             <Textarea id="description" required rows={4} />
           </div>
+          <Dropdown aria-label="Select other account" label="Categorias">
+            <DropdownItem className="flex justify-between">
+              Una categoria
+            </DropdownItem>
+          </Dropdown>
+          <Dropdown aria-label="Select other account" label="Subcategorias">
+            <DropdownItem className="flex justify-between">
+              Una categoria
+            </DropdownItem>
+          </Dropdown>
         </form>
       </main>
     </div>
