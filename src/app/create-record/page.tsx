@@ -1,5 +1,7 @@
+import { TransactionManager } from "@/features/Records/TransactionManager";
+
 export default function CreateRecordPage() {
   return (
-    <div>Create record</div>
+    <TransactionManager />
   )
 }
