@@ -7,19 +7,29 @@ import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { Header } from "@/shared/ui/organisms/Header"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
+import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
 import { Category } from "@/shared/types/categories.types"
+import { RiArrowDownSLine } from "@remixicon/react"
 
 interface TransactionManagerProps {
   categories: Category[]
 }
 
 export const TransactionManager = ({ categories }: TransactionManagerProps) => {
-  console.log('categories', categories)
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
   const updateExpenseScreen = () => setSubscreen('expense')
   const updateIncomeScreen = () => setSubscreen('income')
   const updateTransferScreen = () => setSubscreen('transfer')
+
+  const categoriesShown = categories.map((cat) => ({
+    name: cat.categoryName,
+    categoryId: cat._id
+  }))
+  const [categorySelected, setCategorySelected] = useState({
+    name: '',
+    categoryId: ''
+  })
+  console.log('categorySelected', categorySelected)
 
   const { handleChange, currencyState } = useCurrencyField({
     amount: null
@@ -71,12 +81,19 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
             </div>
             <Textarea id="description" required rows={4} />
           </div>
-          <Dropdown aria-label="Select other account" label="Categorias">
-            <DropdownItem className="flex justify-between">
-              Una categoria
-            </DropdownItem>
+          <Dropdown aria-label="Select category" label="Categorias" renderTrigger={() => (
+            <Button color="dark">
+              Categoria: {categorySelected.name}
+              <RiArrowDownSLine />
+            </Button>
+          )}>
+            { categoriesShown.map((cat) => (
+              <DropdownItem key={cat.categoryId} value={cat.categoryId} onClick={() => setCategorySelected(cat) } className="flex justify-between">
+                {cat.name}
+              </DropdownItem>
+            )) }
           </Dropdown>
-          <Dropdown aria-label="Select other account" label="Subcategorias">
+          <Dropdown aria-label="Select subcategory" label="Subcategorias">
             <DropdownItem className="flex justify-between">
               Una categoria
             </DropdownItem>
