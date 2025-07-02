@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios";
 import { Budget } from "./budgets.types";
 import { Category } from "./categories.types";
 import { DetailedError } from "./global.types";
+import { object, string } from "yup";
 
 export type TypeOfRecord = 'expense' | 'income' | 'transfer';
 
@@ -78,3 +79,23 @@ export type GetCurrentMonthRecordsResponse = {
   message: string | null;
   records: BankMovement[];
 }
+
+export type CreateExpenseData = {
+  shortDescription: string
+  description: string
+}
+
+const shortNameValidation = string()
+  .required('Por favor, ingrese una pequeña descripción')
+  .min(3, 'La pequeña descripción debe contener más de 3 caracteres')
+  .max(50, 'La pequeña descripción debe contener menos de 50 caracteres.');
+const descriptionValidation = string()
+// TODO: Remove required
+  .required()
+    .min(3, 'Por favor, ingrese una descripción de más de 3 caracteres')
+    .max(300, 'Por favor, ingrese una descripción con menos de 300 caracteres.')
+
+export const CreateExpenseSchema = object({
+  shortDescription: shortNameValidation,
+  description: descriptionValidation
+})

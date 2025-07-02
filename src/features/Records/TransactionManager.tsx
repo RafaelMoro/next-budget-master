@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
 import { RiArrowDownSLine } from "@remixicon/react"
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
@@ -13,6 +14,10 @@ import { Category } from "@/shared/types/categories.types"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { CreateExpenseData, CreateExpenseSchema } from "@/shared/types/records.types"
+import { AnimatePresence } from "motion/react";
+import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 
 interface TransactionManagerProps {
   categories: Category[]
@@ -35,6 +40,18 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
     transfer: 'Transferencia',
   }
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateExpenseData>({
+    resolver: yupResolver(CreateExpenseSchema)
+  })
+
+  const onSubmit: SubmitHandler<CreateExpenseData> = (data) => {
+    console.log(data)
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -46,71 +63,76 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
           updateIncomeScreen={updateIncomeScreen}
           updateTransferScreen={updateTransferScreen}
         />
-        <form className="max-w-3xs mx-auto flex flex-col gap-4">
-          <DateTimePicker />
-          <CurrencyField
-            labelName="Cantidad"
-            dataTestId="amount"
-            fieldId="amount"
-            value={currencyState}
-            handleChange={handleChange}
-          />
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="shortDescription">Pequeña descripción</Label>
+        <AnimatePresence>
+          <form onSubmit={handleSubmit(onSubmit)} className="max-w-3xs mx-auto flex flex-col gap-4">
+            <DateTimePicker />
+            <CurrencyField
+              labelName="Cantidad"
+              dataTestId="amount"
+              fieldId="amount"
+              value={currencyState}
+              handleChange={handleChange}
+            />
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="shortDescription">Pequeña descripción</Label>
+              </div>
+              <TextInput
+                data-testid="shortDescription"
+                id="shortDescription"
+                type="text"
+                {...register("shortDescription")}
+                />
+              { errors?.shortDescription?.message && (
+                <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
+              )}
             </div>
-            <TextInput
-              data-testid="shortDescription"
-              id="shortDescription"
-              type="text"
-              // {...register("title")}
-              />
-            {/* { errors?.title?.message && (
-              <ErrorMessage isAnimated>{errors.title?.message}</ErrorMessage>
-            )} */}
-          </div>
-          <div className="max-w-md">
-            <div className="mb-2 block">
-              <Label htmlFor="description">Descripción (opcional)</Label>
+            <div className="max-w-md">
+              <div className="mb-2 block">
+                <Label htmlFor="description">Descripción (opcional)</Label>
+              </div>
+              <Textarea id="description" rows={4} {...register("description")} />
+              { errors?.description?.message && (
+                <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
+              )}
             </div>
-            <Textarea id="description" required rows={4} />
-          </div>
-          <Dropdown aria-label="Select category" label="Categorias" renderTrigger={() => (
-            <Button color="dark">
-              Categoria: {categorySelected.name}
-              <RiArrowDownSLine />
+            <Dropdown aria-label="Select category" label="Categorias" renderTrigger={() => (
+              <Button color="dark">
+                Categoria: {categorySelected.name}
+                <RiArrowDownSLine />
+              </Button>
+            )}>
+              { categoriesShown.map((cat) => (
+                <DropdownItem key={cat.categoryId} value={cat.categoryId} onClick={() => updateCategory(cat) } className="flex justify-between">
+                  {cat.name}
+                </DropdownItem>
+              )) }
+            </Dropdown>
+            <Dropdown disabled={subcategories.length === 0} aria-label="Select subcategory" label="Subcategorias" renderTrigger={() => (
+              <Button color="dark">
+                Subcategoria: {subcategory}
+                <RiArrowDownSLine />
+              </Button>
+            )}>
+              { (subcategories.length > 0) && subcategories.map((subcat) => (
+                <DropdownItem key={subcat} onClick={() => updateSubcategory(subcat)} className="flex justify-between">
+                  {subcat}
+                </DropdownItem>
+              )) }
+            </Dropdown>
+            <LinkButton className="mt-4" text="Cancelar" type="secondary" href={DASHBOARD_ROUTE} />
+              <Button
+                className="hover:cursor-pointer"
+                // disabled={isPending || isSuccess}
+                type="submit"
+                >
+                  Crear gasto
+              {/* { (isIdle || isError) && 'Crear gasto'}
+              { isPending && (<Spinner aria-label="loading reset password budget master" />) }
+              { isSuccess && (<CheckIcon />)} */}
             </Button>
-          )}>
-            { categoriesShown.map((cat) => (
-              <DropdownItem key={cat.categoryId} value={cat.categoryId} onClick={() => updateCategory(cat) } className="flex justify-between">
-                {cat.name}
-              </DropdownItem>
-            )) }
-          </Dropdown>
-          <Dropdown disabled={subcategories.length === 0} aria-label="Select subcategory" label="Subcategorias" renderTrigger={() => (
-            <Button color="dark">
-              Subcategoria: {subcategory}
-              <RiArrowDownSLine />
-            </Button>
-          )}>
-            { (subcategories.length > 0) && subcategories.map((subcat) => (
-              <DropdownItem key={subcat} onClick={() => updateSubcategory(subcat)} className="flex justify-between">
-                {subcat}
-              </DropdownItem>
-            )) }
-          </Dropdown>
-          <LinkButton className="mt-4" text="Cancelar" type="secondary" href={DASHBOARD_ROUTE} />
-            <Button
-              className="hover:cursor-pointer"
-              // disabled={isPending || isSuccess}
-              type="submit"
-              >
-                Crear gasto
-            {/* { (isIdle || isError) && 'Crear gasto'}
-            { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-            { isSuccess && (<CheckIcon />)} */}
-          </Button>
-        </form>
+          </form>
+        </AnimatePresence>
       </main>
     </div>
 
