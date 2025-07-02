@@ -1,5 +1,7 @@
 "use client"
 import { useState } from "react"
+import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
+import { RiArrowDownSLine } from "@remixicon/react"
 
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
@@ -7,10 +9,10 @@ import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { Header } from "@/shared/ui/organisms/Header"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
 import { Category } from "@/shared/types/categories.types"
-import { RiArrowDownSLine } from "@remixicon/react"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
+import { LinkButton } from "@/shared/ui/atoms/LinkButton"
+import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 
 interface TransactionManagerProps {
   categories: Category[]
@@ -97,6 +99,17 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
               </DropdownItem>
             )) }
           </Dropdown>
+          <LinkButton className="mt-4" text="Cancelar" type="secondary" href={DASHBOARD_ROUTE} />
+            <Button
+              className="hover:cursor-pointer"
+              // disabled={isPending || isSuccess}
+              type="submit"
+              >
+                Crear gasto
+            {/* { (isIdle || isError) && 'Crear gasto'}
+            { isPending && (<Spinner aria-label="loading reset password budget master" />) }
+            { isSuccess && (<CheckIcon />)} */}
+          </Button>
         </form>
       </main>
     </div>
