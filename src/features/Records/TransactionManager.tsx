@@ -10,6 +10,7 @@ import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
 import { Category } from "@/shared/types/categories.types"
 import { RiArrowDownSLine } from "@remixicon/react"
+import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 
 interface TransactionManagerProps {
   categories: Category[]
@@ -21,20 +22,10 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
   const updateIncomeScreen = () => setSubscreen('income')
   const updateTransferScreen = () => setSubscreen('transfer')
 
-  const categoriesShown = categories.map((cat) => ({
-    name: cat.categoryName,
-    categoryId: cat._id
-  }))
-  const [categorySelected, setCategorySelected] = useState({
-    name: '',
-    categoryId: ''
-  })
-  const [subcategory, setSubcategory] = useState<string | null>(null)
-  const subcategories = categories.find(cat => cat._id === categorySelected.categoryId)?.subCategories ?? []
-
   const { handleChange, currencyState } = useCurrencyField({
     amount: null
   })
+  const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory } = useCategoriesForm({ categories })
 
   const titleDictionary: Record<TransactionScreens, string> = {
     expense: 'Gasto',
@@ -89,7 +80,7 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
             </Button>
           )}>
             { categoriesShown.map((cat) => (
-              <DropdownItem key={cat.categoryId} value={cat.categoryId} onClick={() => setCategorySelected(cat) } className="flex justify-between">
+              <DropdownItem key={cat.categoryId} value={cat.categoryId} onClick={() => updateCategory(cat) } className="flex justify-between">
                 {cat.name}
               </DropdownItem>
             )) }
@@ -101,7 +92,7 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
             </Button>
           )}>
             { (subcategories.length > 0) && subcategories.map((subcat) => (
-              <DropdownItem key={subcat} onClick={() => setSubcategory(subcat)} className="flex justify-between">
+              <DropdownItem key={subcat} onClick={() => updateSubcategory(subcat)} className="flex justify-between">
                 {subcat}
               </DropdownItem>
             )) }

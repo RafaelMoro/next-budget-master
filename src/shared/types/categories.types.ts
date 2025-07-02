@@ -22,6 +22,11 @@ export type CategoriesIcons = 'foodAndDrink' |
   'income' |
   'newCategory'
 
+export type CategoryShown = {
+  name: string;
+  categoryId: string;
+}
+
 export type GetCategoriesResponse = {
   detailedError: DetailedError | null;
   categories: Category[];
