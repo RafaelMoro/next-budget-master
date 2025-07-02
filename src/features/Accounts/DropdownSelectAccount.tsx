@@ -46,8 +46,8 @@ export const DropdownSelectAccount = ({ cssClass, goAccounts }: DropdownSelectAc
         )) }
         { hasMore10Accounts && (
           <DropdownItem className="flex justify-between" onClick={goAccounts}>
-              Ver todas las cuentas
-            </DropdownItem>
+            Ver todas las cuentas
+          </DropdownItem>
         ) }
       </Dropdown>
     </div>
