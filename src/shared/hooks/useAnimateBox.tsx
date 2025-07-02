@@ -1,6 +1,11 @@
 import { useState } from 'react';
 
-/*
+interface UseAnimateBoxProps {
+  firstStep: number
+  lastStepNumber: number;
+}
+
+/**
 * This hook is to have all the logic needed to use AnimateBox component.
 * counterView is the counter of the pages or views rendered.
 * direction is to have track if you want the previous or the next view.
@@ -9,12 +14,6 @@ import { useState } from 'react';
 * goNextView is the fn to change to the next view.
 * goPreviousView is the fn to go to the previous view.
 */
-
-interface UseAnimateBoxProps {
-  firstStep: number
-  lastStepNumber: number;
-}
-
 const useAnimateBox = ({ firstStep, lastStepNumber }: UseAnimateBoxProps) => {
   const [[step, direction], setCounterView] = useState<[number, number]>([firstStep, 0]);
 

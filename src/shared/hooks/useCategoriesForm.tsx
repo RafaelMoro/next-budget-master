@@ -6,6 +6,9 @@ interface UseCategoriesFormProps {
   categories: Category[]
 }
 
+/**
+* This hook is to handle the selection of category and subcategory for editing or creating transactions
+*/
 export const useCategoriesForm = ({ categories }: UseCategoriesFormProps) => {
   const categoriesShown: CategoryShown[] = categories.map((cat) => ({
     name: cat.categoryName,
