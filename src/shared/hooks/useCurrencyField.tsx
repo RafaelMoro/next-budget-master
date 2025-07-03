@@ -5,11 +5,12 @@ interface UseCurrencyFieldProps {
   amount: string | null;
 }
 
+export const DEFAULT_AMOUNT_VALUE = '$0.00'
+
 /**
 * This hook is to handle the usage of the currency field component
 */
 export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
-  const DEFAULT_AMOUNT_VALUE = '$0.00'
   const [currencyState, setCurrencyState] = useState(amount ?? DEFAULT_AMOUNT_VALUE);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

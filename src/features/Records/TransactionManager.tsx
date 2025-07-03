@@ -3,20 +3,20 @@ import { useState } from "react"
 import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
 import { RiArrowDownSLine } from "@remixicon/react"
 import { yupResolver } from "@hookform/resolvers/yup";
+import { SubmitHandler, useForm } from "react-hook-form"
+import { AnimatePresence } from "motion/react";
 
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { Header } from "@/shared/ui/organisms/Header"
-import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
+import { DEFAULT_AMOUNT_VALUE, useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { Category } from "@/shared/types/categories.types"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { SubmitHandler, useForm } from "react-hook-form"
 import { CreateExpenseData, CreateExpenseSchema } from "@/shared/types/records.types"
-import { AnimatePresence } from "motion/react";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 
 interface TransactionManagerProps {
@@ -35,7 +35,9 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
   const { handleChange, currencyState } = useCurrencyField({
     amount: null
   })
-  const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory, categoryError, subcategoryError, updateCategoryError, updateSubcategoryError } = useCategoriesForm({ categories })
+  const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
+    categoryError, subcategoryError, updateCategoryError, updateSubcategoryError,
+  } = useCategoriesForm({ categories })
 
   const titleDictionary: Record<TransactionScreens, string> = {
     expense: 'Gasto',
@@ -59,7 +61,7 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
     if (!subcategory) {
       updateSubcategoryError('Por favor, seleccione una subcategoría.')
     }
-    if (currencyState === '$0.00') {
+    if (currencyState === DEFAULT_AMOUNT_VALUE) {
       setErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
     }
   }
