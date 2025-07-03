@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Budget } from "./budgets.types";
 import { Category } from "./categories.types";
 import { DetailedError } from "./global.types";
@@ -39,6 +39,10 @@ export type AccountRecord = {
   budgets: string[];
 }
 
+export type ExpenseRecord = AccountRecord & {
+  isPaid: boolean;
+}
+
 export type ExpensePaid = {
   _id: string;
   shortName: string;
@@ -74,13 +78,47 @@ export type GetRecordsResponse = Omit<AxiosResponse, 'data'> & {
   };
 }
 
+export type CreateExpensePayload = {
+  account: string;
+  amount: number;
+  budgets: string[];
+  category: string;
+  date: Date;
+  description: string;
+  indebtedPeople: IndebtedPeople[];
+  isPaid: boolean;
+  linkedBudgets: Budget[];
+  shortName: string;
+  subCategory: string;
+  tag: string[];
+  typeOfRecord: 'expense'
+}
+
+export interface CreateExpenseData {
+  data: {
+    expense: ExpenseRecord
+  }
+  error: null;
+  message: string[];
+  success: boolean;
+  version: string;
+}
+
+export interface CreateExpenseError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
+    }
+  }>;
+}
+
 export type GetCurrentMonthRecordsResponse = {
   detailedError: DetailedError | null;
   message: string | null;
   records: BankMovement[];
 }
 
-export type CreateExpenseData = {
+export type CreateExpenseDataForm = {
   shortDescription: string
   description?: string | null | undefined
 }

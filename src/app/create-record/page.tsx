@@ -13,7 +13,7 @@ export default async function CreateRecordPage() {
   return (
     <>
       <LoginRequiredModal show={!accessToken} />
-      <TransactionManager categories={categories} />
+      <TransactionManager categories={categories} selectedAccount={selectedAccount} accessToken={accessToken} />
     </>
   )
 }

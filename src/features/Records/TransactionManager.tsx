@@ -1,10 +1,11 @@
 "use client"
 import { useState } from "react"
-import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
+import { Button, CheckIcon, Dropdown, DropdownItem, Label, Spinner, Textarea, TextInput } from "flowbite-react"
 import { RiArrowDownSLine } from "@remixicon/react"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form"
 import { AnimatePresence } from "motion/react";
+import { useMutation } from "@tanstack/react-query";
 
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
@@ -16,14 +17,18 @@ import { Category } from "@/shared/types/categories.types"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { CreateExpenseData, CreateExpenseSchema } from "@/shared/types/records.types"
+import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, CreateExpenseSchema } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
+import { createExpenseCb } from "@/shared/utils/records.utils";
+import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils";
 
 interface TransactionManagerProps {
   categories: Category[]
+  selectedAccount: string | null
+  accessToken: string
 }
 
-export const TransactionManager = ({ categories }: TransactionManagerProps) => {
+export const TransactionManager = ({ categories, selectedAccount, accessToken }: TransactionManagerProps) => {
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
   const [date, setDate] = useState<Date | undefined>(new Date())
   const updateExpenseScreen = () => setSubscreen('expense')
@@ -51,8 +56,18 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
     resolver: yupResolver(CreateExpenseSchema)
   })
 
-  const onSubmit: SubmitHandler<CreateExpenseData> = (data) => {
-    console.log(data)
+  const { mutate: createExpense, isError, isPending, isSuccess, isIdle } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
+      mutationFn: (data) => createExpenseCb(data, accessToken),
+      // onError: () => {
+      //   toggleMessageCardState("error")
+      // },
+      onSuccess: () => {
+        window.alert('success')
+        // toggleMessageCardState("success")
+      }
+    })
+
+  const onSubmit: SubmitHandler<CreateExpenseDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
       updateCategoryError('Por favor, seleccione una categoría.')
     }
@@ -61,6 +76,38 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
     }
     if (currencyState === DEFAULT_AMOUNT_VALUE) {
       updateErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
+    }
+    if (!selectedAccount) {
+      // Show error
+      console.error('No account selected')
+    }
+    if (!date) {
+      console.error('Date is undefined')
+    }
+
+    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory) {
+      const amountNumber = cleanCurrencyString(currencyState)
+      const payload: CreateExpensePayload = {
+        account: selectedAccount,
+        amount: amountNumber,
+        // Prop budgets deprecated
+        budgets: [],
+        category: categorySelected.categoryId,
+        date,
+        description: data.description ?? '',
+        // TODO: Add logic to handle indebted people
+        indebtedPeople: [],
+        // TODO: Add logic to check if account is type credit
+        isPaid: false,
+        // TODO: Add logic to handle linked budgets
+        linkedBudgets: [],
+        shortName: data.shortDescription,
+        subCategory: subcategory,
+        // TODO: Add logic to handle tags
+        tag: [],
+        typeOfRecord: 'expense'
+      }
+      createExpense(payload)
     }
   }
 
@@ -144,13 +191,12 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
             <LinkButton className="mt-4" text="Cancelar" type="secondary" href={DASHBOARD_ROUTE} />
               <Button
                 className="hover:cursor-pointer"
-                // disabled={isPending || isSuccess}
+                disabled={isPending || isSuccess}
                 type="submit"
                 >
-                  Crear gasto
-              {/* { (isIdle || isError) && 'Crear gasto'}
+              { (isIdle || isError) && 'Crear gasto'}
               { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-              { isSuccess && (<CheckIcon />)} */}
+              { isSuccess && (<CheckIcon />)}
             </Button>
           </form>
         </AnimatePresence>
