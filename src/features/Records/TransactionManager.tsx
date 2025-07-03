@@ -24,7 +24,7 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { createExpenseCb } from "@/shared/utils/records.utils";
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils";
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants";
-import { DetailedError } from "@/shared/types/global.types";
+import { DetailedError, GeneralError } from "@/shared/types/global.types";
 import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants";
 
 interface TransactionManagerProps {
@@ -55,14 +55,6 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
     transfer: 'Transferencia',
   }
 
-  useEffect(() => {
-    if (detailedError?.cause === 'connection') {
-      toast.error('Error de conexión. Por favor, inténtalo más tarde.');
-    } else if (detailedError?.message) {
-      toast.error(CATEGORY_FETCH_ERROR);
-    }
-  }, [detailedError?.cause, detailedError?.message])
-
   const {
     register,
     handleSubmit,
@@ -71,17 +63,30 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
     resolver: yupResolver(CreateExpenseSchema)
   })
 
-  const { mutate: createExpense, isError, isPending, isSuccess, isIdle } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
+  const { mutate: createExpense, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
       mutationFn: (data) => createExpenseCb(data, accessToken),
-      onError: () => {
-        toast.error(CREATE_EXPENSE_ERROR);
-      },
       onSuccess: () => {
         setTimeout(() => {
           router.push(DASHBOARD_ROUTE)
         }, 1000)
       }
     })
+  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+
+  useEffect(() => {
+    if (detailedError?.cause === 'connection') {
+      toast.error('Error de conexión. Por favor, inténtalo más tarde.');
+    } else if (detailedError?.message) {
+      toast.error(CATEGORY_FETCH_ERROR);
+    }
+  }, [detailedError?.cause, detailedError?.message])
+
+  useEffect(() => {
+    if (isError && messageError) {
+      toast.error(CREATE_EXPENSE_ERROR);
+      return
+    }
+    }, [isError, messageError])
 
   const onSubmit: SubmitHandler<CreateExpenseDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
