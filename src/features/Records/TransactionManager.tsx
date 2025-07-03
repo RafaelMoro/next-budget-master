@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import { Button, CheckIcon, Dropdown, DropdownItem, Label, Spinner, Textarea, TextInput } from "flowbite-react"
-import { RiArrowDownSLine } from "@remixicon/react"
+import { RiArrowDownSLine, RiArrowLeftLine } from "@remixicon/react"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form"
 import { AnimatePresence } from "motion/react";
@@ -135,6 +135,10 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+        {/* <RiArrowLeftLine /> */}
+      <div className="max-w-min ml-5">
+        <LinkButton href={DASHBOARD_ROUTE} text="Volver" type="secondary" />
+      </div>
       <main className="flex-1 flex flex-col items-center gap-8 min-h-full">
         <h1 className="text-black dark:text-white text-4xl text-center font-bold">Crear {titleDictionary[subscreen]}</h1>
         <TransactionManagerGroupButton
