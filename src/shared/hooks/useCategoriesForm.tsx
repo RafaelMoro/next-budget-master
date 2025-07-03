@@ -4,14 +4,19 @@ import { Category, CategoryShown } from "../types/categories.types"
 
 interface UseCategoriesFormProps {
   categories: Category[]
-  categoryError: string | null
-  resetCategoryError: () => void
 }
 
 /**
 * This hook is to handle the selection of category and subcategory for editing or creating transactions
 */
-export const useCategoriesForm = ({ categories, categoryError, resetCategoryError }: UseCategoriesFormProps) => {
+export const useCategoriesForm = ({ categories }: UseCategoriesFormProps) => {
+  const [categoryError, setCategoryError] = useState<string | null>(null)
+  const resetCategoryError = () => setCategoryError(null)
+  const updateCategoryError = (error: string) => setCategoryError(error)
+  const [subcategoryError, setSubcategoryError] = useState<string | null>(null)
+  const resetSubcategoryError = () => setSubcategoryError(null)
+  const updateSubcategoryError = (error: string) => setSubcategoryError(error)
+
   const categoriesShown: CategoryShown[] = categories.map((cat) => ({
     name: cat.categoryName,
     categoryId: cat._id
@@ -27,7 +32,10 @@ export const useCategoriesForm = ({ categories, categoryError, resetCategoryErro
     if (categoryError) resetCategoryError()
     setCategorySelected(newCat)
   }
-  const updateSubcategory = (newSubcat: string) => setSubcategory(newSubcat)
+  const updateSubcategory = (newSubcat: string) => {
+    if (subcategoryError) resetSubcategoryError()
+    setSubcategory(newSubcat)
+  }
 
   return {
     categoriesShown,
@@ -35,6 +43,10 @@ export const useCategoriesForm = ({ categories, categoryError, resetCategoryErro
     updateCategory,
     subcategory,
     subcategories,
-    updateSubcategory
+    updateSubcategory,
+    categoryError,
+    updateCategoryError,
+    subcategoryError,
+    updateSubcategoryError
   }
 }

@@ -31,14 +31,11 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
   const updateTransferScreen = () => setSubscreen('transfer')
 
   const [errorAmount, setErrorAmount] = useState<string | null>(null)
-  const [categoryError, setCategoryError] = useState<string | null>(null)
-  const resetCategoryError = () => setCategoryError(null)
-  const [subcategoryError, setSubcategoryError] = useState<string | null>(null)
 
   const { handleChange, currencyState } = useCurrencyField({
     amount: null
   })
-  const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory } = useCategoriesForm({ categories, categoryError, resetCategoryError })
+  const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory, categoryError, subcategoryError, updateCategoryError, updateSubcategoryError } = useCategoriesForm({ categories })
 
   const titleDictionary: Record<TransactionScreens, string> = {
     expense: 'Gasto',
@@ -57,10 +54,10 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
   const onSubmit: SubmitHandler<CreateExpenseData> = (data) => {
     console.log(data)
     if (!categorySelected.categoryId || !categorySelected.name) {
-      setCategoryError('Por favor, seleccione una categoría.')
+      updateCategoryError('Por favor, seleccione una categoría.')
     }
     if (!subcategory) {
-      setSubcategoryError('Por favor, seleccione una subcategoría.')
+      updateSubcategoryError('Por favor, seleccione una subcategoría.')
     }
     if (currencyState === '$0.00') {
       setErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
