@@ -30,10 +30,15 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
   const updateIncomeScreen = () => setSubscreen('income')
   const updateTransferScreen = () => setSubscreen('transfer')
 
+  const [errorAmount, setErrorAmount] = useState<string | null>(null)
+  const [categoryError, setCategoryError] = useState<string | null>(null)
+  const resetCategoryError = () => setCategoryError(null)
+  const [subcategoryError, setSubcategoryError] = useState<string | null>(null)
+
   const { handleChange, currencyState } = useCurrencyField({
     amount: null
   })
-  const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory } = useCategoriesForm({ categories })
+  const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory } = useCategoriesForm({ categories, categoryError, resetCategoryError })
 
   const titleDictionary: Record<TransactionScreens, string> = {
     expense: 'Gasto',
@@ -51,6 +56,15 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
 
   const onSubmit: SubmitHandler<CreateExpenseData> = (data) => {
     console.log(data)
+    if (!categorySelected.categoryId || !categorySelected.name) {
+      setCategoryError('Por favor, seleccione una categoría.')
+    }
+    if (!subcategory) {
+      setSubcategoryError('Por favor, seleccione una subcategoría.')
+    }
+    if (currencyState === '$0.00') {
+      setErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
+    }
   }
 
   return (
@@ -74,6 +88,9 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
               value={currencyState}
               handleChange={handleChange}
             />
+            { errorAmount && (
+              <ErrorMessage isAnimated>{errorAmount}</ErrorMessage>
+            )}
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="shortDescription">Pequeña descripción</Label>
@@ -109,6 +126,9 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
                 </DropdownItem>
               )) }
             </Dropdown>
+            { categoryError && (
+              <ErrorMessage isAnimated>{categoryError}</ErrorMessage>
+            )}
             <Dropdown disabled={subcategories.length === 0} aria-label="Select subcategory" label="Subcategorias" renderTrigger={() => (
               <Button color="dark">
                 Subcategoria: {subcategory}
@@ -121,6 +141,9 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
                 </DropdownItem>
               )) }
             </Dropdown>
+            { subcategoryError && (
+              <ErrorMessage isAnimated>{subcategoryError}</ErrorMessage>
+            )}
             <LinkButton className="mt-4" text="Cancelar" type="secondary" href={DASHBOARD_ROUTE} />
               <Button
                 className="hover:cursor-pointer"
