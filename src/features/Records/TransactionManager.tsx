@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button, CheckIcon, Dropdown, DropdownItem, Label, Spinner, Textarea, TextInput } from "flowbite-react"
 import { RiArrowDownSLine } from "@remixicon/react"
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { AnimatePresence } from "motion/react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from 'next/navigation'
+import { Toaster, toast } from "sonner";
 
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
@@ -22,14 +23,18 @@ import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExp
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { createExpenseCb } from "@/shared/utils/records.utils";
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils";
+import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants";
+import { DetailedError } from "@/shared/types/global.types";
+import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants";
 
 interface TransactionManagerProps {
   categories: Category[]
   selectedAccount: string | null
   accessToken: string
+  detailedError: DetailedError | null
 }
 
-export const TransactionManager = ({ categories, selectedAccount, accessToken }: TransactionManagerProps) => {
+export const TransactionManager = ({ categories, selectedAccount, accessToken, detailedError }: TransactionManagerProps) => {
   const router = useRouter()
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
   const [date, setDate] = useState<Date | undefined>(new Date())
@@ -50,6 +55,14 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken }:
     transfer: 'Transferencia',
   }
 
+  useEffect(() => {
+    if (detailedError?.cause === 'connection') {
+      toast.error('Error de conexión. Por favor, inténtalo más tarde.');
+    } else if (detailedError?.message) {
+      toast.error(CATEGORY_FETCH_ERROR);
+    }
+  }, [detailedError?.cause, detailedError?.message])
+
   const {
     register,
     handleSubmit,
@@ -60,9 +73,9 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken }:
 
   const { mutate: createExpense, isError, isPending, isSuccess, isIdle } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
       mutationFn: (data) => createExpenseCb(data, accessToken),
-      // onError: () => {
-      //   toggleMessageCardState("error")
-      // },
+      onError: () => {
+        toast.error(CREATE_EXPENSE_ERROR);
+      },
       onSuccess: () => {
         setTimeout(() => {
           router.push(DASHBOARD_ROUTE)
@@ -204,6 +217,9 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken }:
           </form>
         </AnimatePresence>
       </main>
+      { (isError || detailedError?.message) && (
+        <Toaster position="top-center" />
+      )}
     </div>
 
   )

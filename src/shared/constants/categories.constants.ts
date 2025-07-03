@@ -31,3 +31,5 @@ export const categoryIcons: Record<CategoriesIcons, ElementType> = {
   income: BusinessPlanIcon,
   newCategory: CoinsIcon
 }
+
+export const CATEGORY_FETCH_ERROR = 'Error al obtener las categorías. Por favor, inténtalo más tarde.';

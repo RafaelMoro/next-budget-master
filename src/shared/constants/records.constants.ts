@@ -5,3 +5,5 @@ export const GET_EXPENSES = '/expenses-actions';
 export const TRANSFER_ROUTE = 'records/transfer';
 
 export const NO_RECORDS_FOUND = 'No incomes or expenses found.'
+
+export const CREATE_EXPENSE_ERROR = 'Oops! No pudimos registrar el movimiento. Intenta más tarde.'
