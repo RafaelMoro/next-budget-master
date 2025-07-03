@@ -30,6 +30,7 @@ export const useCategoriesForm = ({ categories }: UseCategoriesFormProps) => {
 
   const updateCategory = (newCat: CategoryShown) => {
     if (categoryError) resetCategoryError()
+    if (subcategory) setSubcategory(null)
     setCategorySelected(newCat)
   }
   const updateSubcategory = (newSubcat: string) => {
