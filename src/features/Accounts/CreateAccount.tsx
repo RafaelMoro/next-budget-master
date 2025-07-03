@@ -74,8 +74,8 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
     <AnimatePresence>
       <div key="create-account-modal">
         { (isError) && (
-            <Toaster position="top-center" />
-          )}
+          <Toaster position="top-center" />
+        )}
         <ModalHeader>Crear cuenta</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
