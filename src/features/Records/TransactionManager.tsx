@@ -25,6 +25,7 @@ interface TransactionManagerProps {
 
 export const TransactionManager = ({ categories }: TransactionManagerProps) => {
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
+  const [date, setDate] = useState<Date | undefined>(new Date())
   const updateExpenseScreen = () => setSubscreen('expense')
   const updateIncomeScreen = () => setSubscreen('income')
   const updateTransferScreen = () => setSubscreen('transfer')
@@ -65,7 +66,7 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
         />
         <AnimatePresence>
           <form onSubmit={handleSubmit(onSubmit)} className="max-w-3xs mx-auto flex flex-col gap-4">
-            <DateTimePicker />
+            <DateTimePicker date={date} setDate={setDate} />
             <CurrencyField
               labelName="Cantidad"
               dataTestId="amount"

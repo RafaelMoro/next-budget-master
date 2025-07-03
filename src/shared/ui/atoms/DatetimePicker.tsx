@@ -1,17 +1,18 @@
 "use client"
-
-import { useState } from "react"
 import { DatePicker } from "../tremor/DatePicker"
 
-export const DateTimePicker = () => {
-  const [value, setValue] = useState<Date | undefined>(new Date())
+interface DateTimePickerProps {
+  date: Date | undefined
+  setDate: (date: Date | undefined) => void
+}
 
+export const DateTimePicker = ({ date, setDate }: DateTimePickerProps) => {
   return (
     <DatePicker
       showTimePicker
-      value={value}
+      value={date}
       onChange={(value) => {
-        setValue(value)
+        setDate(value)
       }}
     />
   )
