@@ -82,7 +82,7 @@ export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswor
                 <ErrorMessage isAnimated>{errors.confirmPassword?.message}</ErrorMessage>
               )}
             </div>
-            <LinkButton className="mt-4" text="Volver al inicio" type="secondary" href={LOGIN_ROUTE} />
+            <LinkButton className="mt-4" type="secondary" href={LOGIN_ROUTE} >Volver al inicio</LinkButton>
             <Button
               className="hover:cursor-pointer"
               disabled={isPending || isSuccess}

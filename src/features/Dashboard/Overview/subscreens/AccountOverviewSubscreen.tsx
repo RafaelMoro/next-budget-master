@@ -40,7 +40,9 @@ export const AccountOverviewSubscreen = () => {
         updateAccAction={updateAccAction}
       />
       { records.length > 0 && (
-        <LinkButton text="Registrar movimiento" href={CREATE_RECORD_ROUTE} />
+        <LinkButton href={CREATE_RECORD_ROUTE} >
+          Registrar movimiento
+        </LinkButton>
       ) }
       <MonthAccordionRecords records={records} title="Este mes" />
     </section>

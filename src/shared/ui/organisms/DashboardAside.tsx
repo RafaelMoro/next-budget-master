@@ -27,8 +27,7 @@ export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectA
       )}
       <LinkButton
         href={CREATE_RECORD_ROUTE}
-        text="Registrar movimiento"
-      />
+      >Registrar movimiento</LinkButton>
       <nav className="mt-10 flex flex-col">
         <DashboardAsideLink onClickCb={() => updateScreen('overview')}>
             <HomeIcon />
@@ -45,7 +44,7 @@ export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectA
       </nav>
 
       <section className="flex flex-col gap-2">
-        <LinkButton text="Cerrar sesión" type="darkRed" className="w-full" href="/api/auth/sign-out" />
+        <LinkButton type="darkRed" className="w-full" href="/api/auth/sign-out">Cerrar sesión</LinkButton>
       </section>
     </aside>
   )

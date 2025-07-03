@@ -13,7 +13,9 @@ export const StatisticsSubscreen = () => {
         <h2 className="text-2xl font-semibold text-center">Sin transacciones, sin gráficas... ¡por el momento!</h2>
         <p className="text-gray-400 text-center mb-5">Aún no podemos generar gráficas sin movimientos... ¡empieza a registrar y verás el cambio!</p>
         <div className="mx-auto my-0">
-          <LinkButton text="Registrar movimiento" href={CREATE_RECORD_ROUTE} />
+          <LinkButton href={CREATE_RECORD_ROUTE} >
+            Registrar movimiento
+          </LinkButton>
         </div>
       </div>
     )
@@ -21,7 +23,9 @@ export const StatisticsSubscreen = () => {
   return (
     <section className="grid grid-cols-1 gap-4">
       <div className="justify-self-end max-w-48">
-        <LinkButton text="Registrar movimiento" href={CREATE_RECORD_ROUTE} />
+        <LinkButton href={CREATE_RECORD_ROUTE} >
+          Registrar movimiento
+        </LinkButton>
       </div>
       <IncomeExpensesChart records={records} />
     </section>

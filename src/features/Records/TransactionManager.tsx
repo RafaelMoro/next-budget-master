@@ -135,9 +135,11 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-        {/* <RiArrowLeftLine /> */}
       <div className="max-w-min ml-5">
-        <LinkButton href={DASHBOARD_ROUTE} text="Volver" type="secondary" />
+        <LinkButton href={DASHBOARD_ROUTE} type="secondary">
+          <RiArrowLeftLine />
+          Volver
+      </LinkButton>
       </div>
       <main className="flex-1 flex flex-col items-center gap-8 min-h-full">
         <h1 className="text-black dark:text-white text-4xl text-center font-bold">Crear {titleDictionary[subscreen]}</h1>
@@ -213,7 +215,7 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
             { subcategoryError && (
               <ErrorMessage isAnimated>{subcategoryError}</ErrorMessage>
             )}
-            <LinkButton className="mt-4" text="Cancelar" type="secondary" href={DASHBOARD_ROUTE} />
+            <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
               <Button
                 className="hover:cursor-pointer"
                 disabled={isPending || isSuccess}
