@@ -136,7 +136,7 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
     <div className="min-h-screen flex flex-col">
       <Header />
       <div className="max-w-min ml-5">
-        <LinkButton href={DASHBOARD_ROUTE} type="secondary">
+        <LinkButton href={DASHBOARD_ROUTE} type="greySecondary">
           <RiArrowLeftLine />
           Volver
       </LinkButton>
