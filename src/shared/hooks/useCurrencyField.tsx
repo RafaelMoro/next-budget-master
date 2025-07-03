@@ -12,6 +12,10 @@ export const DEFAULT_AMOUNT_VALUE = '$0.00'
 */
 export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
   const [currencyState, setCurrencyState] = useState(amount ?? DEFAULT_AMOUNT_VALUE);
+  const [errorAmount, setErrorAmount] = useState<string | null>(null)
+  const updateErrorAmount = (error: string) => {
+    setErrorAmount(error);
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -30,6 +34,7 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     if (currencyFirstNumber.test(value)) {
       const newValue = `$0.0${value.charAt(5)}`
       setCurrencyState(newValue);
+      setErrorAmount(null)
       return;
     }
     if (currencySecondNumber.test(value)) {
@@ -84,5 +89,7 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
   return {
     handleChange,
     currencyState,
+    errorAmount,
+    updateErrorAmount,
   };
 }

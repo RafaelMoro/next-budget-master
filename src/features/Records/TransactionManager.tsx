@@ -30,10 +30,8 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
   const updateIncomeScreen = () => setSubscreen('income')
   const updateTransferScreen = () => setSubscreen('transfer')
 
-  const [errorAmount, setErrorAmount] = useState<string | null>(null)
-
-  const { handleChange, currencyState } = useCurrencyField({
-    amount: null
+  const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
+    amount: null,
   })
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
     categoryError, subcategoryError, updateCategoryError, updateSubcategoryError,
@@ -62,7 +60,7 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
       updateSubcategoryError('Por favor, seleccione una subcategoría.')
     }
     if (currencyState === DEFAULT_AMOUNT_VALUE) {
-      setErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
+      updateErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
     }
   }
 
