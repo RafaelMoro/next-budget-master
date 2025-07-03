@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form"
 import { AnimatePresence } from "motion/react";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from 'next/navigation'
 
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
@@ -29,6 +30,7 @@ interface TransactionManagerProps {
 }
 
 export const TransactionManager = ({ categories, selectedAccount, accessToken }: TransactionManagerProps) => {
+  const router = useRouter()
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
   const [date, setDate] = useState<Date | undefined>(new Date())
   const updateExpenseScreen = () => setSubscreen('expense')
@@ -62,8 +64,9 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken }:
       //   toggleMessageCardState("error")
       // },
       onSuccess: () => {
-        window.alert('success')
-        // toggleMessageCardState("success")
+        setTimeout(() => {
+          router.push(DASHBOARD_ROUTE)
+        }, 1000)
       }
     })
 
