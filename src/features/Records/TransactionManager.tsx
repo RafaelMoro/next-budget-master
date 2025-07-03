@@ -45,7 +45,7 @@ export const TransactionManager = ({ categories }: TransactionManagerProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateExpenseData>({
+  } = useForm({
     resolver: yupResolver(CreateExpenseSchema)
   })
 

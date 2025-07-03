@@ -82,7 +82,7 @@ export type GetCurrentMonthRecordsResponse = {
 
 export type CreateExpenseData = {
   shortDescription: string
-  description: string
+  description?: string | null | undefined
 }
 
 const shortNameValidation = string()
@@ -90,12 +90,16 @@ const shortNameValidation = string()
   .min(3, 'La pequeña descripción debe contener más de 3 caracteres')
   .max(50, 'La pequeña descripción debe contener menos de 50 caracteres.');
 const descriptionValidation = string()
-// TODO: Remove required
-  .required()
-    .min(3, 'Por favor, ingrese una descripción de más de 3 caracteres')
-    .max(300, 'Por favor, ingrese una descripción con menos de 300 caracteres.')
+  .nullable()
+  .notRequired()
+  .when('description', {
+      is: (value: string) => value?.length,
+      then: (rule) => rule.min(3, 'Por favor, ingrese una descripción de más de 3 caracteres').max(300, 'Por favor, ingrese una descripción con menos de 300 caracteres.'),
+  })
 
-export const CreateExpenseSchema = object({
+export const CreateExpenseSchema = object().shape({
   shortDescription: shortNameValidation,
   description: descriptionValidation
-})
+}, [
+  ["description", "description"]
+])
