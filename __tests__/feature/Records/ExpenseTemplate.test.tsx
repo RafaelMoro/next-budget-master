@@ -89,5 +89,19 @@ describe("ExpenseTemplate", () => {
 
       expect(screen.getByText(/Por favor, ingrese una descripción con menos de 300 caracteres/i)).toBeInTheDocument();
     })
+
+    it('Given a user filling the short description and then clicking create expense, show validation error for category to be required', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<ExpenseTemplateWrapper push={push} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(/Por favor, seleccione una categoría/i)).toBeInTheDocument();
+    })
   })
 });
