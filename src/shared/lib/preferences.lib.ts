@@ -1,6 +1,6 @@
 "use server"
 import { cookies } from 'next/headers'
-import { ACCOUNT_COOKIE_KEY, THEME_COOKIE_KEY, ThemeMode } from '../constants/Global.constants'
+import { ACCOUNT_COOKIE_KEY, OVERVIEW_SUBSCREEN_KEY, THEME_COOKIE_KEY, ThemeMode } from '../constants/Global.constants'
 
 /**
  * This function gets the value of the theme in the cookie. It sets the cookie if it doesn't exist
@@ -62,4 +62,33 @@ export const getAccountCookie = async () => {
     return null
   }
   return account
+}
+
+/**
+ * This function saves the overview subscreen selection into the cookie
+ * @param theme - The overview subscreen
+ * @returns Promise<void>
+ */
+export const saveOverviewSubscreen = async (overviewSubscreen: string): Promise<void> => {
+  await cookies().set(OVERVIEW_SUBSCREEN_KEY, overviewSubscreen, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  })
+}
+export const removeOverviewSubscreen = async () => {
+  await cookies().delete(OVERVIEW_SUBSCREEN_KEY)
+}
+/**
+ * This function gets the value of the overview subscreen in the cookie.
+ * @returns string or null if not found
+ */
+export const getOverviewSubscreen = async () => {
+  const cookieStore = cookies()
+  const overviewSubscreen = await cookieStore.get(OVERVIEW_SUBSCREEN_KEY)?.value
+  if (!overviewSubscreen) {
+    // Return default
+    return null
+  }
+  return overviewSubscreen
 }

@@ -3,6 +3,7 @@ export const COOKIE_SESSION_KEY = 'session'
 export const THEME_COOKIE_KEY = 'theme'
 // Stands for fintrack selected bank account
 export const ACCOUNT_COOKIE_KEY = 'ftk_sba'
+export const OVERVIEW_SUBSCREEN_KEY = 'overview_subscreen'
 
 export const CURRENT_MONTH_RECORDS_TAG = 'current-month-records'
 
