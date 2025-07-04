@@ -1,11 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 
 import { ExpenseTemplate } from "@/features/Records/ExpenseTemplate";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import QueryProviderWrapper from "@/app/QueryProviderWrapper";
 import { mockCategories } from "../../mocks/categories.mock";
 import { Category } from "@/shared/types/categories.types";
+import { recordMock } from "../../mocks/records.mock";
 
 const ExpenseTemplateWrapper = ({
   push,
@@ -34,6 +36,9 @@ jest.mock('next/headers', () => ({
     set: jest.fn(),
   })),
 }));
+
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("ExpenseTemplate", () => {
   it("should show expense template", () => {
@@ -229,6 +234,44 @@ describe("ExpenseTemplate", () => {
       await user.type(amountInput, '123');
 
       expect(screen.queryByText(/Por favor, ingrese una cantidad mayor a 0/i)).not.toBeInTheDocument();
+    })
+  })
+
+  describe('Form submission', () => {
+    it('Given a user filling correctly the form, it should see the tick in the button', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: ['Expense created', 'Account updated'],
+        success: true,
+        version: "v1.2.0",
+        data: {
+          expense: recordMock
+        },
+      })
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      const amountInput = screen.getByLabelText(/Cantidad/i);
+      await user.type(amountInput, '123');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByTestId('check-icon')).toBeInTheDocument();
     })
   })
 });

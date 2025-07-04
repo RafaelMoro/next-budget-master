@@ -176,7 +176,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             >
           { (isIdle || isError) && 'Crear gasto'}
           { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-          { isSuccess && (<CheckIcon />)}
+          { isSuccess && (<CheckIcon data-testid="check-icon" />)}
         </Button>
       </form>
       { (isError || detailedError?.message) && (
