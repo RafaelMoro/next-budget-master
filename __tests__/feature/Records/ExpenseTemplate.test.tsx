@@ -149,5 +149,32 @@ describe("ExpenseTemplate", () => {
 
       expect(screen.queryByText(/Por favor, seleccione una categoría/i)).not.toBeInTheDocument();
     })
+
+    it('Given a user gets a subcategory error, when the user selects a subcategory, the error should disappear', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
+      await user.click(createExpenseButton);
+
+      const subcategoryError = screen.getByText(/Por favor, seleccione una subcategoría/i);
+      expect(subcategoryError).toBeInTheDocument();
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      expect(screen.queryByText(/Por favor, seleccione una subcategoría/i)).not.toBeInTheDocument();
+    })
   })
 });
