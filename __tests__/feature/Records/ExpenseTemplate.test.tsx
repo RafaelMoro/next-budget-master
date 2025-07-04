@@ -62,7 +62,7 @@ describe("ExpenseTemplate", () => {
       expect(screen.getByText(/Por favor, ingrese una pequeña descripción/i)).toBeInTheDocument()
     })
 
-    it('Given a user typing one letter and then clicking create expense, show validation error for short description to be more than 3 characters', async () => {
+    it('Given a user typing one letter and then clicking create expense, show validation error for description to be more than 3 characters', async () => {
       const user = userEvent.setup();
       const push = jest.fn();
       render(<ExpenseTemplateWrapper push={push} />);
@@ -74,6 +74,20 @@ describe("ExpenseTemplate", () => {
       await user.click(createExpenseButton);
 
       expect(screen.getByText(/Por favor, ingrese una descripción de más de 3 caracteres/i)).toBeInTheDocument();
+    })
+
+    it('Given a user typing more than 300 characters and then clicking create expense, show validation error for description to be less than 300 characters', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<ExpenseTemplateWrapper push={push} />);
+
+      const description = screen.getByLabelText(/Descripción \(opcional\)/i);
+      await user.type(description, 'a'.repeat(301));
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(/Por favor, ingrese una descripción con menos de 300 caracteres/i)).toBeInTheDocument();
     })
   })
 });
