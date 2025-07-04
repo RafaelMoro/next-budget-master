@@ -127,5 +127,27 @@ describe("ExpenseTemplate", () => {
 
       expect(screen.getByText(/Por favor, seleccione una subcategoría/i)).toBeInTheDocument();
     })
+
+    it('Given a user gets a category error, when the user selects a category, the error should disappear', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
+      await user.click(createExpenseButton);
+
+      const categoryError = screen.getByText(/Por favor, seleccione una categoría/i);
+      expect(categoryError).toBeInTheDocument();
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      expect(screen.queryByText(/Por favor, seleccione una categoría/i)).not.toBeInTheDocument();
+    })
   })
 });
