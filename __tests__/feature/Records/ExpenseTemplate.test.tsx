@@ -1,12 +1,18 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
+
 import { ExpenseTemplate } from "@/features/Records/ExpenseTemplate";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import QueryProviderWrapper from "@/app/QueryProviderWrapper";
 
-const ExpenseTemplateWrapper = () => {
+const ExpenseTemplateWrapper = ({
+  push
+}: {
+  push: () => void
+}) => {
   return (
     <QueryProviderWrapper>
-      <AppRouterContextProviderMock router={{ push: jest.fn() }}>
+      <AppRouterContextProviderMock router={{ push }}>
         <ExpenseTemplate
           categories={[]}
           selectedAccount="123"
@@ -27,7 +33,8 @@ jest.mock('next/headers', () => ({
 
 describe("ExpenseTemplate", () => {
   it("should show expense template", () => {
-    render(<ExpenseTemplateWrapper />);
+    const push = jest.fn();
+    render(<ExpenseTemplateWrapper push={push} />);
 
     expect(screen.getByLabelText(/Cantidad/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Pequeña descripción/i)).toBeInTheDocument();
@@ -42,4 +49,17 @@ describe("ExpenseTemplate", () => {
     expect(screen.getByRole('link', { name: /Cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear gasto/i })).toBeInTheDocument();
   });
+
+  describe('Form Validations', () => {
+    it('Given a user clicking on create expense, show validation error for short description to be required', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<ExpenseTemplateWrapper push={push} />);
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(/Por favor, ingrese una pequeña descripción/i)).toBeInTheDocument()
+    })
+  })
 });
