@@ -4,17 +4,21 @@ import userEvent from '@testing-library/user-event';
 import { ExpenseTemplate } from "@/features/Records/ExpenseTemplate";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import QueryProviderWrapper from "@/app/QueryProviderWrapper";
+import { mockCategories } from "../../mocks/categories.mock";
+import { Category } from "@/shared/types/categories.types";
 
 const ExpenseTemplateWrapper = ({
-  push
+  push,
+  categories = []
 }: {
-  push: () => void
+  push: () => void;
+  categories?: Category[];
 }) => {
   return (
     <QueryProviderWrapper>
       <AppRouterContextProviderMock router={{ push }}>
         <ExpenseTemplate
-          categories={[]}
+          categories={categories}
           selectedAccount="123"
           accessToken="abc"
           detailedError={null}
@@ -102,6 +106,26 @@ describe("ExpenseTemplate", () => {
       await user.click(createExpenseButton);
 
       expect(screen.getByText(/Por favor, seleccione una categoría/i)).toBeInTheDocument();
+    })
+
+    it('Given a user filling the short description and selecting a category, then clicking create expense, it should show the validation error for subcategory to be required', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(/Por favor, seleccione una subcategoría/i)).toBeInTheDocument();
     })
   })
 });
