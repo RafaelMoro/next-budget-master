@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useMutation } from "@tanstack/react-query"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Toaster, toast } from "sonner";
+import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite-react"
 
 import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, CreateExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
@@ -19,11 +20,10 @@ import { createExpenseCb } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { Button, CheckIcon, Dropdown, DropdownItem, Label, Spinner, Textarea, TextInput } from "flowbite-react"
-import { RiArrowDownSLine } from "@remixicon/react"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
 import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
+import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -158,36 +158,16 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
           )}
         </div>
-        <Dropdown aria-label="Select category" label="Categorias" renderTrigger={() => (
-          <Button data-testid="category-dropdown" color="dark">
-            Categoria: {categorySelected.name}
-            <RiArrowDownSLine />
-          </Button>
-        )}>
-          { categoriesShown.map((cat) => (
-            <DropdownItem key={cat.categoryId} value={cat.categoryId} onClick={() => updateCategory(cat) } className="flex justify-between">
-              {cat.name}
-            </DropdownItem>
-          )) }
-        </Dropdown>
-        { categoryError && (
-          <ErrorMessage isAnimated>{categoryError}</ErrorMessage>
-        )}
-        <Dropdown disabled={subcategories.length === 0} aria-label="Select subcategory" label="Subcategorias" renderTrigger={() => (
-          <Button data-testid="subcategory-dropdown" color="dark">
-            Subcategoria: {subcategory}
-            <RiArrowDownSLine />
-          </Button>
-        )}>
-          { (subcategories.length > 0) && subcategories.map((subcat) => (
-            <DropdownItem key={subcat} onClick={() => updateSubcategory(subcat)} className="flex justify-between">
-              {subcat}
-            </DropdownItem>
-          )) }
-        </Dropdown>
-        { subcategoryError && (
-          <ErrorMessage isAnimated>{subcategoryError}</ErrorMessage>
-        )}
+        <TransactionCategorizerDropdown
+          categoriesShown={categoriesShown}
+          categorySelected={categorySelected}
+          updateCategory={updateCategory}
+          categoryError={categoryError}
+          subcategories={subcategories}
+          subcategory={subcategory}
+          updateSubcategory={updateSubcategory}
+          subcategoryError={subcategoryError}
+        />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"
