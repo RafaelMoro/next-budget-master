@@ -15,5 +15,16 @@ export const mockCategories: Category[] = [
     ],
     icon: "foodAndDrink",
     __v: 0
+  },
+  {
+    _id: "65f3be727c46232bf19e7d01",
+    categoryName: "Transporte",
+    subCategories: [
+        "Bus",
+        "Taxi",
+        "Gasolina"
+    ],
+    icon: "transportation",
+    __v: 0
   }
 ]
