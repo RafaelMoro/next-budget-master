@@ -159,7 +159,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           )}
         </div>
         <Dropdown aria-label="Select category" label="Categorias" renderTrigger={() => (
-          <Button color="dark">
+          <Button data-testid="category-dropdown" color="dark">
             Categoria: {categorySelected.name}
             <RiArrowDownSLine />
           </Button>
@@ -174,7 +174,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           <ErrorMessage isAnimated>{categoryError}</ErrorMessage>
         )}
         <Dropdown disabled={subcategories.length === 0} aria-label="Select subcategory" label="Subcategorias" renderTrigger={() => (
-          <Button color="dark">
+          <Button data-testid="subcategory-dropdown" color="dark">
             Subcategoria: {subcategory}
             <RiArrowDownSLine />
           </Button>
