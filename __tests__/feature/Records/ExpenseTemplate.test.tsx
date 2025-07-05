@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
@@ -9,6 +9,7 @@ import { mockCategories } from "../../mocks/categories.mock";
 import { Category } from "@/shared/types/categories.types";
 import { recordMock } from "../../mocks/records.mock";
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants";
+import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 
 const ExpenseTemplateWrapper = ({
   push,
@@ -273,9 +274,12 @@ describe("ExpenseTemplate", () => {
       await user.click(createExpenseButton);
 
       expect(screen.getByTestId('check-icon')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(push).toHaveBeenCalledWith(DASHBOARD_ROUTE)
+      }, { timeout: 2000 })
     })
 
-    it.only('Given a user filling correctly the form, then something went wrong, it should show notification', async () => {
+    it('Given a user filling correctly the form, then something went wrong, it should show notification', async () => {
       const user = userEvent.setup();
       const push = jest.fn();
       mockedAxios.post.mockRejectedValue({
