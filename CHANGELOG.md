@@ -1,3 +1,9 @@
+## v0.16.0 (2025-07-05)
+
+### Pull Requests
+[#24](https://github.com/RafaelMoro/next-budget-master/pull/24) | Add tags modal
+
+
 ## v0.15.0 (2025-07-05)
 
 ### Pull Requests
