@@ -5,7 +5,7 @@ import { Dashboard } from '@/features/Dashboard/Dashboard';
 import { getAccountCookie } from '@/shared/lib/preferences.lib';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
 
-export default async function Page () {
+export default async function DashboardPage () {
   const accessToken = await getAccessToken()
   const { accounts, detailedError } = await fetchAccounts()
   const selectedAccountCookie = await getAccountCookie()
