@@ -5,12 +5,13 @@ import { ManageTagsModal } from '@/features/Records/ManageTagsModal';
 import { useManageTags } from '@/shared/hooks/useManageTags';
 
 const ManageTagsModalWrapper = () => {
-  const { openTagModal, toggleTagModal, tags, updateTags } = useManageTags();
+  const { openTagModal, tags, updateTags, openModal, closeModal } = useManageTags();
 
   return (
     <ManageTagsModal
       openModal={openTagModal}
-      toggleModal={toggleTagModal}
+      openModalFn={openModal}
+      closeModalFn={closeModal}
       tags={tags.current}
       updateTags={updateTags}
     />
@@ -98,7 +99,7 @@ describe('ManageTagsModal', () => {
       expect(await screen.findByText(/Por favor, ingrese una etiqueta de más de 3 caracteres/i)).toBeInTheDocument();
     });
 
-    it.only('should show max length error if tag is too long', async () => {
+    it('should show max length error if tag is too long', async () => {
       const user = userEvent.setup();
       render(<ManageTagsModalWrapper />);
 
@@ -106,6 +107,7 @@ describe('ManageTagsModal', () => {
       await user.click(openModalButton);
 
       const tagInput = await screen.findByTestId('tag');
+      await user.clear(tagInput);
       await user.type(tagInput, 'this is a very long input that exceeds the maximum length of fifty characters');
 
       const addTagButton = await screen.findByRole('button', { name: /Agregar etiqueta/i });

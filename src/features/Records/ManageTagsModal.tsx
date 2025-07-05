@@ -10,7 +10,8 @@ import { TAG_MAX_LENGTH_ERROR, TAG_MIN_LENGTH_ERROR, TAG_REQUIRED_ERROR } from "
 
 interface ManageTagsModalProps {
   openModal: boolean
-  toggleModal: () => void
+  openModalFn: () => void
+  closeModalFn: () => void
   tags: string[]
   updateTags: (newTags: string[]) => void
 }
@@ -19,8 +20,7 @@ interface ManageTagsModalProps {
 * This component is used to manage tags for records with a modal
 * This component is meant to be used with the custom hook useManageTags
 */
-export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: ManageTagsModalProps) => {
-  console.log('openModal', openModal)
+export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, closeModalFn }: ManageTagsModalProps) => {
   const subtext = tags.length === 0 ? 'Crear' : 'Administrar'
   const [internalTags, setInternalTags] = useState<string[]>(tags)
   // Using state instead of useForm because I can't clear the input without having required validation after submit
@@ -60,7 +60,7 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
 
   const handleFinalize = () => {
     updateTags(internalTags)
-    toggleModal()
+    closeModalFn()
   }
 
   return (
@@ -77,9 +77,9 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
         </div>
       </>
     )}
-      <Button color="light" onClick={toggleModal}>{subtext} etiquetas</Button>
+      <Button color="light" onClick={openModalFn}>{subtext} etiquetas</Button>
       <AnimatePresence>
-        <Modal key="add-tag-modal" show={openModal} onClose={toggleModal}>
+        <Modal key="add-tag-modal" show={openModal} onClose={closeModalFn}>
           <ModalHeader>Agregar etiqueta</ModalHeader>
           <ModalBody>
             <h3 className="text-2xl text-center font-semibold">Etiquetas:</h3>
@@ -114,7 +114,7 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
           </ModalBody>
           <ModalFooter>
             <div className="w-full flex justify-between">
-              <Button onClick={toggleModal} color="red">Cancelar</Button>
+              <Button onClick={closeModalFn} color="red">Cancelar</Button>
               <Button onClick={handleFinalize} color="green">Finalizar</Button>
             </div>
           </ModalFooter>

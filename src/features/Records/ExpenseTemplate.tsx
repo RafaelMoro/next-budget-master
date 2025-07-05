@@ -39,7 +39,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   const [date, setDate] = useState<Date | undefined>(new Date())
 
-  const { tags, updateTags, openTagModal, toggleTagModal } = useManageTags()
+  const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
   const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
     amount: null,
   })
@@ -164,7 +164,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           updateSubcategory={updateSubcategory}
           subcategoryError={subcategoryError}
         />
-        <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} toggleModal={toggleTagModal} />
+        <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"

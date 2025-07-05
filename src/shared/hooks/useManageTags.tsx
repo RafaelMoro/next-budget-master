@@ -7,7 +7,8 @@ import { useRef, useState } from "react"
 export const useManageTags = () => {
   // The state to open the tag modal is used outside to avoid submit of create transaction form if user clicks enter
   const [openTagModal, setTagModal] = useState<boolean>(false)
-  const toggleTagModal = () => setTagModal(!openTagModal)
+  const closeModal = () => setTagModal(false)
+  const openModal = () => setTagModal(true)
   const tags = useRef<string[]>([])
   const updateTags = (newTags: string[]) => {
     tags.current = [...newTags]
@@ -15,7 +16,8 @@ export const useManageTags = () => {
 
   return {
     openTagModal,
-    toggleTagModal,
+    closeModal,
+    openModal,
     tags,
     updateTags
   }
