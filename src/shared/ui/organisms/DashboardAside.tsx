@@ -15,10 +15,10 @@ interface DashboardAsideProps {
   updateScreen: (newScreen: DashboardScreens) => void
   toggleSelectAccountModal: () => void
   accounts: AccountBank[];
+  screen: DashboardScreens
 }
 
-export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectAccountModal }: DashboardAsideProps) => {
-
+export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectAccountModal, screen }: DashboardAsideProps) => {
   return (
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
       {children}
@@ -29,15 +29,15 @@ export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectA
         href={CREATE_RECORD_ROUTE}
       >Registrar movimiento</LinkButton>
       <nav className="mt-10 flex flex-col">
-        <DashboardAsideLink onClickCb={() => updateScreen('overview')}>
+        <DashboardAsideLink isSelected={screen === 'overview'} onClickCb={() => updateScreen('overview')}>
             <HomeIcon />
             Panorama
         </DashboardAsideLink>
-        <DashboardAsideLink onClickCb={() => updateScreen('accounts')}>
+        <DashboardAsideLink isSelected={screen === 'accounts'} onClickCb={() => updateScreen('accounts')}>
             <CreditCardArrowIcon />
             Cuentas
         </DashboardAsideLink>
-        <DashboardAsideLink onClickCb={() => updateScreen('transactions')}>
+        <DashboardAsideLink isSelected={screen === 'transactions'} onClickCb={() => updateScreen('transactions')}>
             <AccountRecordsIcon />
             Transacciones
         </DashboardAsideLink>

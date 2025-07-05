@@ -75,7 +75,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
 
   return (
     <div className="w-full min-h-screen max-w-screen-2xl flex mx-auto my-0">
-      <DashboardAside toggleSelectAccountModal={toggleSelectAccountModal} updateScreen={updateScreen} accounts={accounts}>
+      <DashboardAside screen={screen} toggleSelectAccountModal={toggleSelectAccountModal} updateScreen={updateScreen} accounts={accounts}>
         <HeaderDashboard isMobile={isMobile} />
       </DashboardAside>
       { accounts.length === 0 && (
