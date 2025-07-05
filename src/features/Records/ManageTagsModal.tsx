@@ -64,6 +64,18 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
 
   return (
     <>
+    { tags.length > 0  && (
+      <>
+        <p className="text-center mt-4">Etiquetas:</p>
+        <div className="flex flex-col gap-3 md:flex-row">
+          { tags.map((tag) => (
+            <Badge key={tag} className="max-w-max" color="purple">
+              {tag}
+            </Badge>
+          )) }
+        </div>
+      </>
+    )}
       <Button color="light" onClick={toggleModal}>{subtext} etiquetas</Button>
       <AnimatePresence>
         <Modal key="add-tag-modal" show={openModal} onClose={toggleModal}>
