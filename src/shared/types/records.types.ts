@@ -131,8 +131,8 @@ const descriptionValidation = string()
   .nullable()
   .notRequired()
   .when('description', {
-      is: (value: string) => value?.length,
-      then: (rule) => rule.min(3, 'Por favor, ingrese una descripción de más de 3 caracteres').max(300, 'Por favor, ingrese una descripción con menos de 300 caracteres.'),
+    is: (value: string) => value?.length,
+    then: (rule) => rule.min(3, 'Por favor, ingrese una descripción de más de 3 caracteres').max(300, 'Por favor, ingrese una descripción con menos de 300 caracteres.'),
   })
 
 export const CreateExpenseSchema = object().shape({

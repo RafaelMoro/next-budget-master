@@ -24,6 +24,8 @@ import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
 import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
+import { ManageTagsModal } from "./ManageTagsModal"
+import { useManageTags } from "@/shared/hooks/useManageTags"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -37,6 +39,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   const [date, setDate] = useState<Date | undefined>(new Date())
 
+  const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
   const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
     amount: null,
   })
@@ -88,7 +91,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
       updateErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
     }
 
-    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory) {
+    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
       const amountNumber = cleanCurrencyString(currencyState)
       const payload: CreateExpensePayload = {
         account: selectedAccount,
@@ -106,8 +109,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         linkedBudgets: [],
         shortName: data.shortDescription,
         subCategory: subcategory,
-        // TODO: Add logic to handle tags
-        tag: [],
+        tag: tags.current,
         typeOfRecord: 'expense'
       }
       createExpense(payload)
@@ -161,10 +163,11 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           updateSubcategory={updateSubcategory}
           subcategoryError={subcategoryError}
         />
+        <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"
-            disabled={isPending || isSuccess}
+            disabled={isPending || isSuccess || openTagModal}
             type="submit"
             >
           { (isIdle || isError) && 'Crear gasto'}
