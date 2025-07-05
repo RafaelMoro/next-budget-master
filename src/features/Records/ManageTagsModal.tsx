@@ -11,11 +11,18 @@ import { SubmitHandler, useForm } from "react-hook-form"
 
 interface ManageTagsModalProps {
   tags: string[]
-  updateTags: (newTag: string) => void
+  updateTags: (newTags: string[]) => void
 }
 
 export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
   const [openModal, setOpenModal] = useState(false)
+  const [internalTags, setInternalTags] = useState<string[]>(tags)
+  const updateInternalTags = (newTag: string) => {
+    setInternalTags([...internalTags, newTag])
+  }
+  const removeTag = (tagToRemove: string) => {
+    setInternalTags(internalTags.filter(tag => tag !== tagToRemove))
+  }
 
   const {
     register,
@@ -26,7 +33,12 @@ export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
   })
 
   const onSubmit: SubmitHandler<AddTagsDataForm> = (data) => {
-    updateTags(data.tag)
+    updateInternalTags(data.tag)
+  }
+
+  const handleFinalize = () => {
+    updateTags(internalTags)
+    setOpenModal(false)
   }
 
   return (
@@ -38,9 +50,9 @@ export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
           <ModalBody>
             <h3 className="text-2xl text-center font-semibold">Etiquetas:</h3>
             <div className="flex flex-col gap-3 md:flex-row">
-              { tags.length > 0 && tags.map((tag) => (
+              { internalTags.length > 0 && internalTags.map((tag) => (
                 <Badge key={tag} className="max-w-max" color="purple">
-                  <button>
+                  <button onClick={() => removeTag(tag)}>
                     <RiCloseFill className="inline-block mr-1" />
                   </button>
                   {tag}
@@ -68,7 +80,7 @@ export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
           <ModalFooter>
             <div className="w-full flex justify-between">
               <Button onClick={() => setOpenModal(false)} color="red">Cancelar</Button>
-              <Button onClick={() => setOpenModal(false)} color="green">Finalizar</Button>
+              <Button onClick={handleFinalize} color="green">Finalizar</Button>
             </div>
           </ModalFooter>
         </Modal>

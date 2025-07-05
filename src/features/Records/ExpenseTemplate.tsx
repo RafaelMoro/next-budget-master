@@ -38,8 +38,8 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   const [date, setDate] = useState<Date | undefined>(new Date())
   const tags = useRef<string[]>([])
-  const updateTags = (newTag: string) => {
-    tags.current = [...tags.current, newTag]
+  const updateTags = (newTags: string[]) => {
+    tags.current = [...newTags]
   }
 
   const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
@@ -94,6 +94,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
     }
 
     if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory) {
+      console.log('tags', tags)
       const amountNumber = cleanCurrencyString(currencyState)
       const payload: CreateExpensePayload = {
         account: selectedAccount,
@@ -112,7 +113,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         shortName: data.shortDescription,
         subCategory: subcategory,
         // TODO: Add logic to handle tags
-        tag: [],
+        tag: tags.current,
         typeOfRecord: 'expense'
       }
       createExpense(payload)
