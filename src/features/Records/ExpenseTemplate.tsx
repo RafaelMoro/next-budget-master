@@ -37,6 +37,8 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const router = useRouter()
 
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [openTagModal, setTagModal] = useState<boolean>(false)
+  const toggleTagModal = () => setTagModal(!openTagModal)
   const tags = useRef<string[]>([])
   const updateTags = (newTags: string[]) => {
     tags.current = [...newTags]
@@ -93,8 +95,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
       updateErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
     }
 
-    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory) {
-      console.log('tags', tags)
+    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
       const amountNumber = cleanCurrencyString(currencyState)
       const payload: CreateExpensePayload = {
         account: selectedAccount,
@@ -167,11 +168,11 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           updateSubcategory={updateSubcategory}
           subcategoryError={subcategoryError}
         />
-        <ManageTagsModal tags={tags.current} updateTags={updateTags} />
+        <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} toggleModal={toggleTagModal} />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"
-            disabled={isPending || isSuccess}
+            disabled={isPending || isSuccess || openTagModal}
             type="submit"
             >
           { (isIdle || isError) && 'Crear gasto'}

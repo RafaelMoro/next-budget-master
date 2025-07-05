@@ -10,12 +10,13 @@ import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
 interface ManageTagsModalProps {
+  openModal: boolean
+  toggleModal: () => void
   tags: string[]
   updateTags: (newTags: string[]) => void
 }
 
-export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
-  const [openModal, setOpenModal] = useState(false)
+export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: ManageTagsModalProps) => {
   const [internalTags, setInternalTags] = useState<string[]>(tags)
   const updateInternalTags = (newTag: string) => {
     setInternalTags([...internalTags, newTag])
@@ -38,14 +39,14 @@ export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
 
   const handleFinalize = () => {
     updateTags(internalTags)
-    setOpenModal(false)
+    toggleModal()
   }
 
   return (
     <>
-      <Button color="light" onClick={() => setOpenModal(true)}>Agregar etiqueta</Button>
+      <Button color="light" onClick={toggleModal}>Agregar etiqueta</Button>
       <AnimatePresence>
-        <Modal key="add-tag-modal" show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal key="add-tag-modal" show={openModal} onClose={toggleModal}>
           <ModalHeader>Agregar etiqueta</ModalHeader>
           <ModalBody>
             <h3 className="text-2xl text-center font-semibold">Etiquetas:</h3>
@@ -79,7 +80,7 @@ export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
           </ModalBody>
           <ModalFooter>
             <div className="w-full flex justify-between">
-              <Button onClick={() => setOpenModal(false)} color="red">Cancelar</Button>
+              <Button onClick={toggleModal} color="red">Cancelar</Button>
               <Button onClick={handleFinalize} color="green">Finalizar</Button>
             </div>
           </ModalFooter>
