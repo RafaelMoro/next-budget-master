@@ -20,6 +20,7 @@ interface ManageTagsModalProps {
 * This component is meant to be used with the custom hook useManageTags
 */
 export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: ManageTagsModalProps) => {
+  console.log('openModal', openModal)
   const subtext = tags.length === 0 ? 'Crear' : 'Administrar'
   const [internalTags, setInternalTags] = useState<string[]>(tags)
   // Using state instead of useForm because I can't clear the input without having required validation after submit
@@ -85,7 +86,7 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
             <div className="flex flex-col gap-3 md:flex-row">
               { internalTags.length > 0 && internalTags.map((tag) => (
                 <Badge key={tag} className="max-w-max" color="purple">
-                  <button onClick={() => removeTag(tag)}>
+                  <button onClick={() => removeTag(tag)} aria-label={`Remove ${tag}`}>
                     <RiCloseFill className="inline-block mr-1" />
                   </button>
                   {tag}
