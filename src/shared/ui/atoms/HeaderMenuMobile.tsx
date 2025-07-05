@@ -68,7 +68,7 @@ export const HeaderMenuMobile = ({ accounts, updateScreen, toggleSelectAccountMo
 
                   <SidebarItemGroup>
                     <ToggleDarkMode cssClass="w-full my-5" />
-                    <LinkButton text="Cerrar sesión" type="darkRed" className="w-full" href="/api/auth/sign-out" />
+                    <LinkButton type="darkRed" className="w-full" href="/api/auth/sign-out">Cerrar sesión</LinkButton>
                   </SidebarItemGroup>
                 </SidebarItems>
               </div>

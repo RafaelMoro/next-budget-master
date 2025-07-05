@@ -8,6 +8,7 @@ import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount
 import { AccountBank } from "@/shared/types/accounts.types"
 import { LinkButton } from "../atoms/LinkButton"
 import { DashboardScreens } from "@/shared/types/dashboard.types"
+import { CREATE_RECORD_ROUTE } from "@/shared/constants/Global.constants"
 
 interface DashboardAsideProps {
   children: ReactNode;
@@ -24,6 +25,9 @@ export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectA
       { accounts.length > 0 && (
         <DropdownSelectAccount goAccounts={toggleSelectAccountModal} />
       )}
+      <LinkButton
+        href={CREATE_RECORD_ROUTE}
+      >Registrar movimiento</LinkButton>
       <nav className="mt-10 flex flex-col">
         <DashboardAsideLink onClickCb={() => updateScreen('overview')}>
             <HomeIcon />
@@ -40,7 +44,7 @@ export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectA
       </nav>
 
       <section className="flex flex-col gap-2">
-        <LinkButton text="Cerrar sesión" type="darkRed" className="w-full" href="/api/auth/sign-out" />
+        <LinkButton type="darkRed" className="w-full" href="/api/auth/sign-out">Cerrar sesión</LinkButton>
       </section>
     </aside>
   )

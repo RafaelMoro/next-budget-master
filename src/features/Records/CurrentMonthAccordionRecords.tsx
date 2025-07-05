@@ -1,7 +1,9 @@
 import { BankMovement } from "@/shared/types/records.types"
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Button, HR } from "flowbite-react"
+import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, HR } from "flowbite-react"
 import { Fragment } from "react";
 import { RecordEntry } from "./RecordEntry";
+import { LinkButton } from "@/shared/ui/atoms/LinkButton";
+import { CREATE_RECORD_ROUTE } from "@/shared/constants/Global.constants";
 
 interface CurrentMonthAccordionRecordsProps {
   records: BankMovement[];
@@ -28,7 +30,7 @@ export const MonthAccordionRecords = ({ records, title }: CurrentMonthAccordionR
             { records.length === 0 && (
               <div className="flex flex-col gap-5 justify-center">
                 <p>Aún no has registrado movimientos este mes</p>
-                <Button>Registrar movimiento</Button>
+                <LinkButton href={CREATE_RECORD_ROUTE} >Registrar movimiento</LinkButton>
               </div>
             )}
           </AccordionContent>

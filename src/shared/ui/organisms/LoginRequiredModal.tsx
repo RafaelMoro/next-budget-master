@@ -26,7 +26,7 @@ export const LoginRequiredModal = ({ show }: LoginRequiredModalProps) => {
           </div>
         </ModalBody>
         <ModalFooter>
-          <LinkButton href={LOGIN_ROUTE} text="Iniciar sesión" />
+          <LinkButton href={LOGIN_ROUTE}>Iniciar sesión</LinkButton>
         </ModalFooter>
       </Modal>
   )

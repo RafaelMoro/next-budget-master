@@ -81,7 +81,9 @@ export const LoginCard =  () => {
             )}
           </div>
           <Link className="underline" href={FORGOT_PASSWORD_ROUTE}>¿Olvidaste tu contraseña?</Link>
-          <LinkButton type="secondary" href={REGISTER_ROUTE} text="Registrarse" />
+          <LinkButton type="secondary" href={REGISTER_ROUTE} >
+            Registrarse
+          </LinkButton>
           <Button className="hover:cursor-pointer" disabled={isPending || isSuccess} type="submit">
             { (isIdle || isError) && 'Iniciar sesión'}
             { isPending && (<Spinner aria-label="loading login budget master" />) }

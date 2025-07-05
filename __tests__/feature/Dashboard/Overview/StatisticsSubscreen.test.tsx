@@ -18,7 +18,7 @@ describe('StatisticsSubscreen', () => {
       </DashboardStoreProvider>
     );
     expect(screen.getByText(/Sin transacciones, sin gráficas/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Registrar movimiento/i })).toBeInTheDocument();
+    expect(screen.getByText(/Registrar movimiento/i)).toBeInTheDocument();
   });
 
   it('Show statistics if there are records', () => {

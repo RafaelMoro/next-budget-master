@@ -7,7 +7,7 @@
  */
 export const saveAccountApi = async (accountId: string) => {
   try {
-    const res = await fetch('/api/preferences/selectedAccount', {
+    const res = await fetch('/api/preferences/selected-account', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

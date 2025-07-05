@@ -9,6 +9,9 @@ interface CurrencyFieldProps {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
+/**
+* This component is meant to be used with the custom hook useCurrencyField
+*/
 export const CurrencyField = ({
   labelName,
   fieldId,
