@@ -122,6 +122,9 @@ export type CreateExpenseDataForm = {
   shortDescription: string
   description?: string | null | undefined
 }
+export type AddTagsDataForm = {
+  tag: string
+}
 
 const shortNameValidation = string()
   .required('Por favor, ingrese una pequeña descripción')
@@ -131,8 +134,8 @@ const descriptionValidation = string()
   .nullable()
   .notRequired()
   .when('description', {
-      is: (value: string) => value?.length,
-      then: (rule) => rule.min(3, 'Por favor, ingrese una descripción de más de 3 caracteres').max(300, 'Por favor, ingrese una descripción con menos de 300 caracteres.'),
+    is: (value: string) => value?.length,
+    then: (rule) => rule.min(3, 'Por favor, ingrese una descripción de más de 3 caracteres').max(300, 'Por favor, ingrese una descripción con menos de 300 caracteres.'),
   })
 
 export const CreateExpenseSchema = object().shape({
@@ -141,3 +144,10 @@ export const CreateExpenseSchema = object().shape({
 }, [
   ["description", "description"]
 ])
+
+export const AddTagSchema = object().shape({
+  tag: string()
+    .required('Por favor, ingrese una etiqueta')
+    .min(2, 'Por favor, ingrese una etiqueta de más de 2 caracteres')
+    .max(50, 'Por favor, ingrese una etiqueta con menos de 50 caracteres.')
+})
