@@ -3,6 +3,7 @@
 import { AddTagSchema, AddTagsDataForm } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { RiCloseFill } from "@remixicon/react"
 import { Badge, Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, TextInput } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
 import { useState } from "react"
@@ -38,7 +39,12 @@ export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
             <h3 className="text-2xl text-center font-semibold">Etiquetas:</h3>
             <div className="flex flex-col gap-3 md:flex-row">
               { tags.length > 0 && tags.map((tag) => (
-                <Badge key={tag} className="max-w-max" color="purple">{tag}</Badge>
+                <Badge key={tag} className="max-w-max" color="purple">
+                  <button>
+                    <RiCloseFill className="inline-block mr-1" />
+                  </button>
+                  {tag}
+                </Badge>
               )) }
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 items-center mt-8">
