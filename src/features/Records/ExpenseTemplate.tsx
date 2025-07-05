@@ -109,7 +109,6 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         linkedBudgets: [],
         shortName: data.shortDescription,
         subCategory: subcategory,
-        // TODO: Add logic to handle tags
         tag: tags.current,
         typeOfRecord: 'expense'
       }
