@@ -87,13 +87,6 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
     if (currencyState === DEFAULT_AMOUNT_VALUE) {
       updateErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
     }
-    if (!selectedAccount) {
-      // Show error
-      console.error('No account selected')
-    }
-    if (!date) {
-      console.error('Date is undefined')
-    }
 
     if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory) {
       const amountNumber = cleanCurrencyString(currencyState)
