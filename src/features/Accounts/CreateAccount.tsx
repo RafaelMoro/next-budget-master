@@ -103,7 +103,8 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
                 id="alias"
                 type="text"
                 {...register("alias")}
-                />
+              />
+              <p className="text-sm text-gray-600 dark:text-gray-400">Si este campo se deja en blanco, el alias será el nombre de la cuenta</p>
               { errors?.alias?.message && (
                 <ErrorMessage isAnimated>{errors.alias?.message}</ErrorMessage>
               )}
@@ -119,7 +120,8 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
                 inputMode="numeric"
                 pattern="[0-9]*"
                 {...register("terminationFourDigits")}
-                />
+              />
+              <p className="text-sm text-gray-600 dark:text-gray-400">Si este campo se deja en blanco, se asignará un número aleatorio</p>
               { errors?.terminationFourDigits?.message && (
                 <ErrorMessage isAnimated>{errors.terminationFourDigits?.message}</ErrorMessage>
               )}
