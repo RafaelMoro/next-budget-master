@@ -60,6 +60,8 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, clos
 
   const handleFinalize = () => {
     updateTags(internalTags)
+    setInputValue('')
+    setError(null)
     closeModalFn()
   }
 
