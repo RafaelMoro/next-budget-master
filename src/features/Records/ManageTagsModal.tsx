@@ -16,6 +16,10 @@ interface ManageTagsModalProps {
   updateTags: (newTags: string[]) => void
 }
 
+/**
+* This component is used to manage tags for records with a modal
+* This component is meant to be used with the custom hook useManageTags
+*/
 export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: ManageTagsModalProps) => {
   const [internalTags, setInternalTags] = useState<string[]>(tags)
   const updateInternalTags = (newTag: string) => {

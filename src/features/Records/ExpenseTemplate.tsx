@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { AnimatePresence } from "motion/react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useRouter } from 'next/navigation'
@@ -25,6 +25,7 @@ import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
 import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { ManageTagsModal } from "./ManageTagsModal"
+import { useManageTags } from "@/shared/hooks/useManageTags"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -37,13 +38,8 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const router = useRouter()
 
   const [date, setDate] = useState<Date | undefined>(new Date())
-  const [openTagModal, setTagModal] = useState<boolean>(false)
-  const toggleTagModal = () => setTagModal(!openTagModal)
-  const tags = useRef<string[]>([])
-  const updateTags = (newTags: string[]) => {
-    tags.current = [...newTags]
-  }
 
+  const { tags, updateTags, openTagModal, toggleTagModal } = useManageTags()
   const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
     amount: null,
   })
