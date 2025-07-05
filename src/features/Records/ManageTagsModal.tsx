@@ -1,13 +1,11 @@
 "use client"
 
-import { AddTagSchema, AddTagsDataForm } from "@/shared/types/records.types"
-import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { yupResolver } from "@hookform/resolvers/yup"
+import { useState } from "react"
 import { RiCloseFill } from "@remixicon/react"
 import { Badge, Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, TextInput } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
-import { useState } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
+
+import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 
 interface ManageTagsModalProps {
   openModal: boolean
@@ -22,6 +20,9 @@ interface ManageTagsModalProps {
 */
 export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: ManageTagsModalProps) => {
   const [internalTags, setInternalTags] = useState<string[]>(tags)
+  // Using state instead of useForm because I can't clear the input without having required validation after submit
+  const [inputValue, setInputValue] = useState<string>('')
+  const [error, setError] = useState<string | null>(null)
   const updateInternalTags = (newTag: string) => {
     setInternalTags([...internalTags, newTag])
   }
@@ -29,16 +30,29 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
     setInternalTags(internalTags.filter(tag => tag !== tagToRemove))
   }
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(AddTagSchema)
-  })
+  const handleSubmit = () => {
+    // Validations
+    if (!inputValue) {
+      setError('Por favor, ingrese una etiqueta')
+      return
+    }
+    if (inputValue.length < 3) {
+      setError('Por favor, ingrese una etiqueta de más de 2 caracteres')
+      return
+    }
+    if (inputValue.length > 50) {
+      setError('Por favor, ingrese una etiqueta con menos de 50 caracteres')
+      return
+    }
 
-  const onSubmit: SubmitHandler<AddTagsDataForm> = (data) => {
-    updateInternalTags(data.tag)
+    updateInternalTags(inputValue)
+    setError(null)
+    setInputValue('')
+  }
+
+  const handleChange = (newValue: string) => {
+    if (error) setError(null)
+    setInputValue(newValue)
   }
 
   const handleFinalize = () => {
@@ -64,7 +78,7 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
                 </Badge>
               )) }
             </div>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 items-center mt-8">
+            <form className="flex flex-col gap-4 items-center mt-8">
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="tag">Etiqueta</Label>
@@ -73,13 +87,14 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
                   data-testid="tag"
                   id="tag"
                   type="text"
-                  {...register("tag")}
+                  value={inputValue}
+                  onChange={(e) => handleChange(e.target.value)}
                 />
-                { errors?.tag?.message && (
-                  <ErrorMessage isAnimated={false}>{errors.tag?.message}</ErrorMessage>
+                { error && (
+                  <ErrorMessage isAnimated={false}>{error}</ErrorMessage>
                 )}
               </div>
-              <Button type="submit" className="max-w-max">Agregar etiqueta</Button>
+              <Button onClick={handleSubmit} className="max-w-max">Agregar etiqueta</Button>
             </form>
           </ModalBody>
           <ModalFooter>
