@@ -111,23 +111,35 @@ export type GetAccountsResponse = {
 
 export type AccountFormData = {
   title: string;
-  terminationFourDigits: string;
-  alias: string
+  terminationFourDigits?: string | null | undefined
+  alias?: string | null | undefined
 }
 
 // Excluding amount as it can't be empty
-export const AccountFormSchema = object({
+export const AccountFormSchema = object().shape({
   title: string()
     .required("Por favor, ingrese el título de la cuenta")
     .min(2, "El título debe tener al menos 2 caracteres")
     .max(50, "El título no puede exceder los 50 caracteres"),
   alias: string()
-    .required("Por favor, ingrese el alías de la cuenta")
-    .min(2, "El título debe tener al menos 2 caracteres")
-    .max(30, "El título no puede exceder los 30 caracteres"),
+    .nullable()
+    .notRequired()
+    .when('alias', {
+      is: (value: string) => value?.length,
+      then: (rule) => rule.min(2, "El título debe tener al menos 2 caracteres").max(30, "El título no puede exceder los 30 caracteres"),
+    }),
   terminationFourDigits: string()
-    .required("Debe ingresar los 4 dígitos finales")
-    .matches(/^\d+$/, { excludeEmptyString: true, message: "La terminación solo puede contener dígitos" })
-    .min(4, "La terminación no puede tener menos de 4 dígitos")
-    .max(4, "La terminación no puede tener más de 4 dígitos"),
-})
+    .nullable()
+    .notRequired()
+    .when('terminationFourDigits', {
+      is: (value: string) => value?.length,
+      then: (rule) => {
+        return rule.matches(/^\d+$/, { excludeEmptyString: true, message: "La terminación solo puede contener dígitos" })
+          .min(4, "La terminación no puede tener menos de 4 dígitos")
+          .max(4, "La terminación no puede tener más de 4 dígitos")
+      },
+    })
+}, [
+  ["alias", "alias"],
+  ["terminationFourDigits", "terminationFourDigits"]
+])
