@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AnimatePresence } from "motion/react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useRouter } from 'next/navigation'
@@ -24,6 +24,7 @@ import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
 import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
+import { ManageTagsModal } from "./ManageTagsModal"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -36,6 +37,10 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const router = useRouter()
 
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const tags = useRef<string[]>([])
+  const updateTags = (newTag: string) => {
+    tags.current = [...tags.current, newTag]
+  }
 
   const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
     amount: null,
@@ -161,6 +166,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           updateSubcategory={updateSubcategory}
           subcategoryError={subcategoryError}
         />
+        <ManageTagsModal tags={tags.current} updateTags={updateTags} />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"
