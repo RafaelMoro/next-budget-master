@@ -25,7 +25,7 @@ export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
   })
 
   const onSubmit: SubmitHandler<AddTagsDataForm> = (data) => {
-    console.log('data', data)
+    updateTags(data.tag)
   }
 
   return (
