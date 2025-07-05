@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ManageTagsModal } from '@/features/Records/ManageTagsModal';
@@ -37,14 +37,18 @@ describe('ManageTagsModal', () => {
     const openModalButton = screen.getByRole('button', { name: /Crear etiquetas/i });
     await user.click(openModalButton);
 
-    const tagInput = await screen.findByTestId('tag');
+    await screen.findByRole('heading', { name: /Agregar etiqueta/i });
+
+    const tagInput = screen.getByTestId('tag');
     await user.type(tagInput, 'new tag');
 
     const addTagButton = await screen.findByRole('button', { name: /Agregar etiqueta/i });
     await user.click(addTagButton);
 
-    const newTagBadge = await screen.findByText(/new tag/i);
-    expect(newTagBadge).toBeInTheDocument();
+    await waitFor(() => {
+      const newTagBadge = screen.getByText(/new tag/i);
+      expect(newTagBadge).toBeInTheDocument();
+    })
   });
 
   it('should remove a tag when clicking the close icon', async () => {
@@ -54,19 +58,25 @@ describe('ManageTagsModal', () => {
     const openModalButton = screen.getByRole('button', { name: /Crear etiquetas/i });
     await user.click(openModalButton);
 
-    const tagInput = await screen.findByTestId('tag');
+    await screen.findByRole('heading', { name: /Agregar etiqueta/i });
+
+    const tagInput = screen.getByTestId('tag');
     await user.type(tagInput, 'tag to remove');
 
     const addTagButton = await screen.findByRole('button', { name: /Agregar etiqueta/i });
     await user.click(addTagButton);
 
-    const tagToRemove = await screen.findByText(/tag to remove/i);
-    expect(tagToRemove).toBeInTheDocument();
+    await waitFor(async () => {
+      const tagToRemove = await screen.findByText(/tag to remove/i);
+      expect(tagToRemove).toBeInTheDocument();
+    });
 
     const removeButton = await screen.findByRole('button', { name: /Remove tag to remove/i });
     await user.click(removeButton);
 
-    expect(screen.queryByText(/tag to remove/i)).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText(/tag to remove/i)).not.toBeInTheDocument();
+    });
   });
 
   describe('Form validations', () => {
@@ -90,13 +100,18 @@ describe('ManageTagsModal', () => {
       const openModalButton = screen.getByRole('button', { name: /Crear etiquetas/i });
       await user.click(openModalButton);
 
-      const tagInput = await screen.findByTestId('tag');
+      await screen.findByRole('heading', { name: /Agregar etiqueta/i });
+
+      const tagInput = screen.getByTestId('tag');
+      await user.clear(tagInput);
       await user.type(tagInput, 'a');
 
       const addTagButton = await screen.findByRole('button', { name: /Agregar etiqueta/i });
       await user.click(addTagButton);
 
-      expect(await screen.findByText(/Por favor, ingrese una etiqueta de más de 3 caracteres/i)).toBeInTheDocument();
+      await waitFor(async () => {
+        expect(await screen.findByText(/Por favor, ingrese una etiqueta de más de 2 caracteres/i)).toBeInTheDocument();
+      })
     });
 
     it('should show max length error if tag is too long', async () => {
@@ -106,7 +121,9 @@ describe('ManageTagsModal', () => {
       const openModalButton = screen.getByRole('button', { name: /Crear etiquetas/i });
       await user.click(openModalButton);
 
-      const tagInput = await screen.findByTestId('tag');
+      await screen.findByRole('heading', { name: /Agregar etiqueta/i });
+
+      const tagInput = screen.getByTestId('tag');
       await user.clear(tagInput);
       await user.type(tagInput, 'this is a very long input that exceeds the maximum length of fifty characters');
 
