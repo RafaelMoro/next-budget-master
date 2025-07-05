@@ -20,6 +20,7 @@ interface ManageTagsModalProps {
 * This component is meant to be used with the custom hook useManageTags
 */
 export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: ManageTagsModalProps) => {
+  const subtext = tags.length === 0 ? 'Crear' : 'Administrar'
   const [internalTags, setInternalTags] = useState<string[]>(tags)
   // Using state instead of useForm because I can't clear the input without having required validation after submit
   const [inputValue, setInputValue] = useState<string>('')
@@ -63,7 +64,7 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
 
   return (
     <>
-      <Button color="light" onClick={toggleModal}>Agregar etiqueta</Button>
+      <Button color="light" onClick={toggleModal}>{subtext} etiquetas</Button>
       <AnimatePresence>
         <Modal key="add-tag-modal" show={openModal} onClose={toggleModal}>
           <ModalHeader>Agregar etiqueta</ModalHeader>
