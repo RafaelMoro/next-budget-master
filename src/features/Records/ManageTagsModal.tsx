@@ -36,9 +36,11 @@ export const ManageTagsModal = ({ tags, updateTags }: ManageTagsModalProps) => {
           <ModalHeader>Agregar etiqueta</ModalHeader>
           <ModalBody>
             <h3 className="text-2xl text-center font-semibold">Etiquetas:</h3>
-            { tags.length > 0 && tags.map((tag) => (
-              <Badge key={tag} color="purple">{tag}</Badge>
-            )) }
+            <div className="flex flex-col gap-3 md:flex-row">
+              { tags.length > 0 && tags.map((tag) => (
+                <Badge key={tag} className="max-w-max" color="purple">{tag}</Badge>
+              )) }
+            </div>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 items-center mt-8">
               <div>
                 <div className="mb-2 block">
