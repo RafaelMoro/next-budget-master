@@ -60,7 +60,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
     return (
       <main className='mt-3 flex flex-col gap-4"'>
         <HeaderDashboard isMobile>
-          <HeaderMenuMobile accounts={accounts} updateScreen={updateScreen} toggleSelectAccountModal={toggleSelectAccountModal} />
+          <HeaderMenuMobile screen={screen} accounts={accounts} updateScreen={updateScreen} toggleSelectAccountModal={toggleSelectAccountModal} />
         </HeaderDashboard>
         { accounts.length === 0 && (
           <NoAccountsFoundScreen screen={screen} />
