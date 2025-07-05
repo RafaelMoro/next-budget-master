@@ -122,9 +122,6 @@ export type CreateExpenseDataForm = {
   shortDescription: string
   description?: string | null | undefined
 }
-export type AddTagsDataForm = {
-  tag: string
-}
 
 const shortNameValidation = string()
   .required('Por favor, ingrese una pequeña descripción')
@@ -144,10 +141,3 @@ export const CreateExpenseSchema = object().shape({
 }, [
   ["description", "description"]
 ])
-
-export const AddTagSchema = object().shape({
-  tag: string()
-    .required('Por favor, ingrese una etiqueta')
-    .min(2, 'Por favor, ingrese una etiqueta de más de 2 caracteres')
-    .max(50, 'Por favor, ingrese una etiqueta con menos de 50 caracteres.')
-})

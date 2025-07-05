@@ -6,6 +6,7 @@ import { Badge, Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, TextI
 import { AnimatePresence } from "motion/react"
 
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
+import { TAG_MAX_LENGTH_ERROR, TAG_MIN_LENGTH_ERROR, TAG_REQUIRED_ERROR } from "@/shared/constants/records.constants"
 
 interface ManageTagsModalProps {
   openModal: boolean
@@ -33,15 +34,15 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, toggleModal }: Ma
   const handleSubmit = () => {
     // Validations
     if (!inputValue) {
-      setError('Por favor, ingrese una etiqueta')
+      setError(TAG_REQUIRED_ERROR)
       return
     }
     if (inputValue.length < 3) {
-      setError('Por favor, ingrese una etiqueta de más de 2 caracteres')
+      setError(TAG_MIN_LENGTH_ERROR)
       return
     }
     if (inputValue.length > 50) {
-      setError('Por favor, ingrese una etiqueta con menos de 50 caracteres')
+      setError(TAG_MAX_LENGTH_ERROR)
       return
     }
 
