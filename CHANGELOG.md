@@ -1,3 +1,9 @@
+## v0.15.0 (2025-07-05)
+
+### Pull Requests
+[#23](https://github.com/RafaelMoro/next-budget-master/pull/23) | Add create expense
+
+
 ## v0.14.1 (2025-07-01)
 
 ### Pull Requests
