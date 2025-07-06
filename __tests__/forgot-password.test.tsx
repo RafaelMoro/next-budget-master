@@ -3,7 +3,7 @@ import axios from 'axios';
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ForgotPasswordPage from '@/app/forgot-password/page'
-import QueryProviderWrapper from '@/app/QueryProviderWrapper'
+import {QueryProviderWrapper} from '@/app/QueryProviderWrapper'
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock'
 
 jest.mock('axios');

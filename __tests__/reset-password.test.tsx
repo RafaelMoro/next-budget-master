@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 
 import ResetPasswordPage from "@/app/reset-password/[slug]/page"
-import QueryProviderWrapper from "@/app/QueryProviderWrapper"
+import {QueryProviderWrapper} from "@/app/QueryProviderWrapper"
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(() => ({

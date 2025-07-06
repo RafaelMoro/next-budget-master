@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import HomePage from '../src/app/page'
-import QueryProviderWrapper from "@/app/QueryProviderWrapper";
+import {QueryProviderWrapper} from "@/app/QueryProviderWrapper";
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants';
 

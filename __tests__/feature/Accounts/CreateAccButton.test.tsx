@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CreateAccButton } from '@/features/Accounts/CreateAccButton';
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
-import QueryProviderWrapper from '@/app/QueryProviderWrapper';
+import {QueryProviderWrapper} from '@/app/QueryProviderWrapper';
 
 const mockRouter = {
   push: jest.fn(),
