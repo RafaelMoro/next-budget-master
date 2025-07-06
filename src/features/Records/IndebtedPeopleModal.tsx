@@ -2,7 +2,7 @@
 import { Button, Label, Modal, ModalBody, ModalHeader, TextInput, ToggleSwitch  } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
 
-import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
+import { DEFAULT_AMOUNT_VALUE, useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -27,8 +27,6 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
   const {
     handleChange: handleChangeAmountPaid,
     currencyState: amountPaid,
-    errorAmount: errorAmountPaid,
-    updateErrorAmount: updateErrorAmountPaid,
   } = useCurrencyField({
     amount: null,
   })
@@ -45,6 +43,10 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
   const toggleDebtPaid = () => setDebtPaid((prev) => !prev)
 
   const onSubmit: SubmitHandler<AddIndebtedPeopleDataForm> = (data) => {
+    if (amountOwed === DEFAULT_AMOUNT_VALUE) {
+      updateErrorAmountOwed('Por favor, ingrese una cantidad mayor a 0.')
+      return
+    }
     console.log('data', data)
   }
 
@@ -80,6 +82,9 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
                 value={amountOwed}
                 handleChange={handleChangeAmountOwed}
               />
+              { errorAmountOwed && (
+                <ErrorMessage isAnimated>{errorAmountOwed}</ErrorMessage>
+              )}
               <CurrencyField
                 labelName="Cantidad pagada"
                 dataTestId="amountPaid"
