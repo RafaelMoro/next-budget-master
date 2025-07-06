@@ -5,6 +5,10 @@ import { AnimatePresence } from "motion/react"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useState } from "react"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema } from "@/shared/types/records.types"
+import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 
 interface IdebtedPeopleModalProps {
   openModal: boolean
@@ -29,8 +33,20 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
     amount: null,
   })
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddIndebtedPeopleDataForm>({
+    resolver: yupResolver(AddIndebtedPeopleSchema)
+  })
+
   const [debtPaid, setDebtPaid] = useState<boolean>(false)
   const toggleDebtPaid = () => setDebtPaid((prev) => !prev)
+
+  const onSubmit: SubmitHandler<AddIndebtedPeopleDataForm> = (data) => {
+    console.log('data', data)
+  }
 
   return (
     <section className="flex flex-col gap-4">
@@ -42,7 +58,7 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
         <Modal key="add-indebted-people-modal" show={openModal} onClose={toggleModal}>
           <ModalHeader>Agregar persona que te debe</ModalHeader>
           <ModalBody>
-            <form className="flex flex-col gap-4 items-center">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 items-center">
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="tag">Nombre completo</Label>
@@ -51,10 +67,11 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
                   data-testid="name"
                   id="name"
                   type="text"
+                  {...register("name")}
                 />
-                {/* { error && (
-                  <ErrorMessage isAnimated={false}>{error}</ErrorMessage>
-                )} */}
+                { errors?.name?.message && (
+                  <ErrorMessage isAnimated={false}>{errors?.name?.message}</ErrorMessage>
+                )}
               </div>
               <CurrencyField
                 labelName="Cantidad a deber"

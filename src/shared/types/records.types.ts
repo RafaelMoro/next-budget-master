@@ -4,6 +4,7 @@ import { Category } from "./categories.types";
 import { DetailedError } from "./global.types";
 import { object, string } from "yup";
 
+//#region General interfaces
 export type TypeOfRecord = 'expense' | 'income' | 'transfer';
 
 export type TransferRecord = {
@@ -63,6 +64,8 @@ export type BankMovement = AccountRecord & {
   expensesPaid?: ExpensePaid[];
 }
 
+//#region Paylaod and responses interfaces
+
 export type GetAccountPayload = {
   accountId: string;
   month: string;
@@ -118,9 +121,15 @@ export type GetCurrentMonthRecordsResponse = {
   records: BankMovement[];
 }
 
+//#region Data form - schemas
+
 export type CreateExpenseDataForm = {
   shortDescription: string
   description?: string | null | undefined
+}
+
+export type AddIndebtedPeopleDataForm = {
+  name: string
 }
 
 const shortNameValidation = string()
@@ -141,3 +150,10 @@ export const CreateExpenseSchema = object().shape({
 }, [
   ["description", "description"]
 ])
+
+export const AddIndebtedPeopleSchema = object().shape({
+  name: string()
+    .required('Por favor, ingrese el nombre de la persona')
+    .min(3, 'El nombre debe contener más de 3 caracteres')
+    .max(100, 'El nombre debe contener menos de 100 caracteres.'),
+})
