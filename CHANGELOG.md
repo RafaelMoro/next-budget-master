@@ -1,3 +1,9 @@
+## v0.16.2 (2025-07-06)
+
+### Pull Requests
+[#26](https://github.com/RafaelMoro/next-budget-master/pull/26) | Fix unnamed export error
+
+
 ## v0.16.1 (2025-07-06)
 
 ### Pull Requests
