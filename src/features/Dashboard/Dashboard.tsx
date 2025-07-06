@@ -15,6 +15,7 @@ import { NoAccountsFoundScreen } from "../Accounts/NoAccountsFoundScreen";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 import { AccountBank } from "@/shared/types/accounts.types";
 import { SelectAccountDialog } from "../Accounts/SelectAccountDialog";
+import { getDashboardScreen, saveDashboardScreen } from "@/shared/lib/preferences.lib";
 
 interface DashboardViewProps {
   accountsFetched: AccountBank[]
@@ -34,7 +35,20 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
   const [screen, setScreen] = useState<DashboardScreens>('overview')
   const [openSelectAccountModal, setOpenSelectAccountModal] = useState<boolean>(false)
 
-  const updateScreen = (newScreen: DashboardScreens) => setScreen(newScreen)
+  const updateScreen = async (newScreen: DashboardScreens) => {
+    await saveDashboardScreen(newScreen)
+    setScreen(newScreen)
+  }
+  useEffect(() => {
+    getDashboardScreen().then((screen) => {
+      if (!screen) {
+        setScreen('overview')
+        return
+      }
+      setScreen(screen as DashboardScreens)
+    })
+  }, [])
+
   const toggleSelectAccountModal = () => setOpenSelectAccountModal((prev) => !prev)
 
   useEffect(() => {
