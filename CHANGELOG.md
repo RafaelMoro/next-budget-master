@@ -1,3 +1,9 @@
+## v0.16.1 (2025-07-06)
+
+### Pull Requests
+[#25](https://github.com/RafaelMoro/next-budget-master/pull/25) | Add Favicon, metadata and other fixes
+
+
 ## v0.16.0 (2025-07-05)
 
 ### Pull Requests
