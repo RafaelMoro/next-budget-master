@@ -2,7 +2,7 @@
 import { Button, Label, Modal, ModalBody, ModalHeader, TextInput, ToggleSwitch  } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
 
-import { DEFAULT_AMOUNT_VALUE, useCurrencyField } from "@/shared/hooks/useCurrencyField"
+import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -20,7 +20,7 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
     handleChange: handleChangeAmountOwed,
     currencyState: amountOwed,
     errorAmount: errorAmountOwed,
-    updateErrorAmount: updateErrorAmountOwed,
+    validateZeroAmount
   } = useCurrencyField({
     amount: null,
   })
@@ -43,10 +43,7 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
   const toggleDebtPaid = () => setDebtPaid((prev) => !prev)
 
   const onSubmit: SubmitHandler<AddIndebtedPeopleDataForm> = (data) => {
-    if (amountOwed === DEFAULT_AMOUNT_VALUE) {
-      updateErrorAmountOwed('Por favor, ingrese una cantidad mayor a 0.')
-      return
-    }
+    validateZeroAmount({ amountState: amountOwed })
     console.log('data', data)
   }
 
