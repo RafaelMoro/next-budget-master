@@ -117,15 +117,16 @@ describe('EditAccount', () => {
       expect(screen.getByText(/Por favor, ingrese el título de la cuenta/i)).toBeInTheDocument()
     })
 
-    it('Given a user deleting the account termination number, clicks on edit, then show an error message', async () => {
+    it('Given a user deleting the account termination number, typing 1 number, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
 
       const accountTerminationInput = screen.getByTestId('terminationNumber')
       const button = screen.getByRole('button', { name: /Editar/i })
       await user.type(accountTerminationInput, '{backspace}{backspace}{backspace}{backspace}')
+      await user.type(accountTerminationInput, '1')
       await user.click(button)
 
-      expect(await screen.findByText(/Debe ingresar los 4 dígitos finales/i)).toBeInTheDocument()
+      expect(await screen.findByText(/La terminación no puede tener menos de 4 dígitos/i)).toBeInTheDocument()
     })
 
     it('Given a user entering a number less than 4 digits, clicks on edit, then show an error message', async () => {
