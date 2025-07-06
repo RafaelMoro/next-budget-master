@@ -1,4 +1,4 @@
-"use client"
+import type { Metadata } from "next";
 import { useMutation } from "@tanstack/react-query"
 import { useRef } from "react"
 
@@ -15,6 +15,12 @@ import { AxiosResponse } from "axios"
 import { GeneralError } from "@/shared/types/global.types"
 import { ERROR_EMAIL_IN_USE } from "@/shared/constants/Login.constants"
 import { useAnimateBox } from "@/shared/hooks/useAnimateBox"
+import { REGISTER_META_DESCRIPTION, REGISTER_META_TITLE } from "@/shared/constants/metadata.constants";
+
+export const metadata: Metadata = {
+  title: REGISTER_META_TITLE,
+  description: REGISTER_META_DESCRIPTION,
+};
 
 
 export default function RegisterPage() {
