@@ -45,7 +45,7 @@ describe('CreateAccount', () => {
     expect(screen.getByText(/Crear cuenta/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Cancelar/i })).toBeInTheDocument()
     expect(screen.getByLabelText('Titulo de la cuenta')).toBeInTheDocument()
-    expect(screen.getByLabelText('Alias')).toBeInTheDocument()
+    expect(screen.getByLabelText('Alias (opcional)')).toBeInTheDocument()
     expect(screen.getByTestId('terminationNumber')).toBeInTheDocument()
     expect(screen.getByLabelText('Saldo de la cuenta')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Tipo de cuenta: Crédito' })).toBeInTheDocument()
@@ -99,10 +99,13 @@ describe('CreateAccount', () => {
     it('Given a user leaving the account termination number empty, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
 
+      const accountTerminationInput = screen.getByTestId('terminationNumber')
+      await user.clear(accountTerminationInput)
+      await user.type(accountTerminationInput, '1')
       const button = screen.getByRole('button', { name: /Crear/i })
       await user.click(button)
 
-      expect(await screen.findByText(/Debe ingresar los 4 dígitos finales/i)).toBeInTheDocument()
+      expect(await screen.findByText(/La terminación no puede tener menos de 4 dígitos/i)).toBeInTheDocument()
     })
 
     it('Given a user entering a number less than 4 digits, clicks on edit, then show an error message', async () => {
@@ -116,15 +119,16 @@ describe('CreateAccount', () => {
       expect(await screen.findByText('La terminación no puede tener menos de 4 dígitos')).toBeInTheDocument()
     })
 
-    it('Given a user leaving the alias empty, clicks on create, then show an error message', async () => {
+    it('Given a user leaving the alias with 1 character, clicks on create, then show an error message', async () => {
       const user = userEvent.setup();
 
       const aliasInput = screen.getByTestId('alias')
       const button = screen.getByRole('button', { name: /Crear/i })
       await user.clear(aliasInput)
+      await user.type(aliasInput, 'a')
       await user.click(button)
 
-      expect(await screen.findByText(/Por favor, ingrese el alías de la cuenta/i)).toBeInTheDocument()
+      expect(await screen.findByText(/El título debe tener al menos 2 caracteres/i)).toBeInTheDocument()
     })
   })
 
@@ -190,7 +194,7 @@ describe('CreateAccount', () => {
       render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
       const titleInput = screen.getByLabelText('Titulo de la cuenta')
-      const aliasInput = screen.getByLabelText('Alias')
+      const aliasInput = screen.getByLabelText('Alias (opcional)')
       const terminationInput = screen.getByTestId('terminationNumber')
       const button = screen.getByRole('button', { name: /Crear/i })
 
