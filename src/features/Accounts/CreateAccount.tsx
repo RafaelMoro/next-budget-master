@@ -16,6 +16,7 @@ import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils";
 import { useMutation } from "@tanstack/react-query";
 import { createBankAccountCb } from "@/shared/lib/accounts.lib";
 import { ACCOUNT_CREATE_ERROR } from "@/shared/constants/accounts.constants";
+import { getRandomFourDigitString } from "@/shared/utils/general.utils"
 
 interface CreateAccountProps {
   closeModal: () => void;
@@ -36,7 +37,7 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AccountFormData>({
+  } = useForm({
     resolver: yupResolver(AccountFormSchema)
   })
 
@@ -59,11 +60,11 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
     const amountNumber = cleanCurrencyString(currencyState)
     const payload: CreateAccountPayload = {
       title: data.title,
-      alias: data.alias,
+      alias: data.alias || data.title,
       accountType: selectedAccountType,
       accountProvider: selectedProvider,
       amount: amountNumber,
-      terminationFourDigits: data.terminationFourDigits,
+      terminationFourDigits: data.terminationFourDigits || getRandomFourDigitString(),
       backgroundColor: 'Dark Orange',
       color: 'white'
     }
@@ -95,21 +96,22 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="alias">Alias</Label>
+                <Label htmlFor="alias">Alias (opcional)</Label>
               </div>
               <TextInput
                 data-testid="alias"
                 id="alias"
                 type="text"
                 {...register("alias")}
-                />
+              />
+              <p className="text-sm text-gray-600 dark:text-gray-400">Si este campo se deja en blanco, el alias será el nombre de la cuenta</p>
               { errors?.alias?.message && (
                 <ErrorMessage isAnimated>{errors.alias?.message}</ErrorMessage>
               )}
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="terminationNumber">Terminación de la cuenta</Label>
+                <Label htmlFor="terminationNumber">Terminación de la cuenta (opcional)</Label>
               </div>
               <TextInput
                 data-testid="terminationNumber"
@@ -118,7 +120,8 @@ export const CreateAccount = ({ closeModal }: CreateAccountProps) => {
                 inputMode="numeric"
                 pattern="[0-9]*"
                 {...register("terminationFourDigits")}
-                />
+              />
+              <p className="text-sm text-gray-600 dark:text-gray-400">Si este campo se deja en blanco, se asignará un número aleatorio</p>
               { errors?.terminationFourDigits?.message && (
                 <ErrorMessage isAnimated>{errors.terminationFourDigits?.message}</ErrorMessage>
               )}

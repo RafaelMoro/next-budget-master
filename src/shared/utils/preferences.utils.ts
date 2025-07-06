@@ -41,3 +41,23 @@ export const saveOverviewSubscreenApi = async (overviewSubscreen: string) => {
     console.log('error while saving overview subscreen in api', error)
   }
 }
+
+/**
+ * This function calls the API to save the dashboard screen in the cookie for client side components
+ * @param dashboardScreen - The dashboard screen to save
+ * @returns Promise<void>
+ */
+export const saveDashboardScreen = async (dashboardScreen: string) => {
+  try {
+    const res = await fetch('/api/preferences/dashboard-screen', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ overviewSubscreen: dashboardScreen }),
+    })
+    return res
+  } catch (error) {
+    console.log('error while saving overview subscreen in api', error)
+  }
+}

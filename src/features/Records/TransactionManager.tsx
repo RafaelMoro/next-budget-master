@@ -33,7 +33,7 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="max-w-min ml-5">
+      <div className="max-w-min ml-5 mb-8 md:mb-0">
         <LinkButton href={DASHBOARD_ROUTE} type="greySecondary">
           <RiArrowLeftLine />
           Volver

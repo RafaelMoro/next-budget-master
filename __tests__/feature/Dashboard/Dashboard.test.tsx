@@ -33,9 +33,9 @@ describe('Dashboard', () => {
     })),
   });
 
-  it('Show Dashboard', () => {
+  it('Show Dashboard', async () => {
     render(<DashboardWrapper />)
 
-    expect(screen.getByRole('heading', { name: /Panorama general/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /Panorama general/i })).toBeInTheDocument()
   })
 })

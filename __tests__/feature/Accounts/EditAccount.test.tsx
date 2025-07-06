@@ -62,7 +62,7 @@ describe('EditAccount', () => {
     expect(screen.getByText(/HSBC clasica/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Volver/i })).toBeInTheDocument()
     expect(screen.getByLabelText('Titulo de la cuenta')).toBeInTheDocument()
-    expect(screen.getByLabelText('Alias')).toBeInTheDocument()
+    expect(screen.getByLabelText('Alias (opcional)')).toBeInTheDocument()
     expect(screen.getByTestId('terminationNumber')).toBeInTheDocument()
     expect(screen.getByLabelText('Saldo de la cuenta')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Tipo de cuenta: Crédito' })).toBeInTheDocument()
@@ -117,15 +117,16 @@ describe('EditAccount', () => {
       expect(screen.getByText(/Por favor, ingrese el título de la cuenta/i)).toBeInTheDocument()
     })
 
-    it('Given a user deleting the account termination number, clicks on edit, then show an error message', async () => {
+    it('Given a user deleting the account termination number, typing 1 number, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
 
       const accountTerminationInput = screen.getByTestId('terminationNumber')
       const button = screen.getByRole('button', { name: /Editar/i })
       await user.type(accountTerminationInput, '{backspace}{backspace}{backspace}{backspace}')
+      await user.type(accountTerminationInput, '1')
       await user.click(button)
 
-      expect(await screen.findByText(/Debe ingresar los 4 dígitos finales/i)).toBeInTheDocument()
+      expect(await screen.findByText(/La terminación no puede tener menos de 4 dígitos/i)).toBeInTheDocument()
     })
 
     it('Given a user entering a number less than 4 digits, clicks on edit, then show an error message', async () => {
@@ -140,15 +141,16 @@ describe('EditAccount', () => {
       expect(await screen.findByText('La terminación no puede tener menos de 4 dígitos')).toBeInTheDocument()
     })
 
-    it('Given a user deleting the alias, clicks on edit, then show an error message', async () => {
+    it('Given a user deleting the alias, typing 1 character, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
 
       const aliasInput = screen.getByTestId('alias')
-      const button = screen.getByRole('button', { name: /Editar/i })
       await user.clear(aliasInput)
+      await user.type(aliasInput, 'a')
+      const button = screen.getByRole('button', { name: /Editar/i })
       await user.click(button)
 
-      expect(await screen.findByText(/Por favor, ingrese el alías de la cuenta/i)).toBeInTheDocument()
+      expect(await screen.findByText(/El título debe tener al menos 2 caracteres/i)).toBeInTheDocument()
     })
   })
 

@@ -1,6 +1,6 @@
 "use server"
 import { cookies } from 'next/headers'
-import { ACCOUNT_COOKIE_KEY, OVERVIEW_SUBSCREEN_KEY, THEME_COOKIE_KEY, ThemeMode } from '../constants/Global.constants'
+import { ACCOUNT_COOKIE_KEY, DASHBOARD_SCREEN_KEY, OVERVIEW_SUBSCREEN_KEY, THEME_COOKIE_KEY, ThemeMode } from '../constants/Global.constants'
 
 /**
  * This function gets the value of the theme in the cookie. It sets the cookie if it doesn't exist
@@ -91,4 +91,33 @@ export const getOverviewSubscreen = async () => {
     return null
   }
   return overviewSubscreen
+}
+
+/**
+ * This function saves the dashboard subscreen selection into the cookie
+ * @param dashboardScreen - The dashboard subscreen
+ * @returns Promise<void>
+ */
+export const saveDashboardScreen = async (dashboardScreen: string): Promise<void> => {
+  await cookies().set(DASHBOARD_SCREEN_KEY, dashboardScreen, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  })
+}
+export const removeDashboardScreen = async () => {
+  await cookies().delete(DASHBOARD_SCREEN_KEY)
+}
+/**
+ * This function gets the value of the dashboard screen in the cookie.
+ * @returns string or null if not found
+ */
+export const getDashboardScreen = async () => {
+  const cookieStore = cookies()
+  const dashboardScreen = await cookieStore.get(DASHBOARD_SCREEN_KEY)?.value
+  if (!dashboardScreen) {
+    // Return default
+    return null
+  }
+  return dashboardScreen
 }
