@@ -26,6 +26,7 @@ import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { ManageTagsModal } from "./ManageTagsModal"
 import { useManageTags } from "@/shared/hooks/useManageTags"
+import { IndebtedPeopleModal } from "./IndebtedPeopleModal"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -38,6 +39,8 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const router = useRouter()
 
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [openIndebtedPeopleModal, setOpenIndebtedPeopleModal] = useState<boolean>(false)
+  const toggleIndebtedPeopleModal = () => setOpenIndebtedPeopleModal((prev) => !prev)
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
   const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
@@ -164,6 +167,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           subcategoryError={subcategoryError}
         />
         <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+        <IndebtedPeopleModal openModal={openIndebtedPeopleModal} toggleModal={toggleIndebtedPeopleModal} />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"
