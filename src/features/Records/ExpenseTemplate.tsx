@@ -12,7 +12,7 @@ import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite
 import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, CreateExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { DEFAULT_AMOUNT_VALUE, useCurrencyField } from "@/shared/hooks/useCurrencyField"
+import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { Category } from "@/shared/types/categories.types"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
@@ -43,7 +43,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const toggleIndebtedPeopleModal = () => setOpenIndebtedPeopleModal((prev) => !prev)
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
-  const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
+  const { handleChange, currencyState, errorAmount, validateZeroAmount } = useCurrencyField({
     amount: null,
   })
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
@@ -90,9 +90,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
     if (!subcategory) {
       updateSubcategoryError('Por favor, seleccione una subcategoría.')
     }
-    if (currencyState === DEFAULT_AMOUNT_VALUE) {
-      updateErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
-    }
+    validateZeroAmount({ amountState: currencyState })
 
     if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
       const amountNumber = cleanCurrencyString(currencyState)
