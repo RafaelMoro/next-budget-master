@@ -62,7 +62,7 @@ describe('EditAccount', () => {
     expect(screen.getByText(/HSBC clasica/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Volver/i })).toBeInTheDocument()
     expect(screen.getByLabelText('Titulo de la cuenta')).toBeInTheDocument()
-    expect(screen.getByLabelText('Alias')).toBeInTheDocument()
+    expect(screen.getByLabelText('Alias (opcional)')).toBeInTheDocument()
     expect(screen.getByTestId('terminationNumber')).toBeInTheDocument()
     expect(screen.getByLabelText('Saldo de la cuenta')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Tipo de cuenta: Crédito' })).toBeInTheDocument()
@@ -140,15 +140,16 @@ describe('EditAccount', () => {
       expect(await screen.findByText('La terminación no puede tener menos de 4 dígitos')).toBeInTheDocument()
     })
 
-    it('Given a user deleting the alias, clicks on edit, then show an error message', async () => {
+    it('Given a user deleting the alias, typing 1 character, clicks on edit, then show an error message', async () => {
       const user = userEvent.setup();
 
       const aliasInput = screen.getByTestId('alias')
-      const button = screen.getByRole('button', { name: /Editar/i })
       await user.clear(aliasInput)
+      await user.type(aliasInput, 'a')
+      const button = screen.getByRole('button', { name: /Editar/i })
       await user.click(button)
 
-      expect(await screen.findByText(/Por favor, ingrese el alías de la cuenta/i)).toBeInTheDocument()
+      expect(await screen.findByText(/El título debe tener al menos 2 caracteres/i)).toBeInTheDocument()
     })
   })
 
