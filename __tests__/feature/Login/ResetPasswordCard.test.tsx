@@ -2,7 +2,7 @@ import { screen, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios';
 
-import QueryProviderWrapper from '@/app/QueryProviderWrapper'
+import {QueryProviderWrapper} from '@/app/QueryProviderWrapper'
 import { ResetPasswordCard } from '@/features/Login/ResetPassword/ResetPasswordCard'
 
 jest.mock('axios');

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { ExpenseTemplate } from "@/features/Records/ExpenseTemplate";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
-import QueryProviderWrapper from "@/app/QueryProviderWrapper";
+import {QueryProviderWrapper} from "@/app/QueryProviderWrapper";
 import { mockCategories } from "../../mocks/categories.mock";
 import { Category } from "@/shared/types/categories.types";
 import { recordMock } from "../../mocks/records.mock";

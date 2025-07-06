@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
-import QueryProviderWrapper from "@/app/QueryProviderWrapper"
+import {QueryProviderWrapper} from "@/app/QueryProviderWrapper"
 import { DeleteAccount } from "@/features/Accounts/DeleteAccount"
 import { AccountModalAction, AccountsDisplay } from "@/shared/types/accounts.types"
 

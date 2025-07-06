@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import QueryProviderWrapper from '@/app/QueryProviderWrapper';
+import {QueryProviderWrapper} from '@/app/QueryProviderWrapper';
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
 import { AccountScreen } from '@/features/Dashboard/Account/AccountScreen';

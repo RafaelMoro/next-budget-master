@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans"
 import "./globals.css";
-import QueryProviderWrapper from "./QueryProviderWrapper";
+import {QueryProviderWrapper} from "./QueryProviderWrapper";
 import { getThemePreference } from "@/shared/lib/preferences.lib";
 
 export const metadata: Metadata = {

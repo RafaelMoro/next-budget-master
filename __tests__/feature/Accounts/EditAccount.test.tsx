@@ -4,7 +4,7 @@ import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
-import QueryProviderWrapper from "@/app/QueryProviderWrapper"
+import {QueryProviderWrapper} from "@/app/QueryProviderWrapper"
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
 import { EditAccount } from "@/features/Accounts/EditAccount"
 import { AccountModalAction, AccountsDisplay } from "@/shared/types/accounts.types"
