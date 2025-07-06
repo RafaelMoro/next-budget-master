@@ -159,7 +159,7 @@ describe('CreateAccount', () => {
       render(<CreateAccountWrapper closeModal={closeModal} push={push} />)
 
       const titleInput = screen.getByLabelText('Titulo de la cuenta')
-      const aliasInput = screen.getByLabelText('Alias')
+      const aliasInput = screen.getByLabelText('Alias (opcional)')
       const terminationInput = screen.getByTestId('terminationNumber')
       const button = screen.getByRole('button', { name: /Crear/i })
 
