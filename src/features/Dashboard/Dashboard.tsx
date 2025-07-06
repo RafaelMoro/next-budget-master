@@ -32,7 +32,7 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
   const { accounts, updateAccounts, updateSelectedAccount } = useDashboardStore(
   (state) => state
   )
-  const [screen, setScreen] = useState<DashboardScreens>('overview')
+  const [screen, setScreen] = useState<DashboardScreens | null>(null)
   const [openSelectAccountModal, setOpenSelectAccountModal] = useState<boolean>(false)
 
   const updateScreen = async (newScreen: DashboardScreens) => {

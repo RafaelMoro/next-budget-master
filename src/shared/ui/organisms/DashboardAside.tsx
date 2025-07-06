@@ -15,7 +15,7 @@ interface DashboardAsideProps {
   updateScreen: (newScreen: DashboardScreens) => void
   toggleSelectAccountModal: () => void
   accounts: AccountBank[];
-  screen: DashboardScreens
+  screen: DashboardScreens | null
 }
 
 export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectAccountModal, screen }: DashboardAsideProps) => {

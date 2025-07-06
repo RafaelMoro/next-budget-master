@@ -15,7 +15,7 @@ import { DashboardScreens } from "@/shared/types/dashboard.types"
 
 interface HeaderMenuMobileProps {
   accounts: AccountBank[];
-  screen: DashboardScreens;
+  screen: DashboardScreens | null;
   updateScreen: (newScreen: DashboardScreens) => void
   toggleSelectAccountModal: () => void
 }
