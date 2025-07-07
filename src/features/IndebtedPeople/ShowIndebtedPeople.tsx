@@ -1,5 +1,6 @@
 import { IndebtedPeopleUI } from "@/shared/types/records.types";
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
+import { RiCloseLine } from "@remixicon/react";
+import { CheckIcon, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 
 interface ShowIndebtedPeopleProps {
   indebtedPeople: IndebtedPeopleUI[]
@@ -31,7 +32,9 @@ export const ShowIndebtedPeople = ({ indebtedPeople }: ShowIndebtedPeopleProps) 
               <TableCell>{person.amountFormatted}</TableCell>
               <TableCell>{person.amountPaidFormatted}</TableCell>
               <TableCell>{person.remainingAmountFormatted}</TableCell>
-              <TableCell>{person.isPaid}</TableCell>
+              <TableCell>
+                { person.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
+              </TableCell>
               <TableCell>
                 <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
                   Edit
