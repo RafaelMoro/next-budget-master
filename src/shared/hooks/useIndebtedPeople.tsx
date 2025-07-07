@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import { IndebtedPeople, IndebtedPeopleUI } from "../types/records.types"
 import { formatNumberToCurrency } from "../utils/formatNumberCurrency.utils"
 
+/**
+* This hook is meant to be used with component IndebtedPeopleModal
+*/
 export const useIndebtedPeople = () => {
   const [indebtedPeople, setIndebtedPeople] = useState<IndebtedPeople[]>([])
   const [openIndebtedPeopleModal, setOpenIndebtedPeopleModal] = useState<boolean>(false)

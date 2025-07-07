@@ -19,6 +19,10 @@ interface IdebtedPeopleModalProps {
   indebtedPeople: IndebtedPeopleUI[]
 }
 
+/**
+ * The component shows a table of the indebted people added and adds a button to add indebted person to open a modal.
+* This component is meant to be used with the custom hook useIndebtedPeople
+*/
 export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson, indebtedPeople }: IdebtedPeopleModalProps) => {
   const optId = useId()
   const {
