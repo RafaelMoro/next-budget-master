@@ -1,12 +1,12 @@
 "use client"
+import { useState } from "react"
 import { Button, Label, Modal, ModalBody, ModalHeader, TextInput, ToggleSwitch  } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { SubmitHandler, useForm } from "react-hook-form"
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { useId, useState } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople, IndebtedPeopleUI } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { ShowIndebtedPeople } from "../IndebtedPeople/ShowIndebtedPeople"
@@ -16,6 +16,7 @@ interface IdebtedPeopleModalProps {
   openModal: boolean
   toggleModal: () => void
   addIndebtedPerson: (newIndebtedPerson: IndebtedPeople) => void
+  validatePersonExist: (name: string) => boolean
   indebtedPeople: IndebtedPeopleUI[]
 }
 
@@ -23,8 +24,7 @@ interface IdebtedPeopleModalProps {
  * The component shows a table of the indebted people added and adds a button to add indebted person to open a modal.
 * This component is meant to be used with the custom hook useIndebtedPeople
 */
-export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson, indebtedPeople }: IdebtedPeopleModalProps) => {
-  const optId = useId()
+export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson, validatePersonExist, indebtedPeople }: IdebtedPeopleModalProps) => {
   const {
     handleChange: handleChangeAmountOwed,
     currencyState: amountOwed,
@@ -47,6 +47,7 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson,
     handleSubmit,
     formState: { errors },
     reset,
+    setError
   } = useForm<AddIndebtedPeopleDataForm>({
     resolver: yupResolver(AddIndebtedPeopleSchema)
   })
@@ -56,13 +57,18 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson,
 
   const onSubmit: SubmitHandler<AddIndebtedPeopleDataForm> = (data) => {
     const isValid = validateZeroAmount({ amountState: amountOwed })
+    const personExists = validatePersonExist(data.name)
     if (!isValid) {
       return
     }
+    if (personExists) {
+      setError('name', { type: 'custom', message: 'El nombre de esa persona ya existe. Elija otro' })
+      return
+    }
+
     const amountOwedNumber = cleanCurrencyString(amountOwed)
     const amountPaidNumber = cleanCurrencyString(amountPaid)
     const payload: IndebtedPeople = {
-      _id: optId,
       name: data.name,
       amount: amountOwedNumber,
       amountPaid: amountPaidNumber,

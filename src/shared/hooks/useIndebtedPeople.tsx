@@ -9,9 +9,15 @@ export const useIndebtedPeople = () => {
   const [indebtedPeople, setIndebtedPeople] = useState<IndebtedPeople[]>([])
   const [openIndebtedPeopleModal, setOpenIndebtedPeopleModal] = useState<boolean>(false)
   const [indebtedPeopleUI, setIndebtedPeopleUI] = useState<IndebtedPeopleUI[]>([])
+
   const toggleIndebtedPeopleModal = () => setOpenIndebtedPeopleModal((prev) => !prev)
+
   const addIndebtedPerson = (newIndebtedPerson: IndebtedPeople) => {
     setIndebtedPeople([...indebtedPeople, newIndebtedPerson])
+  }
+
+  const validatePersonExist = (name: string): boolean => {
+    return indebtedPeople.some((person) => person.name.toLowerCase() === name.toLowerCase())
   }
 
   useEffect(() => {
@@ -28,6 +34,7 @@ export const useIndebtedPeople = () => {
     openIndebtedPeopleModal,
     toggleIndebtedPeopleModal,
     addIndebtedPerson,
+    validatePersonExist,
     indebtedPeople,
     indebtedPeopleUI
   }
