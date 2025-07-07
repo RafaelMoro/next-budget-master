@@ -95,11 +95,17 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     return true
   }
 
+  const resetCurrencyState = () => {
+    setCurrencyState(DEFAULT_AMOUNT_VALUE);
+    setErrorAmount(null);
+  }
+
   return {
     handleChange,
     currencyState,
     errorAmount,
     updateErrorAmount,
     validateZeroAmount,
+    resetCurrencyState,
   };
 }

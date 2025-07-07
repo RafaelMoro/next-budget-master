@@ -29,13 +29,15 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson,
     handleChange: handleChangeAmountOwed,
     currencyState: amountOwed,
     errorAmount: errorAmountOwed,
-    validateZeroAmount
+    validateZeroAmount,
+    resetCurrencyState: resetAmountOwed,
   } = useCurrencyField({
     amount: null,
   })
   const {
     handleChange: handleChangeAmountPaid,
     currencyState: amountPaid,
+    resetCurrencyState: resetAmountPaid,
   } = useCurrencyField({
     amount: null,
   })
@@ -44,6 +46,7 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson,
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<AddIndebtedPeopleDataForm>({
     resolver: yupResolver(AddIndebtedPeopleSchema)
   })
@@ -67,6 +70,12 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson,
     }
     addIndebtedPerson(payload)
     toggleModal()
+
+    // Reset form fields
+    reset()
+    resetAmountOwed()
+    resetAmountPaid()
+    setDebtPaid(false)
   }
 
   return (
