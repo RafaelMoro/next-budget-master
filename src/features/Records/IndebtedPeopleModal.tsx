@@ -71,7 +71,13 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson 
         <Modal key="add-indebted-people-modal" show={openModal} onClose={toggleModal}>
           <ModalHeader>Agregar persona que te debe</ModalHeader>
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 items-center">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault()
+                event.stopPropagation()
+                handleSubmit(onSubmit)(event)
+              }}
+              className="flex flex-col gap-4 items-center">
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="tag">Nombre completo</Label>
