@@ -1,8 +1,8 @@
-import { IndebtedPeople } from "@/shared/types/records.types";
+import { IndebtedPeopleUI } from "@/shared/types/records.types";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 
 interface ShowIndebtedPeopleProps {
-  indebtedPeople: IndebtedPeople[]
+  indebtedPeople: IndebtedPeopleUI[]
 }
 
 export const ShowIndebtedPeople = ({ indebtedPeople }: ShowIndebtedPeopleProps) => {
@@ -28,10 +28,10 @@ export const ShowIndebtedPeople = ({ indebtedPeople }: ShowIndebtedPeopleProps) 
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {person.name}
               </TableCell>
-              <TableCell>{person.amount}</TableCell>
-              <TableCell>{person.amountPaid}</TableCell>
-              <TableCell>Deuda restante</TableCell>
-              <TableCell>Pagado</TableCell>
+              <TableCell>{person.amountFormatted}</TableCell>
+              <TableCell>{person.amountPaidFormatted}</TableCell>
+              <TableCell>{person.remainingAmountFormatted}</TableCell>
+              <TableCell>{person.isPaid}</TableCell>
               <TableCell>
                 <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
                   Edit

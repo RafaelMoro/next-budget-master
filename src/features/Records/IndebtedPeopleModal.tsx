@@ -7,7 +7,7 @@ import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useId, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople } from "@/shared/types/records.types"
+import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople, IndebtedPeopleUI } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { ShowIndebtedPeople } from "../IndebtedPeople/ShowIndebtedPeople"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
@@ -16,7 +16,7 @@ interface IdebtedPeopleModalProps {
   openModal: boolean
   toggleModal: () => void
   addIndebtedPerson: (newIndebtedPerson: IndebtedPeople) => void
-  indebtedPeople: IndebtedPeople[]
+  indebtedPeople: IndebtedPeopleUI[]
 }
 
 export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson, indebtedPeople }: IdebtedPeopleModalProps) => {

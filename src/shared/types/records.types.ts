@@ -20,6 +20,12 @@ export type IndebtedPeople = {
   isPaid: boolean;
 }
 
+export type IndebtedPeopleUI = IndebtedPeople & {
+  amountFormatted: string
+  amountPaidFormatted: string;
+  remainingAmountFormatted: string;
+}
+
 export type AccountRecord = {
   _id: string;
   transferRecord?: TransferRecord;

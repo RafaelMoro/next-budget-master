@@ -42,7 +42,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const [date, setDate] = useState<Date | undefined>(new Date())
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
-  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople } = useIndebtedPeople()
+  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI } = useIndebtedPeople()
   const { handleChange, currencyState, errorAmount, validateZeroAmount } = useCurrencyField({
     amount: null,
   })
@@ -102,8 +102,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         category: categorySelected.categoryId,
         date,
         description: data.description ?? '',
-        // TODO: Add logic to handle indebted people
-        indebtedPeople: indebtedPeople.current,
+        indebtedPeople: indebtedPeople,
         // TODO: Add logic to check if account is type credit
         isPaid: false,
         // TODO: Add logic to handle linked budgets
@@ -168,7 +167,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         <IndebtedPeopleModal
           openModal={openIndebtedPeopleModal}
           toggleModal={toggleIndebtedPeopleModal}
-          indebtedPeople={indebtedPeople.current}
+          indebtedPeople={indebtedPeopleUI}
           addIndebtedPerson={addIndebtedPerson}
           />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
