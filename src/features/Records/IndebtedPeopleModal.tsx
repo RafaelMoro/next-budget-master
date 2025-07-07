@@ -4,18 +4,20 @@ import { AnimatePresence } from "motion/react"
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { useState } from "react"
+import { useId, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema } from "@/shared/types/records.types"
+import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 
 interface IdebtedPeopleModalProps {
   openModal: boolean
   toggleModal: () => void
+  addIndebtedPerson: (newIndebtedPerson: IndebtedPeople) => void
 }
 
-export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleModalProps) => {
+export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson }: IdebtedPeopleModalProps) => {
+  const optId = useId()
   const {
     handleChange: handleChangeAmountOwed,
     currencyState: amountOwed,
@@ -43,8 +45,20 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal }: IdebtedPeopleMod
   const toggleDebtPaid = () => setDebtPaid((prev) => !prev)
 
   const onSubmit: SubmitHandler<AddIndebtedPeopleDataForm> = (data) => {
-    validateZeroAmount({ amountState: amountOwed })
-    console.log('data', data)
+    const isValid = validateZeroAmount({ amountState: amountOwed })
+    if (!isValid) {
+      return
+    }
+
+    const payload: IndebtedPeople = {
+      _id: optId,
+      name: data.name,
+      amount: amountOwed,
+      amountPaid,
+      isPaid: debtPaid
+    }
+    addIndebtedPerson(payload)
+    toggleModal()
   }
 
   return (

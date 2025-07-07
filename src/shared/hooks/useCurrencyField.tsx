@@ -87,10 +87,12 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     
   }
 
-  const validateZeroAmount = ({ amountState, message = CURRENCY_ZERO_ERROR }: { amountState: string, message?: string }) => {
+  const validateZeroAmount = ({ amountState, message = CURRENCY_ZERO_ERROR }: { amountState: string, message?: string }):boolean => {
     if (amountState === DEFAULT_AMOUNT_VALUE) {
       setErrorAmount(message)
+      return false
     }
+    return true
   }
 
   return {

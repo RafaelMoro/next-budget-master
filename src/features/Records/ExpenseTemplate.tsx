@@ -27,6 +27,7 @@ import { TransactionCategorizerDropdown } from "../Categories/TransactionCategor
 import { ManageTagsModal } from "./ManageTagsModal"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { IndebtedPeopleModal } from "./IndebtedPeopleModal"
+import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -39,10 +40,9 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const router = useRouter()
 
   const [date, setDate] = useState<Date | undefined>(new Date())
-  const [openIndebtedPeopleModal, setOpenIndebtedPeopleModal] = useState<boolean>(false)
-  const toggleIndebtedPeopleModal = () => setOpenIndebtedPeopleModal((prev) => !prev)
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
+  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople } = useIndebtedPeople()
   const { handleChange, currencyState, errorAmount, validateZeroAmount } = useCurrencyField({
     amount: null,
   })
@@ -103,7 +103,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         date,
         description: data.description ?? '',
         // TODO: Add logic to handle indebted people
-        indebtedPeople: [],
+        indebtedPeople: indebtedPeople.current,
         // TODO: Add logic to check if account is type credit
         isPaid: false,
         // TODO: Add logic to handle linked budgets
@@ -165,7 +165,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           subcategoryError={subcategoryError}
         />
         <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-        <IndebtedPeopleModal openModal={openIndebtedPeopleModal} toggleModal={toggleIndebtedPeopleModal} />
+        <IndebtedPeopleModal openModal={openIndebtedPeopleModal} toggleModal={toggleIndebtedPeopleModal} addIndebtedPerson={addIndebtedPerson} />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"
