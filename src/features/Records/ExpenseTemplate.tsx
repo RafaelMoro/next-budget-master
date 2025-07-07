@@ -119,7 +119,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   return (
     <AnimatePresence>
-      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="max-w-3xs mx-auto flex flex-col gap-4">
+      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="mx-auto flex flex-col gap-4">
         <DateTimePicker date={date} setDate={setDate} />
         <CurrencyField
           labelName="Cantidad"
@@ -165,7 +165,12 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           subcategoryError={subcategoryError}
         />
         <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-        <IndebtedPeopleModal openModal={openIndebtedPeopleModal} toggleModal={toggleIndebtedPeopleModal} addIndebtedPerson={addIndebtedPerson} />
+        <IndebtedPeopleModal
+          openModal={openIndebtedPeopleModal}
+          toggleModal={toggleIndebtedPeopleModal}
+          indebtedPeople={indebtedPeople.current}
+          addIndebtedPerson={addIndebtedPerson}
+          />
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"

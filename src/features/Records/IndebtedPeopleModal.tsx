@@ -9,14 +9,17 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
+import { ShowIndebtedPeople } from "../IndebtedPeople/ShowIndebtedPeople"
+import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 
 interface IdebtedPeopleModalProps {
   openModal: boolean
   toggleModal: () => void
   addIndebtedPerson: (newIndebtedPerson: IndebtedPeople) => void
+  indebtedPeople: IndebtedPeople[]
 }
 
-export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson }: IdebtedPeopleModalProps) => {
+export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson, indebtedPeople }: IdebtedPeopleModalProps) => {
   const optId = useId()
   const {
     handleChange: handleChangeAmountOwed,
@@ -49,12 +52,13 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson 
     if (!isValid) {
       return
     }
-
+    const amountOwedNumber = cleanCurrencyString(amountOwed)
+    const amountPaidNumber = cleanCurrencyString(amountPaid)
     const payload: IndebtedPeople = {
       _id: optId,
       name: data.name,
-      amount: amountOwed,
-      amountPaid,
+      amount: amountOwedNumber,
+      amountPaid: amountPaidNumber,
       isPaid: debtPaid
     }
     addIndebtedPerson(payload)
@@ -66,6 +70,9 @@ export const IndebtedPeopleModal = ({ openModal, toggleModal, addIndebtedPerson 
       <p className="text-sm text-gray-600 dark:text-gray-400">
         ¿Alguien más coopera con esta transacción? Registra aquí su parte para que no se te olvide.
       </p>
+      { indebtedPeople.length > 0 && (
+        <ShowIndebtedPeople indebtedPeople={indebtedPeople} />
+      )}
       <Button color="light" onClick={toggleModal}>¿Quién te debe?</Button>
       <AnimatePresence>
         <Modal key="add-indebted-people-modal" show={openModal} onClose={toggleModal}>

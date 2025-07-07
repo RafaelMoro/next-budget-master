@@ -15,8 +15,8 @@ export type TransferRecord = {
 export type IndebtedPeople = {
   _id?: string;
   name: string;
-  amount: string;
-  amountPaid: string;
+  amount: number;
+  amountPaid: number;
   isPaid: boolean;
 }
 
