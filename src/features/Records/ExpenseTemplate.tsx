@@ -29,6 +29,7 @@ import { useManageTags } from "@/shared/hooks/useManageTags"
 import { IndebtedPeopleModal } from "./IndebtedPeopleModal"
 import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
+import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -39,6 +40,7 @@ interface ExpenseTemplateProps {
 
 export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, detailedError }: ExpenseTemplateProps) => {
   const router = useRouter()
+  const { isMobileTablet, isDesktop } = useMediaQuery()
 
   const [date, setDate] = useState<Date | undefined>(new Date())
 
@@ -118,80 +120,97 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   }
 
   return (
-    <AnimatePresence>
-      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 lg:px-0 mx-auto flex flex-col gap-4 md:max-w-xl lg:max-w-3xl mb-6">
-        <DateTimePicker date={date} setDate={setDate} />
-        <CurrencyField
-          labelName="Cantidad"
-          dataTestId="amount"
-          fieldId="amount"
-          value={currencyState}
-          handleChange={handleChange}
-        />
-        { errorAmount && (
-          <ErrorMessage isAnimated>{errorAmount}</ErrorMessage>
-        )}
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="shortDescription">Pequeña descripción</Label>
-          </div>
-          <TextInput
-            data-testid="shortDescription"
-            id="shortDescription"
-            type="text"
-            {...register("shortDescription")}
-            />
-          { errors?.shortDescription?.message && (
-            <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
+    <div className="w-full flex justify-between">
+      <AnimatePresence>
+        <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 lg:px-0 mx-auto flex flex-col gap-4 md:max-w-xl lg:max-w-3xl xl:max-w-2xl mb-6">
+          <DateTimePicker date={date} setDate={setDate} />
+          <CurrencyField
+            labelName="Cantidad"
+            dataTestId="amount"
+            fieldId="amount"
+            value={currencyState}
+            handleChange={handleChange}
+          />
+          { errorAmount && (
+            <ErrorMessage isAnimated>{errorAmount}</ErrorMessage>
           )}
-        </div>
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="description">Descripción (opcional)</Label>
-          </div>
-          <Textarea id="description" rows={4} {...register("description")} />
-          { errors?.description?.message && (
-            <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
-          )}
-        </div>
-        <TransactionCategorizerDropdown
-          categoriesShown={categoriesShown}
-          categorySelected={categorySelected}
-          updateCategory={updateCategory}
-          categoryError={categoryError}
-          subcategories={subcategories}
-          subcategory={subcategory}
-          updateSubcategory={updateSubcategory}
-          subcategoryError={subcategoryError}
-        />
-        <FurtherDetailsAccordeon>
-          <div className="w-full flex flex-col gap-12">
-            <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-            <IndebtedPeopleModal
-              openModal={openIndebtedPeopleModal}
-              toggleModal={toggleIndebtedPeopleModal}
-              indebtedPeople={indebtedPeopleUI}
-              addIndebtedPerson={addIndebtedPerson}
-              validatePersonExist={validatePersonExist}
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="shortDescription">Pequeña descripción</Label>
+            </div>
+            <TextInput
+              data-testid="shortDescription"
+              id="shortDescription"
+              type="text"
+              {...register("shortDescription")}
               />
+            { errors?.shortDescription?.message && (
+              <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
+            )}
           </div>
-        </FurtherDetailsAccordeon>
-        <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
-          <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
-          <Button
-            className="hover:cursor-pointer"
-            disabled={isPending || isSuccess || openTagModal}
-            type="submit"
-          >
-            { (isIdle || isError) && 'Crear gasto'}
-            { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-            { isSuccess && (<CheckIcon data-testid="check-icon" />)}
-          </Button>
-        </div>
-      </form>
-      { (isError || detailedError?.message) && (
-        <Toaster position="top-center" />
-      )}
-    </AnimatePresence>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="description">Descripción (opcional)</Label>
+            </div>
+            <Textarea id="description" rows={4} {...register("description")} />
+            { errors?.description?.message && (
+              <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
+            )}
+          </div>
+          <TransactionCategorizerDropdown
+            categoriesShown={categoriesShown}
+            categorySelected={categorySelected}
+            updateCategory={updateCategory}
+            categoryError={categoryError}
+            subcategories={subcategories}
+            subcategory={subcategory}
+            updateSubcategory={updateSubcategory}
+            subcategoryError={subcategoryError}
+          />
+          { isMobileTablet && (
+            <FurtherDetailsAccordeon>
+              <div className="w-full flex flex-col gap-12">
+                <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+                <IndebtedPeopleModal
+                  openModal={openIndebtedPeopleModal}
+                  toggleModal={toggleIndebtedPeopleModal}
+                  indebtedPeople={indebtedPeopleUI}
+                  addIndebtedPerson={addIndebtedPerson}
+                  validatePersonExist={validatePersonExist}
+                  />
+              </div>
+            </FurtherDetailsAccordeon>
+          )}
+          <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
+            <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
+            <Button
+              className="hover:cursor-pointer"
+              disabled={isPending || isSuccess || openTagModal}
+              type="submit"
+            >
+              { (isIdle || isError) && 'Crear gasto'}
+              { isPending && (<Spinner aria-label="loading reset password budget master" />) }
+              { isSuccess && (<CheckIcon data-testid="check-icon" />)}
+            </Button>
+          </div>
+        </form>
+        { (isError || detailedError?.message) && (
+          <Toaster position="top-center" />
+        )}
+      </AnimatePresence>
+      { isDesktop && (
+        <aside className="w-full flex flex-col gap-12">
+          <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
+          <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+          <IndebtedPeopleModal
+            openModal={openIndebtedPeopleModal}
+            toggleModal={toggleIndebtedPeopleModal}
+            indebtedPeople={indebtedPeopleUI}
+            addIndebtedPerson={addIndebtedPerson}
+            validatePersonExist={validatePersonExist}
+            />
+        </aside>
+      ) }
+    </div>
   )
 }
