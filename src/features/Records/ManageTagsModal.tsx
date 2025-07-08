@@ -66,8 +66,8 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, clos
   }
 
   return (
-    <section className="flex flex-col gap-2">
-      <h4 className="text-xl text-center font-semibold">Etiquetas</h4>
+    <section className="flex flex-col gap-4 md:mt-6">
+      <h4 className="text-xl text-center md:text-start font-semibold">Etiquetas</h4>
       <p className="text-gray-400">Agrega etiquetas para recordar detalles importantes de tu transacción.</p>
     { tags.length > 0  && (
       <div className="mt-2 mb-4 flex flex-col gap-3 items-center md:flex-row">

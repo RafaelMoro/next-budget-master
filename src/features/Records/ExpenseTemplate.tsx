@@ -119,7 +119,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   return (
     <AnimatePresence>
-      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 lg:px-0 mx-auto flex flex-col gap-4 md:max-w-xl lg:max-w-3xl">
+      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 lg:px-0 mx-auto flex flex-col gap-4 md:max-w-xl lg:max-w-3xl mb-6">
         <DateTimePicker date={date} setDate={setDate} />
         <CurrencyField
           labelName="Cantidad"
@@ -176,16 +176,18 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
               />
           </div>
         </FurtherDetailsAccordeon>
-        <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
+        <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
+          <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"
             disabled={isPending || isSuccess || openTagModal}
             type="submit"
-            >
-          { (isIdle || isError) && 'Crear gasto'}
-          { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-          { isSuccess && (<CheckIcon data-testid="check-icon" />)}
-        </Button>
+          >
+            { (isIdle || isError) && 'Crear gasto'}
+            { isPending && (<Spinner aria-label="loading reset password budget master" />) }
+            { isSuccess && (<CheckIcon data-testid="check-icon" />)}
+          </Button>
+        </div>
       </form>
       { (isError || detailedError?.message) && (
         <Toaster position="top-center" />

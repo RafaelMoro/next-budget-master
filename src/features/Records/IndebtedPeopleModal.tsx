@@ -87,15 +87,15 @@ export const IndebtedPeopleModal = ({
   }
 
   return (
-    <section className="flex flex-col gap-8">
-      <h4 className="text-xl text-center font-semibold">Personas que te deben:</h4>
+    <section className="flex flex-col gap-4">
+      <h4 className="text-xl text-center md:text-start font-semibold">Personas que te deben</h4>
       <p className="text-sm text-gray-600 dark:text-gray-400">
         ¿Alguien más coopera con esta transacción? Registra aquí su parte para que no se te olvide.
       </p>
       { indebtedPeople.length > 0 && (
         <ShowIndebtedPeople indebtedPeople={indebtedPeople} />
       )}
-      <Button color="light" onClick={toggleModal}>¿Quién te debe?</Button>
+      <Button color="light" className="lg:max-w-max mx-auto" onClick={toggleModal}>¿Quién te debe?</Button>
       <AnimatePresence>
         <Modal key="add-indebted-people-modal" show={openModal} onClose={toggleModal}>
           <ModalHeader>Agregar persona que te debe</ModalHeader>
