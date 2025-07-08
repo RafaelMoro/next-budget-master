@@ -7,7 +7,7 @@ interface FurtherDetailsAccordeonProps {
 
 export const FurtherDetailsAccordeon = ({ children }: FurtherDetailsAccordeonProps) => {
   return (
-    <Accordion type="single" className="max-w-sm" collapsible>
+    <Accordion type="single" collapsible>
     <AccordionItem value="item-1">
       <AccordionTrigger>Más detalles</AccordionTrigger>
       <AccordionContent>

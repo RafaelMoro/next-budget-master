@@ -103,7 +103,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         category: categorySelected.categoryId,
         date,
         description: data.description ?? '',
-        indebtedPeople: indebtedPeople,
+        indebtedPeople,
         // TODO: Add logic to check if account is type credit
         isPaid: false,
         // TODO: Add logic to handle linked budgets
@@ -119,7 +119,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   return (
     <AnimatePresence>
-      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 md:px-0 mx-auto flex flex-col gap-4">
+      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 lg:px-0 mx-auto flex flex-col gap-4 md:max-w-xl">
         <DateTimePicker date={date} setDate={setDate} />
         <CurrencyField
           labelName="Cantidad"
@@ -145,7 +145,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
           )}
         </div>
-        <div className="max-w-md">
+        <div>
           <div className="mb-2 block">
             <Label htmlFor="description">Descripción (opcional)</Label>
           </div>
