@@ -1,4 +1,4 @@
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/tremor/AccordionTremor";
 import { ReactNode } from "react";
 
 interface FurtherDetailsAccordeonProps {
@@ -7,13 +7,14 @@ interface FurtherDetailsAccordeonProps {
 
 export const FurtherDetailsAccordeon = ({ children }: FurtherDetailsAccordeonProps) => {
   return (
-    <Accordion collapseAll>
-      <AccordionPanel>
-        <AccordionTitle>Más detalles</AccordionTitle>
-        <AccordionContent>
-          {children}
-        </AccordionContent>
-      </AccordionPanel>
-    </Accordion>
+    <Accordion type="single" className="max-w-sm" collapsible>
+    <AccordionItem value="item-1">
+      <AccordionTrigger>Más detalles</AccordionTrigger>
+      <AccordionContent>
+        {children}
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
+
   )
 }

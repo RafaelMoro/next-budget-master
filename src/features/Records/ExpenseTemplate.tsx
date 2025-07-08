@@ -119,7 +119,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   return (
     <AnimatePresence>
-      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="px-4 md:px-0 mx-auto flex flex-col gap-4">
+      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 md:px-0 mx-auto flex flex-col gap-4">
         <DateTimePicker date={date} setDate={setDate} />
         <CurrencyField
           labelName="Cantidad"
