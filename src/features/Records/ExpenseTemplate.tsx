@@ -28,6 +28,7 @@ import { ManageTagsModal } from "./ManageTagsModal"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { IndebtedPeopleModal } from "./IndebtedPeopleModal"
 import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
+import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -163,14 +164,16 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           updateSubcategory={updateSubcategory}
           subcategoryError={subcategoryError}
         />
-        <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-        <IndebtedPeopleModal
-          openModal={openIndebtedPeopleModal}
-          toggleModal={toggleIndebtedPeopleModal}
-          indebtedPeople={indebtedPeopleUI}
-          addIndebtedPerson={addIndebtedPerson}
-          validatePersonExist={validatePersonExist}
-          />
+        <FurtherDetailsAccordeon>
+          <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+          <IndebtedPeopleModal
+            openModal={openIndebtedPeopleModal}
+            toggleModal={toggleIndebtedPeopleModal}
+            indebtedPeople={indebtedPeopleUI}
+            addIndebtedPerson={addIndebtedPerson}
+            validatePersonExist={validatePersonExist}
+            />
+        </FurtherDetailsAccordeon>
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button
             className="hover:cursor-pointer"
