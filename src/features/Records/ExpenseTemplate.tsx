@@ -165,14 +165,16 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           subcategoryError={subcategoryError}
         />
         <FurtherDetailsAccordeon>
-          <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-          <IndebtedPeopleModal
-            openModal={openIndebtedPeopleModal}
-            toggleModal={toggleIndebtedPeopleModal}
-            indebtedPeople={indebtedPeopleUI}
-            addIndebtedPerson={addIndebtedPerson}
-            validatePersonExist={validatePersonExist}
-            />
+          <div className="w-full flex flex-col gap-4">
+            <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+            <IndebtedPeopleModal
+              openModal={openIndebtedPeopleModal}
+              toggleModal={toggleIndebtedPeopleModal}
+              indebtedPeople={indebtedPeopleUI}
+              addIndebtedPerson={addIndebtedPerson}
+              validatePersonExist={validatePersonExist}
+              />
+          </div>
         </FurtherDetailsAccordeon>
         <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
           <Button

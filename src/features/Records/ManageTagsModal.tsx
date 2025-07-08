@@ -66,20 +66,19 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, clos
   }
 
   return (
-    <>
+    <section className="flex flex-col gap-2">
+      <h4 className="text-xl text-center font-semibold">Etiquetas</h4>
+      <p className="text-gray-400">Agrega etiquetas para recordar detalles importantes de tu transacción.</p>
     { tags.length > 0  && (
-      <>
-        <p className="text-center mt-4">Etiquetas:</p>
-        <div className="flex flex-col gap-3 md:flex-row">
-          { tags.map((tag) => (
-            <Badge key={tag} className="max-w-max" color="purple">
-              {tag}
-            </Badge>
-          )) }
-        </div>
-      </>
+      <div className="mt-2 mb-4 flex flex-col gap-3 items-center md:flex-row">
+        { tags.map((tag) => (
+          <Badge key={tag} className="max-w-max" color="purple">
+            {tag}
+          </Badge>
+        )) }
+      </div>
     )}
-      <Button color="light" onClick={openModalFn}>{subtext} etiquetas</Button>
+      <Button className="mx-auto" color="light" onClick={openModalFn}>{subtext} etiquetas</Button>
       <AnimatePresence>
         <Modal key="add-tag-modal" show={openModal} onClose={closeModalFn}>
           <ModalHeader>Agregar etiqueta</ModalHeader>
@@ -122,6 +121,6 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, clos
           </ModalFooter>
         </Modal>
       </AnimatePresence>
-    </>
+    </section>
   )
 }
