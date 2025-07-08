@@ -7,9 +7,8 @@ import { SubmitHandler, useForm } from "react-hook-form"
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople, IndebtedPeopleUI } from "@/shared/types/records.types"
+import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { ShowIndebtedPeople } from "./ShowIndebtedPeople"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 
 interface IdebtedPeopleModalProps {
@@ -17,7 +16,6 @@ interface IdebtedPeopleModalProps {
   toggleModal: () => void
   addIndebtedPerson: (newIndebtedPerson: IndebtedPeople) => void
   validatePersonExist: (name: string) => boolean
-  indebtedPeople: IndebtedPeopleUI[]
 }
 
 /**
@@ -25,7 +23,7 @@ interface IdebtedPeopleModalProps {
 * This component is meant to be used with the custom hook useIndebtedPeople
 */
 export const IndebtedPeopleModal = ({
-  openModal, toggleModal, addIndebtedPerson, validatePersonExist, indebtedPeople,
+  openModal, toggleModal, addIndebtedPerson, validatePersonExist,
 }: IdebtedPeopleModalProps) => {
   const {
     handleChange: handleChangeAmountOwed,
@@ -87,63 +85,53 @@ export const IndebtedPeopleModal = ({
   }
 
   return (
-    <section className="flex flex-col gap-4">
-      <h4 className="text-xl text-center md:text-start font-semibold">Personas que te deben</h4>
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        ¿Alguien más coopera con esta transacción? Registra aquí su parte para que no se te olvide.
-      </p>
-      { indebtedPeople.length > 0 && (
-        <ShowIndebtedPeople indebtedPeople={indebtedPeople} />
-      )}
-      <Button color="light" className="lg:max-w-max mx-auto" onClick={toggleModal}>¿Quién te debe?</Button>
-      <AnimatePresence>
-        <Modal key="add-indebted-people-modal" show={openModal} onClose={toggleModal}>
-          <ModalHeader>Agregar persona que te debe</ModalHeader>
-          <ModalBody>
-            <form
-              onSubmit={(event) => {
-                event.preventDefault()
-                event.stopPropagation()
-                handleSubmit(onSubmit)(event)
-              }}
-              className="flex flex-col gap-4 items-center">
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="tag">Nombre completo</Label>
-                </div>
-                <TextInput
-                  data-testid="name"
-                  id="name"
-                  type="text"
-                  {...register("name")}
-                />
-                { errors?.name?.message && (
-                  <ErrorMessage isAnimated={false}>{errors?.name?.message}</ErrorMessage>
-                )}
+    <AnimatePresence>
+      <Modal key="add-indebted-people-modal" show={openModal} onClose={toggleModal}>
+        <ModalHeader>Agregar persona que te debe</ModalHeader>
+        <ModalBody>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault()
+              event.stopPropagation()
+              handleSubmit(onSubmit)(event)
+            }}
+            className="flex flex-col gap-4 items-center">
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="tag">Nombre completo</Label>
               </div>
-              <CurrencyField
-                labelName="Cantidad a deber"
-                dataTestId="amountOwed"
-                fieldId="amountOwed"
-                value={amountOwed}
-                handleChange={handleChangeAmountOwed}
+              <TextInput
+                data-testid="name"
+                id="name"
+                type="text"
+                {...register("name")}
               />
-              { errorAmountOwed && (
-                <ErrorMessage isAnimated>{errorAmountOwed}</ErrorMessage>
+              { errors?.name?.message && (
+                <ErrorMessage isAnimated={false}>{errors?.name?.message}</ErrorMessage>
               )}
-              <CurrencyField
-                labelName="Cantidad pagada"
-                dataTestId="amountPaid"
-                fieldId="amountPaid"
-                value={amountPaid}
-                handleChange={handleChangeAmountPaid}
-              />
-              <ToggleSwitch checked={debtPaid} label="Deuda pagada" onChange={toggleDebtPaid} />
-              <Button type="submit" className="max-w-max">Agregar persona</Button>
-            </form>
-          </ModalBody>
-        </Modal>
-      </AnimatePresence>
-    </section>
+            </div>
+            <CurrencyField
+              labelName="Cantidad a deber"
+              dataTestId="amountOwed"
+              fieldId="amountOwed"
+              value={amountOwed}
+              handleChange={handleChangeAmountOwed}
+            />
+            { errorAmountOwed && (
+              <ErrorMessage isAnimated>{errorAmountOwed}</ErrorMessage>
+            )}
+            <CurrencyField
+              labelName="Cantidad pagada"
+              dataTestId="amountPaid"
+              fieldId="amountPaid"
+              value={amountPaid}
+              handleChange={handleChangeAmountPaid}
+            />
+            <ToggleSwitch checked={debtPaid} label="Deuda pagada" onChange={toggleDebtPaid} />
+            <Button type="submit" className="max-w-max">Agregar persona</Button>
+          </form>
+        </ModalBody>
+      </Modal>
+    </AnimatePresence>
   )
 }

@@ -30,6 +30,8 @@ import { IndebtedPeopleModal } from "../IndebtedPeople/IndebtedPeopleModal"
 import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
+import { IndebtedPeopleSection } from "../IndebtedPeople/IndebtedPeopleSection"
+import { IndebtedPeopleDrawer } from "../IndebtedPeople/IndebtedPeopleDrawer"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -45,7 +47,8 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const [date, setDate] = useState<Date | undefined>(new Date())
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
-  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI, validatePersonExist } = useIndebtedPeople()
+
+  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI, validatePersonExist, handleClick: handleClickIndebtedPeople, openDrawer, toggleModal } = useIndebtedPeople()
   const { handleChange, currencyState, errorAmount, validateZeroAmount } = useCurrencyField({
     amount: null,
   })
@@ -171,13 +174,18 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-                <IndebtedPeopleModal
-                  openModal={openIndebtedPeopleModal}
-                  toggleModal={toggleIndebtedPeopleModal}
+                <IndebtedPeopleSection
                   indebtedPeople={indebtedPeopleUI}
-                  addIndebtedPerson={addIndebtedPerson}
-                  validatePersonExist={validatePersonExist}
-                  />
+                  isMobileTablet={isMobileTablet}
+                  handleClick={handleClickIndebtedPeople}
+                >
+                  <IndebtedPeopleModal
+                    openModal={openIndebtedPeopleModal}
+                    toggleModal={toggleIndebtedPeopleModal}
+                    addIndebtedPerson={addIndebtedPerson}
+                    validatePersonExist={validatePersonExist}
+                    />
+                </IndebtedPeopleSection>
               </div>
             </FurtherDetailsAccordeon>
           )}
@@ -202,13 +210,25 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         <aside className="w-full max-w-xs flex flex-col gap-12">
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-          <IndebtedPeopleModal
-            openModal={openIndebtedPeopleModal}
-            toggleModal={toggleIndebtedPeopleModal}
+          <IndebtedPeopleSection
             indebtedPeople={indebtedPeopleUI}
-            addIndebtedPerson={addIndebtedPerson}
-            validatePersonExist={validatePersonExist}
-            />
+            isMobileTablet={isMobileTablet}
+            handleClick={handleClickIndebtedPeople}
+          >
+            <IndebtedPeopleDrawer
+              indebtedPeople={indebtedPeopleUI}
+              open={openDrawer}
+              toggleDrawer={handleClickIndebtedPeople}
+              toggleModal={toggleModal}
+            >
+              <IndebtedPeopleModal
+                openModal={openIndebtedPeopleModal}
+                toggleModal={toggleIndebtedPeopleModal}
+                addIndebtedPerson={addIndebtedPerson}
+                validatePersonExist={validatePersonExist}
+              />
+            </IndebtedPeopleDrawer>
+          </IndebtedPeopleSection>
         </aside>
       ) }
     </div>

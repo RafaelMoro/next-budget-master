@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react"
 import { IndebtedPeople, IndebtedPeopleUI } from "../types/records.types"
 import { formatNumberToCurrency } from "../utils/formatNumberCurrency.utils"
+import { useMediaQuery } from "./useMediaQuery"
 
 /**
 * This hook is meant to be used with component IndebtedPeopleModal
 */
 export const useIndebtedPeople = () => {
+  const { isMobileTablet } = useMediaQuery()
+
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+
+  const toggleModal = () => setOpenModal((prev) => !prev)
+  const toggleDrawer = () => setOpenDrawer((prev) => !prev)
+
+  const handleClick = isMobileTablet ? toggleModal : toggleDrawer
+
   const [indebtedPeople, setIndebtedPeople] = useState<IndebtedPeople[]>([])
   const [openIndebtedPeopleModal, setOpenIndebtedPeopleModal] = useState<boolean>(false)
   const [indebtedPeopleUI, setIndebtedPeopleUI] = useState<IndebtedPeopleUI[]>([])
@@ -32,6 +43,11 @@ export const useIndebtedPeople = () => {
 
   return {
     openIndebtedPeopleModal,
+    openModal,
+    openDrawer,
+    handleClick,
+    toggleModal,
+    toggleDrawer,
     toggleIndebtedPeopleModal,
     addIndebtedPerson,
     validatePersonExist,
