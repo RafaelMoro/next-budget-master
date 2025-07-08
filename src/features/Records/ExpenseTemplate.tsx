@@ -120,9 +120,9 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   }
 
   return (
-    <div className="w-full flex justify-between">
+    <div className="w-full flex justify-center gap-32">
       <AnimatePresence>
-        <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 lg:px-0 mx-auto flex flex-col gap-4 md:max-w-xl lg:max-w-3xl xl:max-w-2xl mb-6">
+        <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 mx-auto flex flex-col gap-4 md:max-w-xl mb-6 lg:mx-0 lg:px-0">
           <DateTimePicker date={date} setDate={setDate} />
           <CurrencyField
             labelName="Cantidad"
@@ -199,7 +199,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         )}
       </AnimatePresence>
       { isDesktop && (
-        <aside className="w-full flex flex-col gap-12">
+        <aside className="w-full max-w-xs flex flex-col gap-12">
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
           <IndebtedPeopleModal
