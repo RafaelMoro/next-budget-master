@@ -9,7 +9,7 @@ import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople, IndebtedPeopleUI } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { ShowIndebtedPeople } from "../IndebtedPeople/ShowIndebtedPeople"
+import { ShowIndebtedPeople } from "./ShowIndebtedPeople"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 
 interface IdebtedPeopleModalProps {
