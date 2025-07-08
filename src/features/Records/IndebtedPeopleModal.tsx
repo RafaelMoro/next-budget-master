@@ -87,7 +87,8 @@ export const IndebtedPeopleModal = ({
   }
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-8">
+      <h4 className="text-xl text-center font-semibold">Personas que te deben:</h4>
       <p className="text-sm text-gray-600 dark:text-gray-400">
         ¿Alguien más coopera con esta transacción? Registra aquí su parte para que no se te olvide.
       </p>

@@ -165,7 +165,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
           subcategoryError={subcategoryError}
         />
         <FurtherDetailsAccordeon>
-          <div className="w-full flex flex-col gap-4">
+          <div className="w-full flex flex-col gap-12">
             <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
             <IndebtedPeopleModal
               openModal={openIndebtedPeopleModal}
