@@ -1,5 +1,5 @@
 import { Avatar, CheckIcon, ListGroup, ListGroupItem, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import { RiCloseLine } from "@remixicon/react";
+import { RiCloseLine, RiPencilLine, RiDeleteBinFill } from "@remixicon/react";
 
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { IndebtedPeopleUI } from "@/shared/types/records.types";
@@ -43,11 +43,11 @@ export const ShowIndebtedPeople = ({ indebtedPeople }: ShowIndebtedPeopleProps) 
         <TableHead>
           <TableRow>
             <TableHeadCell>Persona</TableHeadCell>
-            <TableHeadCell>Debe</TableHeadCell>
-            <TableHeadCell>Ha pagado</TableHeadCell>
-            <TableHeadCell>Resta</TableHeadCell>
-            <TableHeadCell>Pagado</TableHeadCell>
-            <TableHeadCell>
+            <TableHeadCell className="px-4">Debe</TableHeadCell>
+            <TableHeadCell className="px-4">Ha pagado</TableHeadCell>
+            <TableHeadCell className="px-4">Resta</TableHeadCell>
+            <TableHeadCell className="px-2">Pagado</TableHeadCell>
+            <TableHeadCell className="px-2">
               <span className="sr-only">Acciones</span>
             </TableHeadCell>
           </TableRow>
@@ -59,16 +59,19 @@ export const ShowIndebtedPeople = ({ indebtedPeople }: ShowIndebtedPeopleProps) 
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {person.name}
               </TableCell>
-              <TableCell>{person.amountFormatted}</TableCell>
-              <TableCell>{person.amountPaidFormatted}</TableCell>
-              <TableCell>{person.remainingAmountFormatted}</TableCell>
-              <TableCell>
+              <TableCell className="px-4">{person.amountFormatted}</TableCell>
+              <TableCell className="px-4">{person.amountPaidFormatted}</TableCell>
+              <TableCell className="px-4">{person.remainingAmountFormatted}</TableCell>
+              <TableCell className="px-2">
                 { person.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
               </TableCell>
-              <TableCell>
-                <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                  Edit
-                </a>
+              <TableCell className="px-2">
+                <button aria-label="Edit person" className="cursor-pointer mr-3">
+                  <RiPencilLine />
+                </button>
+                <button aria-label="Remove person" className="cursor-pointer">
+                  <RiDeleteBinFill />
+                </button>
               </TableCell>
             </TableRow>
             ))
