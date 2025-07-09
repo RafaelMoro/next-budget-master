@@ -74,7 +74,7 @@ export const IndebtedPeopleModal = ({
     if (!isValid) {
       return
     }
-    if (personExists) {
+    if (personExists && !editPerson) {
       setError('name', { type: 'custom', message: 'El nombre de esa persona ya existe. Elija otro' })
       return
     }
