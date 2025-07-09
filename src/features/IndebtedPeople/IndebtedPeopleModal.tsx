@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button, Label, Modal, ModalBody, ModalHeader, TextInput, ToggleSwitch  } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -32,6 +32,7 @@ export const IndebtedPeopleModal = ({
     errorAmount: errorAmountOwed,
     validateZeroAmount,
     resetCurrencyState: resetAmountOwed,
+    handleEditState: handleEditStateAmountOwed
   } = useCurrencyField({
     amount: null,
   })
@@ -39,11 +40,10 @@ export const IndebtedPeopleModal = ({
     handleChange: handleChangeAmountPaid,
     currencyState: amountPaid,
     resetCurrencyState: resetAmountPaid,
+    handleEditState: handleEditStateAmountPaid
   } = useCurrencyField({
     amount: null,
   })
-
-  console.log('editPerson', editPerson)
 
   const {
     register,
@@ -54,6 +54,16 @@ export const IndebtedPeopleModal = ({
   } = useForm<AddIndebtedPeopleDataForm>({
     resolver: yupResolver(AddIndebtedPeopleSchema)
   })
+
+  useEffect(() => {
+    if (editPerson?.name) {
+      reset({ name: editPerson.name })
+      handleEditStateAmountOwed(editPerson.amountFormatted)
+      handleEditStateAmountPaid(editPerson.amountPaidFormatted)
+      setDebtPaid(editPerson.isPaid)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editPerson])
 
   const [debtPaid, setDebtPaid] = useState<boolean>(false)
   const toggleDebtPaid = () => setDebtPaid((prev) => !prev)

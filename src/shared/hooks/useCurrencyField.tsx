@@ -100,6 +100,10 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     setErrorAmount(null);
   }
 
+  const handleEditState = (amount: string) => {
+    setCurrencyState(amount);
+  }
+
   return {
     handleChange,
     currencyState,
@@ -107,5 +111,6 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     updateErrorAmount,
     validateZeroAmount,
     resetCurrencyState,
+    handleEditState,
   };
 }
