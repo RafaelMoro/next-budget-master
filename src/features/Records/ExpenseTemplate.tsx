@@ -31,6 +31,7 @@ import { IndebtedPeopleModal } from "../IndebtedPeople/IndebtedPeopleModal"
 import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
+import { IndebtedPeopleSection } from "../IndebtedPeople/IndebtedPeopleSection"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -178,13 +179,14 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-                <IndebtedPeopleModal
-                  openModal={openIndebtedPeopleModal}
-                  toggleModal={toggleIndebtedPeopleModal}
-                  indebtedPeople={indebtedPeopleUI}
-                  addIndebtedPerson={addIndebtedPerson}
-                  validatePersonExist={validatePersonExist}
-                  />
+                <IndebtedPeopleSection indebtedPeople={indebtedPeopleUI} openModal={openIndebtedPeopleModal} toggleModal={toggleIndebtedPeopleModal}>
+                  <IndebtedPeopleModal
+                    openModal={openIndebtedPeopleModal}
+                    toggleModal={toggleIndebtedPeopleModal}
+                    addIndebtedPerson={addIndebtedPerson}
+                    validatePersonExist={validatePersonExist}
+                    />
+                </IndebtedPeopleSection>
               </div>
             </FurtherDetailsAccordeon>
           )}
@@ -209,13 +211,14 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         <aside className={asideCss}>
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-          <IndebtedPeopleModal
-            openModal={openIndebtedPeopleModal}
-            toggleModal={toggleIndebtedPeopleModal}
-            indebtedPeople={indebtedPeopleUI}
-            addIndebtedPerson={addIndebtedPerson}
-            validatePersonExist={validatePersonExist}
-            />
+          <IndebtedPeopleSection indebtedPeople={indebtedPeopleUI} openModal={openIndebtedPeopleModal} toggleModal={toggleIndebtedPeopleModal}>
+            <IndebtedPeopleModal
+              openModal={openIndebtedPeopleModal}
+              toggleModal={toggleIndebtedPeopleModal}
+              addIndebtedPerson={addIndebtedPerson}
+              validatePersonExist={validatePersonExist}
+              />
+          </IndebtedPeopleSection>
         </aside>
       ) }
     </div>
