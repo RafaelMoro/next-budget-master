@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Toaster, toast } from "sonner";
 import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite-react"
+import clsx from "clsx"
 
 import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, CreateExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
@@ -46,6 +47,12 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
   const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI, validatePersonExist } = useIndebtedPeople()
+  const asideCss = clsx(
+    "w-full flex flex-col gap-12",
+    { "max-w-xs": indebtedPeopleUI.length === 0 },
+    { "max-w-2xl": indebtedPeopleUI.length > 0 }
+  )
+
   const { handleChange, currencyState, errorAmount, validateZeroAmount } = useCurrencyField({
     amount: null,
   })
@@ -199,7 +206,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         )}
       </AnimatePresence>
       { isDesktop && (
-        <aside className="w-full max-w-xs flex flex-col gap-12">
+        <aside className={asideCss}>
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
           <IndebtedPeopleModal
