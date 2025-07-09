@@ -47,7 +47,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const [date, setDate] = useState<Date | undefined>(new Date())
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
-  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI, validatePersonExist } = useIndebtedPeople()
+  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI, validatePersonExist, openEditModal, editPerson } = useIndebtedPeople()
   const asideCss = clsx(
     "w-full flex flex-col gap-12",
     { "max-w-xs": indebtedPeopleUI.length === 0 },
@@ -179,13 +179,19 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-                <IndebtedPeopleSection indebtedPeople={indebtedPeopleUI} openModal={openIndebtedPeopleModal} toggleModal={toggleIndebtedPeopleModal}>
+                <IndebtedPeopleSection
+                  indebtedPeople={indebtedPeopleUI}
+                  openModal={openIndebtedPeopleModal}
+                  toggleModal={toggleIndebtedPeopleModal}
+                  updateEditPerson={openEditModal}
+                >
                   <IndebtedPeopleModal
                     openModal={openIndebtedPeopleModal}
                     toggleModal={toggleIndebtedPeopleModal}
                     addIndebtedPerson={addIndebtedPerson}
                     validatePersonExist={validatePersonExist}
-                    />
+                    editPerson={editPerson}
+                  />
                 </IndebtedPeopleSection>
               </div>
             </FurtherDetailsAccordeon>
@@ -211,12 +217,18 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         <aside className={asideCss}>
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-          <IndebtedPeopleSection indebtedPeople={indebtedPeopleUI} openModal={openIndebtedPeopleModal} toggleModal={toggleIndebtedPeopleModal}>
+          <IndebtedPeopleSection
+            indebtedPeople={indebtedPeopleUI}
+            openModal={openIndebtedPeopleModal}
+            toggleModal={toggleIndebtedPeopleModal}
+            updateEditPerson={openEditModal}
+          >
             <IndebtedPeopleModal
               openModal={openIndebtedPeopleModal}
               toggleModal={toggleIndebtedPeopleModal}
               addIndebtedPerson={addIndebtedPerson}
               validatePersonExist={validatePersonExist}
+              editPerson={editPerson}
               />
           </IndebtedPeopleSection>
         </aside>

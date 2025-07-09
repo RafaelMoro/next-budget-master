@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople } from "@/shared/types/records.types"
+import { AddIndebtedPeopleDataForm, AddIndebtedPeopleSchema, IndebtedPeople, IndebtedPeopleUI } from "@/shared/types/records.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 
@@ -16,6 +16,7 @@ interface IdebtedPeopleModalProps {
   toggleModal: () => void
   addIndebtedPerson: (newIndebtedPerson: IndebtedPeople) => void
   validatePersonExist: (name: string) => boolean
+  editPerson: IndebtedPeopleUI | null
 }
 
 /**
@@ -23,7 +24,7 @@ interface IdebtedPeopleModalProps {
 * This component is meant to be used with the custom hook useIndebtedPeople
 */
 export const IndebtedPeopleModal = ({
-  openModal, toggleModal, addIndebtedPerson, validatePersonExist,
+  openModal, toggleModal, addIndebtedPerson, validatePersonExist, editPerson,
 }: IdebtedPeopleModalProps) => {
   const {
     handleChange: handleChangeAmountOwed,
@@ -41,6 +42,8 @@ export const IndebtedPeopleModal = ({
   } = useCurrencyField({
     amount: null,
   })
+
+  console.log('editPerson', editPerson)
 
   const {
     register,

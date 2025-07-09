@@ -7,6 +7,7 @@ import { formatNumberToCurrency } from "../utils/formatNumberCurrency.utils"
 */
 export const useIndebtedPeople = () => {
   const [indebtedPeople, setIndebtedPeople] = useState<IndebtedPeople[]>([])
+  const [editPerson, setEditPerson] = useState<IndebtedPeopleUI | null>(null)
   const [openIndebtedPeopleModal, setOpenIndebtedPeopleModal] = useState<boolean>(false)
   const [indebtedPeopleUI, setIndebtedPeopleUI] = useState<IndebtedPeopleUI[]>([])
 
@@ -14,6 +15,22 @@ export const useIndebtedPeople = () => {
 
   const addIndebtedPerson = (newIndebtedPerson: IndebtedPeople) => {
     setIndebtedPeople([...indebtedPeople, newIndebtedPerson])
+  }
+
+  const updateIndebtedPerson = (editPerson: IndebtedPeopleUI) => {
+    const filteredPeople = indebtedPeople.filter((person) => person.name.toLowerCase() !== editPerson.name.toLowerCase())
+    const { name, amount, amountPaid, isPaid } = editPerson
+    const newPersonEdited: IndebtedPeople = {
+      name, amount, amountPaid, isPaid
+    }
+    const updatedPeople = [...filteredPeople, newPersonEdited]
+    setIndebtedPeople(updatedPeople)
+    setEditPerson(null)
+  }
+
+  const openEditModal = (person: IndebtedPeopleUI ) => {
+    setEditPerson(person)
+    toggleIndebtedPeopleModal()
   }
 
   const validatePersonExist = (name: string): boolean => {
@@ -36,6 +53,9 @@ export const useIndebtedPeople = () => {
     addIndebtedPerson,
     validatePersonExist,
     indebtedPeople,
-    indebtedPeopleUI
+    indebtedPeopleUI,
+    editPerson,
+    updateIndebtedPerson,
+    openEditModal
   }
 }
