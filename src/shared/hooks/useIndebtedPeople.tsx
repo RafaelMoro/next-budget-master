@@ -33,6 +33,11 @@ export const useIndebtedPeople = () => {
     toggleIndebtedPeopleModal()
   }
 
+  const removePerson = (name: string) => {
+    const filteredPeople = indebtedPeople.filter((person) => person.name.toLowerCase() !== name.toLowerCase())
+    setIndebtedPeople(filteredPeople)
+  }
+
   const validatePersonExist = (name: string): boolean => {
     return indebtedPeople.some((person) => person.name.toLowerCase() === name.toLowerCase())
   }
@@ -56,6 +61,7 @@ export const useIndebtedPeople = () => {
     indebtedPeopleUI,
     editPerson,
     updateIndebtedPerson,
-    openEditModal
+    openEditModal,
+    removePerson
   }
 }

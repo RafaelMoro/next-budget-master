@@ -7,9 +7,10 @@ import { IndebtedPeopleUI } from "@/shared/types/records.types";
 interface ShowIndebtedPeopleProps {
   indebtedPeople: IndebtedPeopleUI[]
   openEditModal: (person: IndebtedPeopleUI) => void
+  removePerson: (name: string) => void
 }
 
-export const ShowIndebtedPeople = ({ indebtedPeople, openEditModal }: ShowIndebtedPeopleProps) => {
+export const ShowIndebtedPeople = ({ indebtedPeople, openEditModal, removePerson }: ShowIndebtedPeopleProps) => {
   const { isMobile } = useMediaQuery()
 
   if (isMobile) {
@@ -70,7 +71,7 @@ export const ShowIndebtedPeople = ({ indebtedPeople, openEditModal }: ShowIndebt
                 <button aria-label="Edit person" onClick={() => openEditModal(person)} className="cursor-pointer mr-3">
                   <RiPencilLine />
                 </button>
-                <button aria-label="Remove person" className="cursor-pointer">
+                <button aria-label="Remove person" onClick={() => removePerson(person.name)} className="cursor-pointer">
                   <RiDeleteBinFill />
                 </button>
               </TableCell>

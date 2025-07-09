@@ -46,7 +46,10 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const [date, setDate] = useState<Date | undefined>(new Date())
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
-  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI, validatePersonExist, openEditModal, editPerson } = useIndebtedPeople()
+
+  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI,
+    validatePersonExist, openEditModal, removePerson, editPerson } = useIndebtedPeople()
+
   const asideCss = clsx(
     "w-full flex flex-col gap-12",
     { "max-w-xs": indebtedPeopleUI.length === 0 },
@@ -186,6 +189,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
                   addIndebtedPerson={addIndebtedPerson}
                   validatePersonExist={validatePersonExist}
                   editPerson={editPerson}
+                  removePerson={removePerson}
                 />
               </div>
             </FurtherDetailsAccordeon>
@@ -219,6 +223,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             addIndebtedPerson={addIndebtedPerson}
             validatePersonExist={validatePersonExist}
             editPerson={editPerson}
+            removePerson={removePerson}
           />
         </aside>
       ) }
