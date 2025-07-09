@@ -8,13 +8,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Toaster, toast } from 'sonner'
 import { AnimatePresence } from "motion/react"
 
-import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
-import { LoginError, LoginSchema } from "@/shared/types/Login.types";
-import { LoginMutationFn } from "./LoginCard.utils";
+import { LoginError, LoginSchema } from "@/shared/types/login.types";
+import { LoginMutationCb } from "./LoginCard.utils";
 import { DASHBOARD_ROUTE, FORGOT_PASSWORD_ROUTE, REGISTER_ROUTE } from "@/shared/constants/Global.constants";
 import { ERROR_CREATE_USER_TITLE, ERROR_UNAUTHORIZED_LOGIN, ERROR_UNAUTHORIZED_LOGIN_MESSAGE } from "@/shared/constants/Login.constants";
-import { LoginData, LoginPayload } from "@/shared/types/Login.types";
+import { LoginData, LoginPayload } from "@/shared/types/login.types";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import Link from "next/link";
@@ -29,7 +28,7 @@ export const LoginCard =  () => {
     resolver: yupResolver(LoginSchema)
   })
   const { mutate: loginMutation, isError, isPending, isSuccess, isIdle, error } = useMutation<LoginData, LoginError, LoginPayload>({
-    mutationFn: LoginMutationFn,
+    mutationFn: LoginMutationCb,
     onSuccess: () => {
       setTimeout(() => {
         router.push(DASHBOARD_ROUTE)
@@ -38,18 +37,12 @@ export const LoginCard =  () => {
   })
   const messageError = error?.response?.data?.message
 
-  const onSubmit: SubmitHandler<LoginPayload> = async (data) => {
-    try {
-      const dataForm = {
-        email: data.email,
-        password: data.password
-      }
-      loginMutation(dataForm)
+  const onSubmit: SubmitHandler<LoginPayload> = (data) => {
+    const dataForm = {
+      email: data.email,
+      password: data.password
     }
-    catch (error: unknown) {
-      const infoError = handleErrorForm(error);
-      console.error('error while logging in =>', infoError)
-    }
+    loginMutation(dataForm)
   }
 
   useEffect(() => {
@@ -88,7 +81,9 @@ export const LoginCard =  () => {
             )}
           </div>
           <Link className="underline" href={FORGOT_PASSWORD_ROUTE}>¿Olvidaste tu contraseña?</Link>
-          <LinkButton isSecondary href={REGISTER_ROUTE} text="Registrarse" />
+          <LinkButton type="secondary" href={REGISTER_ROUTE} >
+            Registrarse
+          </LinkButton>
           <Button className="hover:cursor-pointer" disabled={isPending || isSuccess} type="submit">
             { (isIdle || isError) && 'Iniciar sesión'}
             { isPending && (<Spinner aria-label="loading login budget master" />) }

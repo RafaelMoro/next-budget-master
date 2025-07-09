@@ -2,7 +2,6 @@
 import { LoginCard } from "./LoginCard";
 import { Header } from "@/shared/ui/organisms/Header";
 
-
 export const LoginPage = () => {
   return (
     <div className="min-h-screen flex flex-col">

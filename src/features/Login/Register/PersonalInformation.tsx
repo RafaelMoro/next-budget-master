@@ -4,7 +4,7 @@ import { Card, Button, Label, TextInput } from "flowbite-react";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";;
 
-import { InputsPersonalInformation, PersonalInformationSchema } from "@/shared/types/Login.types";
+import { InputsPersonalInformation, PersonalInformationSchema } from "@/shared/types/login.types";
 import { AnimateBox } from "@/shared/ui/atoms/AnimateBox";
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 

@@ -1,25 +1,40 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "flowbite-react";
 import { NightIcon } from "@/shared/ui/icons/Nights";
 import { ThemeMode } from "@/shared/constants/Global.constants";
+import { getThemePreference } from "@/shared/lib/preferences.lib";
+import { saveThemeApi } from "@/shared/utils/preferences.utils";
 
-export const ToggleDarkMode = () => {
-  const [mode, setMode] = useState<ThemeMode>('dark');
-  const toggleDarkMode = () => {
+interface ToggleDarkModeProps {
+  cssClass?: string;
+}
+
+export const ToggleDarkMode = ({ cssClass }: ToggleDarkModeProps) => {
+  const [mode, setMode] = useState<ThemeMode | null>(null);
+  
+
+  const toggleDarkMode = async () => {
     const htmlElement = document.documentElement;
 
     if (mode === 'light') {
-      setMode('dark')
       htmlElement.setAttribute("data-theme", "dark");
+      await saveThemeApi('dark')
+      setMode('dark')
       return
     }
-    setMode('light')
+
     htmlElement.setAttribute("data-theme", "light");
+    await saveThemeApi('light')
+    setMode('light')
   }
 
+  useEffect(() => {
+    getThemePreference().then((theme) => setMode(theme as ThemeMode))
+  }, [])
+
   return (
-    <Button data-testid="toggle-theme-mode-button" onClick={toggleDarkMode} color="dark" outline>
+    <Button className={cssClass && cssClass} data-testid="toggle-theme-mode-button" onClick={toggleDarkMode} color="dark" outline>
       <NightIcon />
     </Button>
   )

@@ -22,7 +22,9 @@ export const ResultCard = ({ title, message, direction, isError, resetStep }: Re
           </h5>
           <p className="text-xl text-black dark:text-white text-pretty">{message}</p>
           <div className="flex justify-between">
-            <LinkButton href={LOGIN_ROUTE} isSecondary text="Regresar al inicio" />
+            <LinkButton href={LOGIN_ROUTE} type="secondary" >
+              Regresar al inicio
+            </LinkButton>
             <Button onClick={resetStep} className="hover:cursor-pointer">
               Volver a intentar.
             </Button>
@@ -43,7 +45,9 @@ export const ResultCard = ({ title, message, direction, isError, resetStep }: Re
         </p>
         <p className="text-xl text-black dark:text-white mb-8">{SUCESS_CREATE_USER_SECONDARY_MESSAGE}</p>
           <div className="w-full flex justify-center">
-            <LinkButton href={LOGIN_ROUTE} text="Regresar al inicio" />
+            <LinkButton href={LOGIN_ROUTE} >
+              Regresar al inicio
+            </LinkButton>
           </div>
       </Card>
     </AnimateBox>

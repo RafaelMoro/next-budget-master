@@ -3,8 +3,8 @@ import axios from 'axios';
 import { render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event'
 
-import QueryProviderWrapper from "@/app/QueryProviderWrapper";
-import RegisterPage from "@/app/register/page";
+import {QueryProviderWrapper} from "@/app/QueryProviderWrapper";
+import { Register } from '@/features/Login/Register/Register';
 import { ERROR_CREATE_USER_MESSAGE, ERROR_CREATE_USER_TITLE, SUCCESS_CREATE_USER_MESSAGE, SUCCESS_CREATE_USER_SPAN,
   SUCCESS_CREATE_USER_TITLE, SUCESS_CREATE_USER_SECONDARY_MESSAGE
  } from '@/shared/constants/Login.constants';
@@ -12,6 +12,13 @@ import { ERROR_EMAIL_IN_USE } from '@/shared/constants/Login.constants';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => ({
+    get: jest.fn(() => ({ value: 'mocked-theme' })),
+    set: jest.fn(),
+  })),
+}));
+
 describe('Register', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -21,7 +28,7 @@ describe('Register', () => {
   it ('Show register page', () => {
     render(
       <QueryProviderWrapper>
-        <RegisterPage />
+        <Register />
       </QueryProviderWrapper>
     )
 
@@ -37,7 +44,7 @@ describe('Register', () => {
     const user = userEvent.setup()
     render(
       <QueryProviderWrapper>
-        <RegisterPage />
+        <Register />
       </QueryProviderWrapper>
     )
     const firstNameInput = screen.getByTestId('firstName')
@@ -85,7 +92,7 @@ describe('Register', () => {
 
       render(
         <QueryProviderWrapper>
-          <RegisterPage />
+          <Register />
         </QueryProviderWrapper>
       )
 
@@ -140,7 +147,7 @@ describe('Register', () => {
 
       render(
         <QueryProviderWrapper>
-          <RegisterPage />
+          <Register />
         </QueryProviderWrapper>
       )
 
@@ -186,7 +193,7 @@ describe('Register', () => {
 
       render(
         <QueryProviderWrapper>
-          <RegisterPage />
+          <Register />
         </QueryProviderWrapper>
       )
 

@@ -11,10 +11,10 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage";
 import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 import { LinkButton } from "@/shared/ui/atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
-import { ForgotPasswordData, ForgotPasswordError, ForgotPasswordPayload, ForgotPasswordSchema } from "@/shared/types/Login.types";
+import { ForgotPasswordData, ForgotPasswordError, ForgotPasswordPayload, ForgotPasswordSchema } from "@/shared/types/login.types";
 import { handleErrorForm } from "@/shared/utils/handleErrorForm";
 import { forgotPasswordCb } from "../Login/LoginCard.utils";
-import { GeneralError } from "@/shared/types/Global";
+import { GeneralError } from "@/shared/types/global.types";
 import { ERROR_CREATE_USER_TITLE } from "@/shared/constants/Login.constants";
 
 export const ForgotPasswordCard = () => {
@@ -74,7 +74,9 @@ export const ForgotPasswordCard = () => {
               <ErrorMessage isAnimated>{errors.email?.message}</ErrorMessage>
             )}
           </div>
-          <LinkButton className="mt-4" text="Volver" isSecondary href={LOGIN_ROUTE} />
+          <LinkButton className="mt-4" type="secondary" href={LOGIN_ROUTE}>
+            Volver
+          </LinkButton>
           <Button
             className="hover:cursor-pointer"
             disabled={isPending || isSuccess}

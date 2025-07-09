@@ -11,7 +11,7 @@ import { CheckIcon } from "@/shared/ui/icons/CheckIcon";
 
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
 import { ResetPasswordData, ResetPasswordError, ResetPasswordFormData, ResetPasswordPayload,
-  ResetPasswordSchema, ResetPasswordStatus } from "@/shared/types/Login.types";
+  ResetPasswordSchema, ResetPasswordStatus } from "@/shared/types/login.types";
 import { resetPasswordCb } from "../Login/LoginCard.utils";
 
 interface ResetPasswordCardProps {
@@ -82,7 +82,7 @@ export const ResetPasswordCard = ({ slug, toggleMessageCardState }: ResetPasswor
                 <ErrorMessage isAnimated>{errors.confirmPassword?.message}</ErrorMessage>
               )}
             </div>
-            <LinkButton className="mt-4" text="Volver al inicio" isSecondary href={LOGIN_ROUTE} />
+            <LinkButton className="mt-4" type="secondary" href={LOGIN_ROUTE} >Volver al inicio</LinkButton>
             <Button
               className="hover:cursor-pointer"
               disabled={isPending || isSuccess}

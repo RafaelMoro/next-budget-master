@@ -13,7 +13,7 @@ interface QueryProviderWrapperProps {
   children: ReactNode;
 }
 
-export default function QueryProviderWrapper({ children }: QueryProviderWrapperProps) {
+export function QueryProviderWrapper({ children }: QueryProviderWrapperProps) {
   // Instead do this, which ensures each request has its own cache:
   const queryClientRef = useRef<QueryClient>()
   if (!queryClientRef.current) {

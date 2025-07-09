@@ -2,8 +2,8 @@ import axios from "axios";
 import { type NextRequest } from 'next/server'
 
 import { getCookieProps } from "@/shared/utils/parseCookie";
-import { encodeAccessToken, saveSessionCookie } from "@/shared/lib/auth";
-import { GeneralError } from "@/shared/types/Global";
+import { encodeAccessToken, saveSessionCookie } from "@/shared/lib/auth.lib";
+import { GeneralError } from "@/shared/types/global.types";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       const [cookie] = cookiesReceived
       const { value: cookieValue } = getCookieProps(cookie)
       const session = await encodeAccessToken(cookieValue)
-      saveSessionCookie(session)
+      await saveSessionCookie(session)
       
       return new Response(JSON.stringify(res.data), {
         status: 201,
