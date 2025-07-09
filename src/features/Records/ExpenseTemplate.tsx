@@ -27,11 +27,10 @@ import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { ManageTagsModal } from "./ManageTagsModal"
 import { useManageTags } from "@/shared/hooks/useManageTags"
-import { IndebtedPeopleModal } from "../IndebtedPeople/IndebtedPeopleModal"
 import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
-import { IndebtedPeopleSection } from "../IndebtedPeople/IndebtedPeopleSection"
+import { PersonalDebtManager } from "../IndebtedPeople/PersonalDebtManager"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -179,20 +178,15 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-                <IndebtedPeopleSection
+                <PersonalDebtManager
                   indebtedPeople={indebtedPeopleUI}
                   openModal={openIndebtedPeopleModal}
                   toggleModal={toggleIndebtedPeopleModal}
-                  updateEditPerson={openEditModal}
-                >
-                  <IndebtedPeopleModal
-                    openModal={openIndebtedPeopleModal}
-                    toggleModal={toggleIndebtedPeopleModal}
-                    addIndebtedPerson={addIndebtedPerson}
-                    validatePersonExist={validatePersonExist}
-                    editPerson={editPerson}
-                  />
-                </IndebtedPeopleSection>
+                  openEditModal={openEditModal}
+                  addIndebtedPerson={addIndebtedPerson}
+                  validatePersonExist={validatePersonExist}
+                  editPerson={editPerson}
+                />
               </div>
             </FurtherDetailsAccordeon>
           )}
@@ -217,20 +211,15 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         <aside className={asideCss}>
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-          <IndebtedPeopleSection
+          <PersonalDebtManager
             indebtedPeople={indebtedPeopleUI}
             openModal={openIndebtedPeopleModal}
             toggleModal={toggleIndebtedPeopleModal}
-            updateEditPerson={openEditModal}
-          >
-            <IndebtedPeopleModal
-              openModal={openIndebtedPeopleModal}
-              toggleModal={toggleIndebtedPeopleModal}
-              addIndebtedPerson={addIndebtedPerson}
-              validatePersonExist={validatePersonExist}
-              editPerson={editPerson}
-              />
-          </IndebtedPeopleSection>
+            openEditModal={openEditModal}
+            addIndebtedPerson={addIndebtedPerson}
+            validatePersonExist={validatePersonExist}
+            editPerson={editPerson}
+          />
         </aside>
       ) }
     </div>

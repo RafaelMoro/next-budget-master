@@ -6,10 +6,10 @@ import { IndebtedPeopleUI } from "@/shared/types/records.types";
 
 interface ShowIndebtedPeopleProps {
   indebtedPeople: IndebtedPeopleUI[]
-  updateEditPerson: (person: IndebtedPeopleUI) => void
+  openEditModal: (person: IndebtedPeopleUI) => void
 }
 
-export const ShowIndebtedPeople = ({ indebtedPeople, updateEditPerson }: ShowIndebtedPeopleProps) => {
+export const ShowIndebtedPeople = ({ indebtedPeople, openEditModal }: ShowIndebtedPeopleProps) => {
   const { isMobile } = useMediaQuery()
 
   if (isMobile) {
@@ -67,7 +67,7 @@ export const ShowIndebtedPeople = ({ indebtedPeople, updateEditPerson }: ShowInd
                 { person.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
               </TableCell>
               <TableCell className="px-2">
-                <button aria-label="Edit person" onClick={() => updateEditPerson(person)} className="cursor-pointer mr-3">
+                <button aria-label="Edit person" onClick={() => openEditModal(person)} className="cursor-pointer mr-3">
                   <RiPencilLine />
                 </button>
                 <button aria-label="Remove person" className="cursor-pointer">
