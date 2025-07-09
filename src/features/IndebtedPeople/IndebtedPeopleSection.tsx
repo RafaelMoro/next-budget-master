@@ -10,6 +10,10 @@ interface IndebtedPeopleSectionProps {
   indebtedPeople: IndebtedPeopleUI[]
 }
 
+/**
+ * This component wraps the modal to add a indebted person. It is a section with title and description. Also shows
+ * the indebted people
+ */
 export const IndebtedPeopleSection = ({ children, toggleModal, indebtedPeople }: IndebtedPeopleSectionProps) => {
   return (
     <section className="flex flex-col gap-4">
