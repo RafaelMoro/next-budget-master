@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
-// import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event'
 import { PersonalDebtManager } from '@/features/IndebtedPeople/PersonalDebtManager'
-import { IndebtedPeopleUI } from '@/shared/types/records.types'
+import { useIndebtedPeople } from '@/shared/hooks/useIndebtedPeople'
+// import { IndebtedPeopleUI } from '@/shared/types/records.types'
 
 // Mock ResizeObserver
 class ResizeObserver {
@@ -33,31 +34,28 @@ window.ResizeObserver = ResizeObserver
 //   },
 // ]
 
-const PersonalDebtManagerWrapper = ({
-  indebtedPeople = [],
-  openModal = false,
-  editPerson = null,
-}: {
-  indebtedPeople?: IndebtedPeopleUI[]
-  openModal?: boolean
-  editPerson?: IndebtedPeopleUI | null
-}) => {
-  const mockToggleModal = jest.fn()
-  const mockOpenEditModal = jest.fn()
-  const mockAddIndebtedPerson = jest.fn()
-  const mockRemovePerson = jest.fn()
-  const mockValidatePersonExist = jest.fn()
+const PersonalDebtManagerWrapper = () => {
+  const {
+    openIndebtedPeopleModal,
+    toggleIndebtedPeopleModal,
+    addIndebtedPerson,
+    validatePersonExist,
+    indebtedPeopleUI,
+    editPerson,
+    openEditModal,
+    removePerson
+  } = useIndebtedPeople()
 
   return (
     <PersonalDebtManager
-      indebtedPeople={indebtedPeople}
-      openModal={openModal}
+      indebtedPeople={indebtedPeopleUI}
+      openModal={openIndebtedPeopleModal}
       editPerson={editPerson}
-      toggleModal={mockToggleModal}
-      openEditModal={mockOpenEditModal}
-      addIndebtedPerson={mockAddIndebtedPerson}
-      validatePersonExist={mockValidatePersonExist}
-      removePerson={mockRemovePerson}
+      toggleModal={toggleIndebtedPeopleModal}
+      openEditModal={openEditModal}
+      addIndebtedPerson={addIndebtedPerson}
+      validatePersonExist={validatePersonExist}
+      removePerson={removePerson}
     />
   )
 }
@@ -83,5 +81,24 @@ describe('PersonalDebtManager', () => {
     expect(screen.getByText('Personas que te deben')).toBeInTheDocument()
     expect(screen.getByText('¿Alguien más coopera con esta transacción? Registra aquí su parte para que no se te olvide.')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /¿Quién te debe?/i })).toBeInTheDocument()
+  })
+
+  describe('Form validation', () => {
+    it('Given a user clicking on the button, show form', async () => {
+      const user = userEvent.setup()
+      render(<PersonalDebtManagerWrapper />)
+
+      // Click the button to open the modal
+      const addButton = screen.getByRole('button', { name: /¿Quién te debe?/i })
+      await user.click(addButton)
+
+      // Verify the form modal is shown
+      expect(screen.getByText('Agregar persona que te debe')).toBeInTheDocument()
+      expect(screen.getByLabelText('Nombre completo')).toBeInTheDocument()
+      expect(screen.getByLabelText('Cantidad a deber')).toBeInTheDocument()
+      expect(screen.getByLabelText('Cantidad pagada')).toBeInTheDocument()
+      expect(screen.getByLabelText('Deuda pagada')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /Agregar persona/i })).toBeInTheDocument()
+    })
   })
 })

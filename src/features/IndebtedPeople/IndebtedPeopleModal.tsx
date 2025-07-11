@@ -111,7 +111,7 @@ export const IndebtedPeopleModal = ({
             className="flex flex-col gap-4 items-center">
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="tag">Nombre completo</Label>
+                <Label htmlFor="name">Nombre completo</Label>
               </div>
               <TextInput
                 data-testid="name"
