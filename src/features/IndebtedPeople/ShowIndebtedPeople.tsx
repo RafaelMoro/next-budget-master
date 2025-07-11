@@ -40,7 +40,7 @@ export const ShowIndebtedPeople = ({ indebtedPeople, openEditModal, removePerson
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div data-testid="show-indebted-people-table" className="overflow-x-auto">
       <Table>
         <TableHead>
           <TableRow>
