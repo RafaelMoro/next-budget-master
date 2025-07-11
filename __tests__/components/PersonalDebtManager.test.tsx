@@ -101,6 +101,27 @@ describe('PersonalDebtManager', () => {
       expect(screen.getByRole('button', { name: /Agregar persona/i })).toBeInTheDocument()
     })
 
+    it('Given a user clicking on agregar persona, it should show the validation error for amount that could not be zero', async () => {
+      const user = userEvent.setup()
+      render(<PersonalDebtManagerWrapper />)
+
+      // Click the button to open the modal
+      const addButton = screen.getByRole('button', { name: /¿Quién te debe?/i })
+      await user.click(addButton)
+
+      // Fill in the form for John and submit successfully
+      const nameInput = screen.getByLabelText('Nombre completo')
+      await user.clear(nameInput)
+      await user.type(nameInput, 'ALongName')
+
+      // Click the submit button
+      const submitButton = screen.getByRole('button', { name: /Agregar persona/i })
+      await user.click(submitButton)
+
+      // Verify the validation error is shown
+      expect(screen.getByText(/Por favor, ingrese una cantidad mayor a 0\./i)).toBeInTheDocument()
+    })
+
     it('Given a user leaving the name empty, it should show a validation error for the name to be required', async () => {
       const user = userEvent.setup()
       render(<PersonalDebtManagerWrapper />)
@@ -160,52 +181,52 @@ describe('PersonalDebtManager', () => {
       expect(screen.getByText(/El nombre debe contener menos de 100 caracteres/i)).toBeInTheDocument()
     })
 
-  it.skip('Given a user entering John, then entering amount, then trying to add another person with name John, it should show person exists validation', async () => {
-    const user = userEvent.setup()
-    render(<PersonalDebtManagerWrapper />)
+    it.skip('Given a user entering John, then entering amount, then trying to add another person with name John, it should show person exists validation', async () => {
+      const user = userEvent.setup()
+      render(<PersonalDebtManagerWrapper />)
 
-    // Open the modal
-    const addButton = screen.getByRole('button', { name: /¿Quién te debe?/i })
-    await user.click(addButton)
+      // Open the modal
+      const addButton = screen.getByRole('button', { name: /¿Quién te debe?/i })
+      await user.click(addButton)
 
-    // Fill in the form for John and submit successfully
-    const nameInput = screen.getByLabelText('Nombre completo')
-    await user.clear(nameInput)
-    await user.type(nameInput, 'ALongName')
+      // Fill in the form for John and submit successfully
+      const nameInput = screen.getByLabelText('Nombre completo')
+      await user.clear(nameInput)
+      await user.type(nameInput, 'ALongName')
 
-    const amountOwedInput = screen.getByTestId('amountOwed')
-    await user.clear(amountOwedInput)
-    await user.type(amountOwedInput, '1')
+      const amountOwedInput = screen.getByTestId('amountOwed')
+      await user.clear(amountOwedInput)
+      await user.type(amountOwedInput, '1')
 
-    const submitButton = screen.getByRole('button', { name: /Agregar persona/i })
-    await user.click(submitButton)
+      const submitButton = screen.getByRole('button', { name: /Agregar persona/i })
+      await user.click(submitButton)
 
-    // Wait for the modal to close
-    await waitFor(() => {
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-      // Wait for John to be added to the table
-      expect(screen.getByText('ALongName')).toBeInTheDocument()
+      // Wait for the modal to close
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+        // Wait for John to be added to the table
+        expect(screen.getByText('ALongName')).toBeInTheDocument()
+      })
+
+      // Now open the modal again to try adding John again
+      const addButtonAgain = screen.getByRole('button', { name: /¿Quién te debe?/i })
+      await user.click(addButtonAgain)
+
+      // Try to enter John again
+      const nameInputAgain = screen.getByTestId('name')
+      await user.clear(nameInput)
+      await user.type(nameInputAgain, 'ALongName')
+
+      const amountOwedInputAgain = screen.getByTestId('amountOwed')
+      await user.clear(amountOwedInputAgain)
+      await user.type(amountOwedInputAgain, '2')
+
+      // Submit the form - this should show the duplicate validation error
+      const submitButtonAgain = screen.getByRole('button', { name: /Agregar persona/i })
+      await user.click(submitButtonAgain)
+
+      // Verify the validation error is shown
+      expect(screen.getByText(/El nombre de esa persona ya existe. Elija otro/i)).toBeInTheDocument()
     })
-
-    // Now open the modal again to try adding John again
-    const addButtonAgain = screen.getByRole('button', { name: /¿Quién te debe?/i })
-    await user.click(addButtonAgain)
-
-    // Try to enter John again
-    const nameInputAgain = screen.getByTestId('name')
-    await user.clear(nameInput)
-    await user.type(nameInputAgain, 'ALongName')
-
-    const amountOwedInputAgain = screen.getByTestId('amountOwed')
-    await user.clear(amountOwedInputAgain)
-    await user.type(amountOwedInputAgain, '2')
-
-    // Submit the form - this should show the duplicate validation error
-    const submitButtonAgain = screen.getByRole('button', { name: /Agregar persona/i })
-    await user.click(submitButtonAgain)
-
-    // Verify the validation error is shown
-    expect(screen.getByText(/El nombre de esa persona ya existe. Elija otro/i)).toBeInTheDocument()
-  })
   })
 })
