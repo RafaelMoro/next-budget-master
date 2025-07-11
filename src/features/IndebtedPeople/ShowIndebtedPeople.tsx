@@ -15,27 +15,29 @@ export const ShowIndebtedPeople = ({ indebtedPeople, openEditModal, removePerson
 
   if (isMobile) {
     return (
-      <ListGroup>
-        { indebtedPeople.map((person) => (
-          <ListGroupItem key={person.name}>
-            <div className="w-full grid grid-cols-[min-content_1fr_1fr] grid-rows-2 place-items-center gap-2">
-              <Avatar className="justify-self-start row-span-2" placeholderInitials={person.name.charAt(0)} rounded />
-              <p className="justify-self-start text-base place-self-end">{person.name}</p>
-              { !person.isPaid && (
-                <p className="text-xs justify-self-start place-self-start text-blue-400 row-start-2 row-end-3 col-start-2 col-end-3">
-                  Restan - {person.remainingAmountFormatted}
-                </p>
-              )}
-              { person.isPaid && (
-                <p className="text-xs justify-self-start place-self-start text-green-400 row-start-2 row-end-3 col-start-2 col-end-3">
-                  Pagado
-                </p>
-              )}
-              <p className="text-red-600 justify-self-end row-span-2" >- {person.amountFormatted}</p>
-            </div>
-          </ListGroupItem>
-        )) }
-      </ListGroup>
+      <div data-testid="show-indebted-people-list">
+        <ListGroup>
+          { indebtedPeople.map((person) => (
+            <ListGroupItem key={person.name}>
+              <div className="w-full grid grid-cols-[min-content_1fr_1fr] grid-rows-2 place-items-center gap-2">
+                <Avatar className="justify-self-start row-span-2" placeholderInitials={person.name.charAt(0)} rounded />
+                <p className="justify-self-start text-base place-self-end">{person.name}</p>
+                { !person.isPaid && (
+                  <p className="text-xs justify-self-start place-self-start text-blue-400 row-start-2 row-end-3 col-start-2 col-end-3">
+                    Restan - {person.remainingAmountFormatted}
+                  </p>
+                )}
+                { person.isPaid && (
+                  <p className="text-xs justify-self-start place-self-start text-green-400 row-start-2 row-end-3 col-start-2 col-end-3">
+                    Pagado
+                  </p>
+                )}
+                <p className="text-red-600 justify-self-end row-span-2" >- {person.amountFormatted}</p>
+              </div>
+            </ListGroupItem>
+          )) }
+        </ListGroup>
+      </div>
     )
   }
 
