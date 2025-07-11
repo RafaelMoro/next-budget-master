@@ -100,5 +100,21 @@ describe('PersonalDebtManager', () => {
       expect(screen.getByLabelText('Deuda pagada')).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /Agregar persona/i })).toBeInTheDocument()
     })
+
+    it('Given a user leaving the name empty, it should show a validation error for the name to be required', async () => {
+      const user = userEvent.setup()
+      render(<PersonalDebtManagerWrapper />)
+
+      // Click the button to open the modal
+      const addButton = screen.getByRole('button', { name: /¿Quién te debe?/i })
+      await user.click(addButton)
+
+      // Click the submit button without filling the name
+      const submitButton = screen.getByRole('button', { name: /Agregar persona/i })
+      await user.click(submitButton)
+
+      // Verify the validation error is shown
+      expect(screen.getByText(/Por favor, ingrese el nombre de la persona/i)).toBeInTheDocument()
+    })
   })
 })
