@@ -137,5 +137,27 @@ describe('PersonalDebtManager', () => {
       // Verify the validation error is shown
       expect(screen.getByText(/El nombre debe contener más de 3 caracteres/i)).toBeInTheDocument()
     })
+
+    it('Given a user entering a name more than 100 characters, it should show a validation error for the name', async () => {
+      const user = userEvent.setup()
+      render(<PersonalDebtManagerWrapper />)
+
+      // Click the button to open the modal
+      const addButton = screen.getByRole('button', { name: /¿Quién te debe?/i })
+      await user.click(addButton)
+
+      // Enter a name with more than 100 characters
+      const nameInput = screen.getByLabelText('Nombre completo')
+      await user.clear(nameInput)
+      const longName = 'A'.repeat(101) // 101 characters
+      await user.type(nameInput, longName)
+
+      // Click the submit button
+      const submitButton = screen.getByRole('button', { name: /Agregar persona/i })
+      await user.click(submitButton)
+
+      // Verify the validation error is shown
+      expect(screen.getByText(/El nombre debe contener menos de 100 caracteres/i)).toBeInTheDocument()
+    })
   })
 })
