@@ -6,7 +6,7 @@ import { Badge, Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, TextI
 import { AnimatePresence } from "motion/react"
 
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { TAG_MAX_LENGTH_ERROR, TAG_MIN_LENGTH_ERROR, TAG_REQUIRED_ERROR } from "@/shared/constants/records.constants"
+import { TAG_MAX_LENGTH_ERROR, TAG_MIN_LENGTH_ERROR, TAG_REPEATED_ERROR, TAG_REQUIRED_ERROR } from "@/shared/constants/records.constants"
 
 interface ManageTagsModalProps {
   openModal: boolean
@@ -45,6 +45,11 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, clos
     }
     if (inputValue.length > 50) {
       setError(TAG_MAX_LENGTH_ERROR)
+      return
+    }
+    const tagExist = internalTags.some(tag => tag.toLowerCase() === inputValue.toLowerCase())
+    if (tagExist) {
+      setError(TAG_REPEATED_ERROR)
       return
     }
 
