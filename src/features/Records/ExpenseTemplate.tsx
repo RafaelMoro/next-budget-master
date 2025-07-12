@@ -48,7 +48,9 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
 
   const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI,
-    validatePersonExist, openEditModal, removePerson, editPerson } = useIndebtedPeople()
+    validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson } = useIndebtedPeople()
+  // console.log('indebtedPeople', indebtedPeople)
+  // console.log('indebtedPeopleUI', indebtedPeopleUI)
 
   const asideCss = clsx(
     "w-full flex flex-col gap-12",
@@ -187,6 +189,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
                   toggleModal={toggleIndebtedPeopleModal}
                   openEditModal={openEditModal}
                   addIndebtedPerson={addIndebtedPerson}
+                  updateIndebtedPerson={updateIndebtedPerson}
                   validatePersonExist={validatePersonExist}
                   editPerson={editPerson}
                   removePerson={removePerson}
@@ -221,6 +224,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             toggleModal={toggleIndebtedPeopleModal}
             openEditModal={openEditModal}
             addIndebtedPerson={addIndebtedPerson}
+            updateIndebtedPerson={updateIndebtedPerson}
             validatePersonExist={validatePersonExist}
             editPerson={editPerson}
             removePerson={removePerson}

@@ -9,6 +9,7 @@ interface IndebtedPeopleProps {
   toggleModal: () => void
   openEditModal: (person: IndebtedPeopleUI) => void
   addIndebtedPerson: (newIndebtedPerson: IndebtedPeopleType) => void
+  updateIndebtedPerson: (editPerson: IndebtedPeopleType) => void
   removePerson: (name: string) => void
   validatePersonExist: (name: string) => boolean
   editPerson: IndebtedPeopleUI | null
@@ -25,6 +26,7 @@ export const PersonalDebtManager = ({
   toggleModal,
   openEditModal,
   addIndebtedPerson,
+  updateIndebtedPerson,
   validatePersonExist,
   removePerson,
 }: IndebtedPeopleProps) => {
@@ -39,6 +41,7 @@ export const PersonalDebtManager = ({
         toggleModal={toggleModal}
         addIndebtedPerson={addIndebtedPerson}
         validatePersonExist={validatePersonExist}
+        updateIndebtedPerson={updateIndebtedPerson}
         editPerson={editPerson}
       />
     </IndebtedPeopleSection>

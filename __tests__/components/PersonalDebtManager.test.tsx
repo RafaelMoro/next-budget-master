@@ -39,6 +39,7 @@ const PersonalDebtManagerWrapper = () => {
     openIndebtedPeopleModal,
     toggleIndebtedPeopleModal,
     addIndebtedPerson,
+    updateIndebtedPerson,
     validatePersonExist,
     indebtedPeopleUI,
     editPerson,
@@ -54,6 +55,7 @@ const PersonalDebtManagerWrapper = () => {
       toggleModal={toggleIndebtedPeopleModal}
       openEditModal={openEditModal}
       addIndebtedPerson={addIndebtedPerson}
+      updateIndebtedPerson={updateIndebtedPerson}
       validatePersonExist={validatePersonExist}
       removePerson={removePerson}
     />

@@ -17,13 +17,12 @@ export const useIndebtedPeople = () => {
     setIndebtedPeople([...indebtedPeople, newIndebtedPerson])
   }
 
-  const updateIndebtedPerson = (editPerson: IndebtedPeopleUI) => {
+  const updateIndebtedPerson = (editPerson: IndebtedPeople) => {
     const filteredPeople = indebtedPeople.filter((person) => person.name.toLowerCase() !== editPerson.name.toLowerCase())
-    const { name, amount, amountPaid, isPaid } = editPerson
-    const newPersonEdited: IndebtedPeople = {
-      name, amount, amountPaid, isPaid
-    }
-    const updatedPeople = [...filteredPeople, newPersonEdited]
+    // console.log('filteredPeople', filteredPeople)
+    // console.log('filteredPeopleUI', filteredPeopleUI)
+    const updatedPeople = [...filteredPeople, editPerson]
+
     setIndebtedPeople(updatedPeople)
     setEditPerson(null)
   }

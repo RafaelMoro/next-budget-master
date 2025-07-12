@@ -15,6 +15,7 @@ interface IdebtedPeopleModalProps {
   openModal: boolean
   toggleModal: () => void
   addIndebtedPerson: (newIndebtedPerson: IndebtedPeople) => void
+  updateIndebtedPerson: (editPerson: IndebtedPeople) => void
   validatePersonExist: (name: string) => boolean
   editPerson: IndebtedPeopleUI | null
 }
@@ -24,8 +25,9 @@ interface IdebtedPeopleModalProps {
 * This component is meant to be used with the custom hook useIndebtedPeople
 */
 export const IndebtedPeopleModal = ({
-  openModal, toggleModal, addIndebtedPerson, validatePersonExist, editPerson,
+  openModal, toggleModal, addIndebtedPerson, validatePersonExist, editPerson, updateIndebtedPerson,
 }: IdebtedPeopleModalProps) => {
+  const buttonText = editPerson ? 'Editar' : 'Agregar'
   const {
     handleChange: handleChangeAmountOwed,
     currencyState: amountOwed,
@@ -87,14 +89,19 @@ export const IndebtedPeopleModal = ({
       amountPaid: amountPaidNumber,
       isPaid: debtPaid
     }
-    addIndebtedPerson(payload)
-    toggleModal()
-
     // Reset form fields
     reset()
     resetAmountOwed()
     resetAmountPaid()
     setDebtPaid(false)
+
+    toggleModal()
+    if (editPerson) {
+      updateIndebtedPerson(payload)
+      return
+    }
+    addIndebtedPerson(payload)
+
   }
 
   return (
@@ -141,7 +148,7 @@ export const IndebtedPeopleModal = ({
               handleChange={handleChangeAmountPaid}
             />
             <ToggleSwitch checked={debtPaid} label="Deuda pagada" onChange={toggleDebtPaid} />
-            <Button type="submit" className="max-w-max">Agregar persona</Button>
+            <Button type="submit" className="max-w-max">{buttonText} persona</Button>
           </form>
         </ModalBody>
       </Modal>

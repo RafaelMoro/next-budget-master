@@ -85,9 +85,6 @@ describe('useIndebtedPeople', () => {
         amount: 200,
         amountPaid: 100,
         isPaid: true,
-        amountFormatted: '$200.00',
-        amountPaidFormatted: '$100.00',
-        remainingAmountFormatted: '$100.00'
       })
     })
 
@@ -97,6 +94,8 @@ describe('useIndebtedPeople', () => {
       amountPaid: 100,
       isPaid: true
     })
+    expect(result.current.indebtedPeople.length).toBe(1)
+    expect(result.current.indebtedPeopleUI.length).toBe(1)
   })
 
   it('should toggle the modal state', () => {
