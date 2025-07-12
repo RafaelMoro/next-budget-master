@@ -1,11 +1,14 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 
 import { QueryProviderWrapper } from '@/app/QueryProviderWrapper';
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { IncomeTemplate } from '@/features/Records/IncomeTemplate';
 import { Category } from '@/shared/types/categories.types';
 import { mockCategories } from '../../mocks/categories.mock';
+import { recordMock } from '../../mocks/records.mock';
+import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants';
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(() => ({
@@ -48,6 +51,9 @@ const IncomeTemplateWrapper = ({
     </QueryProviderWrapper>
   );
 };
+
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('IncomeTemplate', () => {
   it('should show income template', () => {
@@ -243,6 +249,48 @@ describe('IncomeTemplate', () => {
       await user.type(amountInput, '123');
 
       expect(screen.queryByText(/Por favor, ingrese una cantidad mayor a 0/i)).not.toBeInTheDocument();
+    })
+  })
+
+  describe('Form submission', () => {
+    it('Given a user filling correctly the form, it should see the tick in the button', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: ['Expense created', 'Account updated'],
+        success: true,
+        version: "v1.2.0",
+        data: {
+          income: recordMock
+        },
+      })
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      const amountInput = screen.getByLabelText(/Cantidad/i);
+      await user.type(amountInput, '123');
+
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByTestId('check-icon')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(push).toHaveBeenCalledWith(DASHBOARD_ROUTE)
+      }, { timeout: 2000 })
     })
   })
 });
