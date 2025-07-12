@@ -96,7 +96,7 @@ export type CreateExpensePayload = {
   description: string;
   indebtedPeople: IndebtedPeople[];
   isPaid: boolean;
-  linkedBudgets: Budget[];
+  linkedBudgets: string[];
   shortName: string;
   subCategory: string;
   tag: string[];

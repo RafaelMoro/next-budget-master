@@ -127,8 +127,7 @@ export const ExpenseTemplate = ({ categories, budgetsFetched, selectedAccount, a
         description: data.description ?? '',
         indebtedPeople,
         isPaid,
-        // TODO: Add logic to handle linked budgets
-        linkedBudgets: [],
+        linkedBudgets: selectedBudget ? [selectedBudget.budgetId] : [],
         shortName: data.shortDescription,
         subCategory: subcategory,
         tag: tags.current,
