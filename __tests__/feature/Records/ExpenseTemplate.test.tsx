@@ -287,7 +287,7 @@ describe("ExpenseTemplate", () => {
           expense: recordMock
         },
       })
-      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} />);
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} />);
 
       const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
       await user.type(shortDescriptionInput, 'Test expense');
@@ -304,6 +304,11 @@ describe("ExpenseTemplate", () => {
 
       const amountInput = screen.getByLabelText(/Cantidad/i);
       await user.type(amountInput, '123');
+
+      const budgetDropdown = screen.getByTestId('select-budget-dropdown-button')
+      await user.click(budgetDropdown);
+      const budgetToSelect = screen.getByText(mockBudgets[0].name);
+      await user.click(budgetToSelect);
 
       const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
       await user.click(createExpenseButton);
