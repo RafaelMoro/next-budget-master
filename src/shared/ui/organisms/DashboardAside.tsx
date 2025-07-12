@@ -10,6 +10,7 @@ import { LinkButton } from "../atoms/LinkButton"
 import { DashboardScreens } from "@/shared/types/dashboard.types"
 import { Button } from "flowbite-react"
 import { useDashboard } from "@/shared/hooks/useDashboard"
+import { resetLocalStorage } from "@/shared/lib/local-storage.lib"
 
 interface DashboardAsideProps {
   children: ReactNode;
@@ -21,6 +22,10 @@ interface DashboardAsideProps {
 
 export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectAccountModal, screen }: DashboardAsideProps) => {
   const { handleGoCreateRecordRoute } = useDashboard()
+  const handleSignOut = async () => {
+    resetLocalStorage()
+    await fetch('/api/auth/sign-out')
+  }
   return (
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
       {children}
@@ -46,7 +51,7 @@ export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectA
       </nav>
 
       <section className="flex flex-col gap-2">
-        <LinkButton type="darkRed" className="w-full" href="/api/auth/sign-out">Cerrar sesión</LinkButton>
+        <Button outline color="red" className="w-full" onClick={handleSignOut}>Cerrar sesión</Button>
       </section>
     </aside>
   )

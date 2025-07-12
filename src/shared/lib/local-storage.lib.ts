@@ -53,3 +53,7 @@ export function addToLocalStorage({ newInfo, prop }: { newInfo: object, prop?: s
   saveInfoToLocalStorage(newLocalStorage);
   return newLocalStorage;
 }
+
+export function resetLocalStorage() {
+  saveInfoToLocalStorage({});
+}
