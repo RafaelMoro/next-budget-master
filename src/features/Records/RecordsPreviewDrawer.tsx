@@ -57,14 +57,14 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
         </button>
       </header>
       <DrawerItems>
-        <div className="flex flex-col gap-8 mt-8">
+        <div className="flex flex-col gap-10 mt-8">
           <div className="flex flex-col gap-4">
             <h4 className="text-xl font-semibold">{record.shortName}</h4>
             <p className={priceStyles}>{record.amountFormatted}</p>
             <p className="text-sm text-gray-400">{record.description}</p>
           </div>
 
-          <Card className="max-w-sm">
+          <Card>
             <h5 className="text-lg tracking-wider">Categorias:</h5>
             <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
               <Icon size={20} />
@@ -90,8 +90,8 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
             ) }
 
             { record.tag.length > 0 && (
-              <div className="flex flex-col gap-3 mt-8">
-                <h5 className="text-center text-xl">Etiquetas:</h5>
+              <Card>
+                <h5 className="text-lg tracking-wider">Etiquetas:</h5>
                 <div className="flex gap-2">
                   { record.tag.map((t) => (
                     <Badge key={t} className="max-w-max" color="purple">
@@ -99,7 +99,7 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
                     </Badge>
                   )) }
                 </div>
-              </div>
+              </Card>
             ) }
         </div>
       </DrawerItems>
