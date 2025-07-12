@@ -10,7 +10,7 @@ import { Toaster, toast } from "sonner";
 import { Button, CheckIcon, Label, Spinner, Textarea, TextInput, ToggleSwitch } from "flowbite-react"
 import clsx from "clsx"
 
-import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, CreateExpenseSchema } from "@/shared/types/records.types"
+import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
@@ -23,7 +23,7 @@ import { DetailedError, GeneralError, SelectedAccountLS } from "@/shared/types/g
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
-import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
+import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { ManageTagsModal } from "./ManageTagsModal"
 import { useManageTags } from "@/shared/hooks/useManageTags"
@@ -82,7 +82,7 @@ export const ExpenseTemplate = ({
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(CreateExpenseSchema)
+    resolver: yupResolver(IncomeExpenseSchema)
   })
 
   const { mutate: createExpense, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
@@ -114,10 +114,10 @@ export const ExpenseTemplate = ({
 
   const onSubmit: SubmitHandler<CreateExpenseDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
-      updateCategoryError('Por favor, seleccione una categoría.')
+      updateCategoryError(CATEGORY_REQUIRED)
     }
     if (!subcategory) {
-      updateSubcategoryError('Por favor, seleccione una subcategoría.')
+      updateSubcategoryError(SUBCATEGORY_REQUIRED)
     }
     validateZeroAmount({ amountState: currencyState })
 

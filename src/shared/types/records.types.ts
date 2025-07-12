@@ -134,6 +134,11 @@ export type CreateExpenseDataForm = {
   description?: string | null | undefined
 }
 
+export type CreateIncomeDataForm = {
+  shortDescription: string
+  description?: string | null | undefined
+}
+
 export type AddIndebtedPeopleDataForm = {
   name: string
 }
@@ -150,7 +155,7 @@ const descriptionValidation = string()
     then: (rule) => rule.min(3, 'Por favor, ingrese una descripción de más de 3 caracteres').max(300, 'Por favor, ingrese una descripción con menos de 300 caracteres.'),
   })
 
-export const CreateExpenseSchema = object().shape({
+export const IncomeExpenseSchema = object().shape({
   shortDescription: shortNameValidation,
   description: descriptionValidation
 }, [

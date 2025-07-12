@@ -12,6 +12,10 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { CreateExpenseDataForm, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 
 interface IncomeTemplateProps {
   categories: Category[]
@@ -20,21 +24,41 @@ interface IncomeTemplateProps {
 export const IncomeTemplate = ({ categories }: IncomeTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { handleChange, currencyState, errorAmount,
-    // validateZeroAmount
+    validateZeroAmount
   } = useCurrencyField({
     amount: null,
   })
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
     categoryError, subcategoryError,
-    // updateCategoryError, updateSubcategoryError,
+    updateCategoryError, updateSubcategoryError,
   } = useCategoriesForm({ categories })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(IncomeExpenseSchema)
+  })
+
+  const onSubmit: SubmitHandler<CreateExpenseDataForm> = (data) => {
+    if (!categorySelected.categoryId || !categorySelected.name) {
+      updateCategoryError(CATEGORY_REQUIRED)
+    }
+    if (!subcategory) {
+      updateSubcategoryError(SUBCATEGORY_REQUIRED)
+    }
+    validateZeroAmount({ amountState: currencyState })
+
+    console.log(data)
+  }
 
   return (
     <div className="w-full flex justify-center gap-32">
       <AnimatePresence>
         <form
           key="income-template-form"
-          // onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
           className="w-full px-4 mx-auto flex flex-col gap-4 md:max-w-xl mb-6 lg:mx-0 lg:px-0"
         >
           <DateTimePicker date={date} setDate={setDate} />
@@ -56,11 +80,11 @@ export const IncomeTemplate = ({ categories }: IncomeTemplateProps) => {
               data-testid="shortDescription"
               id="shortDescription"
               type="text"
-              // {...register("shortDescription")}
+              {...register("shortDescription")}
               />
-            {/* { errors?.shortDescription?.message && (
+            { errors?.shortDescription?.message && (
               <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
-            )} */}
+            )}
           </div>
           <div>
             <div className="mb-2 block">
@@ -69,11 +93,11 @@ export const IncomeTemplate = ({ categories }: IncomeTemplateProps) => {
             <Textarea
               id="description"
               rows={4}
-              // {...register("description")}
+              {...register("description")}
             />
-            {/* { errors?.description?.message && (
+            { errors?.description?.message && (
               <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
-            )} */}
+            )}
           </div>
           <TransactionCategorizerDropdown
             categoriesShown={categoriesShown}
