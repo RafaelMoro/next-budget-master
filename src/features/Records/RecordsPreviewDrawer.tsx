@@ -51,18 +51,33 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
           </div>
           <p className={priceStyles}>{record.amountFormatted}</p>
           <p className="text-sm text-gray-400">{record.description}</p>
+        </div>
 
-          { record.tag.length > 0 && (
-            <div>
-              <h5>Etiquetas:</h5>
-              { record.tag.map((t) => (
-                <Badge key={t} className="max-w-max" color="purple">
-                  {t}
-                </Badge>
-              )) }
+        { record?.linkedBudgets && record?.linkedBudgets.length > 0 && (
+            <div className="flex flex-col gap-3 mt-8">
+              <h5 className="text-center text-xl">Presupuestos:</h5>
+              <div className="flex gap-2">
+                { record.linkedBudgets.map((budget) => (
+                  <Badge key={budget._id} className="max-w-max" color="warning">
+                    {budget.description}
+                  </Badge>
+                )) }
+              </div>
             </div>
           ) }
-        </div>
+
+          { record.tag.length > 0 && (
+            <div className="flex flex-col gap-3 mt-8">
+              <h5 className="text-center text-xl">Etiquetas:</h5>
+              <div className="flex gap-2">
+                { record.tag.map((t) => (
+                  <Badge key={t} className="max-w-max" color="purple">
+                    {t}
+                  </Badge>
+                )) }
+              </div>
+            </div>
+          ) }
       </DrawerItems>
     </Drawer>
   )
