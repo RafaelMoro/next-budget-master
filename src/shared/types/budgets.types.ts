@@ -1,3 +1,5 @@
+import { DetailedError } from "./global.types";
+
 export type TypeBudget = 'one-time' | 'periodic';
 export type PeriodBudget = 'weekly' | 'bi-weekly' | 'montly' | 'daily' | 'yearly';
 
@@ -17,4 +19,15 @@ export type Budget = {
   nextResetDate: string;
   isActive: boolean;
   previousPeriods: string[];
+}
+
+export type GetBudgetsResponse = {
+  detailedError: DetailedError | null;
+  budgets: Budget[];
+}
+
+export type FetchBudgetsResponse = {
+  data: {
+    budgets: Budget[];
+  }
 }
