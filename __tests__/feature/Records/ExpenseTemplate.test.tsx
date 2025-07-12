@@ -12,6 +12,7 @@ import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { SelectedAccountLS } from "@/shared/types/global.types";
 import { Budget } from "@/shared/types/budgets.types";
+import { mockBudgets } from "../../mocks/budgets.mock";
 
 const ExpenseTemplateWrapper = ({
   push,
@@ -67,7 +68,7 @@ describe("ExpenseTemplate", () => {
 
   it("should show expense template", () => {
     const push = jest.fn();
-    render(<ExpenseTemplateWrapper push={push} />);
+    render(<ExpenseTemplateWrapper push={push} budgetsFetched={mockBudgets} />);
 
     expect(screen.getByLabelText(/Cantidad/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Pequeña descripción/i)).toBeInTheDocument();
@@ -78,6 +79,7 @@ describe("ExpenseTemplate", () => {
 
     expect(categoryButton).toBeInTheDocument();
     expect(subcategoryButton).toBeInTheDocument();
+    expect(screen.getByTestId('select-budget-dropdown-button')).toBeInTheDocument();
     
     expect(screen.getByRole('link', { name: /Cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear gasto/i })).toBeInTheDocument();
