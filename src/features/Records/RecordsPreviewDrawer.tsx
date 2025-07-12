@@ -4,7 +4,7 @@ import { RiDeleteBinFill, RiPencilLine } from "@remixicon/react";
 import { Badge, Drawer, DrawerHeader, DrawerItems } from "flowbite-react";
 import clsx from "clsx"
 
-import { BankMovement } from "@/shared/types/records.types";
+import { BankMovement, TypeOfRecord } from "@/shared/types/records.types";
 import { categoryIcons } from "@/shared/constants/categories.constants";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 
@@ -18,12 +18,23 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
   const { isMobile } = useMediaQuery()
 
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
+  const typeRecordDict: Record<TypeOfRecord, string> = {
+    expense: 'Gasto',
+    income: 'Ingreso',
+    transfer: 'Transferencia'
+  }
+
   const priceStyles = clsx(
     "text-xl font-semibold text-center",
     { "text-red-600": record?.typeOfRecord === 'expense'},
     { "text-green-400": record?.typeOfRecord === 'income' },
     { "text-blue-400": record?.typeOfRecord === 'transfer' }
   )
+  const badgeColorDict: Record<TypeOfRecord, string> = {
+      expense: 'red',
+      income: 'purple',
+      transfer: 'info'
+    }
   const drawerDirection = isMobile ? 'bottom' : 'right'
   
   if (!record) {
@@ -43,9 +54,10 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
           </button>
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center gap-5">
           <h4 className="text-2xl font-bold text-center">{record.shortName}</h4>
           <div className="flex justify-center gap-2 text-sm text-gray-400">
+            <Badge className="max-w-max" color={badgeColorDict[record.typeOfRecord]}>{typeRecordDict[record.typeOfRecord]}</Badge>
             <Icon />
             <p>{record.category?.categoryName} / {record.subCategory}</p>
           </div>
