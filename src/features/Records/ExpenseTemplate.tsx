@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useMutation } from "@tanstack/react-query"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Toaster, toast } from "sonner";
-import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite-react"
+import { Button, CheckIcon, Label, Spinner, Textarea, TextInput, ToggleSwitch } from "flowbite-react"
 import clsx from "clsx"
 
 import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, CreateExpenseSchema } from "@/shared/types/records.types"
@@ -19,7 +19,7 @@ import { Category } from "@/shared/types/categories.types"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { createExpenseCb } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { DetailedError, GeneralError } from "@/shared/types/global.types"
+import { DetailedError, GeneralError, SelectedAccountLS } from "@/shared/types/global.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
@@ -31,19 +31,24 @@ import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { PersonalDebtManager } from "../IndebtedPeople/PersonalDebtManager"
+import { CREDIT_ACCOUNT_TYPE } from "@/shared/types/accounts.types"
 
 interface ExpenseTemplateProps {
   categories: Category[]
   selectedAccount: string | null
+  selectedAccLS: SelectedAccountLS | null
   accessToken: string
   detailedError: DetailedError | null
 }
 
-export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, detailedError }: ExpenseTemplateProps) => {
+export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, detailedError, selectedAccLS }: ExpenseTemplateProps) => {
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
 
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [isPaid, setIsPaid] = useState<boolean>(false)
+  const toggleDebtPaid = () => setIsPaid((prev) => !prev)
+  const isCredit = selectedAccLS?.accountType === CREDIT_ACCOUNT_TYPE
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
 
@@ -116,8 +121,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         date,
         description: data.description ?? '',
         indebtedPeople,
-        // TODO: Add logic to check if account is type credit
-        isPaid: false,
+        isPaid,
         // TODO: Add logic to handle linked budgets
         linkedBudgets: [],
         shortName: data.shortDescription,
@@ -177,6 +181,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             updateSubcategory={updateSubcategory}
             subcategoryError={subcategoryError}
           />
+          { isCredit && (<ToggleSwitch data-testid="toggle-switch-is-paid" checked={isPaid} label="Pagado" onChange={toggleDebtPaid} />) }
           { isMobileTablet && (
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
