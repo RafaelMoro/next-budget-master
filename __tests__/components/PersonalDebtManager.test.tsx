@@ -13,27 +13,6 @@ class ResizeObserver {
 
 window.ResizeObserver = ResizeObserver
 
-// const mockIndebtedPeople: IndebtedPeopleUI[] = [
-//   {
-//     name: 'Juan Pérez',
-//     amount: 1000,
-//     amountPaid: 200,
-//     isPaid: false,
-//     amountFormatted: '$1,000.00',
-//     amountPaidFormatted: '$200.00',
-//     remainingAmountFormatted: '$800.00',
-//   },
-//   {
-//     name: 'María García',
-//     amount: 500,
-//     amountPaid: 500,
-//     isPaid: true,
-//     amountFormatted: '$500.00',
-//     amountPaidFormatted: '$500.00',
-//     remainingAmountFormatted: '$0.00',
-//   },
-// ]
-
 const PersonalDebtManagerWrapper = () => {
   const {
     openIndebtedPeopleModal,
@@ -212,44 +191,44 @@ describe('PersonalDebtManager', () => {
       })
     })
 
-    it('Given a user filling the form correcly, then he should see the list group is mobile', async () => {
-      Object.defineProperty(window, 'matchMedia', {
-        writable: true,
-        value: jest.fn().mockImplementation(query => ({
-          matches: true,
-          media: query,
-          onchange: null,
-          addListener: jest.fn(), // Deprecated
-          removeListener: jest.fn(), // Deprecated
-          addEventListener: jest.fn(),
-          removeEventListener: jest.fn(),
-          dispatchEvent: jest.fn(),
-        })),
-      });
-      const user = userEvent.setup()
-      render(<PersonalDebtManagerWrapper />)
+  it('Given a user filling the form correcly, then he should see the list group is mobile', async () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation(query => ({
+        matches: true,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+    const user = userEvent.setup()
+    render(<PersonalDebtManagerWrapper />)
 
-      // Open the modal
-      const addButton = screen.getByRole('button', { name: /¿Quién te debe?/i })
-      await user.click(addButton)
+    // Open the modal
+    const addButton = screen.getByRole('button', { name: /¿Quién te debe?/i })
+    await user.click(addButton)
 
-      // Fill in the form for John and submit successfully
-      const nameInput = screen.getByLabelText('Nombre completo')
-      await user.clear(nameInput)
-      await user.type(nameInput, 'ALongName')
+    // Fill in the form for John and submit successfully
+    const nameInput = screen.getByLabelText('Nombre completo')
+    await user.clear(nameInput)
+    await user.type(nameInput, 'ALongName')
 
-      const amountOwedInput = screen.getByTestId('amountOwed')
-      await user.clear(amountOwedInput)
-      await user.type(amountOwedInput, '1')
+    const amountOwedInput = screen.getByTestId('amountOwed')
+    await user.clear(amountOwedInput)
+    await user.type(amountOwedInput, '1')
 
-      const submitButton = screen.getByRole('button', { name: /Agregar persona/i })
-      await user.click(submitButton)
+    const submitButton = screen.getByRole('button', { name: /Agregar persona/i })
+    await user.click(submitButton)
 
-      // Wait for the modal to close
-      await waitFor(() => {
-        expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-        // Wait for John to be added to the table
-        expect(screen.getByTestId('show-indebted-people-list')).toBeInTheDocument()
-      })
+    // Wait for the modal to close
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+      // Wait for John to be added to the table
+      expect(screen.getByTestId('show-indebted-people-list')).toBeInTheDocument()
     })
+  })
 })
