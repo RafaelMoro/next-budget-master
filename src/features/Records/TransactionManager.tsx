@@ -23,7 +23,6 @@ interface TransactionManagerProps {
 export const TransactionManager = ({ resCategories, resBudgets, selectedAccount, accessToken, }: TransactionManagerProps) => {
   const { categories, detailedError: errorCategories } = resCategories
   const { budgets, detailedError: errorBudgets } = resBudgets
-  console.log('errorBudgets', errorBudgets)
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
   const updateExpenseScreen = () => setSubscreen('expense')
   const updateIncomeScreen = () => setSubscreen('income')
@@ -67,7 +66,8 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
             categories={categories}
             selectedAccount={selectedAccount}
             accessToken={accessToken}
-            detailedError={errorCategories}
+            detailedErrorCategories={errorCategories}
+            detailedErrorBudgets={errorBudgets}
             selectedAccLS={selectedAccLS}
           />
         ) }
