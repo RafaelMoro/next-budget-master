@@ -185,4 +185,7 @@
   .grid-view-records {
     grid-template-columns: min-content 1fr 1fr;
   }
+  .grid-record-preview {
+    grid-template-columns: min-content 1fr min-content;
+  }
 }

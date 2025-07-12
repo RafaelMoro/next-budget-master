@@ -1,12 +1,13 @@
 "use client"
 
-import { RiDeleteBinFill, RiPencilLine } from "@remixicon/react";
-import { Badge, Drawer, DrawerHeader, DrawerItems } from "flowbite-react";
+import { RiCloseFill, RiDeleteBinFill, RiPencilLine } from "@remixicon/react";
+import { Badge, Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react";
 import clsx from "clsx"
 
 import { BankMovement, TypeOfRecord } from "@/shared/types/records.types";
 import { categoryIcons } from "@/shared/constants/categories.constants";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
+import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon";
 
 interface RecordsPreviewDrawerProps {
   record: BankMovement | null;
@@ -43,7 +44,14 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
 
   return (
     <Drawer open={open} onClose={handleClose} position={drawerDirection}>
-      <DrawerHeader title={`${record.fullDate} ${record.formattedTime}`} />
+      <header className="grid grid-rows-2 grid-record-preview gap-x-2">
+        <ChartLineIcon className="row-span-2 place-self-center" />
+        <h4 className="text-gray-600 dark:text-gray-400 col-start-2 col-end-3 row-start-1 row-end-2">Detalles de la transacción</h4>
+        <p className="text-sm text-gray-600 dark:text-gray-400 col-start-2 col-end-3 row-start-2 row-end-3">{typeRecordDict[record.typeOfRecord]}</p>
+        <button className="text-gray-600 dark:text-gray-400 place-self-center cursor-pointer" onClick={handleClose}>
+          <RiCloseFill />
+        </button>
+      </header>
       <DrawerItems>
         <div className="flex justify-center gap-3 mb-8">
           <button aria-label={`Edit record ${record.shortName}`}className="cursor-pointer mr-3">
