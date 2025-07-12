@@ -71,12 +71,13 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
             detailedErrorBudgets={errorBudgets}
             selectedAccLS={selectedAccLS}
           />
-        ) }
+        )}
         { subscreen === 'income' && (
           <IncomeTemplate
             categories={categories}
+            selectedAccount={selectedAccount}
           />
-        ) }
+        )}
       </main>
     </div>
 

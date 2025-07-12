@@ -103,6 +103,21 @@ export type CreateExpensePayload = {
   typeOfRecord: 'expense'
 }
 
+export type CreateIncomePayload = {
+  account: string;
+  amount: number;
+  budgets: string[];
+  category: string;
+  date: Date;
+  description: string;
+  expensesPaid: ExpensePaid[]
+  indebtedPeople: IndebtedPeople[];
+  shortName: string;
+  subCategory: string;
+  tag: string[];
+  typeOfRecord: 'income'
+}
+
 export interface CreateExpenseData {
   data: {
     expense: ExpenseRecord

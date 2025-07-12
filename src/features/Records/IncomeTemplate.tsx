@@ -2,6 +2,8 @@
 import { useState } from "react"
 import { AnimatePresence } from "motion/react"
 import { Button, Label, Textarea, TextInput } from "flowbite-react"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
@@ -12,22 +14,31 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { CreateExpenseDataForm, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { CreateExpenseDataForm, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
+import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
+import { useManageTags } from "@/shared/hooks/useManageTags"
+import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
+import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
+import { ManageTagsModal } from "./ManageTagsModal"
 
 interface IncomeTemplateProps {
   categories: Category[]
+  selectedAccount: string | null
 }
 
-export const IncomeTemplate = ({ categories }: IncomeTemplateProps) => {
+export const IncomeTemplate = ({ categories, selectedAccount }: IncomeTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
+
   const { handleChange, currencyState, errorAmount,
     validateZeroAmount
   } = useCurrencyField({
     amount: null,
   })
+
+  const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
+  const { isMobileTablet, isDesktop } = useMediaQuery()
+
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
     categoryError, subcategoryError,
     updateCategoryError, updateSubcategoryError,
@@ -50,7 +61,26 @@ export const IncomeTemplate = ({ categories }: IncomeTemplateProps) => {
     }
     validateZeroAmount({ amountState: currencyState })
 
-    console.log(data)
+    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
+      const amountNumber = cleanCurrencyString(currencyState)
+      const payload: CreateIncomePayload = {
+        account: selectedAccount,
+        amount: amountNumber,
+        // Prop budgets deprecated
+        budgets: [],
+        category: categorySelected.categoryId,
+        date,
+        description: data.description ?? '',
+        // TODO: Add feature expenses paid
+        expensesPaid: [],
+        indebtedPeople: [],
+        shortName: data.shortDescription,
+        subCategory: subcategory,
+        tag: tags.current,
+        typeOfRecord: 'income'
+      }
+      // createExpense(payload)
+    }
   }
 
   return (
@@ -109,6 +139,13 @@ export const IncomeTemplate = ({ categories }: IncomeTemplateProps) => {
             updateSubcategory={updateSubcategory}
             subcategoryError={subcategoryError}
           />
+          { isMobileTablet && (
+            <FurtherDetailsAccordeon>
+              <div className="w-full flex flex-col gap-12">
+                <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+              </div>
+            </FurtherDetailsAccordeon>
+          )}
           <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
             <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
             <Button
@@ -124,6 +161,12 @@ export const IncomeTemplate = ({ categories }: IncomeTemplateProps) => {
           </div>
         </form>
       </AnimatePresence>
+      { isDesktop && (
+        <aside className="w-full flex flex-col gap-12 max-w-xs">
+          <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
+          <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+        </aside>
+      ) }
     </div>
   )
 }
