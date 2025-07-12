@@ -21,6 +21,11 @@ export type Budget = {
   previousPeriods: string[];
 }
 
+export type SelectBudget = {
+  budgetId: string
+  name: string
+}
+
 export type GetBudgetsResponse = {
   detailedError: DetailedError | null;
   budgets: Budget[];

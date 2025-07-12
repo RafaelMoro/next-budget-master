@@ -32,16 +32,18 @@ import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { PersonalDebtManager } from "../IndebtedPeople/PersonalDebtManager"
 import { CREDIT_ACCOUNT_TYPE } from "@/shared/types/accounts.types"
+import { Budget } from "@/shared/types/budgets.types"
 
 interface ExpenseTemplateProps {
   categories: Category[]
+  budgetsFetched: Budget[]
   selectedAccount: string | null
   selectedAccLS: SelectedAccountLS | null
   accessToken: string
   detailedError: DetailedError | null
 }
 
-export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, detailedError, selectedAccLS }: ExpenseTemplateProps) => {
+export const ExpenseTemplate = ({ categories, budgetsFetched, selectedAccount, accessToken, detailedError, selectedAccLS }: ExpenseTemplateProps) => {
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
 
