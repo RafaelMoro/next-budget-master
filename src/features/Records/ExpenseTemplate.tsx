@@ -49,8 +49,6 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
 
   const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI,
     validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson } = useIndebtedPeople()
-  // console.log('indebtedPeople', indebtedPeople)
-  // console.log('indebtedPeopleUI', indebtedPeopleUI)
 
   const asideCss = clsx(
     "w-full flex flex-col gap-12",
