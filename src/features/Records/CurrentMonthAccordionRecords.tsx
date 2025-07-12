@@ -3,6 +3,8 @@ import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Button, HR
 import { Fragment } from "react";
 import { RecordEntry } from "./RecordEntry";
 import { useDashboard } from "@/shared/hooks/useDashboard";
+import { RecordsPreviewDrawer } from "./RecordsPreviewDrawer";
+import { useRecordPreview } from "@/shared/hooks/useRecordPreview";
 
 interface CurrentMonthAccordionRecordsProps {
   records: BankMovement[];
@@ -16,26 +18,32 @@ interface CurrentMonthAccordionRecordsProps {
  */
 export const MonthAccordionRecords = ({ records, title }: CurrentMonthAccordionRecordsProps) => {
   const { handleGoCreateRecordRoute } = useDashboard()
+  const {
+    record, handleOpenRecordPreviewDrawer, handleCloseRecordPreviewDrawer, openRecordDrawer
+  } = useRecordPreview()
 
   return (
-    <Accordion className="max-w-3xl">
-      <AccordionPanel>
-        <AccordionTitle>{title}</AccordionTitle>
-          <AccordionContent>
-            { records.length > 0 && records.map((record, index) => (
-              <Fragment key={record._id}>
-                <RecordEntry record={record} />
-                {index !== (records.length - 1) && <HR />}
-              </Fragment>
-            ))}
-            { records.length === 0 && (
-              <div className="flex flex-col gap-5 justify-center">
-                <p>Aún no has registrado movimientos este mes</p>
-                <Button onClick={handleGoCreateRecordRoute} >Registrar movimiento</Button>
-              </div>
-            )}
-          </AccordionContent>
-      </AccordionPanel>
-    </Accordion>
+    <>
+      <Accordion className="max-w-3xl">
+        <AccordionPanel>
+          <AccordionTitle>{title}</AccordionTitle>
+            <AccordionContent>
+              { records.length > 0 && records.map((record, index) => (
+                <Fragment key={record._id}>
+                  <RecordEntry record={record} handleOpenRecordPreviewDrawer={handleOpenRecordPreviewDrawer} />
+                  {index !== (records.length - 1) && <HR />}
+                </Fragment>
+              ))}
+              { records.length === 0 && (
+                <div className="flex flex-col gap-5 justify-center">
+                  <p>Aún no has registrado movimientos este mes</p>
+                  <Button onClick={handleGoCreateRecordRoute} >Registrar movimiento</Button>
+                </div>
+              )}
+            </AccordionContent>
+        </AccordionPanel>
+      </Accordion>
+      <RecordsPreviewDrawer open={openRecordDrawer} handleClose={handleCloseRecordPreviewDrawer} record={record} />
+    </>
   )
 }

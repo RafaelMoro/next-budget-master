@@ -6,9 +6,10 @@ import { categoryIcons } from "@/shared/constants/categories.constants";
 
 interface AccountEntryProps {
   record: BankMovement;
+  handleOpenRecordPreviewDrawer: (passedRecord: BankMovement) => void
 }
 
-export const RecordEntry = ({ record }: AccountEntryProps) => {
+export const RecordEntry = ({ record, handleOpenRecordPreviewDrawer }: AccountEntryProps) => {
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
   const priceClass = clsx(
     'col-start-2 col-end-3 row-start-3 row-end-4',
