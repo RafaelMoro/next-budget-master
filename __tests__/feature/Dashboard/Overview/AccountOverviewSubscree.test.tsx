@@ -6,6 +6,20 @@ import { mockAccounts } from "../../../mocks/accounts.mock"
 import { recordMock } from "../../../mocks/records.mock"
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
 
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // Deprecated
+    removeListener: jest.fn(), // Deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
 describe('AccountOverviewSubscreen', () => {
   it('Show account overview with correct data', () => {
     const push = jest.fn()
