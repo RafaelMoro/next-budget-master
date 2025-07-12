@@ -33,6 +33,8 @@ import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { PersonalDebtManager } from "../IndebtedPeople/PersonalDebtManager"
 import { CREDIT_ACCOUNT_TYPE } from "@/shared/types/accounts.types"
 import { Budget } from "@/shared/types/budgets.types"
+import { useHandleBudgets } from "@/shared/hooks/useHandleBudgets"
+import { SelectBudgetDropdown } from "../Budgets/SelectBudget"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -53,6 +55,7 @@ export const ExpenseTemplate = ({ categories, budgetsFetched, selectedAccount, a
   const isCredit = selectedAccLS?.accountType === CREDIT_ACCOUNT_TYPE
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
+  const { budgetsOptions, updateSelectedBudget, selectedBudget, budgets } = useHandleBudgets({ budgetsFetched })
 
   const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI,
     validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson } = useIndebtedPeople()
@@ -183,6 +186,13 @@ export const ExpenseTemplate = ({ categories, budgetsFetched, selectedAccount, a
             updateSubcategory={updateSubcategory}
             subcategoryError={subcategoryError}
           />
+          { budgets.length > 0 && (
+            <SelectBudgetDropdown
+              budgetOptions={budgetsOptions}
+              selectedBudget={selectedBudget}
+              updateSelectedBudget={updateSelectedBudget}
+            />
+          ) }
           { isCredit && (<ToggleSwitch data-testid="toggle-switch-is-paid" checked={isPaid} label="Pagado" onChange={toggleDebtPaid} />) }
           { isMobileTablet && (
             <FurtherDetailsAccordeon>
