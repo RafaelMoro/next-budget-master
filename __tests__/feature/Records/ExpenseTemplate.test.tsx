@@ -11,14 +11,17 @@ import { recordMock } from "../../mocks/records.mock";
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { SelectedAccountLS } from "@/shared/types/global.types";
+import { Budget } from "@/shared/types/budgets.types";
 
 const ExpenseTemplateWrapper = ({
   push,
   categories = [],
+  budgetsFetched = [],
   selectedAccLS = null
 }: {
   push: () => void;
   categories?: Category[];
+  budgetsFetched?: Budget[]
   selectedAccLS?: SelectedAccountLS | null
 }) => {
   return (
@@ -26,6 +29,7 @@ const ExpenseTemplateWrapper = ({
       <AppRouterContextProviderMock router={{ push }}>
         <ExpenseTemplate
           categories={categories}
+          budgetsFetched={budgetsFetched}
           selectedAccount="123"
           accessToken="abc"
           detailedError={null}

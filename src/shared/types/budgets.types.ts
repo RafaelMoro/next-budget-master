@@ -1,7 +1,7 @@
 import { DetailedError } from "./global.types";
 
 export type TypeBudget = 'one-time' | 'periodic';
-export type PeriodBudget = 'weekly' | 'bi-weekly' | 'montly' | 'daily' | 'yearly';
+export type PeriodBudget = 'weekly' | 'bi-weekly' | 'monthly' | 'daily' | 'yearly';
 
 export type Budget = {
   _id: string
