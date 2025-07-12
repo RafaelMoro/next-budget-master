@@ -2,11 +2,14 @@ import { Dashboard } from "@/features/Dashboard/Dashboard"
 import { DashboardStoreProvider } from "@/zustand/provider/dashboard-store-provider"
 import { mockAccounts } from "../../mocks/accounts.mock"
 import { render, screen } from "@testing-library/react"
+import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
 
-const DashboardWrapper = () => {
+const DashboardWrapper = ({ push }: { push: () => void }) => {
   return (
     <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
-      <Dashboard detailedError={null} accountsFetched={mockAccounts} />
+      <AppRouterContextProviderMock router={{ push }}>
+        <Dashboard detailedError={null} accountsFetched={mockAccounts} />
+      </AppRouterContextProviderMock>
     </DashboardStoreProvider>
   )
 }
@@ -34,7 +37,8 @@ describe('Dashboard', () => {
   });
 
   it('Show Dashboard', async () => {
-    render(<DashboardWrapper />)
+    const push = jest.fn();
+    render(<DashboardWrapper push={push} />)
 
     expect(await screen.findByRole('heading', { name: /Panorama general/i })).toBeInTheDocument()
   })

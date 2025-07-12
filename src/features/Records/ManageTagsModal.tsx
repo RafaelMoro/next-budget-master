@@ -6,7 +6,7 @@ import { Badge, Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, TextI
 import { AnimatePresence } from "motion/react"
 
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { TAG_MAX_LENGTH_ERROR, TAG_MIN_LENGTH_ERROR, TAG_REQUIRED_ERROR } from "@/shared/constants/records.constants"
+import { TAG_MAX_LENGTH_ERROR, TAG_MIN_LENGTH_ERROR, TAG_REPEATED_ERROR, TAG_REQUIRED_ERROR } from "@/shared/constants/records.constants"
 
 interface ManageTagsModalProps {
   openModal: boolean
@@ -47,6 +47,11 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, clos
       setError(TAG_MAX_LENGTH_ERROR)
       return
     }
+    const tagExist = internalTags.some(tag => tag.toLowerCase() === inputValue.toLowerCase())
+    if (tagExist) {
+      setError(TAG_REPEATED_ERROR)
+      return
+    }
 
     updateInternalTags(inputValue)
     setError(null)
@@ -66,20 +71,19 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, clos
   }
 
   return (
-    <>
+    <section className="flex flex-col gap-4 md:mt-6">
+      <h4 className="text-xl text-center md:text-start font-semibold">Etiquetas</h4>
+      <p className="text-gray-400">Agrega etiquetas para recordar detalles importantes de tu transacción.</p>
     { tags.length > 0  && (
-      <>
-        <p className="text-center mt-4">Etiquetas:</p>
-        <div className="flex flex-col gap-3 md:flex-row">
-          { tags.map((tag) => (
-            <Badge key={tag} className="max-w-max" color="purple">
-              {tag}
-            </Badge>
-          )) }
-        </div>
-      </>
+      <div className="mt-2 mb-4 flex flex-col gap-3 items-center md:flex-row">
+        { tags.map((tag) => (
+          <Badge key={tag} className="max-w-max" color="purple">
+            {tag}
+          </Badge>
+        )) }
+      </div>
     )}
-      <Button color="light" onClick={openModalFn}>{subtext} etiquetas</Button>
+      <Button className="mx-auto" color="light" onClick={openModalFn}>{subtext} etiquetas</Button>
       <AnimatePresence>
         <Modal key="add-tag-modal" show={openModal} onClose={closeModalFn}>
           <ModalHeader>Agregar etiqueta</ModalHeader>
@@ -122,6 +126,6 @@ export const ManageTagsModal = ({ tags, updateTags, openModal, openModalFn, clos
           </ModalFooter>
         </Modal>
       </AnimatePresence>
-    </>
+    </section>
   )
 }

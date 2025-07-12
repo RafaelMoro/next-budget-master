@@ -2,7 +2,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from 'next/headers'
 import { COOKIE_SESSION_KEY } from "../constants/Global.constants";
-import { deleteThemeCookie, removeAccountCookie, removeOverviewSubscreen } from "./preferences.lib";
+import { deleteThemeCookie, removeAccountCookie, removeDashboardScreen, removeOverviewSubscreen } from "./preferences.lib";
 
 export const encodeAccessToken = async (cookieValue: string): Promise<string> => {
   const secretKey = process.env.SESSION_SECRET_KEY!
@@ -45,5 +45,6 @@ export const signOut = async () => {
   await deleteSession()
   await removeAccountCookie()
   await removeOverviewSubscreen()
+  await removeDashboardScreen()
   await deleteThemeCookie()
 }
