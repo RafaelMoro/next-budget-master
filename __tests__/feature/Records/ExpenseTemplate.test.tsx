@@ -33,7 +33,8 @@ const ExpenseTemplateWrapper = ({
           budgetsFetched={budgetsFetched}
           selectedAccount="123"
           accessToken="abc"
-          detailedError={null}
+          detailedErrorCategories={null}
+          detailedErrorBudgets={null}
           selectedAccLS={selectedAccLS}
         />
       </AppRouterContextProviderMock>
