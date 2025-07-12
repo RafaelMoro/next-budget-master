@@ -8,7 +8,7 @@ import {QueryProviderWrapper} from "@/app/QueryProviderWrapper";
 import { mockCategories } from "../../mocks/categories.mock";
 import { Category } from "@/shared/types/categories.types";
 import { recordMock } from "../../mocks/records.mock";
-import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants";
+import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { SelectedAccountLS } from "@/shared/types/global.types";
 import { Budget } from "@/shared/types/budgets.types";
@@ -364,7 +364,7 @@ describe("ExpenseTemplate", () => {
       const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
       await user.click(createExpenseButton);
 
-      expect(screen.getByText(CREATE_EXPENSE_ERROR)).toBeInTheDocument();
+      expect(screen.getByText(CREATE_EXPENSE_INCOME_ERROR)).toBeInTheDocument();
     })
   })
 });

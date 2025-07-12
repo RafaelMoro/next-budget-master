@@ -76,6 +76,8 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
           <IncomeTemplate
             categories={categories}
             selectedAccount={selectedAccount}
+            accessToken={accessToken}
+            detailedErrorCategories={errorCategories}
           />
         )}
       </main>

@@ -22,7 +22,7 @@ import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError, SelectedAccountLS } from "@/shared/types/global.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
-import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
+import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { ManageTagsModal } from "./ManageTagsModal"
@@ -97,7 +97,7 @@ export const ExpenseTemplate = ({
 
   useEffect(() => {
     if (isError && messageError) {
-      toast.error(CREATE_EXPENSE_ERROR);
+      toast.error(CREATE_EXPENSE_INCOME_ERROR);
       return
     }
   }, [isError, messageError])

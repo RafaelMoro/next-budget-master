@@ -1,9 +1,11 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from 'next/navigation'
 import { AnimatePresence } from "motion/react"
-import { Button, Label, Textarea, TextInput } from "flowbite-react"
+import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite-react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { Toaster, toast } from "sonner";
 
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
@@ -14,20 +16,27 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { CreateExpenseDataForm, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
-import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
+import { CreateIncomeData, CreateIncomeDataForm, CreateIncomeError, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { ManageTagsModal } from "./ManageTagsModal"
+import { useMutation } from "@tanstack/react-query"
+import { createIncomeCb } from "@/shared/utils/records.utils"
+import { DetailedError, GeneralError } from "@/shared/types/global.types"
+import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
 
 interface IncomeTemplateProps {
   categories: Category[]
   selectedAccount: string | null
+  accessToken: string
+  detailedErrorCategories: DetailedError | null
 }
 
-export const IncomeTemplate = ({ categories, selectedAccount }: IncomeTemplateProps) => {
+export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detailedErrorCategories }: IncomeTemplateProps) => {
+  const router = useRouter()
   const [date, setDate] = useState<Date | undefined>(new Date())
 
   const { handleChange, currencyState, errorAmount,
@@ -52,7 +61,32 @@ export const IncomeTemplate = ({ categories, selectedAccount }: IncomeTemplatePr
     resolver: yupResolver(IncomeExpenseSchema)
   })
 
-  const onSubmit: SubmitHandler<CreateExpenseDataForm> = (data) => {
+  const { mutate: createIncome, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateIncomeData, CreateIncomeError, CreateIncomePayload>({
+    mutationFn: (data) => createIncomeCb(data, accessToken),
+    onSuccess: () => {
+      setTimeout(() => {
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
+    }
+  })
+  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+
+  useEffect(() => {
+    if (isError && messageError) {
+      toast.error(CREATE_EXPENSE_INCOME_ERROR);
+      return
+    }
+  }, [isError, messageError])
+
+  useEffect(() => {
+    if (detailedErrorCategories?.cause === 'connection') {
+      toast.error('Error de conexión. Por favor, inténtalo más tarde.');
+    } else if (detailedErrorCategories?.message) {
+      toast.error(CATEGORY_FETCH_ERROR);
+    }
+  }, [detailedErrorCategories?.cause, detailedErrorCategories?.message])
+
+  const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
       updateCategoryError(CATEGORY_REQUIRED)
     }
@@ -79,7 +113,7 @@ export const IncomeTemplate = ({ categories, selectedAccount }: IncomeTemplatePr
         tag: tags.current,
         typeOfRecord: 'income'
       }
-      // createExpense(payload)
+      createIncome(payload)
     }
   }
 
@@ -153,13 +187,15 @@ export const IncomeTemplate = ({ categories, selectedAccount }: IncomeTemplatePr
               // disabled={isPending || isSuccess || openTagModal}
               type="submit"
             >
-              Crear ingreso
-              {/* { (isIdle || isError) && 'Crear ingreso'}
+              { (isIdle || isError) && 'Crear ingreso'}
               { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-              { isSuccess && (<CheckIcon data-testid="check-icon" />)} */}
+              { isSuccess && (<CheckIcon data-testid="check-icon" />)}
             </Button>
           </div>
         </form>
+        { (isError || detailedErrorCategories?.message) && (
+          <Toaster position="top-center" />
+        )}
       </AnimatePresence>
       { isDesktop && (
         <aside className="w-full flex flex-col gap-12 max-w-xs">

@@ -50,6 +50,10 @@ export type ExpenseRecord = AccountRecord & {
   isPaid: boolean;
 }
 
+export type IncomeRecord = AccountRecord & {
+  expensesPaid: ExpensePaid[];
+}
+
 export type ExpensePaid = {
   _id: string;
   shortName: string;
@@ -128,7 +132,25 @@ export interface CreateExpenseData {
   version: string;
 }
 
+export interface CreateIncomeData {
+  data: {
+    income: IncomeRecord
+  }
+  error: null;
+  message: string[];
+  success: boolean;
+  version: string;
+}
+
 export interface CreateExpenseError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
+    }
+  }>;
+}
+
+export interface CreateIncomeError extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;
