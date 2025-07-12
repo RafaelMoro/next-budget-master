@@ -163,5 +163,86 @@ describe('IncomeTemplate', () => {
 
       expect(screen.queryByText(/Por favor, seleccione una categoría/i)).not.toBeInTheDocument();
     })
+
+    it('Given a user gets a subcategory error, when the user selects a subcategory, the error should disappear', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
+      await user.click(createExpenseButton);
+
+      const subcategoryError = screen.getByText(/Por favor, seleccione una subcategoría/i);
+      expect(subcategoryError).toBeInTheDocument();
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      expect(screen.queryByText(/Por favor, seleccione una subcategoría/i)).not.toBeInTheDocument();
+    })
+
+    it('Given a user filling all fields except amount, then clicking create expense, it should show the validation error for amount to be required', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(/Por favor, ingrese una cantidad mayor a 0/i)).toBeInTheDocument();
+    })
+
+    it('Given a user gets an amount error, when the user types an amount, the error should disappear', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
+      await user.click(createExpenseButton);
+
+      const amountError = screen.getByText(/Por favor, ingrese una cantidad mayor a 0/i);
+      expect(amountError).toBeInTheDocument();
+
+      const amountInput = screen.getByLabelText(/Cantidad/i);
+      await user.type(amountInput, '123');
+
+      expect(screen.queryByText(/Por favor, ingrese una cantidad mayor a 0/i)).not.toBeInTheDocument();
+    })
   })
 });
