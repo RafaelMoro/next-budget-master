@@ -19,8 +19,6 @@ export const useIndebtedPeople = () => {
 
   const updateIndebtedPerson = (editPerson: IndebtedPeople) => {
     const filteredPeople = indebtedPeople.filter((person) => person.name.toLowerCase() !== editPerson.name.toLowerCase())
-    // console.log('filteredPeople', filteredPeople)
-    // console.log('filteredPeopleUI', filteredPeopleUI)
     const updatedPeople = [...filteredPeople, editPerson]
 
     setIndebtedPeople(updatedPeople)
