@@ -1,3 +1,9 @@
+## v0.19.0 (2025-07-12)
+
+### Pull Requests
+[#30](https://github.com/RafaelMoro/next-budget-master/pull/30) | Add select budgets when create expense
+
+
 ## v0.18.0 (2025-07-12)
 
 ### Pull Requests
