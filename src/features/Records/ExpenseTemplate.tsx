@@ -32,16 +32,24 @@ import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { PersonalDebtManager } from "../IndebtedPeople/PersonalDebtManager"
 import { CREDIT_ACCOUNT_TYPE } from "@/shared/types/accounts.types"
+import { Budget } from "@/shared/types/budgets.types"
+import { useHandleBudgets } from "@/shared/hooks/useHandleBudgets"
+import { SelectBudgetDropdown } from "../Budgets/SelectBudget"
+import { BUDGETS_FETCH_ERROR } from "@/shared/constants/budgets.constants"
 
 interface ExpenseTemplateProps {
   categories: Category[]
+  budgetsFetched: Budget[]
   selectedAccount: string | null
   selectedAccLS: SelectedAccountLS | null
   accessToken: string
-  detailedError: DetailedError | null
+  detailedErrorCategories: DetailedError | null
+  detailedErrorBudgets: DetailedError | null
 }
 
-export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, detailedError, selectedAccLS }: ExpenseTemplateProps) => {
+export const ExpenseTemplate = ({
+  categories, budgetsFetched, selectedAccount, accessToken, detailedErrorCategories, detailedErrorBudgets, selectedAccLS
+}: ExpenseTemplateProps) => {
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
 
@@ -51,6 +59,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   const isCredit = selectedAccLS?.accountType === CREDIT_ACCOUNT_TYPE
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
+  const { budgetsOptions, updateSelectedBudget, selectedBudget, budgets } = useHandleBudgets({ budgetsFetched })
 
   const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI,
     validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson } = useIndebtedPeople()
@@ -94,12 +103,14 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   }, [isError, messageError])
 
   useEffect(() => {
-    if (detailedError?.cause === 'connection') {
+    if (detailedErrorCategories?.cause === 'connection' || detailedErrorBudgets?.cause === 'connection') {
       toast.error('Error de conexión. Por favor, inténtalo más tarde.');
-    } else if (detailedError?.message) {
+    } else if (detailedErrorCategories?.message) {
       toast.error(CATEGORY_FETCH_ERROR);
+    } else if (detailedErrorBudgets?.message) {
+      toast.error(BUDGETS_FETCH_ERROR);
     }
-  }, [detailedError?.cause, detailedError?.message])
+  }, [detailedErrorBudgets?.cause, detailedErrorBudgets?.message, detailedErrorCategories?.cause, detailedErrorCategories?.message])
 
   const onSubmit: SubmitHandler<CreateExpenseDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
@@ -122,8 +133,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         description: data.description ?? '',
         indebtedPeople,
         isPaid,
-        // TODO: Add logic to handle linked budgets
-        linkedBudgets: [],
+        linkedBudgets: selectedBudget ? [selectedBudget.budgetId] : [],
         shortName: data.shortDescription,
         subCategory: subcategory,
         tag: tags.current,
@@ -181,6 +191,13 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             updateSubcategory={updateSubcategory}
             subcategoryError={subcategoryError}
           />
+          { budgets.length > 0 && (
+            <SelectBudgetDropdown
+              budgetOptions={budgetsOptions}
+              selectedBudget={selectedBudget}
+              updateSelectedBudget={updateSelectedBudget}
+            />
+          ) }
           { isCredit && (<ToggleSwitch data-testid="toggle-switch-is-paid" checked={isPaid} label="Pagado" onChange={toggleDebtPaid} />) }
           { isMobileTablet && (
             <FurtherDetailsAccordeon>
@@ -213,7 +230,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             </Button>
           </div>
         </form>
-        { (isError || detailedError?.message) && (
+        { (isError || detailedErrorCategories?.message || detailedErrorBudgets?.message) && (
           <Toaster position="top-center" />
         )}
       </AnimatePresence>
