@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecordsPreviewDrawer } from '@/features/Records/RecordsPreviewDrawer';
 import { useRecordPreview } from '@/shared/hooks/useRecordPreview';
-import { recordMock } from '../../mocks/records.mock';
+import { recordMock, paidRecordMock } from '../../mocks/records.mock';
+import { BankMovement } from '@/shared/types/records.types';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -18,7 +19,7 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-const RecordsPreviewDrawerWrapper = () => {
+const RecordsPreviewDrawerWrapper = ({ recordProp = recordMock  }: { recordProp?: BankMovement }) => {
   const {
     openRecordDrawer,
     record,
@@ -28,7 +29,7 @@ const RecordsPreviewDrawerWrapper = () => {
 
   return (
     <div>
-      <button onClick={() => handleOpenRecordPreviewDrawer(recordMock)}>Open Drawer</button>
+      <button onClick={() => handleOpenRecordPreviewDrawer(recordProp)}>Open Drawer</button>
       <RecordsPreviewDrawer
         open={openRecordDrawer}
         handleClose={handleCloseRecordPreviewDrawer}
@@ -68,5 +69,15 @@ describe('RecordsPreviewDrawer', () => {
     await user.click(closeButton);
 
     expect(screen.queryByText('Detalles de la transacción')).not.toBeInTheDocument();
+  });
+
+  it('should display the correct paid status when the record is paid', async () => {
+    const user = userEvent.setup();
+    render(<RecordsPreviewDrawerWrapper recordProp={paidRecordMock} />);
+
+    const openButton = screen.getByText('Open Drawer');
+    await user.click(openButton);
+
+    expect(screen.getByText('Pagado')).toBeInTheDocument();
   });
 });

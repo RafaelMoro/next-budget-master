@@ -33,3 +33,11 @@ export const recordMock: BankMovement ={
   isPaid: false,
   linkedBudgets: [],
 }
+
+export const paidRecordMock: BankMovement = {
+  ...recordMock,
+  isPaid: true,
+  shortName: "Paid Record Example",
+  amount: 500,
+  amountFormatted: "$500.00",
+};
