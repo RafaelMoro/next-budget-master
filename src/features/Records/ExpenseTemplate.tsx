@@ -181,7 +181,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
             updateSubcategory={updateSubcategory}
             subcategoryError={subcategoryError}
           />
-          { isCredit && (<ToggleSwitch checked={isPaid} label="Pagado" onChange={toggleDebtPaid} />) }
+          { isCredit && (<ToggleSwitch data-testid="toggle-switch-is-paid" checked={isPaid} label="Pagado" onChange={toggleDebtPaid} />) }
           { isMobileTablet && (
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">

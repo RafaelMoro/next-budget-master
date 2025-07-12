@@ -1,3 +1,5 @@
+import { AccountTypes } from "./accounts.types";
+
 export interface YupError {
   message: string;
 }
@@ -8,7 +10,7 @@ export type BudgetMasterLocalStorage = {
 
 export type SelectedAccountLS = {
   accountId: string;
-  accountType: string;
+  accountType: AccountTypes;
 }
 
 export type GeneralError = {

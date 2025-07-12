@@ -10,13 +10,16 @@ import { Category } from "@/shared/types/categories.types";
 import { recordMock } from "../../mocks/records.mock";
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
+import { SelectedAccountLS } from "@/shared/types/global.types";
 
 const ExpenseTemplateWrapper = ({
   push,
-  categories = []
+  categories = [],
+  selectedAccLS = null
 }: {
   push: () => void;
   categories?: Category[];
+  selectedAccLS?: SelectedAccountLS | null
 }) => {
   return (
     <QueryProviderWrapper>
@@ -26,6 +29,7 @@ const ExpenseTemplateWrapper = ({
           selectedAccount="123"
           accessToken="abc"
           detailedError={null}
+          selectedAccLS={selectedAccLS}
         />
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>
@@ -74,6 +78,17 @@ describe("ExpenseTemplate", () => {
     expect(screen.getByRole('link', { name: /Cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear gasto/i })).toBeInTheDocument();
   });
+
+  it('Given a user having a credit account, show toggle button to check if the debt is paid', () => {
+    const push = jest.fn();
+    const selectedAccLS: SelectedAccountLS = {
+      accountId: '123',
+      accountType: "Crédito"
+    };
+    render(<ExpenseTemplateWrapper push={push} selectedAccLS={selectedAccLS} />);
+
+    expect(screen.getByTestId('toggle-switch-is-paid')).toBeInTheDocument();
+  })
 
   describe('Form Validations', () => {
     it('Given a user clicking on create expense, show validation error for short description to be required', async () => {
