@@ -16,6 +16,8 @@ export const RecordEntry = ({ record }: AccountEntryProps) => {
     { "text-green-500": record.typeOfRecord === 'income' },
     { "text-blue-600": record.typeOfRecord === 'transfer' }
   )
+  const expenseTagText = record?.isPaid && record.typeOfRecord === 'expense' ? 'Pagado' : 'Sin pagar'
+  const badgeColorGreen = record?.isPaid && record.typeOfRecord === 'expense' ? 'success' : 'failure'
 
   const showPriceDict: Record<TypeOfRecord, string> = {
     expense: `- ${record.amountFormatted}`,
@@ -23,12 +25,12 @@ export const RecordEntry = ({ record }: AccountEntryProps) => {
     transfer: `${record.amountFormatted}`
   }
   const showBadgeDict: Record<TypeOfRecord, string> = {
-    expense: 'Sin pagar',
+    expense: expenseTagText,
     income: 'Pagado',
     transfer: 'Transferencia'
   }
   const badgeColorDict: Record<TypeOfRecord, string> = {
-    expense: 'failure',
+    expense: badgeColorGreen,
     income: 'success',
     transfer: 'info'
   }
