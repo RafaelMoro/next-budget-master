@@ -6,6 +6,7 @@ import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Toaster, toast } from "sonner";
+import { useMutation } from "@tanstack/react-query"
 
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
@@ -23,7 +24,6 @@ import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { ManageTagsModal } from "./ManageTagsModal"
-import { useMutation } from "@tanstack/react-query"
 import { createIncomeCb } from "@/shared/utils/records.utils"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
 import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
@@ -184,7 +184,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
             <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
             <Button
               className="hover:cursor-pointer"
-              // disabled={isPending || isSuccess || openTagModal}
+              disabled={isPending || isSuccess || openTagModal}
               type="submit"
             >
               { (isIdle || isError) && 'Crear ingreso'}
