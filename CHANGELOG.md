@@ -1,3 +1,9 @@
+## v0.21.0 (2025-07-12)
+
+### Pull Requests
+[#33](https://github.com/RafaelMoro/next-budget-master/pull/33) | Add record preview drawer
+
+
 ## v0.20.0 (2025-07-12)
 
 ### Pull Requests
