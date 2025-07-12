@@ -3,8 +3,9 @@ export interface YupError {
 }
 
 export interface BudgetMasterLocalStorage {
-  preferences: {
-    themeMode: 'dark' | 'light'
+  'selected-account': {
+    accountId: string;
+    accountType: string;
   }
 }
 
