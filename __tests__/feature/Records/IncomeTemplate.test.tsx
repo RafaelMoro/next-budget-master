@@ -5,6 +5,7 @@ import { QueryProviderWrapper } from '@/app/QueryProviderWrapper';
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { IncomeTemplate } from '@/features/Records/IncomeTemplate';
 import { Category } from '@/shared/types/categories.types';
+import { mockCategories } from '../../mocks/categories.mock';
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(() => ({
@@ -105,6 +106,62 @@ describe('IncomeTemplate', () => {
       await user.click(createExpenseButton);
 
       expect(screen.getByText(/Por favor, ingrese una descripción con menos de 300 caracteres/i)).toBeInTheDocument();
+    })
+
+    it('Given a user filling the short description and then clicking create expense, show validation error for category to be required', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<IncomeTemplateWrapper push={push} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(/Por favor, seleccione una categoría/i)).toBeInTheDocument();
+    })
+
+    it('Given a user filling the short description and selecting a category, then clicking create expense, it should show the validation error for subcategory to be required', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(/Por favor, seleccione una subcategoría/i)).toBeInTheDocument();
+    })
+
+    it('Given a user gets a category error, when the user selects a category, the error should disappear', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
+      await user.click(createExpenseButton);
+
+      const categoryError = screen.getByText(/Por favor, seleccione una categoría/i);
+      expect(categoryError).toBeInTheDocument();
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      expect(screen.queryByText(/Por favor, seleccione una categoría/i)).not.toBeInTheDocument();
     })
   })
 });
