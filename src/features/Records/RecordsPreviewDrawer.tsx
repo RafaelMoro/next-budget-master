@@ -3,7 +3,7 @@
 import { RiCloseFill,
   RiCloseLine,
   RiPriceTag3Line } from "@remixicon/react";
-import { Badge, Card, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
+import { Badge, Button, Card, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
 import clsx from "clsx"
 
 import { BankMovement, TypeOfRecord } from "@/shared/types/records.types";
@@ -54,71 +54,77 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
 
   return (
     <Drawer open={open} onClose={handleClose} position={drawerDirection}>
-      <header className="grid grid-rows-2 grid-record-preview gap-x-2 text-gray-600 dark:text-gray-400">
-        <ChartLineIcon className="row-span-2 place-self-center" />
-        <h4 className="text-gray-600 dark:text-gray-400 col-start-2 col-end-3 row-start-1 row-end-2">Detalles de la transacción</h4>
-        <p className={typeRecordStyle}>{typeRecordDict[record.typeOfRecord]}</p>
-        <button className="text-gray-600 dark:text-gray-400 place-self-center cursor-pointer" onClick={handleClose}>
-          <RiCloseFill />
-        </button>
-      </header>
-      <DrawerItems>
-        <div className="flex flex-col gap-10 mt-8">
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xl font-semibold capitalize">{record.shortName}</h4>
-            <p className={priceStyles}>{record.amountFormatted}</p>
-            <p className="text-sm text-gray-400">{record.description}</p>
-          </div>
-
-          <Card>
-            <h5 className="text-lg tracking-wider">Categorias:</h5>
-            <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
-              <Icon size={20} />
-              <p>Categoria: <span className="text-black dark:text-white">{record.category?.categoryName}</span></p>
+      <div className="grid min-h-full grid-layout-header-footer">
+        <header className="grid grid-rows-2 grid-record-preview gap-x-2 text-gray-600 dark:text-gray-400">
+          <ChartLineIcon className="row-span-2 place-self-center" />
+          <h4 className="text-gray-600 dark:text-gray-400 col-start-2 col-end-3 row-start-1 row-end-2">Detalles de la transacción</h4>
+          <p className={typeRecordStyle}>{typeRecordDict[record.typeOfRecord]}</p>
+          <button className="text-gray-600 dark:text-gray-400 place-self-center cursor-pointer" onClick={handleClose}>
+            <RiCloseFill />
+          </button>
+        </header>
+        <DrawerItems>
+          <div className="flex flex-col gap-10 mt-8">
+            <div className="flex flex-col gap-4">
+              <h4 className="text-xl font-semibold capitalize">{record.shortName}</h4>
+              <p className={priceStyles}>{record.amountFormatted}</p>
+              <p className="text-sm text-gray-400">{record.description}</p>
             </div>
-            <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
-              <RiPriceTag3Line size={20} />
-              <p>Subcategoria: <span className="text-black dark:text-white">{record.subCategory}</span></p>
-            </div>
-          </Card>
 
-          { record.typeOfRecord === 'expense' && (
             <Card>
-              <h5 className="text-lg tracking-wider">Estatus de pago:</h5>
-              <div className={statusBoxCss}>
-                { record.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
-                <p className="text-sm">{paidStatus}</p>
+              <h5 className="text-lg tracking-wider">Categorias:</h5>
+              <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                <Icon size={20} />
+                <p>Categoria: <span className="text-black dark:text-white">{record.category?.categoryName}</span></p>
+              </div>
+              <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                <RiPriceTag3Line size={20} />
+                <p>Subcategoria: <span className="text-black dark:text-white">{record.subCategory}</span></p>
               </div>
             </Card>
-          ) }
 
-          { record?.linkedBudgets && record?.linkedBudgets.length > 0 && (
-            <Card>
-              <h5 className="text-lg tracking-wider">Presupuestos:</h5>
-              <div className="flex gap-2">
-                { record.linkedBudgets.map((budget) => (
-                  <Badge key={budget._id} className="max-w-max" color="warning">
-                    {budget.description}
-                  </Badge>
-                )) }
-              </div>
-            </Card>
+            { record.typeOfRecord === 'expense' && (
+              <Card>
+                <h5 className="text-lg tracking-wider">Estatus de pago:</h5>
+                <div className={statusBoxCss}>
+                  { record.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
+                  <p className="text-sm">{paidStatus}</p>
+                </div>
+              </Card>
             ) }
 
-            { record.tag.length > 0 && (
+            { record?.linkedBudgets && record?.linkedBudgets.length > 0 && (
               <Card>
-                <h5 className="text-lg tracking-wider">Etiquetas:</h5>
+                <h5 className="text-lg tracking-wider">Presupuestos:</h5>
                 <div className="flex gap-2">
-                  { record.tag.map((t) => (
-                    <Badge key={t} className="max-w-max" color="purple">
-                      {t}
+                  { record.linkedBudgets.map((budget) => (
+                    <Badge key={budget._id} className="max-w-max" color="warning">
+                      {budget.description}
                     </Badge>
                   )) }
                 </div>
               </Card>
-            ) }
-        </div>
-      </DrawerItems>
+              ) }
+
+              { record.tag.length > 0 && (
+                <Card>
+                  <h5 className="text-lg tracking-wider">Etiquetas:</h5>
+                  <div className="flex gap-2">
+                    { record.tag.map((t) => (
+                      <Badge key={t} className="max-w-max" color="purple">
+                        {t}
+                      </Badge>
+                    )) }
+                  </div>
+                </Card>
+              ) }
+          </div>
+        </DrawerItems>
+        <footer className="mt-10 lg:mt-0 flex justify-between">
+          <Button color="red" outline>Eliminar</Button>
+          <Button>Editar</Button>
+        </footer>
+      </div>
     </Drawer>
   )
 }

@@ -188,4 +188,7 @@
   .grid-record-preview {
     grid-template-columns: min-content 1fr min-content;
   }
+  .grid-layout-header-footer {
+    grid-template-rows: auto 1fr auto;
+  }
 }
