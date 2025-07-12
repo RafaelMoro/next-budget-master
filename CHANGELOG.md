@@ -1,3 +1,9 @@
+## v0.18.0 (2025-07-12)
+
+### Pull Requests
+[#29](https://github.com/RafaelMoro/next-budget-master/pull/29) | Add isPaid toggle button
+
+
 ## v0.17.0 (2025-07-12)
 
 ### Pull Requests
