@@ -12,6 +12,7 @@ import { SelectedAccountLS } from "@/shared/types/global.types";
 import { ExpenseTemplate } from "./ExpenseTemplate";
 import { getSelectedAccountLocalStorage } from "@/shared/utils/user-info.utils"
 import { GetBudgetsResponse } from "@/shared/types/budgets.types"
+import { IncomeTemplate } from "./IncomeTemplate"
 
 interface TransactionManagerProps {
   resCategories: GetCategoriesResponse
@@ -70,7 +71,15 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
             detailedErrorBudgets={errorBudgets}
             selectedAccLS={selectedAccLS}
           />
-        ) }
+        )}
+        { subscreen === 'income' && (
+          <IncomeTemplate
+            categories={categories}
+            selectedAccount={selectedAccount}
+            accessToken={accessToken}
+            detailedErrorCategories={errorCategories}
+          />
+        )}
       </main>
     </div>
 

@@ -26,12 +26,12 @@ export const RecordEntry = ({ record }: AccountEntryProps) => {
   }
   const showBadgeDict: Record<TypeOfRecord, string> = {
     expense: expenseTagText,
-    income: 'Pagado',
+    income: 'Ingreso',
     transfer: 'Transferencia'
   }
   const badgeColorDict: Record<TypeOfRecord, string> = {
     expense: badgeColorGreen,
-    income: 'success',
+    income: 'purple',
     transfer: 'info'
   }
 
