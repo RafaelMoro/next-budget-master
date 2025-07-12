@@ -2,11 +2,13 @@ export interface YupError {
   message: string;
 }
 
-export interface BudgetMasterLocalStorage {
-  'selected-account': {
-    accountId: string;
-    accountType: string;
-  }
+export type BudgetMasterLocalStorage = {
+  'selected-account': SelectedAccountLS
+}
+
+export type SelectedAccountLS = {
+  accountId: string;
+  accountType: string;
 }
 
 export type GeneralError = {

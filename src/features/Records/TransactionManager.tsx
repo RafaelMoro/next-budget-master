@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { RiArrowLeftLine } from "@remixicon/react"
 
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
@@ -8,8 +8,9 @@ import { Header } from "@/shared/ui/organisms/Header"
 import { Category } from "@/shared/types/categories.types"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { DetailedError } from "@/shared/types/global.types";
+import { DetailedError, SelectedAccountLS } from "@/shared/types/global.types";
 import { ExpenseTemplate } from "./ExpenseTemplate";
+import { getSelectedAccountLocalStorage } from "@/shared/utils/user-info.utils"
 
 interface TransactionManagerProps {
   categories: Category[]
@@ -23,6 +24,15 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
   const updateExpenseScreen = () => setSubscreen('expense')
   const updateIncomeScreen = () => setSubscreen('income')
   const updateTransferScreen = () => setSubscreen('transfer')
+
+  const [selectedAccLS, setSelectedAccLS] = useState<SelectedAccountLS | null>(null)
+
+  useEffect(() => {
+    const accInfo = getSelectedAccountLocalStorage()
+    if (accInfo) {
+      setSelectedAccLS(accInfo)
+    }
+  }, [])
 
   const titleDictionary: Record<TransactionScreens, string> = {
     expense: 'Gasto',
@@ -53,6 +63,7 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
             selectedAccount={selectedAccount}
             accessToken={accessToken}
             detailedError={detailedError}
+            selectedAccLS={selectedAccLS}
           />
         ) }
       </main>
