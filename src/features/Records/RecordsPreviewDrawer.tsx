@@ -1,9 +1,9 @@
 "use client"
 
 import { RiCloseFill,
-  // RiDeleteBinFill, RiPencilLine,
+  RiCloseLine,
   RiPriceTag3Line } from "@remixicon/react";
-import { Badge, Card, Drawer, DrawerItems } from "flowbite-react";
+import { Badge, Card, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
 import clsx from "clsx"
 
 import { BankMovement, TypeOfRecord } from "@/shared/types/records.types";
@@ -21,11 +21,17 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
   const { isMobile } = useMediaQuery()
 
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
+  const paidStatus = record?.isPaid ? 'Pagado' : 'Sin pagar'
   const typeRecordDict: Record<TypeOfRecord, string> = {
     expense: 'Gasto',
     income: 'Ingreso',
     transfer: 'Transferencia'
   }
+  const statusBoxCss = clsx(
+    "flex gap-1 items-center",
+    { "text-green-500": record?.isPaid },
+    { "text-red-500": !record?.isPaid }
+  )
   const colorText = clsx(
     { "text-red-600": record?.typeOfRecord === 'expense'},
     { "text-green-400": record?.typeOfRecord === 'income' },
@@ -75,6 +81,16 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
               <p>Subcategoria: <span className="text-black dark:text-white">{record.subCategory}</span></p>
             </div>
           </Card>
+
+          { record.typeOfRecord === 'expense' && (
+            <Card>
+              <h5 className="text-lg tracking-wider">Estatus de pago:</h5>
+              <div className={statusBoxCss}>
+                { record.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
+                <p className="text-sm">{paidStatus}</p>
+              </div>
+            </Card>
+          ) }
 
           { record?.linkedBudgets && record?.linkedBudgets.length > 0 && (
             <Card>
