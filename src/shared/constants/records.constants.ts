@@ -11,3 +11,5 @@ export const CREATE_EXPENSE_ERROR = 'Oops! No pudimos registrar el movimiento. I
 export const TAG_REQUIRED_ERROR = 'Por favor, ingrese una etiqueta'
 export const TAG_MIN_LENGTH_ERROR = 'Por favor, ingrese una etiqueta de más de 2 caracteres'
 export const TAG_MAX_LENGTH_ERROR = 'Por favor, ingrese una etiqueta con menos de 50 caracteres.'
+export const TAG_REPEATED_ERROR = 'La etiqueta ya existe. Por favor, ingrese una etiqueta diferente.'
+export const CURRENCY_ZERO_ERROR = 'Por favor, ingrese una cantidad mayor a 0.'

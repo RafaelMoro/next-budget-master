@@ -10,8 +10,8 @@ import { MenuMobileLink } from "./MenuMobileLink"
 import { CreditCardArrowIcon } from "../icons/CreditCardArrowIcon"
 import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ToggleDarkMode } from "./ToggleDarkMode"
-import { LinkButton } from "./LinkButton"
 import { DashboardScreens } from "@/shared/types/dashboard.types"
+import { resetLocalStorage } from "@/shared/lib/local-storage.lib"
 
 interface HeaderMenuMobileProps {
   accounts: AccountBank[];
@@ -26,6 +26,10 @@ export const HeaderMenuMobile = ({ accounts, screen, updateScreen, toggleSelectA
   const handleClick = (onClickCb: (newScreen: DashboardScreens) => void, newScreen: DashboardScreens) => {
     onClickCb(newScreen);
     toggleDrawer();
+  }
+  const handleSignOut = async () => {
+    resetLocalStorage()
+    await fetch('/api/auth/sign-out')
   }
 
   return (
@@ -69,7 +73,7 @@ export const HeaderMenuMobile = ({ accounts, screen, updateScreen, toggleSelectA
 
                   <SidebarItemGroup>
                     <ToggleDarkMode cssClass="w-full my-5" />
-                    <LinkButton type="darkRed" className="w-full" href="/api/auth/sign-out">Cerrar sesión</LinkButton>
+                    <Button outline color="red" className="w-full" onClick={handleSignOut}>Cerrar sesión</Button>
                   </SidebarItemGroup>
                 </SidebarItems>
               </div>

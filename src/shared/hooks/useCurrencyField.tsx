@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { cleanCurrencyString, formatNumberToCurrency, shiftSingleDecimalLeft, shiftThousandSingleDecimalLeft } from "../utils/formatNumberCurrency.utils";
+import { CURRENCY_ZERO_ERROR } from "../constants/records.constants";
 
 interface UseCurrencyFieldProps {
   amount: string | null;
@@ -86,10 +87,30 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     
   }
 
+  const validateZeroAmount = ({ amountState, message = CURRENCY_ZERO_ERROR }: { amountState: string, message?: string }):boolean => {
+    if (amountState === DEFAULT_AMOUNT_VALUE) {
+      setErrorAmount(message)
+      return false
+    }
+    return true
+  }
+
+  const resetCurrencyState = () => {
+    setCurrencyState(DEFAULT_AMOUNT_VALUE);
+    setErrorAmount(null);
+  }
+
+  const handleEditState = (amount: string) => {
+    setCurrencyState(amount);
+  }
+
   return {
     handleChange,
     currencyState,
     errorAmount,
     updateErrorAmount,
+    validateZeroAmount,
+    resetCurrencyState,
+    handleEditState,
   };
 }

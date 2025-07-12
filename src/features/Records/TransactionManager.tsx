@@ -1,28 +1,41 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { RiArrowLeftLine } from "@remixicon/react"
 
 import { TransactionManagerGroupButton } from "./TransactionManagerGroupButton"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
 import { Header } from "@/shared/ui/organisms/Header"
-import { Category } from "@/shared/types/categories.types"
+import { GetCategoriesResponse } from "@/shared/types/categories.types"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { DetailedError } from "@/shared/types/global.types";
+import { SelectedAccountLS } from "@/shared/types/global.types";
 import { ExpenseTemplate } from "./ExpenseTemplate";
+import { getSelectedAccountLocalStorage } from "@/shared/utils/user-info.utils"
+import { GetBudgetsResponse } from "@/shared/types/budgets.types"
 
 interface TransactionManagerProps {
-  categories: Category[]
+  resCategories: GetCategoriesResponse
+  resBudgets: GetBudgetsResponse
   selectedAccount: string | null
   accessToken: string
-  detailedError: DetailedError | null
 }
 
-export const TransactionManager = ({ categories, selectedAccount, accessToken, detailedError }: TransactionManagerProps) => {
+export const TransactionManager = ({ resCategories, resBudgets, selectedAccount, accessToken, }: TransactionManagerProps) => {
+  const { categories, detailedError: errorCategories } = resCategories
+  const { budgets, detailedError: errorBudgets } = resBudgets
   const [subscreen, setSubscreen] = useState<TransactionScreens>('expense')
   const updateExpenseScreen = () => setSubscreen('expense')
   const updateIncomeScreen = () => setSubscreen('income')
   const updateTransferScreen = () => setSubscreen('transfer')
+
+  const [selectedAccLS, setSelectedAccLS] = useState<SelectedAccountLS | null>(null)
+
+  useEffect(() => {
+    const accInfo = getSelectedAccountLocalStorage()
+    if (accInfo) {
+      setSelectedAccLS(accInfo)
+    }
+  }, [])
 
   const titleDictionary: Record<TransactionScreens, string> = {
     expense: 'Gasto',
@@ -49,10 +62,13 @@ export const TransactionManager = ({ categories, selectedAccount, accessToken, d
         />
         { subscreen === 'expense' && (
           <ExpenseTemplate
+            budgetsFetched={budgets}
             categories={categories}
             selectedAccount={selectedAccount}
             accessToken={accessToken}
-            detailedError={detailedError}
+            detailedErrorCategories={errorCategories}
+            detailedErrorBudgets={errorBudgets}
+            selectedAccLS={selectedAccLS}
           />
         ) }
       </main>

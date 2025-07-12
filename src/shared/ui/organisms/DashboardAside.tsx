@@ -6,9 +6,10 @@ import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { DashboardAsideLink } from "../atoms/DashboardAsideLink"
 import { DropdownSelectAccount } from "@/features/Accounts/DropdownSelectAccount"
 import { AccountBank } from "@/shared/types/accounts.types"
-import { LinkButton } from "../atoms/LinkButton"
 import { DashboardScreens } from "@/shared/types/dashboard.types"
-import { CREATE_RECORD_ROUTE } from "@/shared/constants/Global.constants"
+import { Button } from "flowbite-react"
+import { useDashboard } from "@/shared/hooks/useDashboard"
+import { resetLocalStorage } from "@/shared/lib/local-storage.lib"
 
 interface DashboardAsideProps {
   children: ReactNode;
@@ -19,15 +20,20 @@ interface DashboardAsideProps {
 }
 
 export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectAccountModal, screen }: DashboardAsideProps) => {
+  const { handleGoCreateRecordRoute } = useDashboard()
+  const handleSignOut = async () => {
+    resetLocalStorage()
+    await fetch('/api/auth/sign-out')
+  }
   return (
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
       {children}
       { accounts.length > 0 && (
         <DropdownSelectAccount goAccounts={toggleSelectAccountModal} />
       )}
-      <LinkButton
-        href={CREATE_RECORD_ROUTE}
-      >Registrar movimiento</LinkButton>
+      <Button
+        onClick={handleGoCreateRecordRoute}
+      >Registrar movimiento</Button>
       <nav className="mt-10 flex flex-col">
         <DashboardAsideLink isSelected={screen === 'overview'} onClickCb={() => updateScreen('overview')}>
             <HomeIcon />
@@ -44,7 +50,7 @@ export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectA
       </nav>
 
       <section className="flex flex-col gap-2">
-        <LinkButton type="darkRed" className="w-full" href="/api/auth/sign-out">Cerrar sesión</LinkButton>
+        <Button outline color="red" className="w-full" onClick={handleSignOut}>Cerrar sesión</Button>
       </section>
     </aside>
   )

@@ -4,12 +4,16 @@ import { DashboardStoreProvider } from "@/zustand/provider/dashboard-store-provi
 import { AccountOverviewSubscreen } from "@/features/Dashboard/Overview/subscreens/AccountOverviewSubscreen"
 import { mockAccounts } from "../../../mocks/accounts.mock"
 import { recordMock } from "../../../mocks/records.mock"
+import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
 
 describe('AccountOverviewSubscreen', () => {
   it('Show account overview with correct data', () => {
+    const push = jest.fn()
     render(
       <DashboardStoreProvider accounts={mockAccounts} records={[recordMock]} selectedAccountId={mockAccounts[0]._id}>
-        <AccountOverviewSubscreen />
+        <AppRouterContextProviderMock router={{ push }}>
+          <AccountOverviewSubscreen />
+        </AppRouterContextProviderMock>
       </DashboardStoreProvider>
     )
 

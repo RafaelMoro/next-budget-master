@@ -1,21 +1,24 @@
-import { LinkButton } from "@/shared/ui/atoms/LinkButton";
+import { Button } from "flowbite-react";
+
 import { IncomeExpensesChart } from "../../../Charts/IncomeExpensesChart"
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
-import { CREATE_RECORD_ROUTE } from "@/shared/constants/Global.constants";
+import { useDashboard } from "@/shared/hooks/useDashboard";
 
 export const StatisticsSubscreen = () => {
+  const { handleGoCreateRecordRoute } = useDashboard()
   const records = useDashboardStore(
     (state) => state.records
   )
+
   if (records.length === 0) {
     return (
       <div className="flex flex-col justify-center gap-5 mt-20">
         <h2 className="text-2xl font-semibold text-center">Sin transacciones, sin gráficas... ¡por el momento!</h2>
         <p className="text-gray-400 text-center mb-5">Aún no podemos generar gráficas sin movimientos... ¡empieza a registrar y verás el cambio!</p>
         <div className="mx-auto my-0">
-          <LinkButton href={CREATE_RECORD_ROUTE} >
+          <Button onClick={handleGoCreateRecordRoute} >
             Registrar movimiento
-          </LinkButton>
+          </Button>
         </div>
       </div>
     )
@@ -23,9 +26,9 @@ export const StatisticsSubscreen = () => {
   return (
     <section className="grid grid-cols-1 gap-4">
       <div className="justify-self-end max-w-48">
-        <LinkButton href={CREATE_RECORD_ROUTE} >
+        <Button onClick={handleGoCreateRecordRoute} >
           Registrar movimiento
-        </LinkButton>
+        </Button>
       </div>
       <IncomeExpensesChart records={records} />
     </section>

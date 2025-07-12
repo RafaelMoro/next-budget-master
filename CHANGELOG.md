@@ -1,3 +1,21 @@
+## v0.19.0 (2025-07-12)
+
+### Pull Requests
+[#30](https://github.com/RafaelMoro/next-budget-master/pull/30) | Add select budgets when create expense
+
+
+## v0.18.0 (2025-07-12)
+
+### Pull Requests
+[#29](https://github.com/RafaelMoro/next-budget-master/pull/29) | Add isPaid toggle button
+
+
+## v0.17.0 (2025-07-12)
+
+### Pull Requests
+[#28](https://github.com/RafaelMoro/next-budget-master/pull/28) | Add indebted people and fix selected account cookie bug
+
+
 ## v0.16.2 (2025-07-06)
 
 ### Pull Requests

@@ -10,22 +10,31 @@ import { Category } from "@/shared/types/categories.types";
 import { recordMock } from "../../mocks/records.mock";
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
+import { SelectedAccountLS } from "@/shared/types/global.types";
+import { Budget } from "@/shared/types/budgets.types";
+import { mockBudgets } from "../../mocks/budgets.mock";
 
 const ExpenseTemplateWrapper = ({
   push,
-  categories = []
+  categories = [],
+  budgetsFetched = [],
+  selectedAccLS = null
 }: {
   push: () => void;
   categories?: Category[];
+  budgetsFetched?: Budget[]
+  selectedAccLS?: SelectedAccountLS | null
 }) => {
   return (
     <QueryProviderWrapper>
       <AppRouterContextProviderMock router={{ push }}>
         <ExpenseTemplate
           categories={categories}
+          budgetsFetched={budgetsFetched}
           selectedAccount="123"
           accessToken="abc"
           detailedError={null}
+          selectedAccLS={selectedAccLS}
         />
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>
@@ -43,9 +52,23 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("ExpenseTemplate", () => {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation(query => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(), // Deprecated
+      removeListener: jest.fn(), // Deprecated
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
+
   it("should show expense template", () => {
     const push = jest.fn();
-    render(<ExpenseTemplateWrapper push={push} />);
+    render(<ExpenseTemplateWrapper push={push} budgetsFetched={mockBudgets} />);
 
     expect(screen.getByLabelText(/Cantidad/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Pequeña descripción/i)).toBeInTheDocument();
@@ -56,10 +79,22 @@ describe("ExpenseTemplate", () => {
 
     expect(categoryButton).toBeInTheDocument();
     expect(subcategoryButton).toBeInTheDocument();
+    expect(screen.getByTestId('select-budget-dropdown-button')).toBeInTheDocument();
     
     expect(screen.getByRole('link', { name: /Cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear gasto/i })).toBeInTheDocument();
   });
+
+  it('Given a user having a credit account, show toggle button to check if the debt is paid', () => {
+    const push = jest.fn();
+    const selectedAccLS: SelectedAccountLS = {
+      accountId: '123',
+      accountType: "Crédito"
+    };
+    render(<ExpenseTemplateWrapper push={push} selectedAccLS={selectedAccLS} />);
+
+    expect(screen.getByTestId('toggle-switch-is-paid')).toBeInTheDocument();
+  })
 
   describe('Form Validations', () => {
     it('Given a user clicking on create expense, show validation error for short description to be required', async () => {
@@ -252,7 +287,7 @@ describe("ExpenseTemplate", () => {
           expense: recordMock
         },
       })
-      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} />);
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} />);
 
       const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
       await user.type(shortDescriptionInput, 'Test expense');
@@ -269,6 +304,11 @@ describe("ExpenseTemplate", () => {
 
       const amountInput = screen.getByLabelText(/Cantidad/i);
       await user.type(amountInput, '123');
+
+      const budgetDropdown = screen.getByTestId('select-budget-dropdown-button')
+      await user.click(budgetDropdown);
+      const budgetToSelect = screen.getByText(mockBudgets[0].name);
+      await user.click(budgetToSelect);
 
       const createExpenseButton = screen.getByRole('button', { name: /Crear gasto/i });
       await user.click(createExpenseButton);

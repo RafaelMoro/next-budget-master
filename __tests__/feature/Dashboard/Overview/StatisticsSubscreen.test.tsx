@@ -3,6 +3,8 @@ import { StatisticsSubscreen } from '@/features/Dashboard/Overview/subscreens/St
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
 import { mockAccounts } from '../../../mocks/accounts.mock';
 import { recordMock } from '../../../mocks/records.mock';
+import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
+import { BankMovement } from '@/shared/types/records.types';
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
@@ -10,12 +12,20 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }))
 
+const StatisticsSubscreenWrapper = ({ push, records = [] }: { push: () => void, records?: BankMovement[] }) => {
+  return (
+    <DashboardStoreProvider accounts={mockAccounts} records={[...records]} selectedAccountId={mockAccounts[0]._id}>
+        <AppRouterContextProviderMock router={{ push }}>
+          <StatisticsSubscreen />
+        </AppRouterContextProviderMock>
+      </DashboardStoreProvider>
+  )
+}
+
 describe('StatisticsSubscreen', () => {
   it('Show no transactions messaging if there are no records', () => {
     render(
-      <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
-        <StatisticsSubscreen />
-      </DashboardStoreProvider>
+      <StatisticsSubscreenWrapper push={jest.fn()} />
     );
     expect(screen.getByText(/Sin transacciones, sin gráficas/)).toBeInTheDocument();
     expect(screen.getByText(/Registrar movimiento/i)).toBeInTheDocument();
@@ -23,9 +33,7 @@ describe('StatisticsSubscreen', () => {
 
   it('Show statistics if there are records', () => {
     render(
-      <DashboardStoreProvider accounts={mockAccounts} records={[recordMock]} selectedAccountId={mockAccounts[0]._id}>
-        <StatisticsSubscreen />
-      </DashboardStoreProvider>
+      <StatisticsSubscreenWrapper push={jest.fn()} records={[recordMock]} />
     );
     expect(screen.getByText(/Ingresos vs Gastos/)).toBeInTheDocument();
   });

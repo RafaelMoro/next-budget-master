@@ -7,18 +7,19 @@ import { useRouter } from 'next/navigation'
 import { useMutation } from "@tanstack/react-query"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Toaster, toast } from "sonner";
-import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite-react"
+import { Button, CheckIcon, Label, Spinner, Textarea, TextInput, ToggleSwitch } from "flowbite-react"
+import clsx from "clsx"
 
 import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, CreateExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
-import { DEFAULT_AMOUNT_VALUE, useCurrencyField } from "@/shared/hooks/useCurrencyField"
+import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { Category } from "@/shared/types/categories.types"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { createExpenseCb } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { DetailedError, GeneralError } from "@/shared/types/global.types"
+import { DetailedError, GeneralError, SelectedAccountLS } from "@/shared/types/global.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
@@ -26,21 +27,50 @@ import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { ManageTagsModal } from "./ManageTagsModal"
 import { useManageTags } from "@/shared/hooks/useManageTags"
+import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
+import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
+import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
+import { PersonalDebtManager } from "../IndebtedPeople/PersonalDebtManager"
+import { CREDIT_ACCOUNT_TYPE } from "@/shared/types/accounts.types"
+import { Budget } from "@/shared/types/budgets.types"
+import { useHandleBudgets } from "@/shared/hooks/useHandleBudgets"
+import { SelectBudgetDropdown } from "../Budgets/SelectBudget"
+import { BUDGETS_FETCH_ERROR } from "@/shared/constants/budgets.constants"
 
 interface ExpenseTemplateProps {
   categories: Category[]
+  budgetsFetched: Budget[]
   selectedAccount: string | null
+  selectedAccLS: SelectedAccountLS | null
   accessToken: string
-  detailedError: DetailedError | null
+  detailedErrorCategories: DetailedError | null
+  detailedErrorBudgets: DetailedError | null
 }
 
-export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, detailedError }: ExpenseTemplateProps) => {
+export const ExpenseTemplate = ({
+  categories, budgetsFetched, selectedAccount, accessToken, detailedErrorCategories, detailedErrorBudgets, selectedAccLS
+}: ExpenseTemplateProps) => {
   const router = useRouter()
+  const { isMobileTablet, isDesktop } = useMediaQuery()
 
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [isPaid, setIsPaid] = useState<boolean>(false)
+  const toggleDebtPaid = () => setIsPaid((prev) => !prev)
+  const isCredit = selectedAccLS?.accountType === CREDIT_ACCOUNT_TYPE
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
-  const { handleChange, currencyState, errorAmount, updateErrorAmount } = useCurrencyField({
+  const { budgetsOptions, updateSelectedBudget, selectedBudget, budgets } = useHandleBudgets({ budgetsFetched })
+
+  const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI,
+    validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson } = useIndebtedPeople()
+
+  const asideCss = clsx(
+    "w-full flex flex-col gap-12",
+    { "max-w-xs": indebtedPeopleUI.length === 0 },
+    { "max-w-2xl": indebtedPeopleUI.length > 0 }
+  )
+
+  const { handleChange, currencyState, errorAmount, validateZeroAmount } = useCurrencyField({
     amount: null,
   })
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
@@ -73,12 +103,14 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   }, [isError, messageError])
 
   useEffect(() => {
-    if (detailedError?.cause === 'connection') {
+    if (detailedErrorCategories?.cause === 'connection' || detailedErrorBudgets?.cause === 'connection') {
       toast.error('Error de conexión. Por favor, inténtalo más tarde.');
-    } else if (detailedError?.message) {
+    } else if (detailedErrorCategories?.message) {
       toast.error(CATEGORY_FETCH_ERROR);
+    } else if (detailedErrorBudgets?.message) {
+      toast.error(BUDGETS_FETCH_ERROR);
     }
-  }, [detailedError?.cause, detailedError?.message])
+  }, [detailedErrorBudgets?.cause, detailedErrorBudgets?.message, detailedErrorCategories?.cause, detailedErrorCategories?.message])
 
   const onSubmit: SubmitHandler<CreateExpenseDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
@@ -87,9 +119,7 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
     if (!subcategory) {
       updateSubcategoryError('Por favor, seleccione una subcategoría.')
     }
-    if (currencyState === DEFAULT_AMOUNT_VALUE) {
-      updateErrorAmount('Por favor, ingrese una cantidad mayor a 0.')
-    }
+    validateZeroAmount({ amountState: currencyState })
 
     if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
       const amountNumber = cleanCurrencyString(currencyState)
@@ -101,12 +131,9 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
         category: categorySelected.categoryId,
         date,
         description: data.description ?? '',
-        // TODO: Add logic to handle indebted people
-        indebtedPeople: [],
-        // TODO: Add logic to check if account is type credit
-        isPaid: false,
-        // TODO: Add logic to handle linked budgets
-        linkedBudgets: [],
+        indebtedPeople,
+        isPaid,
+        linkedBudgets: selectedBudget ? [selectedBudget.budgetId] : [],
         shortName: data.shortDescription,
         subCategory: subcategory,
         tag: tags.current,
@@ -117,67 +144,113 @@ export const ExpenseTemplate = ({ categories, selectedAccount, accessToken, deta
   }
 
   return (
-    <AnimatePresence>
-      <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="max-w-3xs mx-auto flex flex-col gap-4">
-        <DateTimePicker date={date} setDate={setDate} />
-        <CurrencyField
-          labelName="Cantidad"
-          dataTestId="amount"
-          fieldId="amount"
-          value={currencyState}
-          handleChange={handleChange}
-        />
-        { errorAmount && (
-          <ErrorMessage isAnimated>{errorAmount}</ErrorMessage>
-        )}
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="shortDescription">Pequeña descripción</Label>
+    <div className="w-full flex justify-center gap-32">
+      <AnimatePresence>
+        <form key="expense-template-form" onSubmit={handleSubmit(onSubmit)} className="w-full px-4 mx-auto flex flex-col gap-4 md:max-w-xl mb-6 lg:mx-0 lg:px-0">
+          <DateTimePicker date={date} setDate={setDate} />
+          <CurrencyField
+            labelName="Cantidad"
+            dataTestId="amount"
+            fieldId="amount"
+            value={currencyState}
+            handleChange={handleChange}
+          />
+          { errorAmount && (
+            <ErrorMessage isAnimated>{errorAmount}</ErrorMessage>
+          )}
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="shortDescription">Pequeña descripción</Label>
+            </div>
+            <TextInput
+              data-testid="shortDescription"
+              id="shortDescription"
+              type="text"
+              {...register("shortDescription")}
+              />
+            { errors?.shortDescription?.message && (
+              <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
+            )}
           </div>
-          <TextInput
-            data-testid="shortDescription"
-            id="shortDescription"
-            type="text"
-            {...register("shortDescription")}
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="description">Descripción (opcional)</Label>
+            </div>
+            <Textarea id="description" rows={4} {...register("description")} />
+            { errors?.description?.message && (
+              <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
+            )}
+          </div>
+          <TransactionCategorizerDropdown
+            categoriesShown={categoriesShown}
+            categorySelected={categorySelected}
+            updateCategory={updateCategory}
+            categoryError={categoryError}
+            subcategories={subcategories}
+            subcategory={subcategory}
+            updateSubcategory={updateSubcategory}
+            subcategoryError={subcategoryError}
+          />
+          { budgets.length > 0 && (
+            <SelectBudgetDropdown
+              budgetOptions={budgetsOptions}
+              selectedBudget={selectedBudget}
+              updateSelectedBudget={updateSelectedBudget}
             />
-          { errors?.shortDescription?.message && (
-            <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
+          ) }
+          { isCredit && (<ToggleSwitch data-testid="toggle-switch-is-paid" checked={isPaid} label="Pagado" onChange={toggleDebtPaid} />) }
+          { isMobileTablet && (
+            <FurtherDetailsAccordeon>
+              <div className="w-full flex flex-col gap-12">
+                <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+                <PersonalDebtManager
+                  indebtedPeople={indebtedPeopleUI}
+                  openModal={openIndebtedPeopleModal}
+                  toggleModal={toggleIndebtedPeopleModal}
+                  openEditModal={openEditModal}
+                  addIndebtedPerson={addIndebtedPerson}
+                  updateIndebtedPerson={updateIndebtedPerson}
+                  validatePersonExist={validatePersonExist}
+                  editPerson={editPerson}
+                  removePerson={removePerson}
+                />
+              </div>
+            </FurtherDetailsAccordeon>
           )}
-        </div>
-        <div className="max-w-md">
-          <div className="mb-2 block">
-            <Label htmlFor="description">Descripción (opcional)</Label>
-          </div>
-          <Textarea id="description" rows={4} {...register("description")} />
-          { errors?.description?.message && (
-            <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
-          )}
-        </div>
-        <TransactionCategorizerDropdown
-          categoriesShown={categoriesShown}
-          categorySelected={categorySelected}
-          updateCategory={updateCategory}
-          categoryError={categoryError}
-          subcategories={subcategories}
-          subcategory={subcategory}
-          updateSubcategory={updateSubcategory}
-          subcategoryError={subcategoryError}
-        />
-        <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-        <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
-          <Button
-            className="hover:cursor-pointer"
-            disabled={isPending || isSuccess || openTagModal}
-            type="submit"
+          <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
+            <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
+            <Button
+              className="hover:cursor-pointer"
+              disabled={isPending || isSuccess || openTagModal}
+              type="submit"
             >
-          { (isIdle || isError) && 'Crear gasto'}
-          { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-          { isSuccess && (<CheckIcon data-testid="check-icon" />)}
-        </Button>
-      </form>
-      { (isError || detailedError?.message) && (
-        <Toaster position="top-center" />
-      )}
-    </AnimatePresence>
+              { (isIdle || isError) && 'Crear gasto'}
+              { isPending && (<Spinner aria-label="loading reset password budget master" />) }
+              { isSuccess && (<CheckIcon data-testid="check-icon" />)}
+            </Button>
+          </div>
+        </form>
+        { (isError || detailedErrorCategories?.message || detailedErrorBudgets?.message) && (
+          <Toaster position="top-center" />
+        )}
+      </AnimatePresence>
+      { isDesktop && (
+        <aside className={asideCss}>
+          <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
+          <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+          <PersonalDebtManager
+            indebtedPeople={indebtedPeopleUI}
+            openModal={openIndebtedPeopleModal}
+            toggleModal={toggleIndebtedPeopleModal}
+            openEditModal={openEditModal}
+            addIndebtedPerson={addIndebtedPerson}
+            updateIndebtedPerson={updateIndebtedPerson}
+            validatePersonExist={validatePersonExist}
+            editPerson={editPerson}
+            removePerson={removePerson}
+          />
+        </aside>
+      ) }
+    </div>
   )
 }

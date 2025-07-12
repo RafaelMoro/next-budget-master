@@ -1,11 +1,16 @@
+import { AccountTypes } from "./accounts.types";
+
 export interface YupError {
   message: string;
 }
 
-export interface BudgetMasterLocalStorage {
-  preferences: {
-    themeMode: 'dark' | 'light'
-  }
+export type BudgetMasterLocalStorage = {
+  'selected-account': SelectedAccountLS
+}
+
+export type SelectedAccountLS = {
+  accountId: string;
+  accountType: AccountTypes;
 }
 
 export type GeneralError = {
