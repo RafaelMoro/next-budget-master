@@ -59,7 +59,11 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
           <ChartLineIcon className="row-span-2 place-self-center" />
           <h4 className="text-gray-600 dark:text-gray-400 col-start-2 col-end-3 row-start-1 row-end-2">Detalles de la transacción</h4>
           <p className={typeRecordStyle}>{typeRecordDict[record.typeOfRecord]}</p>
-          <button className="text-gray-600 dark:text-gray-400 place-self-center cursor-pointer" onClick={handleClose}>
+          <button
+            className="text-gray-600 dark:text-gray-400 place-self-center cursor-pointer"
+            onClick={handleClose}
+            aria-label="Close"
+          >
             <RiCloseFill />
           </button>
         </header>
