@@ -79,7 +79,7 @@ export const ExpenseTemplate = ({
     { "max-w-2xl": indebtedPeopleUI.length > 0 }
   )
 
-  const { handleChange, currencyState, errorAmount, validateZeroAmount } = useCurrencyField({
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState } = useCurrencyField({
     amount: null,
   })
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
@@ -108,6 +108,7 @@ export const ExpenseTemplate = ({
     // Init state to edit expense
     if (editRecord) {
       setDate(new Date(editRecord.date))
+      handleEditState(editRecord.amountFormatted)
       updateSubcategory(editRecord.subCategory)
       updateTags(editRecord.tag)
       if (editRecord.indebtedPeople) {
