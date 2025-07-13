@@ -1,5 +1,7 @@
 import axios from "axios";
-import { CreateExpenseData, CreateExpensePayload, CreateIncomeData, CreateIncomePayload } from "../types/records.types";
+import { BankMovement, CreateExpenseData, CreateExpensePayload, CreateIncomeData, CreateIncomePayload } from "../types/records.types";
+import { addToLocalStorage } from "../lib/local-storage.lib";
+import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 
 export const createExpenseCb = (data: CreateExpensePayload, accessToken: string): Promise<CreateExpenseData> => {
   const uri = process.env.NEXT_PUBLIC_BACKEND_URI
@@ -29,4 +31,12 @@ export const createIncomeCb = (data: CreateIncomePayload, accessToken: string): 
       Authorization: `Bearer ${accessToken}`,
     },
   })
+}
+
+export const saveEditRecordLS = (recordToBeEdited: BankMovement) => {
+  try {
+    addToLocalStorage({ prop: EDIT_RECORD_KEY, newInfo: { record: recordToBeEdited } })
+  } catch (error) {
+    console.log('error while saving record to be edited in local storage', error)
+  }
 }
