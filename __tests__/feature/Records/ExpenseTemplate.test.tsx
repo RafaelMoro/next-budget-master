@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
-import { ExpenseTemplate } from "@/features/Records/ExpenseTemplate";
+import { ExpenseTemplate } from "@/features/Records/ExpenseTemplate/ExpenseTemplate";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import {QueryProviderWrapper} from "@/app/QueryProviderWrapper";
 import { mockCategories } from "../../mocks/categories.mock";
