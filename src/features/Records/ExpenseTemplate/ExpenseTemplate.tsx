@@ -10,18 +10,18 @@ import { Toaster, toast } from "sonner";
 import { Button, CheckIcon, Label, Spinner, Textarea, TextInput, ToggleSwitch } from "flowbite-react"
 import clsx from "clsx"
 
-import { BankMovement, CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { BankMovement, CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, EditExpensePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { Category, CategoryShown } from "@/shared/types/categories.types"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
-import { createExpenseCb } from "@/shared/utils/records.utils"
+import { createExpenseCb, editExpenseCb } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError, SelectedAccountLS } from "@/shared/types/global.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
+import { CREATE_EXPENSE_INCOME_ERROR, EDIT_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../../Categories/TransactionCategorizerDropdown"
 import { ManageTagsModal } from "../ManageTagsModal"
@@ -95,7 +95,9 @@ export const ExpenseTemplate = ({
     resolver: yupResolver(IncomeExpenseSchema)
   })
 
-  const { mutate: createExpense, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
+  const {
+    mutate: createExpense, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, isIdle: isIdleCreate, error: errorCreate
+  } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
     mutationFn: (data) => createExpenseCb(data, accessToken),
     onSuccess: () => {
       setTimeout(() => {
@@ -103,7 +105,22 @@ export const ExpenseTemplate = ({
       }, 1000)
     }
   })
-  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+  const {
+    mutate: editExpense, isError: isErrorEdit, isPending: isPendingEdit, isSuccess: isSuccessEdit, isIdle: isIdleEdit, error: errorEdit
+  } = useMutation<CreateExpenseData, CreateExpenseError, EditExpensePayload>({
+    mutationFn: (data) => editExpenseCb(data, accessToken),
+    onSuccess: () => {
+      setTimeout(() => {
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
+    }
+  })
+  const isPending = isPendingCreate || isPendingEdit
+  const isSuccess = isSuccessCreate || isSuccessEdit
+  const isIdle = isIdleCreate || isIdleEdit
+  const isError = isErrorCreate || isErrorEdit
+  const messageErrorCreate = (errorCreate as unknown as GeneralError)?.response?.data?.error?.message
+  const messageErrorEdit = (errorEdit as unknown as GeneralError)?.response?.data?.error?.message
 
   useEffect(() => {
     // Init state to edit expense
@@ -138,11 +155,18 @@ export const ExpenseTemplate = ({
   }, [editRecord])
 
   useEffect(() => {
-    if (isError && messageError) {
+    if (isErrorCreate && messageErrorCreate) {
       toast.error(CREATE_EXPENSE_INCOME_ERROR);
       return
     }
-  }, [isError, messageError])
+  }, [isErrorCreate, messageErrorCreate])
+
+  useEffect(() => {
+    if (isErrorEdit && messageErrorEdit) {
+      toast.error(EDIT_EXPENSE_INCOME_ERROR);
+      return
+    }
+  }, [isErrorEdit, messageErrorEdit])
 
   useEffect(() => {
     if (detailedErrorCategories?.cause === 'connection' || detailedErrorBudgets?.cause === 'connection') {
@@ -181,6 +205,16 @@ export const ExpenseTemplate = ({
         tag: tags.current,
         typeOfRecord: 'expense'
       }
+
+      if (editRecord?.shortName) {
+        const payloadEdit: EditExpensePayload = {
+          ...payload,
+          recordId: editRecord._id
+        }
+        editExpense(payloadEdit)
+        return
+      }
+
       createExpense(payload)
     }
   }
