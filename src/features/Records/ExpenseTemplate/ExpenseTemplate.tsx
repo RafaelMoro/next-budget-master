@@ -21,7 +21,6 @@ import { createExpenseCb } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError, SelectedAccountLS } from "@/shared/types/global.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { TransactionCategorizerDropdown } from "../../Categories/TransactionCategorizerDropdown"
@@ -36,6 +35,7 @@ import { Budget, SelectBudget } from "@/shared/types/budgets.types"
 import { useHandleBudgets } from "@/shared/hooks/useHandleBudgets"
 import { SelectBudgetDropdown } from "../../Budgets/SelectBudget"
 import { BUDGETS_FETCH_ERROR } from "@/shared/constants/budgets.constants"
+import { CancelButtonExpenseTemplate } from "./CancelButtonExpenseTemplate"
 
 interface ExpenseTemplateProps {
   categories: Category[]
@@ -261,7 +261,7 @@ export const ExpenseTemplate = ({
             </FurtherDetailsAccordeon>
           )}
           <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
-            <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
+            <CancelButtonExpenseTemplate action={editRecord?.shortName ? "edit" : "create"} />
             <Button
               className="hover:cursor-pointer"
               disabled={isPending || isSuccess || openTagModal}
