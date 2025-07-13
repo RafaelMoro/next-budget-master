@@ -12,7 +12,7 @@ import { categoryIcons } from "@/shared/constants/categories.constants";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon";
 import { saveEditRecordLS } from "@/shared/utils/records.utils";
-import { CREATE_RECORD_ROUTE } from "@/shared/constants/Global.constants";
+import { EDIT_EXPENSE_ROUTE } from "@/shared/constants/Global.constants";
 
 interface RecordsPreviewDrawerProps {
   record: BankMovement | null;
@@ -58,7 +58,7 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
 
   const handleEditRecord = () => {
     saveEditRecordLS(record)
-    router.push(CREATE_RECORD_ROUTE)
+    router.push(EDIT_EXPENSE_ROUTE)
   }
 
   return (

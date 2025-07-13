@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BankMovement, CreateExpenseData, CreateExpensePayload, CreateIncomeData, CreateIncomePayload } from "../types/records.types";
-import { addToLocalStorage } from "../lib/local-storage.lib";
+import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 
 export const createExpenseCb = (data: CreateExpensePayload, accessToken: string): Promise<CreateExpenseData> => {
@@ -38,5 +38,13 @@ export const saveEditRecordLS = (recordToBeEdited: BankMovement) => {
     addToLocalStorage({ prop: EDIT_RECORD_KEY, newInfo: { record: recordToBeEdited } })
   } catch (error) {
     console.log('error while saving record to be edited in local storage', error)
+  }
+}
+
+export const resetEditRecordLS = () => {
+  try {
+    removeFromLocalStorage({ prop: "edit-record" })
+  } catch (error) {
+    console.log('error while removing record to be edited in local storage', error)
   }
 }

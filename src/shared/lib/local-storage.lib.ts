@@ -54,6 +54,12 @@ export function addToLocalStorage({ newInfo, prop }: { newInfo: object, prop?: s
   return newLocalStorage;
 }
 
+export function removeFromLocalStorage({ prop }: { prop: keyof BudgetMasterLocalStorage }) {
+  const localStorageInfo = getLocalStorageInfo();
+  const { [prop]: _, ...newLocalStorage } = localStorageInfo;
+  saveInfoToLocalStorage(newLocalStorage);
+}
+
 export function resetLocalStorage() {
   saveInfoToLocalStorage({});
 }
