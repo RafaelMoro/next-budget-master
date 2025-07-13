@@ -89,6 +89,7 @@ export const ExpenseTemplate = ({
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -125,6 +126,8 @@ export const ExpenseTemplate = ({
   useEffect(() => {
     // Init state to edit expense
     if (editRecord) {
+      setValue('shortDescription', editRecord?.shortName)
+      setValue('description', editRecord?.description)
       setDate(new Date(editRecord.date))
       handleEditState(editRecord.amountFormatted)
       updateSubcategory(editRecord.subCategory)
@@ -241,7 +244,6 @@ export const ExpenseTemplate = ({
             <TextInput
               data-testid="shortDescription"
               id="shortDescription"
-              defaultValue={editRecord?.shortName ?? ''}
               type="text"
               {...register("shortDescription")}
               />
@@ -253,7 +255,7 @@ export const ExpenseTemplate = ({
             <div className="mb-2 block">
               <Label htmlFor="description">Descripción (opcional)</Label>
             </div>
-            <Textarea id="description" defaultValue={editRecord?.description ?? ''} rows={4} {...register("description")} />
+            <Textarea id="description" rows={4} {...register("description")} />
             { errors?.description?.message && (
               <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
             )}
