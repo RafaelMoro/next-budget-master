@@ -70,6 +70,7 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
             detailedErrorCategories={errorCategories}
             detailedErrorBudgets={errorBudgets}
             selectedAccLS={selectedAccLS}
+            editRecord={null}
           />
         )}
         { subscreen === 'income' && (

@@ -10,12 +10,12 @@ import { Toaster, toast } from "sonner";
 import { Button, CheckIcon, Label, Spinner, Textarea, TextInput, ToggleSwitch } from "flowbite-react"
 import clsx from "clsx"
 
-import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { BankMovement, CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
-import { Category } from "@/shared/types/categories.types"
+import { Category, CategoryShown } from "@/shared/types/categories.types"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { createExpenseCb } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
@@ -32,7 +32,7 @@ import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { PersonalDebtManager } from "../IndebtedPeople/PersonalDebtManager"
 import { CREDIT_ACCOUNT_TYPE } from "@/shared/types/accounts.types"
-import { Budget } from "@/shared/types/budgets.types"
+import { Budget, SelectBudget } from "@/shared/types/budgets.types"
 import { useHandleBudgets } from "@/shared/hooks/useHandleBudgets"
 import { SelectBudgetDropdown } from "../Budgets/SelectBudget"
 import { BUDGETS_FETCH_ERROR } from "@/shared/constants/budgets.constants"
@@ -42,13 +42,21 @@ interface ExpenseTemplateProps {
   budgetsFetched: Budget[]
   selectedAccount: string | null
   selectedAccLS: SelectedAccountLS | null
+  editRecord: BankMovement | null
   accessToken: string
   detailedErrorCategories: DetailedError | null
   detailedErrorBudgets: DetailedError | null
 }
 
 export const ExpenseTemplate = ({
-  categories, budgetsFetched, selectedAccount, accessToken, detailedErrorCategories, detailedErrorBudgets, selectedAccLS
+  categories,
+  budgetsFetched,
+  selectedAccount,
+  accessToken,
+  detailedErrorCategories,
+  detailedErrorBudgets,
+  selectedAccLS,
+  editRecord
 }: ExpenseTemplateProps) => {
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
@@ -94,6 +102,37 @@ export const ExpenseTemplate = ({
     }
   })
   const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+
+  useEffect(() => {
+    // Init state to edit expense
+    if (editRecord) {
+      setDate(new Date(editRecord.date))
+      updateSubcategory(editRecord.subCategory)
+      // updateTags(editRecord.tag)
+      if (editRecord.indebtedPeople) {
+        // addIndebtedPerson(editRecord.indebtedPeople)
+      }
+
+      if (editRecord.category) {
+        const cat: CategoryShown = {
+          name: editRecord.category.categoryName,
+          categoryId: editRecord.category._id
+        }
+        updateCategory(cat)
+      }
+      if (editRecord?.linkedBudgets && editRecord?.linkedBudgets?.length > 0) {
+        const [linkedBudget] = editRecord.linkedBudgets
+        const budget: SelectBudget = {
+          budgetId: linkedBudget._id,
+          name: linkedBudget.name
+        }
+        updateSelectedBudget(budget)
+      }
+      if (editRecord?.isPaid) setIsPaid(editRecord?.isPaid)
+      
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editRecord])
 
   useEffect(() => {
     if (isError && messageError) {

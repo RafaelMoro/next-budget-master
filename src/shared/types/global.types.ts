@@ -7,7 +7,9 @@ export interface YupError {
 
 export type BudgetMasterLocalStorage = {
   'selected-account': SelectedAccountLS
-  'edit-record': BankMovement
+  'edit-record': {
+    record: BankMovement
+  }
 }
 
 export type SelectedAccountLS = {

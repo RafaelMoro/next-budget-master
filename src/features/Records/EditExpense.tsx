@@ -37,7 +37,7 @@ export const EditExpense = ({ resCategories, resBudgets, accessToken, selectedAc
   useEffect(() => {
     const { "edit-record": editRecordGotten, "selected-account": accInfo } = getLocalStorageInfo()
     if (editRecordGotten) {
-      setEditRecord(editRecordGotten)
+      setEditRecord(editRecordGotten.record)
     }
     if (accInfo) {
       setSelectedAccLS(accInfo)
@@ -63,6 +63,7 @@ export const EditExpense = ({ resCategories, resBudgets, accessToken, selectedAc
           detailedErrorCategories={errorCategories}
           detailedErrorBudgets={errorBudgets}
           selectedAccLS={selectedAccLS}
+          editRecord={editRecord}
         />
       </main>
     </div>
