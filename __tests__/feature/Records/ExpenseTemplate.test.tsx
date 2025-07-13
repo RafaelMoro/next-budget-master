@@ -13,17 +13,20 @@ import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { SelectedAccountLS } from "@/shared/types/global.types";
 import { Budget } from "@/shared/types/budgets.types";
 import { mockBudgets } from "../../mocks/budgets.mock";
+import { BankMovement } from "@/shared/types/records.types";
 
 const ExpenseTemplateWrapper = ({
   push,
   categories = [],
   budgetsFetched = [],
-  selectedAccLS = null
+  selectedAccLS = null,
+  editRecord = null
 }: {
   push: () => void;
   categories?: Category[];
   budgetsFetched?: Budget[]
   selectedAccLS?: SelectedAccountLS | null
+  editRecord?: BankMovement | null
 }) => {
   return (
     <QueryProviderWrapper>
@@ -36,6 +39,7 @@ const ExpenseTemplateWrapper = ({
           detailedErrorCategories={null}
           detailedErrorBudgets={null}
           selectedAccLS={selectedAccLS}
+          editRecord={editRecord}
         />
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>
