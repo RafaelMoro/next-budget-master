@@ -206,6 +206,7 @@ export const ExpenseTemplate = ({
             <TextInput
               data-testid="shortDescription"
               id="shortDescription"
+              defaultValue={editRecord?.shortName ?? ''}
               type="text"
               {...register("shortDescription")}
               />
@@ -217,7 +218,7 @@ export const ExpenseTemplate = ({
             <div className="mb-2 block">
               <Label htmlFor="description">Descripción (opcional)</Label>
             </div>
-            <Textarea id="description" rows={4} {...register("description")} />
+            <Textarea id="description" defaultValue={editRecord?.description ?? ''} rows={4} {...register("description")} />
             { errors?.description?.message && (
               <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
             )}
