@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BankMovement, CreateExpenseData, CreateExpensePayload, CreateIncomeData, CreateIncomePayload } from "../types/records.types";
+import { BankMovement, CreateExpenseData, CreateExpensePayload, CreateIncomeData, CreateIncomePayload, EditExpensePayload } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 
@@ -12,6 +12,21 @@ export const createExpenseCb = (data: CreateExpensePayload, accessToken: string)
     throw new Error("Access token is not defined");
   }
   return axios.post(`${uri}/expenses-actions`, data, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
+export const editExpenseCb = (data: EditExpensePayload, accessToken: string): Promise<CreateExpenseData> => {
+  const uri = process.env.NEXT_PUBLIC_BACKEND_URI
+  if (!uri) {
+    throw new Error("Backend URI is not defined");
+  }
+  if (!accessToken) {
+    throw new Error("Access token is not defined");
+  }
+  return axios.put(`${uri}/expenses-actions`, data, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
