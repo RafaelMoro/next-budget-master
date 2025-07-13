@@ -8,6 +8,7 @@ import { resetEditRecordLS } from '@/shared/utils/records.utils'
 import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants'
 import { Button } from 'flowbite-react'
 import { RiArrowLeftLine } from '@remixicon/react'
+import { ExpenseTemplate } from './ExpenseTemplate'
 
 interface EditExpenseProps {
   resCategories: GetCategoriesResponse
@@ -16,7 +17,7 @@ interface EditExpenseProps {
   accessToken: string
 }
 
-export const EditExpense = ({ resCategories, resBudgets }: EditExpenseProps) => {
+export const EditExpense = ({ resCategories, resBudgets, accessToken, selectedAccount }: EditExpenseProps) => {
   const router = useRouter()
   const { categories, detailedError: errorCategories } = resCategories
   const { budgets, detailedError: errorBudgets } = resBudgets
@@ -35,6 +36,18 @@ export const EditExpense = ({ resCategories, resBudgets }: EditExpenseProps) => 
           Volver
         </Button>
       </div>
+      <main className="flex-1 flex flex-col items-center gap-8 min-h-full">
+        <h1 className="text-black dark:text-white text-4xl text-center font-bold">Editar gasto</h1>
+        <ExpenseTemplate
+          budgetsFetched={budgets}
+          categories={categories}
+          selectedAccount={selectedAccount}
+          accessToken={accessToken}
+          detailedErrorCategories={errorCategories}
+          detailedErrorBudgets={errorBudgets}
+          selectedAccLS={null}
+        />
+      </main>
     </div>
   )
 }
