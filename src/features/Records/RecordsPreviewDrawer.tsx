@@ -5,11 +5,14 @@ import { RiCloseFill,
   RiPriceTag3Line } from "@remixicon/react";
 import { Badge, Button, Card, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
 import clsx from "clsx"
+import { useRouter } from 'next/navigation'
 
 import { BankMovement, TypeOfRecord } from "@/shared/types/records.types";
 import { categoryIcons } from "@/shared/constants/categories.constants";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon";
+import { saveEditRecordLS } from "@/shared/utils/records.utils";
+import { CREATE_RECORD_ROUTE } from "@/shared/constants/Global.constants";
 
 interface RecordsPreviewDrawerProps {
   record: BankMovement | null;
@@ -19,6 +22,7 @@ interface RecordsPreviewDrawerProps {
 
 export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPreviewDrawerProps) => {
   const { isMobile } = useMediaQuery()
+  const router = useRouter()
 
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
   const paidStatus = record?.isPaid ? 'Pagado' : 'Sin pagar'
@@ -50,6 +54,11 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
   
   if (!record) {
     return null;
+  }
+
+  const handleEditRecord = () => {
+    saveEditRecordLS(record)
+    router.push(CREATE_RECORD_ROUTE)
   }
 
   return (
@@ -126,7 +135,7 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
         </DrawerItems>
         <footer className="mt-10 lg:mt-0 flex justify-between">
           <Button color="red" outline>Eliminar</Button>
-          <Button>Editar</Button>
+          <Button onClick={handleEditRecord}>Editar</Button>
         </footer>
       </div>
     </Drawer>
