@@ -60,7 +60,6 @@ export const ExpenseTemplate = ({
 }: ExpenseTemplateProps) => {
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
-  console.log('editRecord', editRecord) // Debugging line, can be removed later
 
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [isPaid, setIsPaid] = useState<boolean>(false)
