@@ -112,6 +112,8 @@ export const ExpenseTemplate = ({
     mutationFn: (data) => editExpenseCb(data, accessToken),
     onSuccess: () => {
       setTimeout(() => {
+        // Refetch data after mutation
+        router.refresh()
         router.push(DASHBOARD_ROUTE)
       }, 1000)
     }
