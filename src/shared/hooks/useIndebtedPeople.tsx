@@ -24,6 +24,9 @@ export const useIndebtedPeople = () => {
     setIndebtedPeople(updatedPeople)
     setEditPerson(null)
   }
+  const updateIndebtedPeopleOnEdit = (newIndebtedPeople: IndebtedPeople[]) => {
+    setIndebtedPeople(newIndebtedPeople)
+  }
 
   const openEditModal = (person: IndebtedPeopleUI ) => {
     setEditPerson(person)
@@ -58,6 +61,7 @@ export const useIndebtedPeople = () => {
     indebtedPeopleUI,
     editPerson,
     updateIndebtedPerson,
+    updateIndebtedPeopleOnEdit,
     openEditModal,
     removePerson
   }

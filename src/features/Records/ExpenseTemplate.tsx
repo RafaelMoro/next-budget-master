@@ -60,6 +60,7 @@ export const ExpenseTemplate = ({
 }: ExpenseTemplateProps) => {
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
+  console.log('editRecord', editRecord) // Debugging line, can be removed later
 
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [isPaid, setIsPaid] = useState<boolean>(false)
@@ -70,7 +71,7 @@ export const ExpenseTemplate = ({
   const { budgetsOptions, updateSelectedBudget, selectedBudget, budgets } = useHandleBudgets({ budgetsFetched })
 
   const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI,
-    validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson } = useIndebtedPeople()
+    validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson, updateIndebtedPeopleOnEdit } = useIndebtedPeople()
 
   const asideCss = clsx(
     "w-full flex flex-col gap-12",
@@ -108,9 +109,9 @@ export const ExpenseTemplate = ({
     if (editRecord) {
       setDate(new Date(editRecord.date))
       updateSubcategory(editRecord.subCategory)
-      // updateTags(editRecord.tag)
+      updateTags(editRecord.tag)
       if (editRecord.indebtedPeople) {
-        // addIndebtedPerson(editRecord.indebtedPeople)
+        updateIndebtedPeopleOnEdit(editRecord.indebtedPeople)
       }
 
       if (editRecord.category) {
