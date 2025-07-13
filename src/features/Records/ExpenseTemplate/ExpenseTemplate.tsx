@@ -97,7 +97,7 @@ export const ExpenseTemplate = ({
   })
 
   const {
-    mutate: createExpense, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, isIdle: isIdleCreate, error: errorCreate
+    mutate: createExpense, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, error: errorCreate
   } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
     mutationFn: (data) => createExpenseCb(data, accessToken),
     onSuccess: () => {
@@ -107,7 +107,7 @@ export const ExpenseTemplate = ({
     }
   })
   const {
-    mutate: editExpense, isError: isErrorEdit, isPending: isPendingEdit, isSuccess: isSuccessEdit, isIdle: isIdleEdit, error: errorEdit
+    mutate: editExpense, isError: isErrorEdit, isPending: isPendingEdit, isSuccess: isSuccessEdit, error: errorEdit
   } = useMutation<CreateExpenseData, CreateExpenseError, EditExpensePayload>({
     mutationFn: (data) => editExpenseCb(data, accessToken),
     onSuccess: () => {
@@ -118,7 +118,6 @@ export const ExpenseTemplate = ({
   })
   const isPending = isPendingCreate || isPendingEdit
   const isSuccess = isSuccessCreate || isSuccessEdit
-  const isIdle = isIdleCreate || isIdleEdit
   const isError = isErrorCreate || isErrorEdit
   const messageErrorCreate = (errorCreate as unknown as GeneralError)?.response?.data?.error?.message
   const messageErrorEdit = (errorEdit as unknown as GeneralError)?.response?.data?.error?.message
@@ -303,9 +302,11 @@ export const ExpenseTemplate = ({
               disabled={isPending || isSuccess || openTagModal}
               type="submit"
             >
-              { (isIdle || isError) && buttonText}
-              { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-              { isSuccess && (<CheckIcon data-testid="check-icon" />)}
+              { isPending ? (
+                  <Spinner aria-label="loading reset password budget master" />
+                ) : isSuccess ? (
+                  <CheckIcon data-testid="check-icon" />
+                ) : buttonText }
             </Button>
           </div>
         </form>
