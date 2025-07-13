@@ -279,6 +279,25 @@ describe("ExpenseTemplate", () => {
     })
   })
 
+  it('Given a user with a edit expense, the fields should have the record values', () => {
+    const push = jest.fn();
+    const editRecord = {
+      ...recordMock,
+      shortName: 'Edited Expense',
+      amount: 500,
+      amountFormatted: '$500.00',
+      tag: ['something'],
+      category: mockCategories[0],
+      subCategory: mockCategories[0].subCategories[0],
+    };
+    render(<ExpenseTemplateWrapper push={push} categories={mockCategories} editRecord={editRecord} />);
+
+    expect(screen.getByLabelText(/Pequeña descripción/i)).toHaveValue(editRecord.shortName);
+    expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editRecord.amountFormatted);
+    expect(screen.getByTestId('category-dropdown')).toHaveTextContent(editRecord.category.categoryName);
+    expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editRecord.subCategory);
+  })
+
   describe('Form submission', () => {
     it('Given a user filling correctly the form, it should see the tick in the button', async () => {
       const user = userEvent.setup();
