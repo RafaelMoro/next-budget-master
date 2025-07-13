@@ -56,6 +56,7 @@ export function addToLocalStorage({ newInfo, prop }: { newInfo: object, prop?: s
 
 export function removeFromLocalStorage({ prop }: { prop: keyof BudgetMasterLocalStorage }) {
   const localStorageInfo = getLocalStorageInfo();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { [prop]: _, ...newLocalStorage } = localStorageInfo;
   saveInfoToLocalStorage(newLocalStorage);
 }
