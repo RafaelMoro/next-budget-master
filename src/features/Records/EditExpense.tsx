@@ -9,6 +9,9 @@ import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants'
 import { Button } from 'flowbite-react'
 import { RiArrowLeftLine } from '@remixicon/react'
 import { ExpenseTemplate } from './ExpenseTemplate'
+import { useEffect, useState } from 'react'
+import { SelectedAccountLS } from '@/shared/types/global.types'
+import { getSelectedAccountLocalStorage } from '@/shared/utils/user-info.utils'
 
 interface EditExpenseProps {
   resCategories: GetCategoriesResponse
@@ -26,6 +29,15 @@ export const EditExpense = ({ resCategories, resBudgets, accessToken, selectedAc
     resetEditRecordLS()
     router.push(DASHBOARD_ROUTE)
   }
+
+  const [selectedAccLS, setSelectedAccLS] = useState<SelectedAccountLS | null>(null)
+  
+  useEffect(() => {
+    const accInfo = getSelectedAccountLocalStorage()
+    if (accInfo) {
+      setSelectedAccLS(accInfo)
+    }
+  }, [])
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -45,7 +57,7 @@ export const EditExpense = ({ resCategories, resBudgets, accessToken, selectedAc
           accessToken={accessToken}
           detailedErrorCategories={errorCategories}
           detailedErrorBudgets={errorBudgets}
-          selectedAccLS={null}
+          selectedAccLS={selectedAccLS}
         />
       </main>
     </div>
