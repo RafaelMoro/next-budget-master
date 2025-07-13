@@ -66,6 +66,7 @@ export const ExpenseTemplate = ({
   const [isPaid, setIsPaid] = useState<boolean>(false)
   const toggleDebtPaid = () => setIsPaid((prev) => !prev)
   const isCredit = selectedAccLS?.accountType === CREDIT_ACCOUNT_TYPE
+  const buttonText = editRecord?.shortName ? 'Editar gasto' : 'Crear gasto'
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
   const { budgetsOptions, updateSelectedBudget, selectedBudget, budgets } = useHandleBudgets({ budgetsFetched })
@@ -266,7 +267,7 @@ export const ExpenseTemplate = ({
               disabled={isPending || isSuccess || openTagModal}
               type="submit"
             >
-              { (isIdle || isError) && 'Crear gasto'}
+              { (isIdle || isError) && buttonText}
               { isPending && (<Spinner aria-label="loading reset password budget master" />) }
               { isSuccess && (<CheckIcon data-testid="check-icon" />)}
             </Button>
