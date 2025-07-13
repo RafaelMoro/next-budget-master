@@ -13,6 +13,7 @@ import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon";
 import { saveEditRecordLS } from "@/shared/utils/records.utils";
 import { EDIT_EXPENSE_ROUTE } from "@/shared/constants/Global.constants";
+import { useDashboard } from "@/shared/hooks/useDashboard";
 
 interface RecordsPreviewDrawerProps {
   record: BankMovement | null;
@@ -21,8 +22,9 @@ interface RecordsPreviewDrawerProps {
 }
 
 export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPreviewDrawerProps) => {
-  const { isMobile } = useMediaQuery()
   const router = useRouter()
+  const { isMobile } = useMediaQuery()
+  const { manageSelectedAccountCookie } = useDashboard()
 
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
   const paidStatus = record?.isPaid ? 'Pagado' : 'Sin pagar'
@@ -56,8 +58,10 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
     return null;
   }
 
-  const handleEditRecord = () => {
+  const handleEditRecord = async () => {
+    await manageSelectedAccountCookie()
     saveEditRecordLS(record)
+    // TODO: Change this when editing income or transfer
     router.push(EDIT_EXPENSE_ROUTE)
   }
 
