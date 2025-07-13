@@ -11,7 +11,8 @@ import { RiArrowLeftLine } from '@remixicon/react'
 import { ExpenseTemplate } from './ExpenseTemplate'
 import { useEffect, useState } from 'react'
 import { SelectedAccountLS } from '@/shared/types/global.types'
-import { getSelectedAccountLocalStorage } from '@/shared/utils/user-info.utils'
+import { BankMovement } from '@/shared/types/records.types'
+import { getLocalStorageInfo } from '@/shared/lib/local-storage.lib'
 
 interface EditExpenseProps {
   resCategories: GetCategoriesResponse
@@ -31,9 +32,13 @@ export const EditExpense = ({ resCategories, resBudgets, accessToken, selectedAc
   }
 
   const [selectedAccLS, setSelectedAccLS] = useState<SelectedAccountLS | null>(null)
-  
+  const [editRecord, setEditRecord] = useState<BankMovement | null>(null)
+
   useEffect(() => {
-    const accInfo = getSelectedAccountLocalStorage()
+    const { "edit-record": editRecordGotten, "selected-account": accInfo } = getLocalStorageInfo()
+    if (editRecordGotten) {
+      setEditRecord(editRecordGotten)
+    }
     if (accInfo) {
       setSelectedAccLS(accInfo)
     }
