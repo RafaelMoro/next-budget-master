@@ -1,3 +1,9 @@
+## v0.22.1 (2025-07-14)
+
+### Pull Requests
+[#35](https://github.com/RafaelMoro/next-budget-master/pull/35) | Add reset edit record from LS if error
+
+
 ## v0.22.0 (2025-07-14)
 
 ### Pull Requests
