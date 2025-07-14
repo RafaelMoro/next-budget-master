@@ -17,7 +17,7 @@ import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { Category, CategoryShown } from "@/shared/types/categories.types"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
-import { createExpenseCb, editExpenseCb } from "@/shared/utils/records.utils"
+import { createExpenseCb, editExpenseCb, resetEditRecordLS } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError, SelectedAccountLS } from "@/shared/types/global.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
@@ -109,6 +109,12 @@ export const ExpenseTemplate = ({
     mutate: editExpense, isError: isErrorEdit, isPending: isPendingEdit, isSuccess: isSuccessEdit, error: errorEdit
   } = useMutation<CreateExpenseData, CreateExpenseError, EditExpensePayload>({
     mutationFn: (data) => editExpenseCb(data, accessToken),
+    onError: () => {
+      setTimeout(() => {
+        resetEditRecordLS()
+        router.push(DASHBOARD_ROUTE)
+      }, 1500)
+    },
     onSuccess: () => {
       setTimeout(() => {
         // Refetch data after mutation
