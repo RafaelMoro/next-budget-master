@@ -1,4 +1,5 @@
 import { AccountTypes } from "./accounts.types";
+import { BankMovement } from "./records.types";
 
 export interface YupError {
   message: string;
@@ -6,6 +7,9 @@ export interface YupError {
 
 export type BudgetMasterLocalStorage = {
   'selected-account': SelectedAccountLS
+  'edit-record': {
+    record: BankMovement
+  }
 }
 
 export type SelectedAccountLS = {

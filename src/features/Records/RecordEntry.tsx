@@ -6,9 +6,10 @@ import { categoryIcons } from "@/shared/constants/categories.constants";
 
 interface AccountEntryProps {
   record: BankMovement;
+  handleOpenRecordPreviewDrawer: (passedRecord: BankMovement) => void
 }
 
-export const RecordEntry = ({ record }: AccountEntryProps) => {
+export const RecordEntry = ({ record, handleOpenRecordPreviewDrawer }: AccountEntryProps) => {
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
   const priceClass = clsx(
     'col-start-2 col-end-3 row-start-3 row-end-4',
@@ -26,17 +27,17 @@ export const RecordEntry = ({ record }: AccountEntryProps) => {
   }
   const showBadgeDict: Record<TypeOfRecord, string> = {
     expense: expenseTagText,
-    income: 'Pagado',
+    income: 'Ingreso',
     transfer: 'Transferencia'
   }
   const badgeColorDict: Record<TypeOfRecord, string> = {
     expense: badgeColorGreen,
-    income: 'success',
+    income: 'purple',
     transfer: 'info'
   }
 
   return (
-    <article className="md:p-2 rounded-lg grid grid-rows-3 grid-view-records gap-x-2 transition-colors duration-200 hover:bg-gray-200 dark:hover:bg-gray-800 cursor-pointer">
+    <article onClick={() => handleOpenRecordPreviewDrawer(record)} className="md:p-2 rounded-lg grid grid-rows-3 grid-view-records gap-x-2 transition-colors duration-200 hover:bg-gray-200 dark:hover:bg-gray-800 cursor-pointer">
       <span className="col-span-3 text-center text-gray-600 dark:text-gray-400 text-sm">{record.fullDate} {record.formattedTime}</span>
       <div className="col-start-1 col-end-2 row-start-2 row-end-4 flex items-center">
         <Icon />

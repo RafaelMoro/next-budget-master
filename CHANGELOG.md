@@ -1,3 +1,27 @@
+## v0.22.1 (2025-07-14)
+
+### Pull Requests
+[#35](https://github.com/RafaelMoro/next-budget-master/pull/35) | Add reset edit record from LS if error
+
+
+## v0.22.0 (2025-07-14)
+
+### Pull Requests
+[#34](https://github.com/RafaelMoro/next-budget-master/pull/34) | Edit Expense
+
+
+## v0.21.0 (2025-07-12)
+
+### Pull Requests
+[#33](https://github.com/RafaelMoro/next-budget-master/pull/33) | Add record preview drawer
+
+
+## v0.20.0 (2025-07-12)
+
+### Pull Requests
+[#32](https://github.com/RafaelMoro/next-budget-master/pull/32) | Add income template
+
+
 ## v0.19.0 (2025-07-12)
 
 ### Pull Requests

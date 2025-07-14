@@ -10,45 +10,53 @@ import { Toaster, toast } from "sonner";
 import { Button, CheckIcon, Label, Spinner, Textarea, TextInput, ToggleSwitch } from "flowbite-react"
 import clsx from "clsx"
 
-import { CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, CreateExpenseSchema } from "@/shared/types/records.types"
+import { BankMovement, CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, EditExpensePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
-import { Category } from "@/shared/types/categories.types"
+import { Category, CategoryShown } from "@/shared/types/categories.types"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
-import { createExpenseCb } from "@/shared/utils/records.utils"
+import { createExpenseCb, editExpenseCb, resetEditRecordLS } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError, SelectedAccountLS } from "@/shared/types/global.types"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
-import { LinkButton } from "@/shared/ui/atoms/LinkButton"
-import { CREATE_EXPENSE_ERROR } from "@/shared/constants/records.constants"
-import { CATEGORY_FETCH_ERROR } from "@/shared/constants/categories.constants"
-import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
-import { ManageTagsModal } from "./ManageTagsModal"
+import { CREATE_EXPENSE_INCOME_ERROR, EDIT_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
+import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
+import { TransactionCategorizerDropdown } from "../../Categories/TransactionCategorizerDropdown"
+import { ManageTagsModal } from "../ManageTagsModal"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useIndebtedPeople } from "@/shared/hooks/useIndebtedPeople"
-import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
+import { FurtherDetailsAccordeon } from "../FurtherDetailsAccordeon"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
-import { PersonalDebtManager } from "../IndebtedPeople/PersonalDebtManager"
+import { PersonalDebtManager } from "../../IndebtedPeople/PersonalDebtManager"
 import { CREDIT_ACCOUNT_TYPE } from "@/shared/types/accounts.types"
-import { Budget } from "@/shared/types/budgets.types"
+import { Budget, SelectBudget } from "@/shared/types/budgets.types"
 import { useHandleBudgets } from "@/shared/hooks/useHandleBudgets"
-import { SelectBudgetDropdown } from "../Budgets/SelectBudget"
+import { SelectBudgetDropdown } from "../../Budgets/SelectBudget"
 import { BUDGETS_FETCH_ERROR } from "@/shared/constants/budgets.constants"
+import { CancelButtonExpenseTemplate } from "./CancelButtonExpenseTemplate"
 
 interface ExpenseTemplateProps {
   categories: Category[]
   budgetsFetched: Budget[]
   selectedAccount: string | null
   selectedAccLS: SelectedAccountLS | null
+  editRecord: BankMovement | null
   accessToken: string
   detailedErrorCategories: DetailedError | null
   detailedErrorBudgets: DetailedError | null
 }
 
 export const ExpenseTemplate = ({
-  categories, budgetsFetched, selectedAccount, accessToken, detailedErrorCategories, detailedErrorBudgets, selectedAccLS
+  categories,
+  budgetsFetched,
+  selectedAccount,
+  accessToken,
+  detailedErrorCategories,
+  detailedErrorBudgets,
+  selectedAccLS,
+  editRecord
 }: ExpenseTemplateProps) => {
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
@@ -57,12 +65,13 @@ export const ExpenseTemplate = ({
   const [isPaid, setIsPaid] = useState<boolean>(false)
   const toggleDebtPaid = () => setIsPaid((prev) => !prev)
   const isCredit = selectedAccLS?.accountType === CREDIT_ACCOUNT_TYPE
+  const buttonText = editRecord?.shortName ? 'Editar gasto' : 'Crear gasto'
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
   const { budgetsOptions, updateSelectedBudget, selectedBudget, budgets } = useHandleBudgets({ budgetsFetched })
 
   const { addIndebtedPerson, openIndebtedPeopleModal, toggleIndebtedPeopleModal, indebtedPeople, indebtedPeopleUI,
-    validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson } = useIndebtedPeople()
+    validatePersonExist, openEditModal, removePerson, editPerson, updateIndebtedPerson, updateIndebtedPeopleOnEdit } = useIndebtedPeople()
 
   const asideCss = clsx(
     "w-full flex flex-col gap-12",
@@ -70,7 +79,7 @@ export const ExpenseTemplate = ({
     { "max-w-2xl": indebtedPeopleUI.length > 0 }
   )
 
-  const { handleChange, currencyState, errorAmount, validateZeroAmount } = useCurrencyField({
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState } = useCurrencyField({
     amount: null,
   })
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
@@ -79,13 +88,16 @@ export const ExpenseTemplate = ({
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(CreateExpenseSchema)
+    resolver: yupResolver(IncomeExpenseSchema)
   })
 
-  const { mutate: createExpense, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
+  const {
+    mutate: createExpense, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, error: errorCreate
+  } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
     mutationFn: (data) => createExpenseCb(data, accessToken),
     onSuccess: () => {
       setTimeout(() => {
@@ -93,14 +105,77 @@ export const ExpenseTemplate = ({
       }, 1000)
     }
   })
-  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+  const {
+    mutate: editExpense, isError: isErrorEdit, isPending: isPendingEdit, isSuccess: isSuccessEdit, error: errorEdit
+  } = useMutation<CreateExpenseData, CreateExpenseError, EditExpensePayload>({
+    mutationFn: (data) => editExpenseCb(data, accessToken),
+    onError: () => {
+      setTimeout(() => {
+        resetEditRecordLS()
+        router.push(DASHBOARD_ROUTE)
+      }, 1500)
+    },
+    onSuccess: () => {
+      setTimeout(() => {
+        // Refetch data after mutation
+        router.refresh()
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
+    }
+  })
+  const isPending = isPendingCreate || isPendingEdit
+  const isSuccess = isSuccessCreate || isSuccessEdit
+  const isError = isErrorCreate || isErrorEdit
+  const messageErrorCreate = (errorCreate as unknown as GeneralError)?.response?.data?.error?.message
+  const messageErrorEdit = (errorEdit as unknown as GeneralError)?.response?.data?.error?.message
 
   useEffect(() => {
-    if (isError && messageError) {
-      toast.error(CREATE_EXPENSE_ERROR);
+    // Init state to edit expense
+    if (editRecord) {
+      setValue('shortDescription', editRecord?.shortName)
+      setValue('description', editRecord?.description)
+      setDate(new Date(editRecord.date))
+      handleEditState(editRecord.amountFormatted)
+      updateSubcategory(editRecord.subCategory)
+      updateTags(editRecord.tag)
+      if (editRecord.indebtedPeople) {
+        updateIndebtedPeopleOnEdit(editRecord.indebtedPeople)
+      }
+
+      if (editRecord.category) {
+        const cat: CategoryShown = {
+          name: editRecord.category.categoryName,
+          categoryId: editRecord.category._id
+        }
+        updateCategory(cat)
+      }
+      if (editRecord?.linkedBudgets && editRecord?.linkedBudgets?.length > 0) {
+        const [linkedBudget] = editRecord.linkedBudgets
+        const budget: SelectBudget = {
+          budgetId: linkedBudget._id,
+          name: linkedBudget.name
+        }
+        updateSelectedBudget(budget)
+      }
+      if (editRecord?.isPaid) setIsPaid(editRecord?.isPaid)
+      
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editRecord])
+
+  useEffect(() => {
+    if (isErrorCreate && messageErrorCreate) {
+      toast.error(CREATE_EXPENSE_INCOME_ERROR);
       return
     }
-  }, [isError, messageError])
+  }, [isErrorCreate, messageErrorCreate])
+
+  useEffect(() => {
+    if (isErrorEdit && messageErrorEdit) {
+      toast.error(EDIT_EXPENSE_INCOME_ERROR);
+      return
+    }
+  }, [isErrorEdit, messageErrorEdit])
 
   useEffect(() => {
     if (detailedErrorCategories?.cause === 'connection' || detailedErrorBudgets?.cause === 'connection') {
@@ -114,10 +189,10 @@ export const ExpenseTemplate = ({
 
   const onSubmit: SubmitHandler<CreateExpenseDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
-      updateCategoryError('Por favor, seleccione una categoría.')
+      updateCategoryError(CATEGORY_REQUIRED)
     }
     if (!subcategory) {
-      updateSubcategoryError('Por favor, seleccione una subcategoría.')
+      updateSubcategoryError(SUBCATEGORY_REQUIRED)
     }
     validateZeroAmount({ amountState: currencyState })
 
@@ -139,6 +214,16 @@ export const ExpenseTemplate = ({
         tag: tags.current,
         typeOfRecord: 'expense'
       }
+
+      if (editRecord?.shortName) {
+        const payloadEdit: EditExpensePayload = {
+          ...payload,
+          recordId: editRecord._id
+        }
+        editExpense(payloadEdit)
+        return
+      }
+
       createExpense(payload)
     }
   }
@@ -218,15 +303,17 @@ export const ExpenseTemplate = ({
             </FurtherDetailsAccordeon>
           )}
           <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
-            <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
+            <CancelButtonExpenseTemplate action={editRecord?.shortName ? "edit" : "create"} />
             <Button
               className="hover:cursor-pointer"
               disabled={isPending || isSuccess || openTagModal}
               type="submit"
             >
-              { (isIdle || isError) && 'Crear gasto'}
-              { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-              { isSuccess && (<CheckIcon data-testid="check-icon" />)}
+              { isPending ? (
+                  <Spinner aria-label="loading reset password budget master" />
+                ) : isSuccess ? (
+                  <CheckIcon data-testid="check-icon" />
+                ) : buttonText }
             </Button>
           </div>
         </form>

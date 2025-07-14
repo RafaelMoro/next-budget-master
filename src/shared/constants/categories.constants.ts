@@ -33,3 +33,7 @@ export const categoryIcons: Record<CategoriesIcons, ElementType> = {
 }
 
 export const CATEGORY_FETCH_ERROR = 'Error al obtener las categorías. Por favor, inténtalo más tarde.';
+
+// Form Validation errors
+export const CATEGORY_REQUIRED = 'Por favor, seleccione una categoría.'
+export const SUBCATEGORY_REQUIRED = 'Por favor, seleccione una subcategoría.';
