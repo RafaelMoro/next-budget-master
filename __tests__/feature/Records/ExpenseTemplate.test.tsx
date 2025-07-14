@@ -324,9 +324,13 @@ describe("ExpenseTemplate", () => {
     const editRecord = {
       ...recordMock,
       shortName: 'Edited Expense',
+      description: 'a edited expense description',
       amount: 500,
       amountFormatted: '$500.00',
       tag: ['something'],
+      indebtedPeople: [
+        { name: 'John', amount: 12, amountPaid: 0, isPaid: false }
+      ],
       category: mockCategories[0],
       subCategory: mockCategories[0].subCategories[0],
     };
@@ -334,9 +338,14 @@ describe("ExpenseTemplate", () => {
 
     expect(screen.getByLabelText(/Pequeña descripción/i)).toHaveValue(editRecord.shortName);
     expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editRecord.amountFormatted);
+    expect(screen.getByLabelText(/Descripción \(opcional\)/i)).toHaveValue(editRecord.description);
     expect(screen.getByTestId('category-dropdown')).toHaveTextContent(editRecord.category.categoryName);
     expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editRecord.subCategory);
+
+    // tag
     expect(screen.getByText('something')).toBeInTheDocument();
+    // indebted people
+    expect(screen.getByText('John')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /editar gasto/i })).toBeInTheDocument();
 
