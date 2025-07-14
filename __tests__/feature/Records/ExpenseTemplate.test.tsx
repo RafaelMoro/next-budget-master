@@ -7,7 +7,7 @@ import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterCon
 import {QueryProviderWrapper} from "@/app/QueryProviderWrapper";
 import { mockCategories } from "../../mocks/categories.mock";
 import { Category } from "@/shared/types/categories.types";
-import { recordMock } from "../../mocks/records.mock";
+import { editRecord, recordMock } from "../../mocks/records.mock";
 import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { SelectedAccountLS } from "@/shared/types/global.types";
@@ -321,30 +321,16 @@ describe("ExpenseTemplate", () => {
       }),
     });
     const push = jest.fn();
-    const editRecord = {
-      ...recordMock,
-      shortName: 'Edited Expense',
-      description: 'a edited expense description',
-      amount: 500,
-      amountFormatted: '$500.00',
-      tag: ['something'],
-      indebtedPeople: [
-        { name: 'John', amount: 12, amountPaid: 0, isPaid: false }
-      ],
-      linkedBudgets: [mockBudgets[0]],
-      category: mockCategories[0],
-      subCategory: mockCategories[0].subCategories[0],
-    };
     render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editRecord} />);
 
     expect(screen.getByLabelText(/Pequeña descripción/i)).toHaveValue(editRecord.shortName);
     expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editRecord.amountFormatted);
     expect(screen.getByLabelText(/Descripción \(opcional\)/i)).toHaveValue(editRecord.description);
-    expect(screen.getByTestId('category-dropdown')).toHaveTextContent(editRecord.category.categoryName);
+    expect(screen.getByTestId('category-dropdown')).toHaveTextContent('Comida y Bebida');
     expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editRecord.subCategory);
 
     // linkedBudget
-    expect(screen.getByTestId('select-budget-dropdown-button')).toHaveTextContent(editRecord.linkedBudgets[0].name);
+    expect(screen.getByTestId('select-budget-dropdown-button')).toHaveTextContent('Monthly Budget');
     // tag
     expect(screen.getByText('something')).toBeInTheDocument();
     // indebted people

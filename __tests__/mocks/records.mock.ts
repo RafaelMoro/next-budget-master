@@ -1,5 +1,7 @@
 import { Category } from "@/shared/types/categories.types";
 import { BankMovement } from "@/shared/types/records.types";
+import { mockBudgets } from "./budgets.mock";
+import { mockCategories } from "./categories.mock";
 
 const categoryMock: Category = {
   _id: "65f3be727c46232bf19e7d00",
@@ -33,6 +35,20 @@ export const recordMock: BankMovement ={
   isPaid: false,
   linkedBudgets: [],
 }
+export const editRecord: BankMovement = {
+  ...recordMock,
+  shortName: 'Edited Expense',
+  description: 'a edited expense description',
+  amount: 500,
+  amountFormatted: '$500.00',
+  tag: ['something'],
+  indebtedPeople: [
+    { name: 'John', amount: 12, amountPaid: 0, isPaid: false }
+  ],
+  linkedBudgets: [mockBudgets[0]],
+  category: mockCategories[0],
+  subCategory: mockCategories[0].subCategories[0],
+};
 
 export const paidRecordMock: BankMovement = {
   ...recordMock,
