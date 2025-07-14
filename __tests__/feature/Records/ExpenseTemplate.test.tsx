@@ -391,5 +391,32 @@ describe("ExpenseTemplate", () => {
 
       expect(screen.getByText(CREATE_EXPENSE_INCOME_ERROR)).toBeInTheDocument();
     })
+
+    it('Given a user filling correctly the form to edit an expense, it should see the tick in the button', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.put.mockResolvedValue({
+        error: null,
+        message: ['Expense created', 'Account updated'],
+        success: true,
+        version: "v1.2.0",
+        data: {
+          expense: recordMock
+        },
+      })
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editRecord} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.clear(shortDescriptionInput);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Editar gasto/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByTestId('check-icon')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(push).toHaveBeenCalledWith(DASHBOARD_ROUTE)
+      }, { timeout: 2000 })
+    })
   })
 });
