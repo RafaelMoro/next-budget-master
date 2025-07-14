@@ -58,18 +58,9 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("ExpenseTemplate", () => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation(query => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
+  mockMatchMedia({
+    [QueryMatchMedia.isMobileTablet]: false,
+    [QueryMatchMedia.isDesktop]: false,
   });
 
   it("should show expense template", () => {
@@ -302,8 +293,6 @@ describe("ExpenseTemplate", () => {
     expect(screen.getByText('John')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /editar gasto/i })).toBeInTheDocument();
-
-    // screen.debug(undefined, 1000000)
   })
 
   describe('Form submission', () => {
