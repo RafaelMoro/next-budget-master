@@ -4,6 +4,9 @@ import { RecordsPreviewDrawer } from '@/features/Records/RecordsPreviewDrawer';
 import { useRecordPreview } from '@/shared/hooks/useRecordPreview';
 import { recordMock, paidRecordMock } from '../../mocks/records.mock';
 import { BankMovement } from '@/shared/types/records.types';
+import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
+import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
+import { mockAccounts } from '../../mocks/accounts.mock';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -19,7 +22,7 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-const RecordsPreviewDrawerWrapper = ({ recordProp = recordMock  }: { recordProp?: BankMovement }) => {
+const RecordsPreviewDrawerWrapper = ({ push, recordProp = recordMock  }: { push: () => void; recordProp?: BankMovement }) => {
   const {
     openRecordDrawer,
     record,
@@ -28,21 +31,26 @@ const RecordsPreviewDrawerWrapper = ({ recordProp = recordMock  }: { recordProp?
   } = useRecordPreview();
 
   return (
-    <div>
-      <button onClick={() => handleOpenRecordPreviewDrawer(recordProp)}>Open Drawer</button>
-      <RecordsPreviewDrawer
-        open={openRecordDrawer}
-        handleClose={handleCloseRecordPreviewDrawer}
-        record={record}
-      />
-    </div>
+    <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
+      <div>
+        <button onClick={() => handleOpenRecordPreviewDrawer(recordProp)}>Open Drawer</button>
+        <AppRouterContextProviderMock router={{ push }}>
+          <RecordsPreviewDrawer
+            open={openRecordDrawer}
+            handleClose={handleCloseRecordPreviewDrawer}
+            record={record}
+          />
+        </AppRouterContextProviderMock>
+      </div>
+    </DashboardStoreProvider>
   );
 };
 
 describe('RecordsPreviewDrawer', () => {
   it('should render the drawer with record details when open', async () => {
     const user = userEvent.setup();
-    render(<RecordsPreviewDrawerWrapper />);
+    const push = jest.fn();
+    render(<RecordsPreviewDrawerWrapper push={push} />);
 
     const openButton = screen.getByText('Open Drawer');
     await user.click(openButton);
@@ -60,7 +68,8 @@ describe('RecordsPreviewDrawer', () => {
 
   it('should close the drawer when the close button is clicked', async () => {
     const user = userEvent.setup();
-    render(<RecordsPreviewDrawerWrapper />);
+    const push = jest.fn();
+    render(<RecordsPreviewDrawerWrapper push={push} />);
 
     const openButton = screen.getByText('Open Drawer');
     await user.click(openButton);
@@ -73,7 +82,8 @@ describe('RecordsPreviewDrawer', () => {
 
   it('should display the correct paid status when the record is paid', async () => {
     const user = userEvent.setup();
-    render(<RecordsPreviewDrawerWrapper recordProp={paidRecordMock} />);
+    const push = jest.fn();
+    render(<RecordsPreviewDrawerWrapper recordProp={paidRecordMock}  push={push} />);
 
     const openButton = screen.getByText('Open Drawer');
     await user.click(openButton);

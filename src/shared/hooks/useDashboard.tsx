@@ -14,9 +14,9 @@ export const useDashboard = () => {
     state => state.selectedAccountDisplay
   )
 
-  // Function that checks if the select cookie exists and set it if not, then redirect to create record route.
+  // Function that checks if the select cookie exists and set it if not,
   // This way we avoid on having null selected account in create record on first log in
-  const handleGoCreateRecordRoute = async () => {
+  const manageSelectedAccountCookie = async () => {
     try {
       const selectedAccountCookie = await getAccountCookie()
       if (!selectedAccountCookie && selectedAccountId && selectedAccountDisplay) {
@@ -26,6 +26,14 @@ export const useDashboard = () => {
           accountType: selectedAccountDisplay.type
         })
       }
+    } catch (error) {
+      console.error('Error managing selected account cookie:', error)
+    }
+  }
+
+  const handleGoCreateRecordRoute = async () => {
+    try {
+      await manageSelectedAccountCookie()
       router.push(CREATE_RECORD_ROUTE)
     } catch (error) {
       console.error('Error redirecting create record:', error)
@@ -33,6 +41,7 @@ export const useDashboard = () => {
   }
 
   return {
-    handleGoCreateRecordRoute
+    handleGoCreateRecordRoute,
+    manageSelectedAccountCookie
   }
 }

@@ -7,6 +7,7 @@ export const TRANSFER_ROUTE = 'records/transfer';
 export const NO_RECORDS_FOUND = 'No incomes or expenses found.'
 
 export const CREATE_EXPENSE_INCOME_ERROR = 'Oops! No pudimos registrar el movimiento. Intenta más tarde.'
+export const EDIT_EXPENSE_INCOME_ERROR = 'Oops! No pudimos editar esta transacción. Intenta más tarde.'
 
 export const TAG_REQUIRED_ERROR = 'Por favor, ingrese una etiqueta'
 export const TAG_MIN_LENGTH_ERROR = 'Por favor, ingrese una etiqueta de más de 2 caracteres'

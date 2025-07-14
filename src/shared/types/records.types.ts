@@ -106,6 +106,9 @@ export type CreateExpensePayload = {
   tag: string[];
   typeOfRecord: 'expense'
 }
+export type EditExpensePayload = CreateExpensePayload & {
+  recordId: string;
+}
 
 export type CreateIncomePayload = {
   account: string;

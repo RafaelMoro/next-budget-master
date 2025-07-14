@@ -9,7 +9,7 @@ import { GetCategoriesResponse } from "@/shared/types/categories.types"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { SelectedAccountLS } from "@/shared/types/global.types";
-import { ExpenseTemplate } from "./ExpenseTemplate";
+import { ExpenseTemplate } from "./ExpenseTemplate/ExpenseTemplate";
 import { getSelectedAccountLocalStorage } from "@/shared/utils/user-info.utils"
 import { GetBudgetsResponse } from "@/shared/types/budgets.types"
 import { IncomeTemplate } from "./IncomeTemplate"
@@ -70,6 +70,7 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
             detailedErrorCategories={errorCategories}
             detailedErrorBudgets={errorBudgets}
             selectedAccLS={selectedAccLS}
+            editRecord={null}
           />
         )}
         { subscreen === 'income' && (

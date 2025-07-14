@@ -2,28 +2,32 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
-import { ExpenseTemplate } from "@/features/Records/ExpenseTemplate";
+import { ExpenseTemplate } from "@/features/Records/ExpenseTemplate/ExpenseTemplate";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import {QueryProviderWrapper} from "@/app/QueryProviderWrapper";
 import { mockCategories } from "../../mocks/categories.mock";
 import { Category } from "@/shared/types/categories.types";
-import { recordMock } from "../../mocks/records.mock";
+import { editRecord, recordMock } from "../../mocks/records.mock";
 import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { SelectedAccountLS } from "@/shared/types/global.types";
 import { Budget } from "@/shared/types/budgets.types";
 import { mockBudgets } from "../../mocks/budgets.mock";
+import { BankMovement } from "@/shared/types/records.types";
+import { mockMatchMedia, QueryMatchMedia } from "../../utils-test/record.utils";
 
 const ExpenseTemplateWrapper = ({
   push,
   categories = [],
   budgetsFetched = [],
-  selectedAccLS = null
+  selectedAccLS = null,
+  editRecord = null
 }: {
   push: () => void;
   categories?: Category[];
   budgetsFetched?: Budget[]
   selectedAccLS?: SelectedAccountLS | null
+  editRecord?: BankMovement | null
 }) => {
   return (
     <QueryProviderWrapper>
@@ -36,6 +40,7 @@ const ExpenseTemplateWrapper = ({
           detailedErrorCategories={null}
           detailedErrorBudgets={null}
           selectedAccLS={selectedAccLS}
+          editRecord={editRecord}
         />
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>
@@ -53,18 +58,9 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("ExpenseTemplate", () => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation(query => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
+  mockMatchMedia({
+    [QueryMatchMedia.isMobileTablet]: false,
+    [QueryMatchMedia.isDesktop]: false,
   });
 
   it("should show expense template", () => {
@@ -275,7 +271,35 @@ describe("ExpenseTemplate", () => {
     })
   })
 
+  it('Given a user with a edit expense, the fields should have the record values', () => {
+    mockMatchMedia({
+      [QueryMatchMedia.isMobileTablet]: false,
+      [QueryMatchMedia.isDesktop]: true,
+    });
+    const push = jest.fn();
+    render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editRecord} />);
+
+    expect(screen.getByLabelText(/Pequeña descripción/i)).toHaveValue(editRecord.shortName);
+    expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editRecord.amountFormatted);
+    expect(screen.getByLabelText(/Descripción \(opcional\)/i)).toHaveValue(editRecord.description);
+    expect(screen.getByTestId('category-dropdown')).toHaveTextContent('Comida y Bebida');
+    expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editRecord.subCategory);
+
+    // linkedBudget
+    expect(screen.getByTestId('select-budget-dropdown-button')).toHaveTextContent('Monthly Budget');
+    // tag
+    expect(screen.getByText('something')).toBeInTheDocument();
+    // indebted people
+    expect(screen.getByText('John')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /cancelar/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /editar gasto/i })).toBeInTheDocument();
+  })
+
   describe('Form submission', () => {
+    mockMatchMedia({
+      [QueryMatchMedia.isMobileTablet]: false,
+      [QueryMatchMedia.isDesktop]: true,
+    });
     it('Given a user filling correctly the form, it should see the tick in the button', async () => {
       const user = userEvent.setup();
       const push = jest.fn();
@@ -366,6 +390,33 @@ describe("ExpenseTemplate", () => {
       await user.click(createExpenseButton);
 
       expect(screen.getByText(CREATE_EXPENSE_INCOME_ERROR)).toBeInTheDocument();
+    })
+
+    it('Given a user filling correctly the form to edit an expense, it should see the tick in the button', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.put.mockResolvedValue({
+        error: null,
+        message: ['Expense created', 'Account updated'],
+        success: true,
+        version: "v1.2.0",
+        data: {
+          expense: recordMock
+        },
+      })
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editRecord} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.clear(shortDescriptionInput);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Editar gasto/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByTestId('check-icon')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(push).toHaveBeenCalledWith(DASHBOARD_ROUTE)
+      }, { timeout: 2000 })
     })
   })
 });
