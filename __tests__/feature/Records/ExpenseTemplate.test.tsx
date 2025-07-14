@@ -331,10 +331,11 @@ describe("ExpenseTemplate", () => {
       indebtedPeople: [
         { name: 'John', amount: 12, amountPaid: 0, isPaid: false }
       ],
+      linkedBudgets: [mockBudgets[0]],
       category: mockCategories[0],
       subCategory: mockCategories[0].subCategories[0],
     };
-    render(<ExpenseTemplateWrapper push={push} categories={mockCategories} editRecord={editRecord} />);
+    render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editRecord} />);
 
     expect(screen.getByLabelText(/Pequeña descripción/i)).toHaveValue(editRecord.shortName);
     expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editRecord.amountFormatted);
@@ -342,6 +343,8 @@ describe("ExpenseTemplate", () => {
     expect(screen.getByTestId('category-dropdown')).toHaveTextContent(editRecord.category.categoryName);
     expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editRecord.subCategory);
 
+    // linkedBudget
+    expect(screen.getByTestId('select-budget-dropdown-button')).toHaveTextContent(editRecord.linkedBudgets[0].name);
     // tag
     expect(screen.getByText('something')).toBeInTheDocument();
     // indebted people
