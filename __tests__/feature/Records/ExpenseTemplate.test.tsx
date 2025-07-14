@@ -280,6 +280,46 @@ describe("ExpenseTemplate", () => {
   })
 
   it('Given a user with a edit expense, the fields should have the record values', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation(query => {
+        // isMobileTablet
+        if (query === '(max-width: 1024px)') {
+          return {
+            matches: false, // isMobileTablet
+            media: query,
+            onchange: null,
+            addListener: jest.fn(), // Deprecated
+            removeListener: jest.fn(), // Deprecated
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+            dispatchEvent: jest.fn(),
+          };
+        }
+        if (query === '(min-width: 1024px)') {
+          return {
+            matches: true, // isDesktop
+            media: query,
+            onchange: null,
+            addListener: jest.fn(), // Deprecated
+            removeListener: jest.fn(), // Deprecated
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+            dispatchEvent: jest.fn(),
+          };
+        }
+        return {
+          matches: true,
+          media: query,
+          onchange: null,
+          addListener: jest.fn(), // Deprecated
+          removeListener: jest.fn(), // Deprecated
+          addEventListener: jest.fn(),
+          removeEventListener: jest.fn(),
+          dispatchEvent: jest.fn(),
+        }
+      }),
+    });
     const push = jest.fn();
     const editRecord = {
       ...recordMock,
@@ -296,9 +336,27 @@ describe("ExpenseTemplate", () => {
     expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editRecord.amountFormatted);
     expect(screen.getByTestId('category-dropdown')).toHaveTextContent(editRecord.category.categoryName);
     expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editRecord.subCategory);
+    expect(screen.getByText('something')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /cancelar/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /editar gasto/i })).toBeInTheDocument();
+
+    // screen.debug(undefined, 1000000)
   })
 
   describe('Form submission', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
     it('Given a user filling correctly the form, it should see the tick in the button', async () => {
       const user = userEvent.setup();
       const push = jest.fn();
