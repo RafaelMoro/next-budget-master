@@ -14,6 +14,7 @@ import { SelectedAccountLS } from "@/shared/types/global.types";
 import { Budget } from "@/shared/types/budgets.types";
 import { mockBudgets } from "../../mocks/budgets.mock";
 import { BankMovement } from "@/shared/types/records.types";
+import { mockMatchMedia, QueryMatchMedia } from "../../utils/record.utils";
 
 const ExpenseTemplateWrapper = ({
   push,
@@ -280,45 +281,9 @@ describe("ExpenseTemplate", () => {
   })
 
   it('Given a user with a edit expense, the fields should have the record values', () => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: jest.fn().mockImplementation(query => {
-        // isMobileTablet
-        if (query === '(max-width: 1024px)') {
-          return {
-            matches: false, // isMobileTablet
-            media: query,
-            onchange: null,
-            addListener: jest.fn(), // Deprecated
-            removeListener: jest.fn(), // Deprecated
-            addEventListener: jest.fn(),
-            removeEventListener: jest.fn(),
-            dispatchEvent: jest.fn(),
-          };
-        }
-        if (query === '(min-width: 1024px)') {
-          return {
-            matches: true, // isDesktop
-            media: query,
-            onchange: null,
-            addListener: jest.fn(), // Deprecated
-            removeListener: jest.fn(), // Deprecated
-            addEventListener: jest.fn(),
-            removeEventListener: jest.fn(),
-            dispatchEvent: jest.fn(),
-          };
-        }
-        return {
-          matches: true,
-          media: query,
-          onchange: null,
-          addListener: jest.fn(), // Deprecated
-          removeListener: jest.fn(), // Deprecated
-          addEventListener: jest.fn(),
-          removeEventListener: jest.fn(),
-          dispatchEvent: jest.fn(),
-        }
-      }),
+    mockMatchMedia({
+      [QueryMatchMedia.isMobileTablet]: false,
+      [QueryMatchMedia.isDesktop]: true,
     });
     const push = jest.fn();
     render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editRecord} />);
