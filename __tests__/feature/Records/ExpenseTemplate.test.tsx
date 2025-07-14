@@ -14,7 +14,7 @@ import { SelectedAccountLS } from "@/shared/types/global.types";
 import { Budget } from "@/shared/types/budgets.types";
 import { mockBudgets } from "../../mocks/budgets.mock";
 import { BankMovement } from "@/shared/types/records.types";
-import { mockMatchMedia, QueryMatchMedia } from "../../utils/record.utils";
+import { mockMatchMedia, QueryMatchMedia } from "../../utils-test/record.utils";
 
 const ExpenseTemplateWrapper = ({
   push,
