@@ -10,6 +10,7 @@ import { mockCategories } from '../../mocks/categories.mock';
 import { recordMock } from '../../mocks/records.mock';
 import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants';
 import { CREATE_EXPENSE_INCOME_ERROR } from '@/shared/constants/records.constants';
+import { BankMovement } from '@/shared/types/records.types';
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(() => ({
@@ -35,9 +36,11 @@ Object.defineProperty(window, 'matchMedia', {
 const IncomeTemplateWrapper = ({
   push,
   categories = [],
+  editRecord = null
 }: {
   push: () => void;
   categories?: Category[];
+  editRecord?: BankMovement | null
 }) => {
   return (
     <QueryProviderWrapper>
@@ -47,6 +50,7 @@ const IncomeTemplateWrapper = ({
           selectedAccount="123"
           accessToken="abc"
           detailedErrorCategories={null}
+          editRecord={editRecord}
         />
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>

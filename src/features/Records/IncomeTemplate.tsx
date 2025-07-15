@@ -17,7 +17,7 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { CreateIncomeData, CreateIncomeDataForm, CreateIncomeError, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { BankMovement, CreateIncomeData, CreateIncomeDataForm, CreateIncomeError, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { useManageTags } from "@/shared/hooks/useManageTags"
@@ -33,11 +33,13 @@ interface IncomeTemplateProps {
   selectedAccount: string | null
   accessToken: string
   detailedErrorCategories: DetailedError | null
+  editRecord: BankMovement | null
 }
 
-export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detailedErrorCategories }: IncomeTemplateProps) => {
+export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detailedErrorCategories, editRecord }: IncomeTemplateProps) => {
   const router = useRouter()
   const [date, setDate] = useState<Date | undefined>(new Date())
+  console.log('editRecord', editRecord)
 
   const { handleChange, currencyState, errorAmount,
     validateZeroAmount

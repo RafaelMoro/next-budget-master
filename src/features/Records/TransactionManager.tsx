@@ -79,6 +79,7 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
             selectedAccount={selectedAccount}
             accessToken={accessToken}
             detailedErrorCategories={errorCategories}
+            editRecord={null}
           />
         )}
       </main>
