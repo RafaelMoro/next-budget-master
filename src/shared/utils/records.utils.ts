@@ -2,6 +2,7 @@ import axios from "axios";
 import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
+import { defaultResFetchExpenses } from "../constants/records.constants";
 
 export const createExpenseCb = (data: CreateExpensePayload, accessToken: string): Promise<ExpenseDataResponse> => {
   const uri = process.env.NEXT_PUBLIC_BACKEND_URI
@@ -68,10 +69,16 @@ export const getExpensesByDateCb = async (payload: FetchExpensesDatePayload, acc
     const { month, year, accountId } = payload;
     const uri = process.env.NEXT_PUBLIC_BACKEND_URI
     if (!uri) {
-      throw new Error("Backend URI is not defined");
+      return {
+        ...defaultResFetchExpenses,
+        error: 'Backend URI is not defined"',
+      }
     }
     if (!accessToken) {
-      throw new Error("Access token is not defined");
+      return {
+        ...defaultResFetchExpenses,
+        error: 'Access token is not defined"',
+      }
     }
     const res = await axios.get(`${uri}/expenses-actions/${accountId}/${month}/${year}`, {
       headers: {
@@ -81,7 +88,10 @@ export const getExpensesByDateCb = async (payload: FetchExpensesDatePayload, acc
     return res?.data
   } catch (error) {
     console.error('Error fetching expenses by date:', error);
-    throw new Error((error as Error).message || "Failed to fetch expenses by date");
+    return {
+      ...defaultResFetchExpenses,
+      error: (error as Error).message
+    }
   }
 }
 

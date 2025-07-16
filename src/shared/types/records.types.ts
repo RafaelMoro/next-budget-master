@@ -159,10 +159,10 @@ export interface FetchExpensesDateResponse {
   data: {
     expenses: BankMovement[]
   }
-  error: null;
-  message: string[];
+  error: null | string;
+  message: string[] | null;
   success: boolean;
-  version: string;
+  version: string | null;
 }
 
 export interface ExpenseErrorResponse extends Omit<AxiosError, 'response'> {

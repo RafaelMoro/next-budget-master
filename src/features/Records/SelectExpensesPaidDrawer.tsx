@@ -30,7 +30,8 @@ export const SelectExpensesPaidDrawer = ({ accessToken, accountId }: SelectExpen
     enabled: flag,
     queryFn: () => getExpensesByDateCb({ month: selectedAbbreviatedMonth ?? 'none', year: selectedYear ?? 'none', accountId: accountId ?? 'none' }, accessToken)
   })
-  console.log('data', data)
+  const expenses = data?.data?.expenses ?? []
+  console.log('expenses', expenses)
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
