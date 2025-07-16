@@ -117,6 +117,7 @@ export const ExpenseTemplate = ({
     },
     onSuccess: () => {
       setTimeout(() => {
+        resetEditRecordLS()
         // Refetch data after mutation
         router.refresh()
         router.push(DASHBOARD_ROUTE)
