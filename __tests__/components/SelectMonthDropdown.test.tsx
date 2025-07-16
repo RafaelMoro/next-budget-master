@@ -29,11 +29,14 @@ describe("SelectMonthDropdown", () => {
   it("should display all months in the dropdown when clicked", async () => {
     render(<SelectMonthDropdownWrapper />);
 
-    const dropdownButton = screen.getByRole("button", { name: `${completeMonth}`});
+    const dropdownButton = screen.getByTestId("select-month-dropdown-button");
     await userEvent.click(dropdownButton);
 
-    MONTHS.forEach((month) => {
-      expect(screen.getByText(month)).toBeInTheDocument();
+    const dropdownItems = screen.getAllByRole("menuitem");
+    expect(dropdownItems).toHaveLength(MONTHS.length);
+
+    MONTHS.forEach((month, index) => {
+      expect(dropdownItems[index]).toHaveTextContent(month);
     });
   });
 
