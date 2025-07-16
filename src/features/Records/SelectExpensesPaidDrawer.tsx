@@ -28,6 +28,7 @@ export const SelectExpensesPaidDrawer = ({
   const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
   const drawerDirection = isMobile ? 'bottom' : 'right'
+  const buttonText = selectedExpenses.length > 0 ? 'Administrar gastos': 'Agregar gastos'
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const toggleOpen = () => setIsOpen((prev) => !prev)
@@ -58,7 +59,8 @@ export const SelectExpensesPaidDrawer = ({
       <p className="text-gray-400">
         Puedes asociar este pago con una o varias transacciones para indicar qué estás pagando.
       </p>
-      <Button color="light" className="lg:max-w-max mx-auto" onClick={toggleOpen}>Agregar gastos</Button>
+      { selectedExpenses.length > 0 && (<p className="text-gray-400">Gastos seleccionados: {selectedExpenses.length}</p>) }
+      <Button color="light" className="lg:max-w-max mx-auto" onClick={toggleOpen}>{buttonText}</Button>
       <Drawer className="w-max" open={isOpen} onClose={toggleOpen} position={drawerDirection}>
         <DrawerHeader title="Agregar gastos" />
         <DrawerItems>
