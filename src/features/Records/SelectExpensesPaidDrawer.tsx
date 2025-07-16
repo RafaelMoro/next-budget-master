@@ -1,10 +1,13 @@
 "use client"
 
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
+import { useSelectMonth } from "@/shared/hooks/useSelectMonth"
+import { SelectMonthDropdown } from "@/shared/ui/atoms/SelectMonthDropdown"
 import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
 import { useState } from "react"
 
 export const SelectExpensesPaidDrawer = () => {
+  const { selectedMonth, updateSelectMonth } = useSelectMonth()
   const { isMobile } = useMediaQuery()
   const drawerDirection = isMobile ? 'bottom' : 'right'
 
@@ -21,7 +24,9 @@ export const SelectExpensesPaidDrawer = () => {
       <Drawer open={isOpen} onClose={toggleOpen} position={drawerDirection}>
         <DrawerHeader title="Agregar gastos" />
         <DrawerItems>
-
+          <form>
+            <SelectMonthDropdown selectedMonth={selectedMonth} changeSelectedMonth={updateSelectMonth} />
+          </form>
         </DrawerItems>
       </Drawer>
     </section>
