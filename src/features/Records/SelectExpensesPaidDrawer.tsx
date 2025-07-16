@@ -15,13 +15,14 @@ import { BankMovement } from "@/shared/types/records.types"
 interface SelectExpensesPaidDrawerProps {
   accessToken: string;
   accountId: string | null;
+  selectedExpenses: BankMovement[]
   handleUnselectExpense: (expense: BankMovement) => void
   handleSelectExpense: (expense: BankMovement) => void
   handleFinishSelection: () => void
 }
 
 export const SelectExpensesPaidDrawer = ({
-  accessToken, accountId, handleSelectExpense, handleUnselectExpense, handleFinishSelection,
+  accessToken, accountId, selectedExpenses, handleSelectExpense, handleUnselectExpense, handleFinishSelection,
 }: SelectExpensesPaidDrawerProps) => {
   const { selectedMonth, updateSelectMonth, allMonths, selectedAbbreviatedMonth } = useSelectMonth()
   const { selectedYear, updateSelectYear } = useSelectYear()
@@ -71,6 +72,7 @@ export const SelectExpensesPaidDrawer = ({
               expenses={expenses}
               handleSelectExpense={handleSelectExpense}
               handleUnselectExpense={handleUnselectExpense}
+              selectedExpenses={selectedExpenses}
             />
             <Button onClick={handleClick}>Terminar</Button>
           </div>

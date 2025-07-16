@@ -6,11 +6,12 @@ import { BankMovement } from "@/shared/types/records.types"
 
 interface ExpensesPaidTableProps {
   expenses: BankMovement[]
+  selectedExpenses: BankMovement[]
   handleUnselectExpense: (expense: BankMovement) => void
   handleSelectExpense: (expense: BankMovement) => void
 }
 
-export const ExpensesPaidTable = ({ expenses, handleSelectExpense, handleUnselectExpense }: ExpensesPaidTableProps) => {
+export const ExpensesPaidTable = ({ expenses, selectedExpenses, handleSelectExpense, handleUnselectExpense }: ExpensesPaidTableProps) => {
   const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: BankMovement) => {
     const checkboxChecked = event.target.checked
     if (!checkboxChecked) {
@@ -19,6 +20,7 @@ export const ExpensesPaidTable = ({ expenses, handleSelectExpense, handleUnselec
     }
     handleSelectExpense(expenseSelected)
   }
+  const isSelected = (expenseId: string) => selectedExpenses.some((expense) => expense._id === expenseId);
 
   if (expenses.length === 0) {
     return (
@@ -44,10 +46,12 @@ export const ExpensesPaidTable = ({ expenses, handleSelectExpense, handleUnselec
         </TableHead>
         <TableBody className="divide-y">
           {
-            expenses.length > 0 && expenses.map((expense) => (
+            expenses.length > 0 && expenses.map((expense) => {
+              const isItemSelected = isSelected(expense._id);
+              return (
             <TableRow key={expense._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableCell className="p-4">
-                <Checkbox onChange={(event) => handleCheckboxcChange(event, expense)} />
+                <Checkbox defaultChecked={isItemSelected} onChange={(event) => handleCheckboxcChange(event, expense)} />
               </TableCell>
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {expense.shortName}
@@ -58,7 +62,8 @@ export const ExpensesPaidTable = ({ expenses, handleSelectExpense, handleUnselec
                 { expense.isPaid ? (<CheckIcon />) : (<RiCloseLine />) } 
               </TableCell>
             </TableRow>
-            ))
+            )
+            })
           }
         </TableBody>
       </Table>

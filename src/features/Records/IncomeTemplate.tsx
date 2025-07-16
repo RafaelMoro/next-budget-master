@@ -252,6 +252,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
                 <SelectExpensesPaidDrawer
                   accessToken={accessToken}
                   accountId={selectedAccount}
+                  selectedExpenses={selectedExpenses.current}
                   handleSelectExpense={handleSelectExpense}
                   handleUnselectExpense={handleUnselectExpense}
                   handleFinishSelection={handleFinishSelection}
@@ -285,6 +286,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
           <SelectExpensesPaidDrawer
             accessToken={accessToken}
             accountId={selectedAccount}
+            selectedExpenses={selectedExpenses.current}
             handleSelectExpense={handleSelectExpense}
             handleUnselectExpense={handleUnselectExpense}
             handleFinishSelection={handleFinishSelection}
