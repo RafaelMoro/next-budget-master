@@ -309,51 +309,78 @@ describe('IncomeTemplate', () => {
     })
 
     it('Given a user filling correctly the form, then something went wrong, it should show notification', async () => {
-          const user = userEvent.setup();
-          const push = jest.fn();
-          mockedAxios.post.mockRejectedValue({
-            code: 'ERR_BAD_REQUEST',
-            config: null,
-            message: 'Request failed with status code 401',
-            name: 'AxiosError',
-            request: null,
-            response: {
-              config: null,
-              data: {
-                data: null,
-                error: {
-                  error: 'Bad Request',
-                  message: 'Something went wrong.',
-                  statusCode: 403
-                },
-                message: null,
-                success: false,
-                version: '1.2.0'
-              }
-            }
-          })
-          render(<IncomeTemplateWrapper push={push} categories={mockCategories} />);
-    
-          const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
-          await user.type(shortDescriptionInput, 'Test expense');
-    
-          const categoryButton = screen.getByTestId('category-dropdown');
-          await user.click(categoryButton);
-          const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
-          await user.click(categoryToSelect);
-    
-          const subcategoryButton = screen.getByTestId('subcategory-dropdown');
-          await user.click(subcategoryButton);
-          const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
-          await user.click(subcategoryToSelect);
-    
-          const amountInput = screen.getByLabelText(/Cantidad/i);
-          await user.type(amountInput, '123');
-    
-          const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
-          await user.click(createExpenseButton);
-    
-          expect(screen.getByText(CREATE_EXPENSE_INCOME_ERROR)).toBeInTheDocument();
-        })
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.post.mockRejectedValue({
+        code: 'ERR_BAD_REQUEST',
+        config: null,
+        message: 'Request failed with status code 401',
+        name: 'AxiosError',
+        request: null,
+        response: {
+          config: null,
+          data: {
+            data: null,
+            error: {
+              error: 'Bad Request',
+              message: 'Something went wrong.',
+              statusCode: 403
+            },
+            message: null,
+            success: false,
+            version: '1.2.0'
+          }
+        }
+      })
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      const amountInput = screen.getByLabelText(/Cantidad/i);
+      await user.type(amountInput, '123');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear ingreso/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(CREATE_EXPENSE_INCOME_ERROR)).toBeInTheDocument();
+    })
+
+    it('Given a user filling correctly the form to edit an income, it should see the tick in the button', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.put.mockResolvedValue({
+        error: null,
+        message: ['Income updated', 'Account updated'],
+        success: true,
+        version: "v1.2.0",
+        data: {
+          expense: recordMock
+        },
+      })
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} editRecord={editIncome} />);
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.clear(shortDescriptionInput);
+      await user.type(shortDescriptionInput, 'Test income');
+
+      const editIncomeButton = screen.getByRole('button', { name: /Editar ingreso/i });
+      await user.click(editIncomeButton);
+
+      expect(screen.getByTestId('check-icon')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(push).toHaveBeenCalledWith(DASHBOARD_ROUTE)
+      }, { timeout: 2000 })
+    })
   })
 });
