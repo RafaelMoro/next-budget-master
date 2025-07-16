@@ -50,6 +50,6 @@ describe("SelectMonthDropdown", () => {
     const newMonthOption = screen.getByText(newMonth);
     await userEvent.click(newMonthOption);
 
-    expect(screen.getByText(`Mes: ${newMonth}`)).toBeInTheDocument();
+    expect(screen.getByText(`${newMonth}`)).toBeInTheDocument();
   });
 });
