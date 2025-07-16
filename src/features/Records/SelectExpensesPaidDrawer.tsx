@@ -16,19 +16,19 @@ interface SelectExpensesPaidDrawerProps {
 }
 
 export const SelectExpensesPaidDrawer = ({ accessToken, accountId }: SelectExpensesPaidDrawerProps) => {
-  const { selectedMonth, updateSelectMonth, allMonths } = useSelectMonth()
+  const { selectedMonth, updateSelectMonth, allMonths, selectedAbbreviatedMonth } = useSelectMonth()
   const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
   const drawerDirection = isMobile ? 'bottom' : 'right'
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const toggleOpen = () => setIsOpen((prev) => !prev)
-  const flag = Boolean(selectedMonth && selectedYear && accessToken && accountId)
+  const flag = Boolean(selectedAbbreviatedMonth && selectedYear && accessToken && accountId)
 
   const { data, refetch } = useQuery({
     queryKey: ['expenses-paid'],
     enabled: flag,
-    queryFn: () => getExpensesByDateCb({ month: selectedMonth ?? 'none', year: selectedYear ?? 'none', accountId: accountId ?? 'none' }, accessToken)
+    queryFn: () => getExpensesByDateCb({ month: selectedAbbreviatedMonth ?? 'none', year: selectedYear ?? 'none', accountId: accountId ?? 'none' }, accessToken)
   })
   console.log('data', data)
 
