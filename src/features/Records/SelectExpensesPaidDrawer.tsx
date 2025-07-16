@@ -9,6 +9,7 @@ import { useSelectYear } from "@/shared/hooks/useSelectYear"
 import { SelectMonthDropdown } from "@/shared/ui/atoms/SelectMonthDropdown"
 import { SelectYearDropdown } from "@/shared/ui/atoms/SelectYearDropdown"
 import { getExpensesByDateCb } from "@/shared/utils/records.utils"
+import { ExpensesPaidTable } from "./ExpensesPaid/ExpensesPaidTable"
 
 interface SelectExpensesPaidDrawerProps {
   accessToken: string;
@@ -46,14 +47,17 @@ export const SelectExpensesPaidDrawer = ({ accessToken, accountId }: SelectExpen
         Puedes asociar este pago con una o varias transacciones para indicar qué estás pagando.
       </p>
       <Button color="light" className="lg:max-w-max mx-auto" onClick={toggleOpen}>Agregar gastos</Button>
-      <Drawer className="w-96" open={isOpen} onClose={toggleOpen} position={drawerDirection}>
+      <Drawer className="w-max" open={isOpen} onClose={toggleOpen} position={drawerDirection}>
         <DrawerHeader title="Agregar gastos" />
         <DrawerItems>
-          <form className="flex justify-center gap-3" onSubmit={handleSubmit}>
-            <SelectMonthDropdown allMonths={allMonths} selectedMonth={selectedMonth} changeSelectedMonth={updateSelectMonth} />
-            <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={updateSelectYear} />
-            <Button type="submit" className="max-w-max" outline>Buscar</Button>
-          </form>
+          <div className="flex flex-col gap-5">
+            <form className="flex justify-center gap-3" onSubmit={handleSubmit}>
+              <SelectMonthDropdown allMonths={allMonths} selectedMonth={selectedMonth} changeSelectedMonth={updateSelectMonth} />
+              <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={updateSelectYear} />
+              <Button type="submit" className="max-w-max" outline>Buscar</Button>
+            </form>
+            <ExpensesPaidTable expenses={expenses} />
+          </div>
         </DrawerItems>
       </Drawer>
     </section>
