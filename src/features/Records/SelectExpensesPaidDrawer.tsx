@@ -2,12 +2,15 @@
 
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { useSelectMonth } from "@/shared/hooks/useSelectMonth"
+import { useSelectYear } from "@/shared/hooks/useSelectYear"
 import { SelectMonthDropdown } from "@/shared/ui/atoms/SelectMonthDropdown"
+import { SelectYearDropdown } from "@/shared/ui/atoms/SelectYearDropdown"
 import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
 import { useState } from "react"
 
 export const SelectExpensesPaidDrawer = () => {
   const { selectedMonth, updateSelectMonth } = useSelectMonth()
+  const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
   const drawerDirection = isMobile ? 'bottom' : 'right'
 
@@ -26,6 +29,7 @@ export const SelectExpensesPaidDrawer = () => {
         <DrawerItems>
           <form>
             <SelectMonthDropdown selectedMonth={selectedMonth} changeSelectedMonth={updateSelectMonth} />
+            <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={updateSelectYear} />
           </form>
         </DrawerItems>
       </Drawer>
