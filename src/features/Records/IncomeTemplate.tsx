@@ -83,6 +83,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
     },
     onSuccess: () => {
       setTimeout(() => {
+        resetEditRecordLS()
         // Refetch data after mutation
         router.refresh()
         router.push(DASHBOARD_ROUTE)
