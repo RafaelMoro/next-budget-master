@@ -18,7 +18,7 @@ export const SelectMonthDropdown = ({ selectedMonth, changeSelectedMonth }: Sele
   return (
     <Dropdown label="" renderTrigger={() => (
       <Button data-testid="select-month-dropdown-button" color="light">
-        Mes: {selectedMonth}
+        { selectedMonth ? selectedMonth : 'Mes:' }
         <RiArrowDownSLine />
       </Button>
     )}>

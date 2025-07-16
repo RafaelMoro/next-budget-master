@@ -7,13 +7,13 @@ interface SelectYearDropdownProps {
   changeSelectedYear: (newYear: string) => void
 }
 
-export const SelectYearDropdown = ({ selectedYear: selectedMonth, changeSelectedYear: changeSelectedYear }: SelectYearDropdownProps ) => {
+export const SelectYearDropdown = ({ selectedYear, changeSelectedYear: changeSelectedYear }: SelectYearDropdownProps ) => {
   const { years } = getDateInfo()
 
   return (
     <Dropdown label="" renderTrigger={() => (
       <Button data-testid="select-month-dropdown-button" color="light">
-        Año: {selectedMonth}
+        { selectedYear ? selectedYear : 'Año:' }
         <RiArrowDownSLine />
       </Button>
     )}>
