@@ -1,3 +1,9 @@
+## v0.23.1 (2025-07-16)
+
+### Pull Requests
+[#38](https://github.com/RafaelMoro/next-budget-master/pull/38) | Remove edit record ls success
+
+
 ## v0.23.0 (2025-07-16)
 
 ### Pull Requests
