@@ -8,6 +8,10 @@ interface SelectMonthDropdownProps {
   changeSelectedMonth: (newMonth: CompleteMonthsType) => void
 }
 
+/**
+* Component to select a month from a dropdown.
+* It's meant to be used in the useSelectMonth hook.
+*/
 export const SelectMonthDropdown = ({ allMonths, selectedMonth, changeSelectedMonth }: SelectMonthDropdownProps) => {
   return (
     <Dropdown label="" renderTrigger={() => (

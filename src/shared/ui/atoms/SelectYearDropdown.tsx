@@ -7,6 +7,10 @@ interface SelectYearDropdownProps {
   changeSelectedYear: (newYear: string) => void
 }
 
+/**
+* Component to select a year from a dropdown.
+* It's meant to be used in the useSelectYear hook.
+*/
 export const SelectYearDropdown = ({ selectedYear, changeSelectedYear: changeSelectedYear }: SelectYearDropdownProps ) => {
   const { years } = getDateInfo()
 
