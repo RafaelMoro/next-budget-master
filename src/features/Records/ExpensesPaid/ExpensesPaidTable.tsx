@@ -1,12 +1,25 @@
-import { BankMovement } from "@/shared/types/records.types"
-import { RiCloseLine } from "@remixicon/react"
+import { ChangeEvent } from "react"
 import { Checkbox, CheckIcon, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
+import { RiCloseLine } from "@remixicon/react"
+
+import { BankMovement } from "@/shared/types/records.types"
 
 interface ExpensesPaidTableProps {
   expenses: BankMovement[]
+  handleUnselectExpense: (expense: BankMovement) => void
+  handleSelectExpense: (expense: BankMovement) => void
 }
 
-export const ExpensesPaidTable = ({ expenses }: ExpensesPaidTableProps) => {
+export const ExpensesPaidTable = ({ expenses, handleSelectExpense, handleUnselectExpense }: ExpensesPaidTableProps) => {
+  const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: BankMovement) => {
+    const checkboxChecked = event.target.checked
+    if (!checkboxChecked) {
+      handleUnselectExpense(expenseSelected)
+      return
+    }
+    handleSelectExpense(expenseSelected)
+  }
+
   if (expenses.length === 0) {
     return (
       <div className="w-full">
@@ -34,7 +47,7 @@ export const ExpensesPaidTable = ({ expenses }: ExpensesPaidTableProps) => {
             expenses.length > 0 && expenses.map((expense) => (
             <TableRow key={expense._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableCell className="p-4">
-                <Checkbox />
+                <Checkbox onChange={(event) => handleCheckboxcChange(event, expense)} />
               </TableCell>
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {expense.shortName}

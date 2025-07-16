@@ -28,6 +28,7 @@ import { DetailedError, GeneralError } from "@/shared/types/global.types"
 import { CREATE_EXPENSE_INCOME_ERROR, EDIT_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 import { SelectExpensesPaidDrawer } from "./SelectExpensesPaidDrawer"
+import { useSelectExpensesPaid } from "@/shared/hooks/useSelectExpensesPaid"
 
 interface IncomeTemplateProps {
   categories: Category[]
@@ -48,7 +49,13 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
   })
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
+  const { selectedExpenses, handleSelectExpense, handleUnselectExpense } = useSelectExpensesPaid()
   const { isMobileTablet, isDesktop } = useMediaQuery()
+
+  const handleFinishSelection =() => {
+    console.log('Selected expenses:', selectedExpenses.current)
+    // Here you can handle the selected expenses, e.g., save them or process them further
+  }
 
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
     categoryError, subcategoryError,
@@ -242,7 +249,13 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-                <SelectExpensesPaidDrawer accessToken={accessToken} accountId={selectedAccount} />
+                <SelectExpensesPaidDrawer
+                  accessToken={accessToken}
+                  accountId={selectedAccount}
+                  handleSelectExpense={handleSelectExpense}
+                  handleUnselectExpense={handleUnselectExpense}
+                  handleFinishSelection={handleFinishSelection}
+                />
               </div>
             </FurtherDetailsAccordeon>
           )}
@@ -269,7 +282,13 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         <aside className="w-full flex flex-col gap-12 max-w-xs">
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-          <SelectExpensesPaidDrawer accessToken={accessToken} accountId={selectedAccount} />
+          <SelectExpensesPaidDrawer
+            accessToken={accessToken}
+            accountId={selectedAccount}
+            handleSelectExpense={handleSelectExpense}
+            handleUnselectExpense={handleUnselectExpense}
+            handleFinishSelection={handleFinishSelection}
+          />
         </aside>
       ) }
     </div>

@@ -10,13 +10,19 @@ import { SelectMonthDropdown } from "@/shared/ui/atoms/SelectMonthDropdown"
 import { SelectYearDropdown } from "@/shared/ui/atoms/SelectYearDropdown"
 import { getExpensesByDateCb } from "@/shared/utils/records.utils"
 import { ExpensesPaidTable } from "./ExpensesPaid/ExpensesPaidTable"
+import { BankMovement } from "@/shared/types/records.types"
 
 interface SelectExpensesPaidDrawerProps {
   accessToken: string;
   accountId: string | null;
+  handleUnselectExpense: (expense: BankMovement) => void
+  handleSelectExpense: (expense: BankMovement) => void
+  handleFinishSelection: () => void
 }
 
-export const SelectExpensesPaidDrawer = ({ accessToken, accountId }: SelectExpensesPaidDrawerProps) => {
+export const SelectExpensesPaidDrawer = ({
+  accessToken, accountId, handleSelectExpense, handleUnselectExpense, handleFinishSelection,
+}: SelectExpensesPaidDrawerProps) => {
   const { selectedMonth, updateSelectMonth, allMonths, selectedAbbreviatedMonth } = useSelectMonth()
   const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
@@ -40,6 +46,11 @@ export const SelectExpensesPaidDrawer = ({ accessToken, accountId }: SelectExpen
     refetch()
   }
 
+  const handleClick = () => {
+    handleFinishSelection()
+    toggleOpen()
+  }
+
   return (
     <section className="flex flex-col gap-4 md:mt-6">
       <h4 className="text-xl text-center md:text-start font-semibold">Conecta este pago con tus gastos</h4>
@@ -56,7 +67,12 @@ export const SelectExpensesPaidDrawer = ({ accessToken, accountId }: SelectExpen
               <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={updateSelectYear} />
               <Button type="submit" className="max-w-max" outline>Buscar</Button>
             </form>
-            <ExpensesPaidTable expenses={expenses} />
+            <ExpensesPaidTable
+              expenses={expenses}
+              handleSelectExpense={handleSelectExpense}
+              handleUnselectExpense={handleUnselectExpense}
+            />
+            <Button onClick={handleClick}>Terminar</Button>
           </div>
         </DrawerItems>
       </Drawer>
