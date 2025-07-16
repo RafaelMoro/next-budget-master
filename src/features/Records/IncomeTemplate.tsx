@@ -15,7 +15,6 @@ import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
-import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, IncomeErrorResponse, CreateIncomePayload, IncomeExpenseSchema, EditIncomePayload } from "@/shared/types/records.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
@@ -27,6 +26,7 @@ import { ManageTagsModal } from "./ManageTagsModal"
 import { createIncomeCb, editIncomeCb, resetEditRecordLS } from "@/shared/utils/records.utils"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
 import { CREATE_EXPENSE_INCOME_ERROR, EDIT_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
+import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 
 interface IncomeTemplateProps {
   categories: Category[]
@@ -244,7 +244,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
             </FurtherDetailsAccordeon>
           )}
           <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
-            <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
+            <CancelButtonExpenseTemplate action={editRecord?.shortName ? "edit" : "create"} />
             <Button
               className="hover:cursor-pointer"
               disabled={isPending || isSuccess || openTagModal}
