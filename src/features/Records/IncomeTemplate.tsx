@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query"
 
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
-import { Category } from "@/shared/types/categories.types"
+import { Category, CategoryShown } from "@/shared/types/categories.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
@@ -39,10 +39,8 @@ interface IncomeTemplateProps {
 export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detailedErrorCategories, editRecord }: IncomeTemplateProps) => {
   const router = useRouter()
   const [date, setDate] = useState<Date | undefined>(new Date())
-  console.log('editRecord', editRecord)
 
-  const { handleChange, currencyState, errorAmount,
-    validateZeroAmount
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
     amount: null,
   })
@@ -58,6 +56,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(IncomeExpenseSchema)
@@ -79,6 +78,27 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
       return
     }
   }, [isError, messageError])
+
+  useEffect(() => {
+    // Init state to edit expense
+    if (editRecord) {
+      setValue('shortDescription', editRecord?.shortName)
+      setValue('description', editRecord?.description)
+      setDate(new Date(editRecord.date))
+      handleEditCurrency(editRecord.amountFormatted)
+      updateSubcategory(editRecord.subCategory)
+      updateTags(editRecord.tag)
+
+      if (editRecord.category) {
+        const cat: CategoryShown = {
+          name: editRecord.category.categoryName,
+          categoryId: editRecord.category._id
+        }
+        updateCategory(cat)
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editRecord])
 
   useEffect(() => {
     if (detailedErrorCategories?.cause === 'connection') {
