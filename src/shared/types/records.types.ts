@@ -149,7 +149,7 @@ export interface IncomeDataResponse {
   version: string;
 }
 
-export interface CreateExpenseError extends Omit<AxiosError, 'response'> {
+export interface ExpenseErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;
@@ -157,7 +157,7 @@ export interface CreateExpenseError extends Omit<AxiosError, 'response'> {
   }>;
 }
 
-export interface CreateIncomeError extends Omit<AxiosError, 'response'> {
+export interface IncomeErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;

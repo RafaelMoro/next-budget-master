@@ -17,14 +17,14 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, CreateIncomeError, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, IncomeErrorResponse, CreateIncomePayload, IncomeExpenseSchema, EditIncomePayload } from "@/shared/types/records.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { ManageTagsModal } from "./ManageTagsModal"
-import { createIncomeCb } from "@/shared/utils/records.utils"
+import { createIncomeCb, editIncomeCb, resetEditRecordLS } from "@/shared/utils/records.utils"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
 import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
 
@@ -62,7 +62,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
     resolver: yupResolver(IncomeExpenseSchema)
   })
 
-  const { mutate: createIncome, isError, isPending, isSuccess, isIdle, error } = useMutation<IncomeDataResponse, CreateIncomeError, CreateIncomePayload>({
+  const { mutate: createIncome, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, error: errorCreate } = useMutation<IncomeDataResponse, IncomeErrorResponse, CreateIncomePayload>({
     mutationFn: (data) => createIncomeCb(data, accessToken),
     onSuccess: () => {
       setTimeout(() => {
@@ -70,15 +70,37 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
       }, 1000)
     }
   })
-  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+  const {
+    mutate: editIncome, isError: isErrorEdit, isPending: isPendingEdit, isSuccess: isSuccessEdit, error: errorEdit
+  } = useMutation<IncomeDataResponse, IncomeErrorResponse, EditIncomePayload>({
+    mutationFn: (data) => editIncomeCb(data, accessToken),
+    onError: () => {
+      setTimeout(() => {
+        resetEditRecordLS()
+        router.push(DASHBOARD_ROUTE)
+      }, 1500)
+    },
+    onSuccess: () => {
+      setTimeout(() => {
+        // Refetch data after mutation
+        router.refresh()
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
+    }
+  })
+  const isPending = isPendingCreate || isPendingEdit
+  const isSuccess = isSuccessCreate || isSuccessEdit
+  const isError = isErrorCreate || isErrorEdit
+  const messageErrorCreate = (errorCreate as unknown as GeneralError)?.response?.data?.error?.message
+  const messageErrorEdit = (errorEdit as unknown as GeneralError)?.response?.data?.error?.message
 
   // Handle error message use Effect
   useEffect(() => {
-    if (isError && messageError) {
+    if (isError && messageErrorCreate) {
       toast.error(CREATE_EXPENSE_INCOME_ERROR);
       return
     }
-  }, [isError, messageError])
+  }, [isError, messageErrorCreate])
 
   // Load edit record use Effect
   useEffect(() => {
