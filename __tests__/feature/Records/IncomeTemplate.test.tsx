@@ -7,10 +7,11 @@ import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterCon
 import { IncomeTemplate } from '@/features/Records/IncomeTemplate';
 import { Category } from '@/shared/types/categories.types';
 import { mockCategories } from '../../mocks/categories.mock';
-import { recordMock } from '../../mocks/records.mock';
+import { editIncome, recordMock } from '../../mocks/records.mock';
 import { DASHBOARD_ROUTE } from '@/shared/constants/Global.constants';
 import { CREATE_EXPENSE_INCOME_ERROR } from '@/shared/constants/records.constants';
 import { BankMovement } from '@/shared/types/records.types';
+import { mockMatchMedia, QueryMatchMedia } from '../../utils-test/record.utils';
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(() => ({
@@ -18,20 +19,6 @@ jest.mock('next/headers', () => ({
     set: jest.fn(),
   })),
 }));
-
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // Deprecated
-    removeListener: jest.fn(), // Deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
 
 const IncomeTemplateWrapper = ({
   push,
@@ -61,6 +48,11 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('IncomeTemplate', () => {
+  mockMatchMedia({
+    [QueryMatchMedia.isMobileTablet]: false,
+    [QueryMatchMedia.isDesktop]: false,
+  });
+
   it('should show income template', () => {
     const push = jest.fn();
     render(<IncomeTemplateWrapper push={push} />);
@@ -256,6 +248,24 @@ describe('IncomeTemplate', () => {
       expect(screen.queryByText(/Por favor, ingrese una cantidad mayor a 0/i)).not.toBeInTheDocument();
     })
   })
+
+  it('Given a user with a edit income, the fields should have the record values', () => {
+      mockMatchMedia({
+        [QueryMatchMedia.isMobileTablet]: false,
+        [QueryMatchMedia.isDesktop]: true,
+      });
+      const push = jest.fn();
+      render(<IncomeTemplateWrapper push={push} categories={mockCategories} editRecord={editIncome} />);
+  
+      expect(screen.getByLabelText(/Pequeña descripción/i)).toHaveValue(editIncome.shortName);
+      expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editIncome.amountFormatted);
+      expect(screen.getByLabelText(/Descripción \(opcional\)/i)).toHaveValue(editIncome.description);
+      expect(screen.getByTestId('category-dropdown')).toHaveTextContent('Comida y Bebida');
+      expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editIncome.subCategory);
+
+      // tag
+      expect(screen.getByText('something')).toBeInTheDocument();
+    })
 
   describe('Form submission', () => {
     it('Given a user filling correctly the form, it should see the tick in the button', async () => {
