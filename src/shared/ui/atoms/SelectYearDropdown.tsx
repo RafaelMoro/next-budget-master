@@ -16,7 +16,7 @@ export const SelectYearDropdown = ({ selectedYear, changeSelectedYear: changeSel
 
   return (
     <Dropdown label="" renderTrigger={() => (
-      <Button data-testid="select-month-dropdown-button" color="light">
+      <Button data-testid="select-year-dropdown-button" color="light">
         { selectedYear ? selectedYear : 'Año:' }
         <RiArrowDownSLine />
       </Button>
