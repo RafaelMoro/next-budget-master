@@ -1,14 +1,21 @@
 "use client"
+import { FormEvent, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
 
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { useSelectMonth } from "@/shared/hooks/useSelectMonth"
 import { useSelectYear } from "@/shared/hooks/useSelectYear"
 import { SelectMonthDropdown } from "@/shared/ui/atoms/SelectMonthDropdown"
 import { SelectYearDropdown } from "@/shared/ui/atoms/SelectYearDropdown"
-import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
-import { useState } from "react"
+import { getExpensesByDateCb } from "@/shared/utils/records.utils"
 
-export const SelectExpensesPaidDrawer = () => {
+interface SelectExpensesPaidDrawerProps {
+  accessToken: string;
+  accountId: string | null;
+}
+
+export const SelectExpensesPaidDrawer = ({ accessToken, accountId }: SelectExpensesPaidDrawerProps) => {
   const { selectedMonth, updateSelectMonth, allMonths } = useSelectMonth()
   const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
@@ -16,6 +23,20 @@ export const SelectExpensesPaidDrawer = () => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const toggleOpen = () => setIsOpen((prev) => !prev)
+  const flag = Boolean(selectedMonth && selectedYear && accessToken && accountId)
+
+  const { data, refetch } = useQuery({
+    queryKey: ['expenses-paid'],
+    enabled: flag,
+    queryFn: () => getExpensesByDateCb({ month: selectedMonth ?? 'none', year: selectedYear ?? 'none', accountId: accountId ?? 'none' }, accessToken)
+  })
+  console.log('data', data)
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    refetch()
+  }
 
   return (
     <section className="flex flex-col gap-4 md:mt-6">
@@ -27,9 +48,10 @@ export const SelectExpensesPaidDrawer = () => {
       <Drawer open={isOpen} onClose={toggleOpen} position={drawerDirection}>
         <DrawerHeader title="Agregar gastos" />
         <DrawerItems>
-          <form>
+          <form onSubmit={handleSubmit}>
             <SelectMonthDropdown allMonths={allMonths} selectedMonth={selectedMonth} changeSelectedMonth={updateSelectMonth} />
             <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={updateSelectYear} />
+            <Button type="submit" className="max-w-max">Buscar</Button>
           </form>
         </DrawerItems>
       </Drawer>

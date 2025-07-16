@@ -149,6 +149,22 @@ export interface IncomeDataResponse {
   version: string;
 }
 
+export interface FetchExpensesDatePayload {
+  month: string;
+  year: string;
+  accountId: string;
+}
+
+export interface FetchExpensesDateResponse {
+  data: {
+    expenses: BankMovement[]
+  }
+  error: null;
+  message: string[];
+  success: boolean;
+  version: string;
+}
+
 export interface ExpenseErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {

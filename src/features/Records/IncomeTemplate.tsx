@@ -242,7 +242,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-                <SelectExpensesPaidDrawer />
+                <SelectExpensesPaidDrawer accessToken={accessToken} accountId={selectedAccount} />
               </div>
             </FurtherDetailsAccordeon>
           )}
@@ -269,7 +269,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         <aside className="w-full flex flex-col gap-12 max-w-xs">
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-          <SelectExpensesPaidDrawer />
+          <SelectExpensesPaidDrawer accessToken={accessToken} accountId={selectedAccount} />
         </aside>
       ) }
     </div>
