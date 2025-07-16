@@ -9,7 +9,7 @@ import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
 import { useState } from "react"
 
 export const SelectExpensesPaidDrawer = () => {
-  const { selectedMonth, updateSelectMonth } = useSelectMonth()
+  const { selectedMonth, updateSelectMonth, allMonths } = useSelectMonth()
   const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
   const drawerDirection = isMobile ? 'bottom' : 'right'
@@ -28,7 +28,7 @@ export const SelectExpensesPaidDrawer = () => {
         <DrawerHeader title="Agregar gastos" />
         <DrawerItems>
           <form>
-            <SelectMonthDropdown selectedMonth={selectedMonth} changeSelectedMonth={updateSelectMonth} />
+            <SelectMonthDropdown allMonths={allMonths} selectedMonth={selectedMonth} changeSelectedMonth={updateSelectMonth} />
             <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={updateSelectYear} />
           </form>
         </DrawerItems>
