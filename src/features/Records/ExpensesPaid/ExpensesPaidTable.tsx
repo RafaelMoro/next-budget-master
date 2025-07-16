@@ -1,6 +1,6 @@
 import { BankMovement } from "@/shared/types/records.types"
 import { RiCloseLine } from "@remixicon/react"
-import { CheckIcon, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
+import { Checkbox, CheckIcon, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
 
 interface ExpensesPaidTableProps {
   expenses: BankMovement[]
@@ -17,9 +17,12 @@ export const ExpensesPaidTable = ({ expenses }: ExpensesPaidTableProps) => {
 
   return (
     <div data-testid="show-expenses-paid-table" className="overflow-x-auto">
-      <Table>
+      <Table hoverable>
         <TableHead>
           <TableRow>
+            <TableHeadCell className="p-4">
+              <span className="sr-only">Seleccionar gasto</span>
+            </TableHeadCell>
             <TableHeadCell className="px-4">Descripción</TableHeadCell>
             <TableHeadCell className="px-4">Monto</TableHeadCell>
             <TableHeadCell className="px-4">Fecha</TableHeadCell>
@@ -30,6 +33,9 @@ export const ExpensesPaidTable = ({ expenses }: ExpensesPaidTableProps) => {
           {
             expenses.length > 0 && expenses.map((expense) => (
             <TableRow key={expense._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <TableCell className="p-4">
+                <Checkbox />
+              </TableCell>
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {expense.shortName}
               </TableCell>
