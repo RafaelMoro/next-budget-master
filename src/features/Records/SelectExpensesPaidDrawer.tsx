@@ -45,13 +45,13 @@ export const SelectExpensesPaidDrawer = ({ accessToken, accountId }: SelectExpen
         Puedes asociar este pago con una o varias transacciones para indicar qué estás pagando.
       </p>
       <Button color="light" className="lg:max-w-max mx-auto" onClick={toggleOpen}>Agregar gastos</Button>
-      <Drawer open={isOpen} onClose={toggleOpen} position={drawerDirection}>
+      <Drawer className="w-96" open={isOpen} onClose={toggleOpen} position={drawerDirection}>
         <DrawerHeader title="Agregar gastos" />
         <DrawerItems>
-          <form onSubmit={handleSubmit}>
+          <form className="flex justify-center gap-3" onSubmit={handleSubmit}>
             <SelectMonthDropdown allMonths={allMonths} selectedMonth={selectedMonth} changeSelectedMonth={updateSelectMonth} />
             <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={updateSelectYear} />
-            <Button type="submit" className="max-w-max">Buscar</Button>
+            <Button type="submit" className="max-w-max" outline>Buscar</Button>
           </form>
         </DrawerItems>
       </Drawer>
