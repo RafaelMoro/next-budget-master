@@ -5,7 +5,6 @@ import { Header } from "@/shared/ui/organisms/Header"
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 import { IncomeTemplate } from "./IncomeTemplate"
 import { GetCategoriesResponse } from "@/shared/types/categories.types"
-import { SelectedAccountLS } from "@/shared/types/global.types"
 import { BankMovement } from "@/shared/types/records.types"
 import { getLocalStorageInfo } from "@/shared/lib/local-storage.lib"
 
@@ -22,16 +21,12 @@ export const EditIncome = ({
 }: EditIncomeProps) => {
   const { categories, detailedError: errorCategories } = resCategories
 
-  const [selectedAccLS, setSelectedAccLS] = useState<SelectedAccountLS | null>(null)
   const [editRecord, setEditRecord] = useState<BankMovement | null>(null)
 
   useEffect(() => {
-      const { "edit-record": editRecordGotten, "selected-account": accInfo } = getLocalStorageInfo()
+      const { "edit-record": editRecordGotten, } = getLocalStorageInfo()
       if (editRecordGotten) {
         setEditRecord(editRecordGotten.record)
-      }
-      if (accInfo) {
-        setSelectedAccLS(accInfo)
       }
     }, [])
 
