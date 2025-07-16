@@ -26,7 +26,7 @@ import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { ManageTagsModal } from "./ManageTagsModal"
 import { createIncomeCb, editIncomeCb, resetEditRecordLS } from "@/shared/utils/records.utils"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
-import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
+import { CREATE_EXPENSE_INCOME_ERROR, EDIT_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
 
 interface IncomeTemplateProps {
   categories: Category[]
@@ -39,6 +39,7 @@ interface IncomeTemplateProps {
 export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detailedErrorCategories, editRecord }: IncomeTemplateProps) => {
   const router = useRouter()
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const buttonText = editRecord?.shortName ? 'Editar ingreso' : 'Crear ingreso'
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -101,6 +102,12 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
       return
     }
   }, [isError, messageErrorCreate])
+  useEffect(() => {
+    if (isErrorEdit && messageErrorEdit) {
+      toast.error(EDIT_EXPENSE_INCOME_ERROR);
+      return
+    }
+  }, [isErrorEdit, messageErrorEdit])
 
   // Load edit record use Effect
   useEffect(() => {
@@ -160,6 +167,15 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         tag: tags.current,
         typeOfRecord: 'income'
       }
+      if (editRecord?.shortName) {
+        const payloadEdit: EditIncomePayload = {
+          ...payload,
+          recordId: editRecord._id
+        }
+        editIncome(payloadEdit)
+        return
+      }
+
       createIncome(payload)
     }
   }
@@ -234,9 +250,11 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
               disabled={isPending || isSuccess || openTagModal}
               type="submit"
             >
-              { (isIdle || isError) && 'Crear ingreso'}
-              { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-              { isSuccess && (<CheckIcon data-testid="check-icon" />)}
+              { isPending ? (
+                  <Spinner aria-label="loading reset password budget master" />
+                ) : isSuccess ? (
+                  <CheckIcon data-testid="check-icon" />
+                ) : buttonText }
             </Button>
           </div>
         </form>
