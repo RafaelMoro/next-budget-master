@@ -5,11 +5,13 @@ import { fetchCategories } from "@/shared/lib/categoires.lib";
 import { getAccountCookie } from "@/shared/lib/preferences.lib";
 
 export default async function EditExpensePage() {
-  const accessToken = await getAccessToken()
-  const selectedAccountCookie = await getAccountCookie()
+  const [accessToken, selectedAccountCookie, resCategories, resBudgets] = await Promise.all([
+    getAccessToken(),
+    getAccountCookie(),
+    fetchCategories(),
+    fetchAllBudgets()
+  ])
   const selectedAccount = selectedAccountCookie ?? null;
-  const resCategories = await fetchCategories()
-  const resBudgets = await fetchAllBudgets()
 
   return (
     <EditExpense

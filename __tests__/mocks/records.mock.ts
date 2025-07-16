@@ -35,7 +35,7 @@ export const recordMock: BankMovement ={
   isPaid: false,
   linkedBudgets: [],
 }
-export const editRecord: BankMovement = {
+export const editExpense: BankMovement = {
   ...recordMock,
   shortName: 'Edited Expense',
   description: 'a edited expense description',
@@ -49,6 +49,17 @@ export const editRecord: BankMovement = {
   category: mockCategories[0],
   subCategory: mockCategories[0].subCategories[0],
 };
+
+export const editIncome: BankMovement = {
+  ...recordMock,
+  shortName: 'Edited Income',
+  description: 'a edited income description',
+  amount: 500,
+  amountFormatted: '$500.00',
+  tag: ['something'],
+  category: mockCategories[0],
+  subCategory: mockCategories[0].subCategories[0],
+}
 
 export const paidRecordMock: BankMovement = {
   ...recordMock,

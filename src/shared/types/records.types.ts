@@ -125,7 +125,11 @@ export type CreateIncomePayload = {
   typeOfRecord: 'income'
 }
 
-export interface CreateExpenseData {
+export type EditIncomePayload = CreateIncomePayload & {
+  recordId: string;
+}
+
+export interface ExpenseDataResponse {
   data: {
     expense: ExpenseRecord
   }
@@ -135,7 +139,7 @@ export interface CreateExpenseData {
   version: string;
 }
 
-export interface CreateIncomeData {
+export interface IncomeDataResponse {
   data: {
     income: IncomeRecord
   }
@@ -145,7 +149,7 @@ export interface CreateIncomeData {
   version: string;
 }
 
-export interface CreateExpenseError extends Omit<AxiosError, 'response'> {
+export interface ExpenseErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;
@@ -153,7 +157,7 @@ export interface CreateExpenseError extends Omit<AxiosError, 'response'> {
   }>;
 }
 
-export interface CreateIncomeError extends Omit<AxiosError, 'response'> {
+export interface IncomeErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;

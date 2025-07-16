@@ -7,7 +7,7 @@ import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterCon
 import {QueryProviderWrapper} from "@/app/QueryProviderWrapper";
 import { mockCategories } from "../../mocks/categories.mock";
 import { Category } from "@/shared/types/categories.types";
-import { editRecord, recordMock } from "../../mocks/records.mock";
+import { editExpense, recordMock } from "../../mocks/records.mock";
 import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { SelectedAccountLS } from "@/shared/types/global.types";
@@ -277,13 +277,13 @@ describe("ExpenseTemplate", () => {
       [QueryMatchMedia.isDesktop]: true,
     });
     const push = jest.fn();
-    render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editRecord} />);
+    render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editExpense} />);
 
-    expect(screen.getByLabelText(/Pequeña descripción/i)).toHaveValue(editRecord.shortName);
-    expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editRecord.amountFormatted);
-    expect(screen.getByLabelText(/Descripción \(opcional\)/i)).toHaveValue(editRecord.description);
+    expect(screen.getByLabelText(/Pequeña descripción/i)).toHaveValue(editExpense.shortName);
+    expect(screen.getByLabelText(/Cantidad/i)).toHaveValue(editExpense.amountFormatted);
+    expect(screen.getByLabelText(/Descripción \(opcional\)/i)).toHaveValue(editExpense.description);
     expect(screen.getByTestId('category-dropdown')).toHaveTextContent('Comida y Bebida');
-    expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editRecord.subCategory);
+    expect(screen.getByTestId('subcategory-dropdown')).toHaveTextContent(editExpense.subCategory);
 
     // linkedBudget
     expect(screen.getByTestId('select-budget-dropdown-button')).toHaveTextContent('Monthly Budget');
@@ -404,7 +404,7 @@ describe("ExpenseTemplate", () => {
           expense: recordMock
         },
       })
-      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editRecord} />);
+      render(<ExpenseTemplateWrapper push={push} categories={mockCategories} budgetsFetched={mockBudgets} editRecord={editExpense} />);
 
       const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
       await user.clear(shortDescriptionInput);
