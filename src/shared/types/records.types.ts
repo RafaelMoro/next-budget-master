@@ -6,6 +6,7 @@ import { object, string } from "yup";
 
 //#region General interfaces
 export type TypeOfRecord = 'expense' | 'income' | 'transfer';
+export type DrawerDirection = "top" | "right" | "bottom" | "left"
 
 export type TransferRecord = {
   transferId: string;

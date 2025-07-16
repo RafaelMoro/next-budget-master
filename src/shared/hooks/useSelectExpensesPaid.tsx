@@ -1,7 +1,27 @@
-import { useRef } from "react"
-import { BankMovement } from "../types/records.types"
+import { FormEvent, useRef, useState } from "react"
+import { BankMovement, DrawerDirection } from "../types/records.types"
+import { useSelectMonth } from "./useSelectMonth"
+import { useSelectYear } from "./useSelectYear"
+import { useMediaQuery } from "./useMediaQuery"
+import { useQuery } from "@tanstack/react-query"
+import { getExpensesByDateCb } from "../utils/records.utils"
 
-export const useSelectExpensesPaid = () => {
+interface UseSelectExpensesPaidProps {
+  accessToken: string;
+  accountId: string | null;
+}
+
+export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpensesPaidProps) => {
+  const { selectedMonth, updateSelectMonth, allMonths, selectedAbbreviatedMonth } = useSelectMonth()
+  const { selectedYear, updateSelectYear } = useSelectYear()
+  const { isMobile } = useMediaQuery()
+
+  const drawerDirection: DrawerDirection = isMobile ? 'bottom' : 'right'
+  const flag = Boolean(selectedAbbreviatedMonth && selectedYear && accessToken && accountId)
+
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const toggleOpen = () => setIsOpen((prev) => !prev)
+
   const selectedExpenses = useRef<BankMovement []>([])
   const handleUnselectExpense = (expense: BankMovement) => {
     const fileteredExpenses = selectedExpenses.current.filter((e) => e._id !== expense._id)
@@ -15,9 +35,43 @@ export const useSelectExpensesPaid = () => {
     selectedExpenses.current.push(expense)
   }
 
+  const { data, refetch } = useQuery({
+      queryKey: ['expenses-paid'],
+      enabled: flag,
+      queryFn: () => getExpensesByDateCb({ month: selectedAbbreviatedMonth ?? 'none', year: selectedYear ?? 'none', accountId: accountId ?? 'none' }, accessToken)
+    })
+  const expensesFetched = data?.data?.expenses ?? []
+
+  const handleFinishSelection =() => {
+    console.log('Selected expenses:', selectedExpenses.current)
+    // Here you can handle the selected expenses, e.g., save them or process them further
+  }
+
+  const handleSubmitGetExpenses = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    refetch()
+  }
+
+  const handleClick = () => {
+    handleFinishSelection()
+    toggleOpen()
+  }
+
   return {
+    openSelectExpensesDrawer: isOpen,
+    drawerDirection,
     selectedExpenses,
+    selectedMonth,
+    selectedYear,
+    allMonths,
+    expensesFetched,
+    toggleSelectExpensesDrawer: toggleOpen,
+    updateSelectMonth,
+    updateSelectYear,
     handleUnselectExpense,
-    handleSelectExpense
+    handleSelectExpense,
+    handleSubmitGetExpenses,
+    handleClick,
   }
 }
