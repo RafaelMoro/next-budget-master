@@ -125,7 +125,11 @@ export type CreateIncomePayload = {
   typeOfRecord: 'income'
 }
 
-export interface CreateExpenseData {
+export type EditIncomePayload = CreateIncomePayload & {
+  recordId: string;
+}
+
+export interface ExpenseDataResponse {
   data: {
     expense: ExpenseRecord
   }
@@ -135,7 +139,7 @@ export interface CreateExpenseData {
   version: string;
 }
 
-export interface CreateIncomeData {
+export interface IncomeDataResponse {
   data: {
     income: IncomeRecord
   }

@@ -17,7 +17,7 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { BankMovement, CreateIncomeData, CreateIncomeDataForm, CreateIncomeError, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, CreateIncomeError, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { useManageTags } from "@/shared/hooks/useManageTags"
@@ -62,7 +62,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
     resolver: yupResolver(IncomeExpenseSchema)
   })
 
-  const { mutate: createIncome, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateIncomeData, CreateIncomeError, CreateIncomePayload>({
+  const { mutate: createIncome, isError, isPending, isSuccess, isIdle, error } = useMutation<IncomeDataResponse, CreateIncomeError, CreateIncomePayload>({
     mutationFn: (data) => createIncomeCb(data, accessToken),
     onSuccess: () => {
       setTimeout(() => {
@@ -72,6 +72,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
   })
   const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
 
+  // Handle error message use Effect
   useEffect(() => {
     if (isError && messageError) {
       toast.error(CREATE_EXPENSE_INCOME_ERROR);
@@ -79,6 +80,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
     }
   }, [isError, messageError])
 
+  // Load edit record use Effect
   useEffect(() => {
     // Init state to edit expense
     if (editRecord) {
@@ -100,6 +102,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editRecord])
 
+  // Handle error categories use Effect
   useEffect(() => {
     if (detailedErrorCategories?.cause === 'connection') {
       toast.error('Error de conexión. Por favor, inténtalo más tarde.');
