@@ -16,13 +16,13 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
   const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
 
-  const drawerDirection: DrawerDirection = isMobile ? 'bottom' : 'right'
-  const flag = Boolean(selectedAbbreviatedMonth && selectedYear && accessToken && accountId)
-
+  const selectedExpenses = useRef<BankMovement []>([])
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const toggleOpen = () => setIsOpen((prev) => !prev)
 
-  const selectedExpenses = useRef<BankMovement []>([])
+  const drawerDirection: DrawerDirection = isMobile ? 'bottom' : 'right'
+  const flag = Boolean(selectedAbbreviatedMonth && selectedYear && accessToken && accountId && isOpen)
+
   const handleUnselectExpense = (expense: BankMovement) => {
     const fileteredExpenses = selectedExpenses.current.filter((e) => e._id !== expense._id)
     selectedExpenses.current = fileteredExpenses
