@@ -10,37 +10,38 @@ import { useMutation } from "@tanstack/react-query"
 
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
-import { Category } from "@/shared/types/categories.types"
+import { Category, CategoryShown } from "@/shared/types/categories.types"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
-import { LinkButton } from "@/shared/ui/atoms/LinkButton"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { CreateIncomeData, CreateIncomeDataForm, CreateIncomeError, CreateIncomePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, IncomeErrorResponse, CreateIncomePayload, IncomeExpenseSchema, EditIncomePayload } from "@/shared/types/records.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { ManageTagsModal } from "./ManageTagsModal"
-import { createIncomeCb } from "@/shared/utils/records.utils"
+import { createIncomeCb, editIncomeCb, resetEditRecordLS } from "@/shared/utils/records.utils"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
-import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
+import { CREATE_EXPENSE_INCOME_ERROR, EDIT_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
+import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 
 interface IncomeTemplateProps {
   categories: Category[]
   selectedAccount: string | null
   accessToken: string
   detailedErrorCategories: DetailedError | null
+  editRecord: BankMovement | null
 }
 
-export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detailedErrorCategories }: IncomeTemplateProps) => {
+export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detailedErrorCategories, editRecord }: IncomeTemplateProps) => {
   const router = useRouter()
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const buttonText = editRecord?.shortName ? 'Editar ingreso' : 'Crear ingreso'
 
-  const { handleChange, currencyState, errorAmount,
-    validateZeroAmount
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
     amount: null,
   })
@@ -56,12 +57,13 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(IncomeExpenseSchema)
   })
 
-  const { mutate: createIncome, isError, isPending, isSuccess, isIdle, error } = useMutation<CreateIncomeData, CreateIncomeError, CreateIncomePayload>({
+  const { mutate: createIncome, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, error: errorCreate } = useMutation<IncomeDataResponse, IncomeErrorResponse, CreateIncomePayload>({
     mutationFn: (data) => createIncomeCb(data, accessToken),
     onSuccess: () => {
       setTimeout(() => {
@@ -69,15 +71,68 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
       }, 1000)
     }
   })
-  const messageError = (error as unknown as GeneralError)?.response?.data?.error?.message
+  const {
+    mutate: editIncome, isError: isErrorEdit, isPending: isPendingEdit, isSuccess: isSuccessEdit, error: errorEdit
+  } = useMutation<IncomeDataResponse, IncomeErrorResponse, EditIncomePayload>({
+    mutationFn: (data) => editIncomeCb(data, accessToken),
+    onError: () => {
+      setTimeout(() => {
+        resetEditRecordLS()
+        router.push(DASHBOARD_ROUTE)
+      }, 1500)
+    },
+    onSuccess: () => {
+      setTimeout(() => {
+        resetEditRecordLS()
+        // Refetch data after mutation
+        router.refresh()
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
+    }
+  })
+  const isPending = isPendingCreate || isPendingEdit
+  const isSuccess = isSuccessCreate || isSuccessEdit
+  const isError = isErrorCreate || isErrorEdit
+  const messageErrorCreate = (errorCreate as unknown as GeneralError)?.response?.data?.error?.message
+  const messageErrorEdit = (errorEdit as unknown as GeneralError)?.response?.data?.error?.message
 
+  // Handle error message use Effect
   useEffect(() => {
-    if (isError && messageError) {
+    if (isError && messageErrorCreate) {
       toast.error(CREATE_EXPENSE_INCOME_ERROR);
       return
     }
-  }, [isError, messageError])
+  }, [isError, messageErrorCreate])
+  useEffect(() => {
+    if (isErrorEdit && messageErrorEdit) {
+      toast.error(EDIT_EXPENSE_INCOME_ERROR);
+      return
+    }
+  }, [isErrorEdit, messageErrorEdit])
 
+  // Load edit record use Effect
+  useEffect(() => {
+    // Init state to edit expense
+    if (editRecord) {
+      setValue('shortDescription', editRecord?.shortName)
+      setValue('description', editRecord?.description)
+      setDate(new Date(editRecord.date))
+      handleEditCurrency(editRecord.amountFormatted)
+      updateSubcategory(editRecord.subCategory)
+      updateTags(editRecord.tag)
+
+      if (editRecord.category) {
+        const cat: CategoryShown = {
+          name: editRecord.category.categoryName,
+          categoryId: editRecord.category._id
+        }
+        updateCategory(cat)
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editRecord])
+
+  // Handle error categories use Effect
   useEffect(() => {
     if (detailedErrorCategories?.cause === 'connection') {
       toast.error('Error de conexión. Por favor, inténtalo más tarde.');
@@ -113,6 +168,15 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         tag: tags.current,
         typeOfRecord: 'income'
       }
+      if (editRecord?.shortName) {
+        const payloadEdit: EditIncomePayload = {
+          ...payload,
+          recordId: editRecord._id
+        }
+        editIncome(payloadEdit)
+        return
+      }
+
       createIncome(payload)
     }
   }
@@ -181,15 +245,17 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
             </FurtherDetailsAccordeon>
           )}
           <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
-            <LinkButton className="mt-4" type="secondary" href={DASHBOARD_ROUTE} >Cancelar</LinkButton>
+            <CancelButtonExpenseTemplate action={editRecord?.shortName ? "edit" : "create"} />
             <Button
               className="hover:cursor-pointer"
               disabled={isPending || isSuccess || openTagModal}
               type="submit"
             >
-              { (isIdle || isError) && 'Crear ingreso'}
-              { isPending && (<Spinner aria-label="loading reset password budget master" />) }
-              { isSuccess && (<CheckIcon data-testid="check-icon" />)}
+              { isPending ? (
+                  <Spinner aria-label="loading reset password budget master" />
+                ) : isSuccess ? (
+                  <CheckIcon data-testid="check-icon" />
+                ) : buttonText }
             </Button>
           </div>
         </form>

@@ -10,7 +10,7 @@ import { Toaster, toast } from "sonner";
 import { Button, CheckIcon, Label, Spinner, Textarea, TextInput, ToggleSwitch } from "flowbite-react"
 import clsx from "clsx"
 
-import { BankMovement, CreateExpenseData, CreateExpenseDataForm, CreateExpenseError, CreateExpensePayload, EditExpensePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { BankMovement, ExpenseDataResponse, CreateExpenseDataForm, ExpenseErrorResponse, CreateExpensePayload, EditExpensePayload, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
@@ -97,7 +97,7 @@ export const ExpenseTemplate = ({
 
   const {
     mutate: createExpense, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, error: errorCreate
-  } = useMutation<CreateExpenseData, CreateExpenseError, CreateExpensePayload>({
+  } = useMutation<ExpenseDataResponse, ExpenseErrorResponse, CreateExpensePayload>({
     mutationFn: (data) => createExpenseCb(data, accessToken),
     onSuccess: () => {
       setTimeout(() => {
@@ -107,7 +107,7 @@ export const ExpenseTemplate = ({
   })
   const {
     mutate: editExpense, isError: isErrorEdit, isPending: isPendingEdit, isSuccess: isSuccessEdit, error: errorEdit
-  } = useMutation<CreateExpenseData, CreateExpenseError, EditExpensePayload>({
+  } = useMutation<ExpenseDataResponse, ExpenseErrorResponse, EditExpensePayload>({
     mutationFn: (data) => editExpenseCb(data, accessToken),
     onError: () => {
       setTimeout(() => {
@@ -117,6 +117,7 @@ export const ExpenseTemplate = ({
     },
     onSuccess: () => {
       setTimeout(() => {
+        resetEditRecordLS()
         // Refetch data after mutation
         router.refresh()
         router.push(DASHBOARD_ROUTE)
