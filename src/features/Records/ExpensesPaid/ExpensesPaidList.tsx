@@ -35,8 +35,8 @@ export const ExpensesPaidList = ({ expenses, selectedExpenses, handleSelectExpen
                 />
               </div>
               <p className="text-xs text-gray-600 dark:text-gray-400 col-span-2">{expense.fullDate}</p>
-              <h5 className="text-start">{expense.shortName}</h5>
-              <p className="col-start-3 col-end-4 row-span-2 place-self-center text-red-600">- {expense.amountFormatted}</p>
+              <h5 className="text-start text-base">{expense.shortName}</h5>
+              <p className="col-start-3 col-end-4 row-span-2 place-self-center text-red-500">- {expense.amountFormatted}</p>
               <Badge className="max-w-max col-start-2 col-end-3 row-start-3 row-end-4 text-xs" color={getBadgeColor(expense?.isPaid)}>
                 {getBadgeText(expense?.isPaid)}
               </Badge>
