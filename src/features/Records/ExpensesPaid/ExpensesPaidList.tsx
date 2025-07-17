@@ -23,21 +23,21 @@ export const ExpensesPaidList = ({ expenses, selectedExpenses, handleSelectExpen
   }
 
   return (
-    <div>
+    <div className="max-h-[650px] overflow-y-scroll">
       <ListGroup>
         { expenses.map((expense) => (
-          <ListGroupItem key={expense._id}>
-            <div className="flex flex-col gap-3">
-              <div className="p-4 row-span-2">
+          <ListGroupItem className="max-w-80" key={expense._id}>
+            <div className="w-full grid grid-layout-expenses-paid-list grid-rows-3 gap-2">
+              <div className="p-2 row-span-3 place-self-center">
                 <Checkbox
                   defaultChecked={isSelected(expense._id)}
                   onChange={(event) => handleCheckboxcChange(event, expense)}
                 />
               </div>
-              <h5 className="text-lg font-semibold">{expense.shortName}</h5>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{expense.fullDate}</p>
-              <p>{expense.amountFormatted}</p>
-              <Badge color={getBadgeColor(expense?.isPaid)}>
+              <p className="text-xs text-gray-600 dark:text-gray-400 col-span-2">{expense.fullDate}</p>
+              <h5 className="text-start">{expense.shortName}</h5>
+              <p className="col-start-3 col-end-4 row-span-2 place-self-center text-red-600">- {expense.amountFormatted}</p>
+              <Badge className="max-w-max col-start-2 col-end-3 row-start-3 row-end-4 text-xs" color={getBadgeColor(expense?.isPaid)}>
                 {getBadgeText(expense?.isPaid)}
               </Badge>
             </div>
