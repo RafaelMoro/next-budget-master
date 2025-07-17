@@ -6,6 +6,7 @@ import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
 import { ExpensesPaidTable } from "./ExpensesPaidTable"
 import { CompleteMonthsType } from "@/shared/types/global.types";
 import { BankMovement, DrawerDirection } from "@/shared/types/records.types";
+import { ExpensesPaidList } from "./ExpensesPaidList";
 
 interface SelectExpensesPaidDrawerProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ interface SelectExpensesPaidDrawerProps {
   selectedYear: string | null
   expenses: BankMovement[]
   selectedExpenses: BankMovement[]
+  isMobile: boolean
   toggleOpen: () => void;
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void
   changeSelectedMonth: (newMonth: CompleteMonthsType) => void
@@ -32,6 +34,7 @@ export const SelectPaidDrawer = ({
   selectedYear,
   expenses,
   selectedExpenses,
+  isMobile,
   toggleOpen,
   handleSubmit,
   changeSelectedMonth,
@@ -50,12 +53,22 @@ export const SelectPaidDrawer = ({
             <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={changeSelectedYear} />
             <Button type="submit" className="max-w-max" outline>Buscar</Button>
           </form>
-          <ExpensesPaidTable
-            expenses={expenses}
-            handleSelectExpense={handleSelectExpense}
-            handleUnselectExpense={handleUnselectExpense}
-            selectedExpenses={selectedExpenses}
-          />
+          { isMobile && (
+            <ExpensesPaidList
+              expenses={expenses}
+              selectedExpenses={selectedExpenses}
+              handleSelectExpense={handleSelectExpense}
+              handleUnselectExpense={handleUnselectExpense}
+            />
+          )}
+          { !isMobile && (
+            <ExpensesPaidTable
+              expenses={expenses}
+              handleSelectExpense={handleSelectExpense}
+              handleUnselectExpense={handleUnselectExpense}
+              selectedExpenses={selectedExpenses}
+            />
+          )}
           <Button onClick={handleClick}>Terminar</Button>
         </div>
       </DrawerItems>

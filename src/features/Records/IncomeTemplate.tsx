@@ -56,6 +56,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
     selectedYear,
     allMonths,
     expensesFetched,
+    isMobile,
     toggleSelectExpensesDrawer,
     updateSelectMonth,
     updateSelectYear,
@@ -298,6 +299,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
       ) }
       <SelectPaidDrawer
         isOpen={openSelectExpensesDrawer}
+        isMobile={isMobile}
         drawerDirection={drawerDirection}
         allMonths={allMonths}
         selectedMonth={selectedMonth}

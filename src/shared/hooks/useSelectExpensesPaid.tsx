@@ -66,6 +66,7 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
     selectedYear,
     allMonths,
     expensesFetched,
+    isMobile,
     toggleSelectExpensesDrawer: toggleOpen,
     updateSelectMonth,
     updateSelectYear,
