@@ -26,7 +26,7 @@ export const ExpensesPaidList = ({ expenses, selectedExpenses, handleSelectExpen
     <div className="max-h-[650px] overflow-y-scroll">
       <ListGroup>
         { expenses.map((expense) => (
-          <ListGroupItem className="max-w-80" key={expense._id}>
+          <ListGroupItem className="max-w-80 sm:max-w-screen" key={expense._id}>
             <div className="w-full grid grid-layout-expenses-paid-list grid-rows-3 gap-2">
               <div className="p-2 row-span-3 place-self-center">
                 <Checkbox
