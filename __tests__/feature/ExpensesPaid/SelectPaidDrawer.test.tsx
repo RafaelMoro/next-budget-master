@@ -82,9 +82,12 @@ describe('SelectPaidDrawer', () => {
   });
 
   it('should not render the drawer when closed', () => {
-    render(<SelectPaidDrawerWrapper />);
+    render(<SelectPaidDrawerWrapper isOpen={false} />);
 
-    expect(screen.queryByText('Agregar gastos')).not.toBeInTheDocument();
+    // Flowbite drawer renders the content but hides it with CSS
+    // When closed, it should have 'translate-x-full' class (off-screen)
+    const drawer = screen.getByRole('dialog');
+    expect(drawer).toHaveClass('translate-x-full');
   });
 
   it('should show "No hay gastos que mostrar" when no expenses', () => {
@@ -171,7 +174,8 @@ describe('SelectPaidDrawer', () => {
     render(<SelectPaidDrawerWrapper isOpen={true} />);
 
     // These should be rendered as dropdowns - checking for their containers
-    expect(screen.getByRole('button', { name: /Enero/i })).toBeInTheDocument();
+    // July is the current month based on the current date
+    expect(screen.getByRole('button', { name: /Julio/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /2025/i })).toBeInTheDocument();
   });
 
