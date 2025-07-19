@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ExpensesPaidList } from '@/features/Records/ExpensesPaid/SelectExpensesPaidList';
+import { SelectExpensesPaidList } from '@/features/Records/ExpensesPaid/SelectExpensesPaidList';
 import { recordMock, editExpense, paidRecordMock } from '../../mocks/records.mock';
-import { BankMovement } from '@/shared/types/records.types';
+import { ExpensePaid } from '@/shared/types/records.types';
 
 const ExpensesPaidListWrapper = ({
   expenses = [],
@@ -10,13 +10,13 @@ const ExpensesPaidListWrapper = ({
   handleSelectExpense = jest.fn(),
   handleUnselectExpense = jest.fn()
 }: {
-  expenses?: BankMovement[];
-  selectedExpenses?: BankMovement[];
-  handleSelectExpense?: (expense: BankMovement) => void;
-  handleUnselectExpense?: (expense: BankMovement) => void;
+  expenses?: ExpensePaid[];
+  selectedExpenses?: ExpensePaid[];
+  handleSelectExpense?: (expense: ExpensePaid) => void;
+  handleUnselectExpense?: (expense: ExpensePaid) => void;
 }) => {
   return (
-    <ExpensesPaidList
+    <SelectExpensesPaidList
       expenses={expenses}
       selectedExpenses={selectedExpenses}
       handleSelectExpense={handleSelectExpense}
@@ -26,7 +26,7 @@ const ExpensesPaidListWrapper = ({
 };
 
 describe('ExpensesPaidList', () => {
-  const mockExpenses = [recordMock, editExpense, paidRecordMock];
+  const mockExpenses = [recordMock, editExpense, paidRecordMock] as ExpensePaid[];
 
   it('should render the list with expenses data', () => {
     render(<ExpensesPaidListWrapper expenses={mockExpenses} />);
@@ -53,7 +53,8 @@ describe('ExpensesPaidList', () => {
   });
 
   it('should display paid status badges correctly', () => {
-    render(<ExpensesPaidListWrapper expenses={[recordMock, paidRecordMock]} />);
+    const mocks = [recordMock, paidRecordMock] as ExpensePaid[];
+    render(<ExpensesPaidListWrapper expenses={mocks} />);
 
     // Check for paid and unpaid badges
     const paidBadges = screen.getAllByText('Pagado');
@@ -66,9 +67,10 @@ describe('ExpensesPaidList', () => {
   it('should call handleSelectExpense when an unchecked checkbox is clicked', async () => {
     const user = userEvent.setup();
     const handleSelectExpense = jest.fn();
+    const mock = [recordMock] as ExpensePaid[];
     render(
       <ExpensesPaidListWrapper
-        expenses={[recordMock]}
+        expenses={mock}
         handleSelectExpense={handleSelectExpense}
       />
     );
@@ -83,10 +85,11 @@ describe('ExpensesPaidList', () => {
   it('should call handleUnselectExpense when a checked checkbox is clicked', async () => {
     const user = userEvent.setup();
     const handleUnselectExpense = jest.fn();
+    const mock = [recordMock] as ExpensePaid[];
     render(
       <ExpensesPaidListWrapper
-        expenses={[recordMock]}
-        selectedExpenses={[recordMock]}
+        expenses={mock}
+        selectedExpenses={mock}
         handleUnselectExpense={handleUnselectExpense}
       />
     );
@@ -99,10 +102,11 @@ describe('ExpensesPaidList', () => {
   });
 
   it('should show selected expenses as checked', () => {
+    const mocks = [recordMock, editExpense] as ExpensePaid[];
     render(
       <ExpensesPaidListWrapper
         expenses={mockExpenses}
-        selectedExpenses={[recordMock, editExpense]}
+        selectedExpenses={mocks}
       />
     );
 
@@ -113,7 +117,8 @@ describe('ExpensesPaidList', () => {
   });
 
   it('should render amount with negative sign prefix', () => {
-    render(<ExpensesPaidListWrapper expenses={[recordMock]} />);
+    const mock = [recordMock] as ExpensePaid[];
+    render(<ExpensesPaidListWrapper expenses={mock} />);
 
     expect(screen.getByText(`- ${recordMock.amountFormatted}`)).toBeInTheDocument();
   });
@@ -134,7 +139,8 @@ describe('ExpensesPaidList', () => {
   });
 
   it('should render date information for each expense', () => {
-    render(<ExpensesPaidListWrapper expenses={[recordMock, editExpense]} />);
+    const mocks = [recordMock, editExpense] as ExpensePaid[];
+    render(<ExpensesPaidListWrapper expenses={mocks} />);
 
     expect(screen.getByText(recordMock.fullDate)).toBeInTheDocument();
     expect(screen.getByText(editExpense.fullDate)).toBeInTheDocument();
