@@ -72,7 +72,7 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
   }
 
   return (
-    <Drawer open={open} onClose={handleClose} position={drawerDirection}>
+    <Drawer className="w-max" open={open} onClose={handleClose} position={drawerDirection}>
       <div className="grid min-h-full grid-layout-header-footer">
         <header className="grid grid-rows-2 grid-record-preview gap-x-2 text-gray-600 dark:text-gray-400">
           <ChartLineIcon className="row-span-2 place-self-center" />
