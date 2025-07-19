@@ -16,7 +16,7 @@ import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, IncomeErrorResponse, CreateIncomePayload, IncomeExpenseSchema, EditIncomePayload } from "@/shared/types/records.types"
+import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, IncomeErrorResponse, CreateIncomePayload, IncomeExpenseSchema, EditIncomePayload, ExpensePaid } from "@/shared/types/records.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { useManageTags } from "@/shared/hooks/useManageTags"
@@ -27,6 +27,9 @@ import { createIncomeCb, editIncomeCb, resetEditRecordLS } from "@/shared/utils/
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
 import { CREATE_EXPENSE_INCOME_ERROR, EDIT_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants"
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
+import { SelectPaidSection } from "./ExpensesPaid/SelectPaidSection"
+import { useSelectExpensesPaid } from "@/shared/hooks/useSelectExpensesPaid"
+import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
 
 interface IncomeTemplateProps {
   categories: Category[]
@@ -45,6 +48,24 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
   } = useCurrencyField({
     amount: null,
   })
+  const {
+    openSelectExpensesDrawer,
+    selectedExpenses,
+    drawerDirection,
+    selectedMonth,
+    selectedYear,
+    allMonths,
+    expensesFetched,
+    isMobile,
+    toggleSelectExpensesDrawer,
+    updateSelectMonth,
+    updateSelectYear,
+    handleSelectExpense,
+    handleUnselectExpense,
+    handleSubmitGetExpenses,
+    handleClick,
+    loadSelectedExpenses,
+  } = useSelectExpensesPaid({ accessToken, accountId: selectedAccount })
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
   const { isMobileTablet, isDesktop } = useMediaQuery()
@@ -120,6 +141,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
       handleEditCurrency(editRecord.amountFormatted)
       updateSubcategory(editRecord.subCategory)
       updateTags(editRecord.tag)
+      loadSelectedExpenses(editRecord.expensesPaid as ExpensePaid[])
 
       if (editRecord.category) {
         const cat: CategoryShown = {
@@ -160,8 +182,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         category: categorySelected.categoryId,
         date,
         description: data.description ?? '',
-        // TODO: Add feature expenses paid
-        expensesPaid: [],
+        expensesPaid: selectedExpenses.current,
         indebtedPeople: [],
         shortName: data.shortDescription,
         subCategory: subcategory,
@@ -241,6 +262,10 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+                <SelectPaidSection
+                  selectedExpenses={selectedExpenses.current}
+                  toggleOpen={toggleSelectExpensesDrawer}
+                />
               </div>
             </FurtherDetailsAccordeon>
           )}
@@ -267,8 +292,29 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         <aside className="w-full flex flex-col gap-12 max-w-xs">
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+          <SelectPaidSection
+            selectedExpenses={selectedExpenses.current}
+            toggleOpen={toggleSelectExpensesDrawer}
+          />
         </aside>
       ) }
+      <SelectPaidDrawer
+        isOpen={openSelectExpensesDrawer}
+        isMobile={isMobile}
+        drawerDirection={drawerDirection}
+        allMonths={allMonths}
+        selectedMonth={selectedMonth}
+        selectedYear={selectedYear}
+        expenses={expensesFetched}
+        selectedExpenses={selectedExpenses.current}
+        toggleOpen={toggleSelectExpensesDrawer}
+        handleSubmit={handleSubmitGetExpenses}
+        changeSelectedMonth={updateSelectMonth}
+        changeSelectedYear={updateSelectYear}
+        handleSelectExpense={handleSelectExpense}
+        handleUnselectExpense={handleUnselectExpense}
+        handleClick={handleClick}
+      />
     </div>
   )
 }

@@ -191,4 +191,7 @@
   .grid-layout-header-footer {
     grid-template-rows: auto 1fr auto;
   }
+  .grid-layout-expenses-paid-list {
+    grid-template-columns: min-content 1fr 1fr;
+  }
 }

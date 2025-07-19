@@ -1,3 +1,5 @@
+import { FetchExpensesDateResponse } from "../types/records.types";
+
 export const GET_EXPENSES_AND_INCOMES_BY_MONTH_ROUTE = '/records/expenses-and-incomes';
 export const EXPENSE_ROUTE = '/expenses-actions';
 export const INCOME_ROUTE = '/incomes-actions';
@@ -14,3 +16,13 @@ export const TAG_MIN_LENGTH_ERROR = 'Por favor, ingrese una etiqueta de más de 
 export const TAG_MAX_LENGTH_ERROR = 'Por favor, ingrese una etiqueta con menos de 50 caracteres.'
 export const TAG_REPEATED_ERROR = 'La etiqueta ya existe. Por favor, ingrese una etiqueta diferente.'
 export const CURRENCY_ZERO_ERROR = 'Por favor, ingrese una cantidad mayor a 0.'
+
+export const defaultResFetchExpenses: FetchExpensesDateResponse = {
+  data: {
+    expenses: []
+  },
+  error: null,
+  message: null,
+  success: false,
+  version: null,
+}

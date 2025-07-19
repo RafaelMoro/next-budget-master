@@ -6,6 +6,7 @@ import { object, string } from "yup";
 
 //#region General interfaces
 export type TypeOfRecord = 'expense' | 'income' | 'transfer';
+export type DrawerDirection = "top" | "right" | "bottom" | "left"
 
 export type TransferRecord = {
   transferId: string;
@@ -147,6 +148,22 @@ export interface IncomeDataResponse {
   message: string[];
   success: boolean;
   version: string;
+}
+
+export interface FetchExpensesDatePayload {
+  month: string;
+  year: string;
+  accountId: string;
+}
+
+export interface FetchExpensesDateResponse {
+  data: {
+    expenses: ExpensePaid[]
+  }
+  error: null | string;
+  message: string[] | null;
+  success: boolean;
+  version: string | null;
 }
 
 export interface ExpenseErrorResponse extends Omit<AxiosError, 'response'> {
