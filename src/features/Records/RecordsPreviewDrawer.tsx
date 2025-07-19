@@ -14,6 +14,7 @@ import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon";
 import { saveEditRecordLS } from "@/shared/utils/records.utils";
 import { EDIT_EXPENSE_ROUTE, EDIT_INCOME_ROUTE } from "@/shared/constants/Global.constants";
 import { useDashboard } from "@/shared/hooks/useDashboard";
+import { ExpensePaidList } from "./ExpensesPaid/ExpensePaidList";
 
 interface RecordsPreviewDrawerProps {
   record: BankMovement | null;
@@ -139,6 +140,13 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
                   </div>
                 </Card>
               ) }
+
+              { record?.expensesPaid && record?.expensesPaid.length > 0 && (
+                <Card>
+                  <h5 className="text-lg tracking-wider">Gastos pagados:</h5>
+                  <ExpensePaidList expenses={record?.expensesPaid} />
+                </Card>
+              )}
           </div>
         </DrawerItems>
         <footer className="mt-10 lg:mt-0 flex justify-between">
