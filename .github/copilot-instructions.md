@@ -13,4 +13,6 @@ For the unit tests, consider the following instructions:
 
 - Do not Mock the component to avoid rendering its internals
 
+- Remember to use userEvent for user interactions. Do not use fireEvent.
+
 - Make sure the tests are passing. Iterate until the tests are passing. Apply the changes into the file if needed. To be sure these are passing run the command: pnpm test -- tests/feature/Accounts/CreateAccButton.test.tsx
