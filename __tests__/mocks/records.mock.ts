@@ -100,3 +100,37 @@ export const drawerTestExpense2: ExpensePaid = {
   fullDate: "Mie, 25 Jun, 2025",
   isPaid: true,
 };
+
+// Mock expenses for ExpensePaidList component tests
+export const expensePaidListMock1: ExpensePaid = {
+  _id: "6855ed98e3d57ba1214bc5c5",
+  shortName: "Coffee Shop Purchase",
+  amount: 150,
+  amountFormatted: "$150.00",
+  date: new Date("2025-07-01T08:30:00.000Z"),
+  fullDate: "Mar, 1 Jul, 2025",
+  formattedTime: "08:30am",
+  isPaid: false,
+};
+
+export const expensePaidListMock2: ExpensePaid = {
+  _id: "6855ed98e3d57ba1214bc5c6",
+  shortName: "Grocery Store",
+  amount: 2500,
+  amountFormatted: "$2,500.00",
+  date: new Date("2025-07-02T14:15:30.000Z"),
+  fullDate: "Mie, 2 Jul, 2025",
+  formattedTime: "14:15pm",
+  isPaid: true,
+};
+
+export const expensePaidListMock3: ExpensePaid = {
+  _id: "6855ed98e3d57ba1214bc5c7",
+  shortName: "Gas Station Fill-up",
+  amount: 5000,
+  amountFormatted: "$5,000.00",
+  date: new Date("2025-07-03T19:45:00.000Z"),
+  fullDate: "Jue, 3 Jul, 2025",
+  formattedTime: "19:45pm",
+  isPaid: false,
+};
