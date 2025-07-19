@@ -15,6 +15,7 @@ import { saveEditRecordLS } from "@/shared/utils/records.utils";
 import { EDIT_EXPENSE_ROUTE, EDIT_INCOME_ROUTE } from "@/shared/constants/Global.constants";
 import { useDashboard } from "@/shared/hooks/useDashboard";
 import { ExpensePaidList } from "./ExpensesPaid/ExpensePaidList";
+import { IndebtedPeoplePreviewRecord } from "../IndebtedPeople/IndebtedPeoplePreviewRecord";
 
 interface RecordsPreviewDrawerProps {
   record: BankMovement | null;
@@ -23,6 +24,7 @@ interface RecordsPreviewDrawerProps {
 }
 
 export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPreviewDrawerProps) => {
+  console.log('record', record)
   const router = useRouter()
   const { isMobile } = useMediaQuery()
   const { manageSelectedAccountCookie } = useDashboard()
@@ -140,6 +142,13 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
                   </div>
                 </div>
               ) }
+
+              { record?.indebtedPeople && record?.indebtedPeople.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <h5 className="text-lg tracking-wider">Personas que te deben:</h5>
+                  <IndebtedPeoplePreviewRecord indebtedPeople={record?.indebtedPeople} />
+                </div>
+              )}
 
               { record?.expensesPaid && record?.expensesPaid.length > 0 && (
                 <div className="flex flex-col gap-3">
