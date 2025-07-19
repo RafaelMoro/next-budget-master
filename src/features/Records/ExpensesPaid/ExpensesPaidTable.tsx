@@ -22,14 +22,6 @@ export const ExpensesPaidTable = ({ expenses, selectedExpenses, handleSelectExpe
   }
   const isSelected = (expenseId: string) => selectedExpenses.some((expense) => expense._id === expenseId);
 
-  if (expenses.length === 0) {
-    return (
-      <div className="w-full">
-        <p className="text-lg text-center py-3">No hay gastos que mostrar</p>
-      </div>
-    )
-  }
-
   return (
     <div data-testid="show-expenses-paid-table" className="overflow-x-auto">
       <Table hoverable>
@@ -46,7 +38,7 @@ export const ExpensesPaidTable = ({ expenses, selectedExpenses, handleSelectExpe
         </TableHead>
         <TableBody className="divide-y">
           {
-            expenses.length > 0 && expenses.map((expense) => {
+            expenses.map((expense) => {
               const isItemSelected = isSelected(expense._id);
               return (
             <TableRow key={expense._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">

@@ -53,7 +53,14 @@ export const SelectPaidDrawer = ({
             <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={changeSelectedYear} />
             <Button type="submit" className="max-w-max" outline>Buscar</Button>
           </form>
-          { isMobile && (
+          {
+            expenses.length === 0 && (
+              <div className="w-full">
+                <p className="text-lg text-center py-3">No hay gastos que mostrar</p>
+              </div>
+            )
+          }
+          { (isMobile && expenses.length > 0) && (
             <ExpensesPaidList
               expenses={expenses}
               selectedExpenses={selectedExpenses}
@@ -61,7 +68,7 @@ export const SelectPaidDrawer = ({
               handleUnselectExpense={handleUnselectExpense}
             />
           )}
-          { !isMobile && (
+          { (!isMobile && expenses.length > 0) && (
             <ExpensesPaidTable
               expenses={expenses}
               handleSelectExpense={handleSelectExpense}
