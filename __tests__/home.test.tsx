@@ -126,10 +126,10 @@ describe('Home', () => {
         data: {
           user: {
             _id: "656ce2abfe380684665e92a3",
-            email: "rafael.moro.galindo@gmail.com",
+            email: "esteban@mail.com",
             firstName: "Jose",
-            lastName: "Moro Galindo",
-            middleName: "Rafael"
+            lastName: "Lopez",
+            middleName: "Gabriel"
           }
         }
       })
