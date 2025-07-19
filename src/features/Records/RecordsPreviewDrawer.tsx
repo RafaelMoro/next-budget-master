@@ -23,6 +23,7 @@ interface RecordsPreviewDrawerProps {
 }
 
 export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPreviewDrawerProps) => {
+  console.log('record', record)
   const router = useRouter()
   const { isMobile } = useMediaQuery()
   const { manageSelectedAccountCookie } = useDashboard()
