@@ -17,6 +17,9 @@ import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useSelectExpensesPaid } from "@/shared/hooks/useSelectExpensesPaid"
 import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { CreateIncomeDataForm, IncomeExpenseSchema } from "@/shared/types/records.types"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -52,16 +55,27 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken }: T
     handleUnselectExpense,
     handleSubmitGetExpenses,
     handleClick,
-    loadSelectedExpenses,
   } = useSelectExpensesPaid({ accessToken, accountId: selectedAccount })
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(IncomeExpenseSchema)
+  })
+
+  const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
+    console.log('data', data)
+  }
 
   return (
     <div className="w-full flex justify-center gap-32">
       <AnimatePresence>
         <form
           key="transfer-template-form"
-          // onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
           className="w-full px-4 mx-auto flex flex-col gap-4 md:max-w-xl mb-6 lg:mx-0 lg:px-0"
         >
           <DateTimePicker date={date} setDate={setDate} />
@@ -83,11 +97,11 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken }: T
               data-testid="shortDescription"
               id="shortDescription"
               type="text"
-              // {...register("shortDescription")}
+              {...register("shortDescription")}
               />
-            {/* { errors?.shortDescription?.message && (
+            { errors?.shortDescription?.message && (
               <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
-            )} */}
+            )}
           </div>
           <div>
             <div className="mb-2 block">
@@ -96,11 +110,11 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken }: T
             <Textarea
               id="description"
               rows={4}
-              // {...register("description")}
+              {...register("description")}
             />
-            {/* { errors?.description?.message && (
+            { errors?.description?.message && (
               <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
-            )} */}
+            )}
           </div>
           <TransactionCategorizerDropdown
             categoriesShown={categoriesShown}
