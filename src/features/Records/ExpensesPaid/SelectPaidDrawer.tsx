@@ -6,7 +6,7 @@ import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
 import { ExpensesPaidTable } from "./ExpensesPaidTable"
 import { CompleteMonthsType } from "@/shared/types/global.types";
 import { DrawerDirection, ExpensePaid } from "@/shared/types/records.types";
-import { ExpensesPaidList } from "./SelectExpensesPaidList";
+import { SelectExpensesPaidList } from "./SelectExpensesPaidList";
 
 interface SelectExpensesPaidDrawerProps {
   isOpen: boolean;
@@ -61,7 +61,7 @@ export const SelectPaidDrawer = ({
             )
           }
           { (isMobile && expenses.length > 0) && (
-            <ExpensesPaidList
+            <SelectExpensesPaidList
               expenses={expenses}
               selectedExpenses={selectedExpenses}
               handleSelectExpense={handleSelectExpense}
