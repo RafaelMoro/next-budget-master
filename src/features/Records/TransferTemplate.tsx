@@ -1,18 +1,31 @@
 "use client"
 import { useState } from "react"
+import { Label, Textarea, TextInput } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
 import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
+import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
+import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
+import { Category } from "@/shared/types/categories.types"
 
-export const TransferTemplate = () => {
+interface TransferTemplateProps {
+  categories: Category[]
+}
+
+export const TransferTemplate = ({ categories }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
+
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
     amount: null,
   })
+  const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
+      categoryError, subcategoryError,
+      updateCategoryError, updateSubcategoryError,
+    } = useCategoriesForm({ categories })
 
   return (
     <div className="w-full flex justify-center gap-32">
@@ -33,6 +46,43 @@ export const TransferTemplate = () => {
           { errorAmount && (
             <ErrorMessage isAnimated>{errorAmount}</ErrorMessage>
           )}
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="shortDescription">Pequeña descripción</Label>
+            </div>
+            <TextInput
+              data-testid="shortDescription"
+              id="shortDescription"
+              type="text"
+              // {...register("shortDescription")}
+              />
+            {/* { errors?.shortDescription?.message && (
+              <ErrorMessage isAnimated>{errors.shortDescription?.message}</ErrorMessage>
+            )} */}
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="description">Descripción (opcional)</Label>
+            </div>
+            <Textarea
+              id="description"
+              rows={4}
+              // {...register("description")}
+            />
+            {/* { errors?.description?.message && (
+              <ErrorMessage isAnimated>{errors.description?.message}</ErrorMessage>
+            )} */}
+          </div>
+          <TransactionCategorizerDropdown
+            categoriesShown={categoriesShown}
+            categorySelected={categorySelected}
+            updateCategory={updateCategory}
+            categoryError={categoryError}
+            subcategories={subcategories}
+            subcategory={subcategory}
+            updateSubcategory={updateSubcategory}
+            subcategoryError={subcategoryError}
+          />
         </form>
       </AnimatePresence>
     </div>

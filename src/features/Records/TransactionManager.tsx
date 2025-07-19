@@ -84,7 +84,9 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
           />
         )}
         { subscreen === 'transfer' && (
-          <TransferTemplate />
+          <TransferTemplate
+            categories={categories}
+          />
         )}
       </main>
     </div>
