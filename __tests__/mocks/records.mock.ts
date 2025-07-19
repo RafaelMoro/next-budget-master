@@ -72,8 +72,8 @@ export const paidRecordMock: BankMovement = {
   _id: "6855ed98e3d57ba1214bc5c2",
   isPaid: true,
   shortName: "Paid Record Example",
-  amount: 500,
-  amountFormatted: "$500.00",
+  amount: 750,
+  amountFormatted: "$750.00",
   date: new Date("2025-06-23T17:23:42.000Z"),
   fullDate: "Lun, 23 Jun, 2025",
 };
