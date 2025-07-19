@@ -65,6 +65,7 @@ export const editIncome: BankMovement = {
   tag: ['something'],
   category: mockCategories[0],
   subCategory: mockCategories[0].subCategories[0],
+  expensesPaid: []
 }
 
 export const paidRecordMock: BankMovement = {
