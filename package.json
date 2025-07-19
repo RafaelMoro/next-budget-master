@@ -1,6 +1,6 @@
 {
   "name": "next-budget-master",
-  "version": "0.23.1",
+  "version": "0.25.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
