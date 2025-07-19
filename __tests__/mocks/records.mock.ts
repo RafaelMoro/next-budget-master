@@ -77,3 +77,25 @@ export const paidRecordMock: BankMovement = {
   date: new Date("2025-06-23T17:23:42.000Z"),
   fullDate: "Lun, 23 Jun, 2025",
 };
+
+export const drawerTestExpense1: BankMovement = {
+  ...recordMock,
+  _id: "6855ed98e3d57ba1214bc5c3",
+  shortName: "Drawer Test Expense 1",
+  amount: 200,
+  amountFormatted: "$200.00",
+  date: new Date("2025-06-24T17:23:42.000Z"),
+  fullDate: "Mar, 24 Jun, 2025",
+  isPaid: false,
+};
+
+export const drawerTestExpense2: BankMovement = {
+  ...recordMock,
+  _id: "6855ed98e3d57ba1214bc5c4",
+  shortName: "Drawer Test Expense 2",
+  amount: 300,
+  amountFormatted: "$300.00",
+  date: new Date("2025-06-25T17:23:42.000Z"),
+  fullDate: "Mie, 25 Jun, 2025",
+  isPaid: true,
+};
