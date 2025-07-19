@@ -37,10 +37,13 @@ export const recordMock: BankMovement ={
 }
 export const editExpense: BankMovement = {
   ...recordMock,
+  _id: "6855ed98e3d57ba1214bc5c0",
   shortName: 'Edited Expense',
   description: 'a edited expense description',
   amount: 500,
   amountFormatted: '$500.00',
+  date: new Date("2025-06-21T17:23:42.000Z"),
+  fullDate: "Sab, 21 Jun, 2025",
   tag: ['something'],
   indebtedPeople: [
     { name: 'John', amount: 12, amountPaid: 0, isPaid: false }
@@ -52,10 +55,13 @@ export const editExpense: BankMovement = {
 
 export const editIncome: BankMovement = {
   ...recordMock,
+  _id: "6855ed98e3d57ba1214bc5c1",
   shortName: 'Edited Income',
   description: 'a edited income description',
   amount: 500,
   amountFormatted: '$500.00',
+  date: new Date("2025-06-22T17:23:42.000Z"),
+  fullDate: "Dom, 22 Jun, 2025",
   tag: ['something'],
   category: mockCategories[0],
   subCategory: mockCategories[0].subCategories[0],
@@ -63,8 +69,11 @@ export const editIncome: BankMovement = {
 
 export const paidRecordMock: BankMovement = {
   ...recordMock,
+  _id: "6855ed98e3d57ba1214bc5c2",
   isPaid: true,
   shortName: "Paid Record Example",
   amount: 500,
   amountFormatted: "$500.00",
+  date: new Date("2025-06-23T17:23:42.000Z"),
+  fullDate: "Lun, 23 Jun, 2025",
 };

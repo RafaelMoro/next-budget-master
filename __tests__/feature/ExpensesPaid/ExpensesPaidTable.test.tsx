@@ -44,9 +44,11 @@ describe('ExpensesPaidTable', () => {
 
     expect(screen.getByText(editExpense.shortName)).toBeInTheDocument();
     expect(screen.getByText(editExpense.amountFormatted)).toBeInTheDocument();
+    expect(screen.getByText(editExpense.fullDate)).toBeInTheDocument();
 
     expect(screen.getByText(paidRecordMock.shortName)).toBeInTheDocument();
     expect(screen.getByText(paidRecordMock.amountFormatted)).toBeInTheDocument();
+    expect(screen.getByText(paidRecordMock.fullDate)).toBeInTheDocument();
   });
 
   it('should show checkboxes for each expense', () => {
@@ -102,7 +104,7 @@ describe('ExpensesPaidTable', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     expect(checkboxes[0]).toBeChecked(); // recordMock
     expect(checkboxes[1]).toBeChecked(); // editExpense
-    expect(checkboxes[2]).not.toBeChecked(); // paidRecordMock
+    expect(checkboxes[2]).not.toBeChecked(); // paidRecordMock - not in selectedExpenses
   });
 
   it('should display paid status correctly for expenses', () => {
