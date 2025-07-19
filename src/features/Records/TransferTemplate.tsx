@@ -10,22 +10,51 @@ import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
 import { Category } from "@/shared/types/categories.types"
+import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
+import { ManageTagsModal } from "./ManageTagsModal"
+import { SelectPaidSection } from "./ExpensesPaid/SelectPaidSection"
+import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
+import { useManageTags } from "@/shared/hooks/useManageTags"
+import { useSelectExpensesPaid } from "@/shared/hooks/useSelectExpensesPaid"
+import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
 
 interface TransferTemplateProps {
   categories: Category[]
+  selectedAccount: string | null
+  accessToken: string
 }
 
-export const TransferTemplate = ({ categories }: TransferTemplateProps) => {
+export const TransferTemplate = ({ categories, selectedAccount, accessToken }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const { isMobileTablet, isDesktop } = useMediaQuery()
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
     amount: null,
   })
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
-      categoryError, subcategoryError,
-      updateCategoryError, updateSubcategoryError,
-    } = useCategoriesForm({ categories })
+    categoryError, subcategoryError,
+    updateCategoryError, updateSubcategoryError,
+  } = useCategoriesForm({ categories })
+  const {
+    openSelectExpensesDrawer,
+    selectedExpenses,
+    drawerDirection,
+    selectedMonth,
+    selectedYear,
+    allMonths,
+    expensesFetched,
+    isMobile,
+    toggleSelectExpensesDrawer,
+    updateSelectMonth,
+    updateSelectYear,
+    handleSelectExpense,
+    handleUnselectExpense,
+    handleSubmitGetExpenses,
+    handleClick,
+    loadSelectedExpenses,
+  } = useSelectExpensesPaid({ accessToken, accountId: selectedAccount })
+  const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
 
   return (
     <div className="w-full flex justify-center gap-32">
@@ -83,8 +112,46 @@ export const TransferTemplate = ({ categories }: TransferTemplateProps) => {
             updateSubcategory={updateSubcategory}
             subcategoryError={subcategoryError}
           />
+          { isMobileTablet && (
+            <FurtherDetailsAccordeon>
+              <div className="w-full flex flex-col gap-12">
+                <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+                <SelectPaidSection
+                  selectedExpenses={selectedExpenses.current}
+                  toggleOpen={toggleSelectExpensesDrawer}
+                />
+              </div>
+            </FurtherDetailsAccordeon>
+          )}
         </form>
       </AnimatePresence>
+      { isDesktop && (
+        <aside className="w-full flex flex-col gap-12 max-w-xs">
+          <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
+          <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
+          <SelectPaidSection
+            selectedExpenses={selectedExpenses.current}
+            toggleOpen={toggleSelectExpensesDrawer}
+          />
+        </aside>
+      ) }
+      <SelectPaidDrawer
+        isOpen={openSelectExpensesDrawer}
+        isMobile={isMobile}
+        drawerDirection={drawerDirection}
+        allMonths={allMonths}
+        selectedMonth={selectedMonth}
+        selectedYear={selectedYear}
+        expenses={expensesFetched}
+        selectedExpenses={selectedExpenses.current}
+        toggleOpen={toggleSelectExpensesDrawer}
+        handleSubmit={handleSubmitGetExpenses}
+        changeSelectedMonth={updateSelectMonth}
+        changeSelectedYear={updateSelectYear}
+        handleSelectExpense={handleSelectExpense}
+        handleUnselectExpense={handleUnselectExpense}
+        handleClick={handleClick}
+      />
     </div>
   )
 }
