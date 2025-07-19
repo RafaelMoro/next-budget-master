@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ExpensesPaidList } from '@/features/Records/ExpensesPaid/ExpensesPaidList';
+import { ExpensesPaidList } from '@/features/Records/ExpensesPaid/SelectExpensesPaidList';
 import { recordMock, editExpense, paidRecordMock } from '../../mocks/records.mock';
 import { BankMovement } from '@/shared/types/records.types';
 
