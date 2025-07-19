@@ -1,0 +1,2 @@
+export const getBadgeColor = (isPaid: boolean | undefined): string => isPaid ? 'success' : 'failure'
+export const getBadgeText = (isPaid: boolean | undefined): string => isPaid ? 'Pagado' : 'Sin pagar'
