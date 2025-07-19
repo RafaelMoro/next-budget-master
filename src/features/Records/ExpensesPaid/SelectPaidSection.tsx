@@ -1,10 +1,10 @@
 "use client"
 import { Button } from "flowbite-react"
 
-import { BankMovement } from "@/shared/types/records.types"
+import { ExpensePaid } from "@/shared/types/records.types"
 
 interface SelectExpensesPaidDrawerProps {
-  selectedExpenses: BankMovement[]
+  selectedExpenses: ExpensePaid[]
   toggleOpen: () => void;
 }
 

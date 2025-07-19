@@ -1,19 +1,19 @@
-import { BankMovement } from "@/shared/types/records.types"
+import { ExpensePaid } from "@/shared/types/records.types"
 import { Badge, Checkbox, ListGroup, ListGroupItem } from "flowbite-react"
 import { ChangeEvent } from "react"
 
 interface ExpensesPaidListProps {
-  expenses: BankMovement[]
-  selectedExpenses: BankMovement[]
-  handleUnselectExpense: (expense: BankMovement) => void
-  handleSelectExpense: (expense: BankMovement) => void
+  expenses: ExpensePaid[]
+  selectedExpenses: ExpensePaid[]
+  handleUnselectExpense: (expense: ExpensePaid) => void
+  handleSelectExpense: (expense: ExpensePaid) => void
 }
 
 export const ExpensesPaidList = ({ expenses, selectedExpenses, handleSelectExpense, handleUnselectExpense }: ExpensesPaidListProps) => {
   const getBadgeColor = (isPaid: boolean | undefined): string => isPaid ? 'success' : 'failure'
   const getBadgeText = (isPaid: boolean | undefined): string => isPaid ? 'Pagado' : 'Sin pagar'
   const isSelected = (expenseId: string) => selectedExpenses.some((expense) => expense._id === expenseId);
-  const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: BankMovement) => {
+  const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: ExpensePaid) => {
     const checkboxChecked = event.target.checked
     if (!checkboxChecked) {
       handleUnselectExpense(expenseSelected)

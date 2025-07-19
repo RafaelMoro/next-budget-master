@@ -1,5 +1,5 @@
 import { Category } from "@/shared/types/categories.types";
-import { BankMovement } from "@/shared/types/records.types";
+import { BankMovement, ExpensePaid } from "@/shared/types/records.types";
 import { mockBudgets } from "./budgets.mock";
 import { mockCategories } from "./categories.mock";
 
@@ -78,7 +78,7 @@ export const paidRecordMock: BankMovement = {
   fullDate: "Lun, 23 Jun, 2025",
 };
 
-export const drawerTestExpense1: BankMovement = {
+export const drawerTestExpense1: ExpensePaid = {
   ...recordMock,
   _id: "6855ed98e3d57ba1214bc5c3",
   shortName: "Drawer Test Expense 1",
@@ -89,7 +89,7 @@ export const drawerTestExpense1: BankMovement = {
   isPaid: false,
 };
 
-export const drawerTestExpense2: BankMovement = {
+export const drawerTestExpense2: ExpensePaid = {
   ...recordMock,
   _id: "6855ed98e3d57ba1214bc5c4",
   shortName: "Drawer Test Expense 2",

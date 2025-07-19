@@ -180,8 +180,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         category: categorySelected.categoryId,
         date,
         description: data.description ?? '',
-        // TODO: Add feature expenses paid
-        expensesPaid: [],
+        expensesPaid: selectedExpenses.current,
         indebtedPeople: [],
         shortName: data.shortDescription,
         subCategory: subcategory,

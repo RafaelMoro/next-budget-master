@@ -2,17 +2,17 @@ import { ChangeEvent } from "react"
 import { Checkbox, CheckIcon, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
 import { RiCloseLine } from "@remixicon/react"
 
-import { BankMovement } from "@/shared/types/records.types"
+import { ExpensePaid } from "@/shared/types/records.types"
 
 interface ExpensesPaidTableProps {
-  expenses: BankMovement[]
-  selectedExpenses: BankMovement[]
-  handleUnselectExpense: (expense: BankMovement) => void
-  handleSelectExpense: (expense: BankMovement) => void
+  expenses: ExpensePaid[]
+  selectedExpenses: ExpensePaid[]
+  handleUnselectExpense: (expense: ExpensePaid) => void
+  handleSelectExpense: (expense: ExpensePaid) => void
 }
 
 export const ExpensesPaidTable = ({ expenses, selectedExpenses, handleSelectExpense, handleUnselectExpense }: ExpensesPaidTableProps) => {
-  const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: BankMovement) => {
+  const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: ExpensePaid) => {
     const checkboxChecked = event.target.checked
     if (!checkboxChecked) {
       handleUnselectExpense(expenseSelected)

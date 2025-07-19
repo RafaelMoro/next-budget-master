@@ -158,7 +158,7 @@ export interface FetchExpensesDatePayload {
 
 export interface FetchExpensesDateResponse {
   data: {
-    expenses: BankMovement[]
+    expenses: ExpensePaid[]
   }
   error: null | string;
   message: string[] | null;

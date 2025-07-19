@@ -4,18 +4,18 @@ import userEvent from '@testing-library/user-event';
 import { QueryProviderWrapper } from '@/app/QueryProviderWrapper';
 import { SelectPaidDrawer } from '@/features/Records/ExpensesPaid/SelectPaidDrawer';
 import { drawerTestExpense1, drawerTestExpense2 } from '../../mocks/records.mock';
-import { BankMovement } from '@/shared/types/records.types';
+import { ExpensePaid } from '@/shared/types/records.types';
 import { useSelectExpensesPaid } from '@/shared/hooks/useSelectExpensesPaid';
 import { mockMatchMedia, QueryMatchMedia } from '../../utils-test/record.utils';
 
 interface SelectPaidDrawerWrapperProps {
   isOpen?: boolean;
-  expenses?: BankMovement[];
+  expenses?: ExpensePaid[];
   isMobile?: boolean;
   handleSubmit?: jest.MockedFunction<() => void>;
   handleClick?: jest.MockedFunction<() => void>;
   toggleOpen?: jest.MockedFunction<() => void>;
-  handleSelectExpense?: jest.MockedFunction<(expense: BankMovement) => void>;
+  handleSelectExpense?: jest.MockedFunction<(expense: ExpensePaid) => void>;
 }
 
 const SelectPaidDrawerWrapper = (props: SelectPaidDrawerWrapperProps) => {

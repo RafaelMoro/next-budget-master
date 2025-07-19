@@ -5,7 +5,7 @@ import { SelectYearDropdown } from "@/shared/ui/atoms/SelectYearDropdown"
 import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
 import { ExpensesPaidTable } from "./ExpensesPaidTable"
 import { CompleteMonthsType } from "@/shared/types/global.types";
-import { BankMovement, DrawerDirection } from "@/shared/types/records.types";
+import { DrawerDirection, ExpensePaid } from "@/shared/types/records.types";
 import { ExpensesPaidList } from "./ExpensesPaidList";
 
 interface SelectExpensesPaidDrawerProps {
@@ -14,15 +14,15 @@ interface SelectExpensesPaidDrawerProps {
   allMonths: CompleteMonthsType[]
   selectedMonth: CompleteMonthsType | null
   selectedYear: string | null
-  expenses: BankMovement[]
-  selectedExpenses: BankMovement[]
+  expenses: ExpensePaid[]
+  selectedExpenses: ExpensePaid[]
   isMobile: boolean
   toggleOpen: () => void;
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void
   changeSelectedMonth: (newMonth: CompleteMonthsType) => void
   changeSelectedYear: (newYear: string) => void
-  handleSelectExpense: (expense: BankMovement) => void
-  handleUnselectExpense: (expense: BankMovement) => void
+  handleSelectExpense: (expense: ExpensePaid) => void
+  handleUnselectExpense: (expense: ExpensePaid) => void
   handleClick: () => void
 }
 

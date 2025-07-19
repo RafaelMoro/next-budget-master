@@ -1,5 +1,5 @@
 import { FormEvent, useRef, useState } from "react"
-import { BankMovement, DrawerDirection } from "../types/records.types"
+import { DrawerDirection, ExpensePaid } from "../types/records.types"
 import { useSelectMonth } from "./useSelectMonth"
 import { useSelectYear } from "./useSelectYear"
 import { useMediaQuery } from "./useMediaQuery"
@@ -16,18 +16,18 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
   const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
 
-  const selectedExpenses = useRef<BankMovement []>([])
+  const selectedExpenses = useRef<ExpensePaid []>([])
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const toggleOpen = () => setIsOpen((prev) => !prev)
 
   const drawerDirection: DrawerDirection = isMobile ? 'bottom' : 'right'
   const flag = Boolean(selectedAbbreviatedMonth && selectedYear && accessToken && accountId && isOpen)
 
-  const handleUnselectExpense = (expense: BankMovement) => {
+  const handleUnselectExpense = (expense: ExpensePaid) => {
     const fileteredExpenses = selectedExpenses.current.filter((e) => e._id !== expense._id)
     selectedExpenses.current = fileteredExpenses
   }
-  const handleSelectExpense = (expense: BankMovement) => {
+  const handleSelectExpense = (expense: ExpensePaid) => {
     if (selectedExpenses.current.includes(expense)) {
       console.warn('Expense selected already added', expense)
       return
