@@ -34,6 +34,9 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
     }
     selectedExpenses.current.push(expense)
   }
+  const loadSelectedExpenses = (expenses: ExpensePaid[]) => {
+    selectedExpenses.current = expenses
+  }
 
   const { data, refetch } = useQuery({
       queryKey: ['expenses-paid'],
@@ -74,5 +77,6 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
     handleSelectExpense,
     handleSubmitGetExpenses,
     handleClick,
+    loadSelectedExpenses,
   }
 }

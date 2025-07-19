@@ -16,7 +16,7 @@ import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
-import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, IncomeErrorResponse, CreateIncomePayload, IncomeExpenseSchema, EditIncomePayload } from "@/shared/types/records.types"
+import { BankMovement, IncomeDataResponse, CreateIncomeDataForm, IncomeErrorResponse, CreateIncomePayload, IncomeExpenseSchema, EditIncomePayload, ExpensePaid } from "@/shared/types/records.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { useManageTags } from "@/shared/hooks/useManageTags"
@@ -63,7 +63,8 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
     handleSelectExpense,
     handleUnselectExpense,
     handleSubmitGetExpenses,
-    handleClick
+    handleClick,
+    loadSelectedExpenses,
   } = useSelectExpensesPaid({ accessToken, accountId: selectedAccount })
 
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
@@ -140,6 +141,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
       handleEditCurrency(editRecord.amountFormatted)
       updateSubcategory(editRecord.subCategory)
       updateTags(editRecord.tag)
+      loadSelectedExpenses(editRecord.expensesPaid as ExpensePaid[])
 
       if (editRecord.category) {
         const cat: CategoryShown = {
