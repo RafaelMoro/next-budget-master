@@ -5,53 +5,8 @@ import { QueryProviderWrapper } from '@/app/QueryProviderWrapper';
 import { SelectPaidDrawer } from '@/features/Records/ExpensesPaid/SelectPaidDrawer';
 import { drawerTestExpense1, drawerTestExpense2 } from '../../mocks/records.mock';
 import { BankMovement } from '@/shared/types/records.types';
-import { CompleteMonthsType } from '@/shared/types/global.types';
 import { useSelectExpensesPaid } from '@/shared/hooks/useSelectExpensesPaid';
-
-// Mock the custom hooks and utilities
-// jest.mock('@/shared/hooks/useSelectMonth', () => ({
-//   useSelectMonth: () => ({
-//     selectedMonth: 'Enero' as CompleteMonthsType,
-//     updateSelectMonth: jest.fn(),
-//     allMonths: ['Enero', 'Febrero', 'Marzo'] as CompleteMonthsType[],
-//     selectedAbbreviatedMonth: 'Jan'
-//   })
-// }));
-
-// jest.mock('@/shared/hooks/useSelectYear', () => ({
-//   useSelectYear: () => ({
-//     selectedYear: '2025',
-//     updateSelectYear: jest.fn()
-//   })
-// }));
-
-// jest.mock('@/shared/hooks/useMediaQuery', () => ({
-//   useMediaQuery: () => ({
-//     isMobile: false
-//   })
-// }));
-
-// jest.mock('@/shared/utils/records.utils', () => ({
-//   getExpensesByDateCb: jest.fn().mockResolvedValue({
-//     data: {
-//       expenses: [drawerTestExpense1, drawerTestExpense2]
-//     }
-//   })
-// }));
-
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
+import { mockMatchMedia, QueryMatchMedia } from '../../utils-test/record.utils';
 
 interface SelectPaidDrawerWrapperProps {
   isOpen?: boolean;
@@ -112,6 +67,10 @@ const SelectPaidDrawerInner = (props: SelectPaidDrawerWrapperProps) => {
 };
 
 describe('SelectPaidDrawer', () => {
+  mockMatchMedia({
+    [QueryMatchMedia.isMobileTablet]: false,
+    [QueryMatchMedia.isDesktop]: false,
+  });
   const mockExpenses = [drawerTestExpense1, drawerTestExpense2];
 
   it('should render the drawer when open', () => {
