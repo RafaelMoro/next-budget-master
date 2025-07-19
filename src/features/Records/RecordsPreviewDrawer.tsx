@@ -3,7 +3,7 @@
 import { RiCloseFill,
   RiCloseLine,
   RiPriceTag3Line } from "@remixicon/react";
-import { Badge, Button, Card, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
+import { Badge, Button, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
 import clsx from "clsx"
 import { useRouter } from 'next/navigation'
 
@@ -23,7 +23,6 @@ interface RecordsPreviewDrawerProps {
 }
 
 export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPreviewDrawerProps) => {
-  console.log('record', record)
   const router = useRouter()
   const { isMobile } = useMediaQuery()
   const { manageSelectedAccountCookie } = useDashboard()
@@ -94,7 +93,7 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
               <p className="text-sm text-gray-400">{record.description}</p>
             </div>
 
-            <Card>
+            <div className="flex flex-col gap-2">
               <h5 className="text-lg tracking-wider">Categorias:</h5>
               <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
                 <Icon size={20} />
@@ -104,20 +103,20 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
                 <RiPriceTag3Line size={20} />
                 <p>Subcategoria: <span className="text-black dark:text-white">{record.subCategory}</span></p>
               </div>
-            </Card>
+            </div>
 
             { record.typeOfRecord === 'expense' && (
-              <Card>
+              <div className="flex flex-col gap-2">
                 <h5 className="text-lg tracking-wider">Estatus de pago:</h5>
                 <div className={statusBoxCss}>
                   { record.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
                   <p className="text-sm">{paidStatus}</p>
                 </div>
-              </Card>
+              </div>
             ) }
 
             { record?.linkedBudgets && record?.linkedBudgets.length > 0 && (
-              <Card>
+              <div className="flex flex-col gap-2">
                 <h5 className="text-lg tracking-wider">Presupuestos:</h5>
                 <div className="flex gap-2">
                   { record.linkedBudgets.map((budget) => (
@@ -126,11 +125,11 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
                     </Badge>
                   )) }
                 </div>
-              </Card>
+              </div>
               ) }
 
               { record.tag.length > 0 && (
-                <Card>
+                <div className="flex flex-col gap-2">
                   <h5 className="text-lg tracking-wider">Etiquetas:</h5>
                   <div className="flex gap-2">
                     { record.tag.map((t) => (
@@ -139,14 +138,14 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
                       </Badge>
                     )) }
                   </div>
-                </Card>
+                </div>
               ) }
 
               { record?.expensesPaid && record?.expensesPaid.length > 0 && (
-                <Card>
+                <div className="flex flex-col gap-3">
                   <h5 className="text-lg tracking-wider">Gastos pagados:</h5>
                   <ExpensePaidList expenses={record?.expensesPaid} />
-                </Card>
+                </div>
               )}
           </div>
         </DrawerItems>
