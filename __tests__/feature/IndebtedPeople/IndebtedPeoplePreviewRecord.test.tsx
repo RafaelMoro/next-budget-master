@@ -38,9 +38,12 @@ describe('IndebtedPeoplePreviewRecord', () => {
     // Should not show "Pagado" for unpaid person
     expect(screen.queryByText('Pagado')).not.toBeInTheDocument();
     
-    // Check avatar with correct initial
-    const avatar = screen.getByRole('img');
+    // Check avatar with correct initial (Flowbite Avatar renders as div with testid)
+    const avatar = screen.getByTestId('flowbite-avatar');
     expect(avatar).toBeInTheDocument();
+    
+    // Check that the initial "J" is rendered
+    expect(screen.getByText('J')).toBeInTheDocument();
   });
 
   it('should render a single paid person correctly', () => {
@@ -144,16 +147,22 @@ describe('IndebtedPeoplePreviewRecord', () => {
   it('should render avatars with correct initials', () => {
     render(<IndebtedPeoplePreviewRecord indebtedPeople={indebtedPeopleMockList} />);
     
-    // Note: Flowbite Avatar component renders initials as text content, not alt text
-    // We can check for the presence of avatars but specific initial checking 
-    // might require more detailed DOM inspection
-    const avatars = screen.getAllByRole('img');
+    // Flowbite Avatar renders as div with data-testid="flowbite-avatar"
+    const avatars = screen.getAllByTestId('flowbite-avatar');
     expect(avatars).toHaveLength(3);
     
-    // Check that avatars have the correct classes
+    // Check that avatars have the correct wrapper classes
     avatars.forEach(avatar => {
       expect(avatar.closest('div')).toHaveClass('justify-self-start', 'row-span-2');
     });
+    
+    // Check that the correct initials are rendered
+    // John Doe and Jane Smith both have 'J', Bob Johnson has 'B'
+    const jInitials = screen.getAllByText('J');
+    expect(jInitials).toHaveLength(2); // John Doe and Jane Smith
+    
+    const bInitials = screen.getAllByText('B');
+    expect(bInitials).toHaveLength(1); // Bob Johnson
   });
 
   it('should update when indebtedPeople prop changes', () => {
