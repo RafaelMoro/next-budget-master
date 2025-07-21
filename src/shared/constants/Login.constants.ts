@@ -1,5 +1,8 @@
 export const ERROR_EMAIL_IN_USE = 'Try with other email.'
 
+// This is return if the verification of the JWT with the secret fails
+export const JWT_ERROR_VERIFY = 'signature verification failed'
+
 // Errors
 export const ERROR_UNAUTHORIZED_LOGIN = 'Email or Password incorrect.'
 export const ERROR_UNAUTHORIZED_LOGIN_MESSAGE = 'Correo electronico o contraseña incorrecta.';

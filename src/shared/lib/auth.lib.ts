@@ -4,6 +4,7 @@ import { cookies } from 'next/headers'
 import { COOKIE_SESSION_KEY } from "../constants/Global.constants";
 import { deleteThemeCookie, removeAccountCookie, removeDashboardScreen, removeOverviewSubscreen } from "./preferences.lib";
 import { GetAccessTokenResponse } from "../types/global.types";
+import { JWT_ERROR_VERIFY } from "../constants/Login.constants";
 
 export const encodeAccessToken = async (cookieValue: string): Promise<string> => {
   const secretKey = process.env.SESSION_SECRET_KEY!
@@ -44,7 +45,7 @@ export const getAccessToken = async (): Promise<GetAccessTokenResponse> => {
       accessToken
     }
   } catch (error) {
-    if (error instanceof Error && error.message === 'signature verification failed') {
+    if (error instanceof Error && error.message === JWT_ERROR_VERIFY) {
       return {
         message: 'Session invalid',
         accessToken: null

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { LinkButton } from "../atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
 import { GetAccessTokenResponse } from "@/shared/types/global.types";
+import { JWT_ERROR_VERIFY } from "@/shared/constants/Login.constants";
 
 interface LoginRequiredModalProps {
   show: boolean;
@@ -16,7 +17,7 @@ export const LoginRequiredModal = ({ show, resToken }: LoginRequiredModalProps) 
   const toggleModal = () => setOpenModal((prevState) => !prevState);
 
   useEffect(() => {
-    if (!resToken.accessToken && resToken.message) {
+    if (!resToken.accessToken && resToken.message === JWT_ERROR_VERIFY) {
       fetch('/api/auth/sign-out')
     }
   }, [resToken.accessToken, resToken.message])
