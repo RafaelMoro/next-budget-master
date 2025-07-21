@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const accessToken = await getAccessToken()
-  if (accessToken) {
+  const resToken = await getAccessToken()
+  if (resToken.accessToken) {
     redirect(DASHBOARD_ROUTE)
   }
 

@@ -1,17 +1,25 @@
 "use client";
 
 import { Modal, ModalBody, ModalFooter } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LinkButton } from "../atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
+import { GetAccessTokenResponse } from "@/shared/types/global.types";
 
 interface LoginRequiredModalProps {
   show: boolean;
+  resToken: GetAccessTokenResponse
 }
 
-export const LoginRequiredModal = ({ show }: LoginRequiredModalProps) => {
+export const LoginRequiredModal = ({ show, resToken }: LoginRequiredModalProps) => {
   const [openModal, setOpenModal] = useState<boolean>(show);
   const toggleModal = () => setOpenModal((prevState) => !prevState);
+
+  useEffect(() => {
+    if (!resToken.accessToken && resToken.message) {
+      fetch('/api/auth/sign-out')
+    }
+  }, [resToken.accessToken, resToken.message])
 
   return (
     <Modal show={openModal} onClose={toggleModal}>

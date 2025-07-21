@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { getAccessToken } from '@/shared/lib/auth.lib';
+import { deleteSession, getAccessToken, signOut } from '@/shared/lib/auth.lib';
 import { fetchAccounts, fetchRecordsCurrentMonth } from '@/shared/lib/dashboard.lib';
 import { LoginRequiredModal } from '@/shared/ui/organisms/LoginRequiredModal';
 import { Dashboard } from '@/features/Dashboard/Dashboard';
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage () {
-  const accessToken = await getAccessToken()
+  const resToken = await getAccessToken()
   const { accounts, detailedError } = await fetchAccounts()
   const selectedAccountCookie = await getAccountCookie()
   const selectedAccount = selectedAccountCookie ?? accounts[0]?._id ?? null;
@@ -22,7 +22,7 @@ export default async function DashboardPage () {
 
   return (
     <DashboardStoreProvider records={records} accounts={accounts} selectedAccountId={selectedAccount}>
-      <LoginRequiredModal show={!accessToken} />
+      <LoginRequiredModal resToken={resToken} show={!resToken.accessToken} />
       <Dashboard detailedError={detailedError} accountsFetched={accounts} />
     </DashboardStoreProvider>
   )
