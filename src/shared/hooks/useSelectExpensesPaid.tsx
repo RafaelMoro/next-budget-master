@@ -39,10 +39,10 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
   }
 
   const { data, refetch } = useQuery({
-      queryKey: ['expenses-paid'],
-      enabled: flag,
-      queryFn: () => getExpensesByDateCb({ month: selectedAbbreviatedMonth ?? 'none', year: selectedYear ?? 'none', accountId: accountId ?? 'none' }, accessToken)
-    })
+    queryKey: ['expenses-paid'],
+    enabled: flag,
+    queryFn: () => getExpensesByDateCb({ month: selectedAbbreviatedMonth ?? 'none', year: selectedYear ?? 'none', accountId: accountId ?? 'none' }, accessToken)
+  })
   const expensesFetched = data?.data?.expenses ?? []
 
   const handleFinishSelection =() => {
