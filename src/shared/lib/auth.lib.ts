@@ -3,7 +3,6 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from 'next/headers'
 import { COOKIE_SESSION_KEY } from "../constants/Global.constants";
 import { deleteThemeCookie, removeAccountCookie, removeDashboardScreen, removeOverviewSubscreen } from "./preferences.lib";
-import { GetAccessTokenResponse } from "../types/global.types";
 import { JWT_ERROR_VERIFY } from "../constants/Login.constants";
 
 export const encodeAccessToken = async (cookieValue: string): Promise<string> => {
@@ -26,35 +25,23 @@ export const saveSessionCookie = async (session: string): Promise<void> => {
   })
 }
 
-export const getAccessToken = async (): Promise<GetAccessTokenResponse> => {
+export const getAccessToken = async () => {
   try {
     const secretKey = process.env.SESSION_SECRET_KEY!
     const session = cookies().get(COOKIE_SESSION_KEY)?.value
     if (!session) {
-      return {
-        message: 'Session not found',
-        accessToken: null
-      }
+      return ''
     }
   
     const encodedKey = new TextEncoder().encode(secretKey)
     const jwtDecoded = await jwtVerify(session, encodedKey)
     const accessToken = jwtDecoded?.payload?.accessToken as string
-    return {
-      message: null,
-      accessToken
-    }
+    return accessToken
   } catch (error) {
     if (error instanceof Error && error.message === JWT_ERROR_VERIFY) {
-      return {
-        message: 'Session invalid',
-        accessToken: null
-      }
+      return ''
     }
-    return {
-      message: 'Unknown error',
-      accessToken: null
-    }
+    return ''
   }
 }
 
