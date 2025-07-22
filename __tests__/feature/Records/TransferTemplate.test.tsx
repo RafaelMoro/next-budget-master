@@ -38,6 +38,8 @@ describe('TransferTemplate', () => {
     const push = jest.fn();
     render(<TransferTemplateWrapper push={push} />)
 
+    expect(screen.getByTestId('select-origin-dropdown-button')).toBeInTheDocument();
+    expect(screen.getByTestId('select-destination-dropdown-button')).toBeInTheDocument();
     expect(screen.getByLabelText(/Cantidad/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Pequeña descripción/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Descripción \(opcional\)/i)).toBeInTheDocument();
@@ -50,5 +52,17 @@ describe('TransferTemplate', () => {
 
     expect(screen.getByRole('link', { name: /Cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear transferencia/i })).toBeInTheDocument();
+  })
+  it('Given a user being on desktop, should see the more details section', () => {
+    mockMatchMedia({
+      [QueryMatchMedia.isMobileTablet]: false,
+      [QueryMatchMedia.isDesktop]: true,
+    });
+
+    const push = jest.fn();
+    render(<TransferTemplateWrapper push={push} />)
+
+    expect(screen.getByText(/Más detalles/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Etiquetas/i })).toBeInTheDocument();
   })
 })
