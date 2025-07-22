@@ -14,6 +14,7 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
   const [destinationAccounts, setDestinationAccounts] = useState<AccountTransfer[]>([])
   const [origin, setOrigin] = useState<AccountTransfer | null>(null)
   const [destination, setDestination] = useState<AccountTransfer | null>(null)
+  const [destinationError, setDestinationError] = useState<string | null>(null)
 
   const updateDestination = (account: AccountTransfer) => {
     setDestination(account)
@@ -23,6 +24,10 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
     const newDestinationAccounts = destinationAccounts.filter(acc => acc.accountId !== account.accountId)
     setDestinationAccounts(newDestinationAccounts)
     setDestination(null)
+    setDestinationError(null)
+  }
+  const handleDestinationError = (error: string) => {
+    setDestinationError(error)
   }
 
   const isTransfer = subscreen === 'transfer'
@@ -55,8 +60,10 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
     isPending,
     origin,
     destination,
+    destinationError,
     destinationAccounts,
     updateDestination,
+    handleDestinationError,
     updateOrigin
   }
 }

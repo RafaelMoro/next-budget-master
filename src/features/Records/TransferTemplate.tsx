@@ -23,6 +23,8 @@ import { CreateIncomeDataForm, IncomeExpenseSchema } from "@/shared/types/record
 import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
 import { RiArrowDownSLine } from "@remixicon/react"
+import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
+import { DESTINATION_ACC_REQUIRED } from "@/shared/constants/records.constants"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -34,7 +36,8 @@ interface TransferTemplateProps {
 export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { isMobileTablet, isDesktop } = useMediaQuery()
-  const { accountsFormatted, isPending, origin, destination, destinationAccounts, updateOrigin, updateDestination } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
+  const { accountsFormatted, isPending, origin, destination, destinationAccounts, destinationError,
+    updateOrigin, updateDestination, handleDestinationError } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -73,6 +76,16 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
 
   const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
     console.log('data', data)
+    if (!categorySelected.categoryId || !categorySelected.name) {
+      updateCategoryError(CATEGORY_REQUIRED)
+    }
+    if (!subcategory) {
+      updateSubcategoryError(SUBCATEGORY_REQUIRED)
+    }
+    if (!destination) {
+      handleDestinationError(DESTINATION_ACC_REQUIRED)
+    }
+    validateZeroAmount({ amountState: currencyState })
   }
 
   return (
@@ -112,6 +125,9 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
               >{acc.name}</DropdownItem>
             ))}
           </Dropdown>
+          { destinationError && (
+            <ErrorMessage isAnimated>{destinationError}</ErrorMessage>
+          )}
           <CurrencyField
             labelName="Cantidad"
             dataTestId="amount"
