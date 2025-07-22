@@ -21,7 +21,7 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
   }
   const updateOrigin = (account: AccountTransfer) => {
     setOrigin(account)
-    const newDestinationAccounts = destinationAccounts.filter(acc => acc.accountId !== account.accountId)
+    const newDestinationAccounts = accountsFormatted.filter(acc => acc.accountId !== account.accountId)
     setDestinationAccounts(newDestinationAccounts)
     setDestination(null)
     setDestinationError(null)
@@ -40,15 +40,17 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
   useEffect(() => {
     if (Boolean(data) && isSuccess) {
       // Format accounts
-      const accounts = data.accounts.map(account => ({
+      const accounts: AccountTransfer[] = data.accounts.map(account => ({
         accountId: account._id,
         name: account.title
       }))
       // Set origin account
       const originAccount: AccountTransfer = accounts.find(acc => acc.accountId === selectedAccount) ?? accounts?.[0]
+      console.log('originAccount', originAccount)
       setOrigin(originAccount)
 
       const newDestinationAccounts: AccountTransfer[] = accounts.filter(acc => acc.accountId !== originAccount.accountId)
+      console.log('newDestinationAccounts', newDestinationAccounts)
       setDestinationAccounts(newDestinationAccounts)
 
       setAccountsFormatted(accounts)
