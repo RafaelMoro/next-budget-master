@@ -1,9 +1,8 @@
 import axios from "axios";
-import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid } from "../types/records.types";
+import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
-import { cleanCurrencyString } from "./formatNumberCurrency.utils";
 
 //#region API Calls
 export const createExpenseCb = (data: CreateExpensePayload, accessToken: string): Promise<ExpenseDataResponse> => {
@@ -121,7 +120,7 @@ export const getValuesIncomeAndExpense = ({ values, expensesSelected }: { values
   const {
     origin, destination, ...restValues
   } = values;
-  const newValuesExpense = {
+  const newValuesExpense: TransferExpense = {
     ...restValues,
     indebtedPeople: [],
     account: origin,
@@ -129,7 +128,7 @@ export const getValuesIncomeAndExpense = ({ values, expensesSelected }: { values
     isPaid: true,
     linkedBudgets: [],
   };
-  const newValuesIncome = {
+  const newValuesIncome: TransferIncome = {
     ...restValues,
     indebtedPeople: [],
     expensesPaid: expensesSelected,

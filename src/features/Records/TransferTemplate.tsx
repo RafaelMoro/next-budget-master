@@ -27,6 +27,7 @@ import { DESTINATION_ACC_REQUIRED } from "@/shared/constants/records.constants"
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 import { TransferAccountsSelector } from "./Transfer/TransferAccountsSelector"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
+import { getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -41,7 +42,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   const { accountsFormatted, isPending, origin, destination, destinationAccounts, destinationError,
     updateOrigin, updateDestination, handleDestinationError } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
 
-  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
+  const { handleChange, currencyState, errorAmount, validateZeroAmount,
   } = useCurrencyField({
     amount: null,
   })
@@ -102,6 +103,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
         destination: destination?.accountId ?? '',
         tag: tags.current,
       }
+      const { newValuesExpense, newValuesIncome } = getValuesIncomeAndExpense({ values: payload, expensesSelected: selectedExpenses.current })
     }
   }
 

@@ -143,6 +143,37 @@ export type CreateTransferValues = {
   tag: string[];
 }
 
+export type TransferExpense = {
+  indebtedPeople: never[];
+  account: string;
+  typeOfRecord: 'transfer';
+  isPaid: boolean;
+  linkedBudgets: never[];
+  amount: number;
+  budgets: string[];
+  category: string;
+  date: Date;
+  description: string;
+  shortName: string;
+  subCategory: string;
+  tag: string[];
+}
+
+export type TransferIncome = {
+  indebtedPeople: never[];
+  expensesPaid: ExpensePaid[];
+  account: string;
+  typeOfRecord: string;
+  amount: number;
+  budgets: string[];
+  category: string;
+  date: Date;
+  description: string;
+  shortName: string;
+  subCategory: string;
+  tag: string[];
+}
+
 export interface ExpenseDataResponse {
   data: {
     expense: ExpenseRecord
