@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
+import { Button, Label, Textarea, TextInput } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
@@ -22,10 +22,10 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { CreateIncomeDataForm, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
-import { RiArrowDownSLine } from "@remixicon/react"
 import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { DESTINATION_ACC_REQUIRED } from "@/shared/constants/records.constants"
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
+import { TransferAccountsSelector } from "./Transfer/TransferAccountsSelector"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -98,37 +98,16 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
           className="w-full px-4 mx-auto flex flex-col gap-4 md:max-w-xl mb-6 lg:mx-0 lg:px-0"
         >
           <DateTimePicker date={date} setDate={setDate} />
-          <Dropdown label="" renderTrigger={() => (
-            <Button disabled={isPending} data-testid="select-origin-dropdown-button" color="light">
-              { isPending ? 'Cargando...' : `Origen: ${origin?.name}` }
-              <RiArrowDownSLine />
-            </Button>
-          )}>
-            { accountsFormatted.map((acc) => (
-              <DropdownItem
-                onClick={() => updateOrigin(acc)}
-                value={acc.accountId}
-                key={acc.accountId}
-              >{acc.name}</DropdownItem>
-            ))}
-          </Dropdown>
-          <Dropdown label="" renderTrigger={() => (
-            <Button disabled={isPending} data-testid="select-destination-dropdown-button" color="light">
-              { isPending ? 'Cargando...' : `Destino: ${destination?.name ?? ''}` }
-              <RiArrowDownSLine />
-            </Button>
-          )}>
-            { destinationAccounts.map((acc) => (
-              <DropdownItem
-                onClick={() => updateDestination(acc)}
-                value={acc.accountId}
-                key={acc.accountId}
-              >{acc.name}</DropdownItem>
-            ))}
-          </Dropdown>
-          { destinationError && (
-            <ErrorMessage isAnimated>{destinationError}</ErrorMessage>
-          )}
+          <TransferAccountsSelector
+            accountsFormatted={accountsFormatted}
+            isPending={isPending}
+            origin={origin}
+            destination={destination}
+            destinationAccounts={destinationAccounts}
+            destinationError={destinationError}
+            updateOrigin={updateOrigin}
+            updateDestination={updateDestination}
+          />
           <CurrencyField
             labelName="Cantidad"
             dataTestId="amount"
