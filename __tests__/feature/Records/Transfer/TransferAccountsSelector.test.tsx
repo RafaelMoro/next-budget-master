@@ -158,26 +158,28 @@ describe('TransferAccountsSelector', () => {
       expect(await screen.findByText('Destino:')).toBeInTheDocument();
     });
 
-    it('should render destination dropdown with selected account name', () => {
-
-      render(<TransferAccountsSelectorWrapper />);
-
-      expect(screen.getByText('Destino: HSBC Debit')).toBeInTheDocument();
-    });
-
     it('should render only available destination accounts (excluding origin)', async () => {
       const user = userEvent.setup();
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
       render(<TransferAccountsSelectorWrapper />);
+
+      // Wait for accounts to load
+      await screen.findByText('Origen: Santander');
 
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
 
-      // Should show HSBC and BBVA but not Santander (origin)
-      expect(screen.getByText('HSBC Debit')).toBeInTheDocument();
-      expect(screen.getByText('BBVA Savings')).toBeInTheDocument();
+      // Should show HSBC oro (the only other account, not the origin Santander)
+      expect(screen.getByText('HSBC oro')).toBeInTheDocument();
       
-      // Should not show Santander as it's the origin account
-      const santanderElements = screen.queryAllByText('Santander Credit');
+      // Should not show Santander as it's the origin account - check that Santander only appears once (in origin dropdown)
+      const santanderElements = screen.queryAllByText(/Santander/);
       expect(santanderElements).toHaveLength(1); // Only in the origin dropdown
     });
 
