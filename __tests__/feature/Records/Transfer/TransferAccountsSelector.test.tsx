@@ -102,14 +102,20 @@ describe('TransferAccountsSelector', () => {
 
     it('should render all accounts in origin dropdown when clicked', async () => {
       const user = userEvent.setup();
-      render(<TransferAccountsSelectorInner />);
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
+      render(<TransferAccountsSelectorWrapper />);
 
       const originButton = screen.getByTestId('select-origin-dropdown-button');
       await user.click(originButton);
 
-      expect(screen.getByText('Santander Credit')).toBeInTheDocument();
-      expect(screen.getByText('HSBC Debit')).toBeInTheDocument();
-      expect(screen.getByText('BBVA Savings')).toBeInTheDocument();
+      expect(screen.getByText('Santander')).toBeInTheDocument();
+      expect(screen.getByText('HSBC oro')).toBeInTheDocument();
     });
 
     it('should call updateOrigin when an origin account is selected', async () => {
