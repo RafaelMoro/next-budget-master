@@ -22,7 +22,7 @@ export default async function CreateRecordPage() {
 
   return (
     <>
-      <LoginRequiredModal show={!accessToken} />
+      <LoginRequiredModal accessToken={accessToken} />
       <TransactionManager
         resCategories={resCategories}
         resBudgets={resBudgets}
