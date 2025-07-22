@@ -36,6 +36,11 @@ export type AccountsDisplay = {
   alias?: string;
 }
 
+export type AccountTransfer = {
+  accountId: string
+  name: string
+}
+
 //#region Data interfaces
 
 export type EditAccountPayload = {

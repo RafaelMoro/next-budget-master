@@ -33,9 +33,8 @@ interface TransferTemplateProps {
 export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { isMobileTablet, isDesktop } = useMediaQuery()
-  const { data } = useTransferBankAccounts({ accessToken, subscreen })
-  const fetchedAccounts = data?.accounts
-  console.log('fetchedAccounts', fetchedAccounts)
+  const { accountsFormatted } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
+  console.log('fetchedAccounts', accountsFormatted)
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
