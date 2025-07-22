@@ -53,16 +53,31 @@ describe('TransferTemplate', () => {
     expect(screen.getByRole('link', { name: /Cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear transferencia/i })).toBeInTheDocument();
   })
-  it('Given a user being on desktop, should see the more details section', () => {
-    mockMatchMedia({
-      [QueryMatchMedia.isMobileTablet]: false,
-      [QueryMatchMedia.isDesktop]: true,
-    });
 
-    const push = jest.fn();
-    render(<TransferTemplateWrapper push={push} />)
-
-    expect(screen.getByText(/Más detalles/i)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Etiquetas/i })).toBeInTheDocument();
+  describe('More details section', () => {
+    it('Given a user being on desktop, should see the more details section', () => {
+      mockMatchMedia({
+        [QueryMatchMedia.isMobileTablet]: false,
+        [QueryMatchMedia.isDesktop]: true,
+      });
+  
+      const push = jest.fn();
+      render(<TransferTemplateWrapper push={push} />)
+  
+      expect(screen.getByText(/Más detalles/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /Etiquetas/i })).toBeInTheDocument();
+    })
+  
+    it('Given a user being on desktop, should see the more details section', () => {
+      mockMatchMedia({
+        [QueryMatchMedia.isMobileTablet]: true,
+        [QueryMatchMedia.isDesktop]: false,
+      });
+  
+      const push = jest.fn();
+      render(<TransferTemplateWrapper push={push} />)
+  
+      expect(screen.getByRole('button', { name: /Más detalles/i  })).toBeInTheDocument();
+    })
   })
 })
