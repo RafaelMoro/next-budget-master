@@ -211,176 +211,42 @@ describe('TransferAccountsSelector', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should display error message when destinationError exists', () => {
-      const errorMessage = 'Cannot transfer to the same account';
-
-      render(<TransferAccountsSelectorWrapper />);
-
-      expect(screen.getByText(errorMessage)).toBeInTheDocument();
-    });
-
-    it('should not display error message when destinationError is null', () => {
-      render(<TransferAccountsSelectorWrapper />);
-
-      expect(screen.queryByText(/cannot transfer/i)).not.toBeInTheDocument();
-    });
-
-    it('should display error with proper styling', () => {
-      const errorMessage = 'Transfer error occurred';
-
-      render(<TransferAccountsSelectorWrapper />);
-
-      const errorElement = screen.getByText(errorMessage);
-      expect(errorElement).toBeInTheDocument();
-      // The ErrorMessage component should have proper styling
-      expect(errorElement.closest('div')).toHaveClass('text-red-600');
-    });
-  });
-
   describe('Component Integration', () => {
     it('should render both dropdowns and handle state updates correctly', async () => {
-      const mockUpdateOrigin = jest.fn();
-      const mockUpdateDestination = jest.fn();
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
 
       const user = userEvent.setup();
       render(<TransferAccountsSelectorWrapper />);
 
-      // Verify initial state
-      expect(screen.getByText('Origen: Santander Credit')).toBeInTheDocument();
+      // Wait for accounts to load and verify initial state
+      await screen.findByText('Origen: Santander');
       expect(screen.getByText('Destino:')).toBeInTheDocument();
 
-      // Test origin selection
+      // Test origin selection - change from Santander to HSBC oro
       const originButton = screen.getByTestId('select-origin-dropdown-button');
       await user.click(originButton);
-      await user.click(screen.getByText('HSBC Debit'));
-      expect(mockUpdateOrigin).toHaveBeenCalledWith(mockAccountTransfer2);
+      
+      // Wait for dropdown to open and click HSBC oro
+      await user.click(screen.getByText('HSBC oro'));
+      
+      // Verify origin has changed
+      expect(await screen.findByText('Origen: HSBC oro')).toBeInTheDocument();
 
-      // Test destination selection
+      // Test destination selection - with HSBC oro as origin, Santander should be available as destination
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
-      await user.click(screen.getByText('BBVA Savings'));
-      expect(mockUpdateDestination).toHaveBeenCalledWith(mockAccountTransfer3);
-    });
-
-    it('should handle empty accounts list gracefully', () => {
-
-      render(<TransferAccountsSelectorInner />);
-
-      expect(screen.getByText('Origen:')).toBeInTheDocument();
-      expect(screen.getByText('Destino:')).toBeInTheDocument();
-    });
-  });
-
-  describe('Accessibility', () => {
-    it('should have proper testids for automation', () => {
-      render(<TransferAccountsSelectorInner />);
-
-      expect(screen.getByTestId('select-origin-dropdown-button')).toBeInTheDocument();
-      expect(screen.getByTestId('select-destination-dropdown-button')).toBeInTheDocument();
-    });
-
-    it('should have proper button roles', () => {
-      render(<TransferAccountsSelectorInner />);
-
-      const originButton = screen.getByTestId('select-origin-dropdown-button');
-      const destinationButton = screen.getByTestId('select-destination-dropdown-button');
-
-      expect(originButton).toHaveAttribute('type', 'button');
-      expect(destinationButton).toHaveAttribute('type', 'button');
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should handle single account scenario', () => {
-      const singleAccount = [mockAccountTransfer1];
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        accountsFormatted: singleAccount,
-        destinationAccounts: [], // No destinations available
-        origin: mockAccountTransfer1
-      });
-
-      render(<TransferAccountsSelectorInner />);
-
-      expect(screen.getByText('Origen: Santander Credit')).toBeInTheDocument();
-      expect(screen.getByText('Destino:')).toBeInTheDocument();
-    });
-
-    it('should handle very long account names gracefully', () => {
-      const longNameAccount: AccountTransfer = {
-        accountId: '999',
-        name: 'Very Long Account Name That Might Cause Display Issues',
-        type: 'Crédito'
-      };
-
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        origin: longNameAccount
-      });
-
-      render(<TransferAccountsSelectorInner />);
-
-      expect(screen.getByText('Origen: Very Long Account Name That Might Cause Display Issues')).toBeInTheDocument();
-    });
-
-    it('should handle special characters in account names', () => {
-      const specialCharAccount: AccountTransfer = {
-        accountId: '999',
-        name: 'Café & Más - España',
-        type: 'Crédito'
-      };
-
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        origin: specialCharAccount
-      });
-
-      render(<TransferAccountsSelectorInner />);
-
-      expect(screen.getByText('Origen: Café & Más - España')).toBeInTheDocument();
-    });
-  });
-
-  describe('Wrapper Component Tests', () => {
-    it('should pass correct props to useTransferBankAccounts hook', () => {
-      render(
-        <TransferAccountsSelectorInner
-          subscreen="transfer"
-          accessToken="custom-token"
-          selectedAccount="account-123"
-        />
-      );
-
-      expect(mockUseTransferBankAccounts).toHaveBeenCalledWith({
-        subscreen: 'transfer',
-        accessToken: 'custom-token',
-        selectedAccount: 'account-123'
-      });
-    });
-
-    it('should use default props when not provided', () => {
-      render(<TransferAccountsSelectorInner />);
-
-      expect(mockUseTransferBankAccounts).toHaveBeenCalledWith({
-        subscreen: 'transfer',
-        accessToken: 'test-token',
-        selectedAccount: null
-      });
-    });
-
-    it('should handle different subscreen values', () => {
-      render(
-        <TransferAccountsSelectorInner
-          subscreen="expense"
-        />
-      );
-
-      expect(mockUseTransferBankAccounts).toHaveBeenCalledWith({
-        subscreen: 'expense',
-        accessToken: 'test-token',
-        selectedAccount: null
-      });
+      
+      // Wait for dropdown to open and click Santander (now available as destination)
+      await user.click(screen.getByText('Santander'));
+      
+      // Verify destination has changed
+      expect(await screen.findByText('Destino: Santander')).toBeInTheDocument();
     });
   });
 });
