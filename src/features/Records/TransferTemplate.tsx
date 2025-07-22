@@ -1,7 +1,11 @@
 "use client"
 import { useState } from "react"
-import { Button, Label, Textarea, TextInput } from "flowbite-react"
+import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
+import { useRouter } from 'next/navigation'
+import { SubmitHandler, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useMutation } from "@tanstack/react-query"
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
@@ -17,9 +21,7 @@ import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useSelectExpensesPaid } from "@/shared/hooks/useSelectExpensesPaid"
 import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { CreateIncomeDataForm, CreateTransferValues, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { CreateIncomeDataForm, CreateTransferPayload, CreateTransferValues, ExpenseDataResponse, IncomeExpenseSchema, TransferErrorResponse } from "@/shared/types/records.types"
 import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
 import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
@@ -27,7 +29,8 @@ import { DESTINATION_ACC_REQUIRED } from "@/shared/constants/records.constants"
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 import { TransferAccountsSelector } from "./Transfer/TransferAccountsSelector"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
-import { getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
+import { createTransferCb, getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
+import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -38,8 +41,9 @@ interface TransferTemplateProps {
 
 export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
-  const { accountsFormatted, isPending, origin, destination, destinationAccounts, destinationError,
+  const { accountsFormatted, isPending: isPendingFetchAcc, origin, destination, destinationAccounts, destinationError,
     updateOrigin, updateDestination, handleDestinationError } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount,
@@ -77,6 +81,20 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     resolver: yupResolver(IncomeExpenseSchema)
   })
 
+  const {
+    mutate: createTransfer, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, error: errorCreate
+  } = useMutation<ExpenseDataResponse, TransferErrorResponse, CreateTransferPayload>({
+    mutationFn: (data) => createTransferCb(data, accessToken),
+    onSuccess: () => {
+      setTimeout(() => {
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
+    }
+  })
+  const isPending = isPendingCreate // || isPendingEdit
+  const isSuccess = isSuccessCreate // || isSuccessEdit
+  const isError = isErrorCreate // || isErrorEdit
+
   const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
       updateCategoryError(CATEGORY_REQUIRED)
@@ -104,6 +122,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
         tag: tags.current,
       }
       const { newValuesExpense, newValuesIncome } = getValuesIncomeAndExpense({ values: payload, expensesSelected: selectedExpenses.current })
+      createTransfer({  expense: newValuesExpense, income: newValuesIncome })
     }
   }
 
@@ -118,7 +137,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
           <DateTimePicker date={date} setDate={setDate} />
           <TransferAccountsSelector
             accountsFormatted={accountsFormatted}
-            isPending={isPending}
+            isPending={isPendingFetchAcc}
             origin={origin}
             destination={destination}
             destinationAccounts={destinationAccounts}
@@ -188,15 +207,14 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
             <CancelButtonExpenseTemplate action="create" />
             <Button
               className="hover:cursor-pointer"
-              // disabled={isPending || isSuccess || openTagModal}
+              disabled={isPending || isSuccess || openTagModal}
               type="submit"
             >
-              Crear transferencia
-              {/* { isPending ? (
+              { isPending ? (
                   <Spinner aria-label="loading create transfer" />
                 ) : isSuccess ? (
                   <CheckIcon data-testid="check-icon" />
-                ) : buttonText } */}
+                ) : 'Crear transferencia' }
             </Button>
           </div>
         </form>

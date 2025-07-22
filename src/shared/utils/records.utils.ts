@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense } from "../types/records.types";
+import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
@@ -59,6 +59,21 @@ export const editIncomeCb = (data: EditIncomePayload, accessToken: string): Prom
     throw new Error("Access token is not defined");
   }
   return axios.put(`${uri}/incomes-actions`, data, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
+export const createTransferCb = (data: CreateTransferPayload, accessToken: string): Promise<TransferDataResponse> => {
+  const uri = process.env.NEXT_PUBLIC_BACKEND_URI
+  if (!uri) {
+    throw new Error("Backend URI is not defined");
+  }
+  if (!accessToken) {
+    throw new Error("Access token is not defined");
+  }
+  return axios.post(`${uri}/records/transfer`, data, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

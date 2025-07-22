@@ -163,7 +163,7 @@ export type TransferIncome = {
   indebtedPeople: never[];
   expensesPaid: ExpensePaid[];
   account: string;
-  typeOfRecord: string;
+  typeOfRecord: 'transfer';
   amount: number;
   budgets: string[];
   category: string;
@@ -172,6 +172,11 @@ export type TransferIncome = {
   shortName: string;
   subCategory: string;
   tag: string[];
+}
+
+export type CreateTransferPayload = {
+  expense: TransferExpense
+  income: TransferIncome
 }
 
 export interface ExpenseDataResponse {
@@ -186,6 +191,17 @@ export interface ExpenseDataResponse {
 
 export interface IncomeDataResponse {
   data: {
+    income: IncomeRecord
+  }
+  error: null;
+  message: string[];
+  success: boolean;
+  version: string;
+}
+
+export interface TransferDataResponse {
+  data: {
+    expense: ExpenseRecord
     income: IncomeRecord
   }
   error: null;
@@ -219,6 +235,14 @@ export interface ExpenseErrorResponse extends Omit<AxiosError, 'response'> {
 }
 
 export interface IncomeErrorResponse extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
+    }
+  }>;
+}
+
+export interface TransferErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;
