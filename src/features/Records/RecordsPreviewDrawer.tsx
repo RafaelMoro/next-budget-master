@@ -26,7 +26,10 @@ interface RecordsPreviewDrawerProps {
 export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPreviewDrawerProps) => {
   const router = useRouter()
   const { isMobile } = useMediaQuery()
-  const { manageSelectedAccountCookie } = useDashboard()
+  const { manageSelectedAccountCookie, accountsDisplay } = useDashboard()
+  const isOrigin = typeof record?.isPaid !== 'undefined' && record?.typeOfRecord === 'transfer';
+  const transferText = isOrigin ? 'Transferencia a' : 'Transferencia desde';
+  const transferAccountName = accountsDisplay.find(account => account.accountId === record?.transferRecord?.account)?.name || ''
 
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
   const paidStatus = record?.isPaid ? 'Pagado' : 'Sin pagar'
@@ -99,11 +102,7 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
                 <h5 className="text-lg tracking-wider">Detalle de la transferencia:</h5>
                 <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
                   <RiBankLine size={20} />
-                  <p>Origen: <span className="text-black dark:text-white">{record.transferRecord?.account}</span></p>
-                </div>
-                <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
-                  <RiBankLine size={20} />
-                  <p>Destino: <span className="text-black dark:text-white">{record.transferRecord?.transferId}</span></p>
+                  <p>{transferText}: <span className="text-black dark:text-white">{transferAccountName}</span></p>
                 </div>
               </div>
             )}
