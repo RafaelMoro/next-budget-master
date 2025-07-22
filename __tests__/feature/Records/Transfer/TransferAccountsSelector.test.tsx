@@ -76,7 +76,7 @@ describe('TransferAccountsSelector', () => {
     });
 
     it('should disable buttons when isPending is true', () => {
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
 
       const originButton = screen.getByTestId('select-origin-dropdown-button');
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
@@ -87,10 +87,17 @@ describe('TransferAccountsSelector', () => {
   });
 
   describe('Origin Dropdown', () => {
-    it('should render origin dropdown with correct initial value', () => {
-      render(<TransferAccountsSelectorInner />);
+    it('should render origin dropdown with correct initial value', async () => {
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
+      render(<TransferAccountsSelectorWrapper />);
 
-      expect(screen.getByText('Origen: Santander Credit')).toBeInTheDocument();
+      expect(await screen.findByText('Origen: Santander')).toBeInTheDocument();
     });
 
     it('should render all accounts in origin dropdown when clicked', async () => {
@@ -107,10 +114,6 @@ describe('TransferAccountsSelector', () => {
 
     it('should call updateOrigin when an origin account is selected', async () => {
       const mockUpdateOrigin = jest.fn();
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        updateOrigin: mockUpdateOrigin
-      });
 
       const user = userEvent.setup();
       render(<TransferAccountsSelectorInner />);
