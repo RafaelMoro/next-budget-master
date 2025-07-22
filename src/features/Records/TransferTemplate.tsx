@@ -73,7 +73,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     handleUnselectExpense,
     handleSubmitGetExpenses,
     handleClick,
-  } = useSelectExpensesPaid({ accessToken, accountId: selectedAccount })
+  } = useSelectExpensesPaid({ accessToken, accountId: destination?.accountId || null })
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
 
   const {
