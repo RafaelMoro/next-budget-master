@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecordsPreviewDrawer } from '@/features/Records/RecordsPreviewDrawer';
 import { useRecordPreview } from '@/shared/hooks/useRecordPreview';
-import { recordMock, paidRecordMock } from '../../mocks/records.mock';
+import { recordMock, paidRecordMock, editExpense } from '../../mocks/records.mock';
 import { BankMovement } from '@/shared/types/records.types';
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
@@ -92,5 +92,20 @@ describe('RecordsPreviewDrawer', () => {
     await user.click(openButton);
 
     expect(screen.getByText('Pagado')).toBeInTheDocument();
+  });
+
+  it('should display tags when the record has tags', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn();
+    render(<RecordsPreviewDrawerWrapper recordProp={editExpense} push={push} />);
+
+    const openButton = screen.getByText('Open Drawer');
+    await user.click(openButton);
+
+    // Should display the tags section header
+    expect(screen.getByText('Etiquetas:')).toBeInTheDocument();
+    
+    // Should display the tag from editExpense mock
+    expect(screen.getByText('something')).toBeInTheDocument();
   });
 });
