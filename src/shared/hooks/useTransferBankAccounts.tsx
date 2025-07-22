@@ -46,11 +46,9 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
       }))
       // Set origin account
       const originAccount: AccountTransfer = accounts.find(acc => acc.accountId === selectedAccount) ?? accounts?.[0]
-      console.log('originAccount', originAccount)
       setOrigin(originAccount)
 
       const newDestinationAccounts: AccountTransfer[] = accounts.filter(acc => acc.accountId !== originAccount.accountId)
-      console.log('newDestinationAccounts', newDestinationAccounts)
       setDestinationAccounts(newDestinationAccounts)
 
       setAccountsFormatted(accounts)
