@@ -34,7 +34,7 @@ interface TransferTemplateProps {
 export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { isMobileTablet, isDesktop } = useMediaQuery()
-  const { accountsFormatted, isPending, origin, updateOrigin } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
+  const { accountsFormatted, isPending, origin, destination, updateOrigin, updateDestination } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -93,6 +93,20 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
             { accountsFormatted.map((acc) => (
               <DropdownItem
                 onClick={() => updateOrigin(acc)}
+                value={acc.accountId}
+                key={acc.accountId}
+              >{acc.name}</DropdownItem>
+            ))}
+          </Dropdown>
+          <Dropdown label="" renderTrigger={() => (
+            <Button disabled={isPending} data-testid="select-destination-dropdown-button" color="light">
+              { isPending ? 'Cargando...' : `Destino: ${destination?.name ?? ''}` }
+              <RiArrowDownSLine />
+            </Button>
+          )}>
+            { accountsFormatted.map((acc) => (
+              <DropdownItem
+                onClick={() => updateDestination(acc)}
                 value={acc.accountId}
                 key={acc.accountId}
               >{acc.name}</DropdownItem>
