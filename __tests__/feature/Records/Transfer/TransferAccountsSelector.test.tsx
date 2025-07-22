@@ -119,18 +119,28 @@ describe('TransferAccountsSelector', () => {
     });
 
     it('should call updateOrigin when an origin account is selected', async () => {
-      const mockUpdateOrigin = jest.fn();
-
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
       const user = userEvent.setup();
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
+
+      // Wait for the component to load and render initial state
+      await screen.findByText('Origen: Santander');
 
       const originButton = screen.getByTestId('select-origin-dropdown-button');
       await user.click(originButton);
 
-      const hsbc = screen.getByText('HSBC Debit');
+      const hsbc = screen.getByText('HSBC oro');
       await user.click(hsbc);
 
-      expect(mockUpdateOrigin).toHaveBeenCalledWith(mockAccountTransfer2);
+      // Since we're using the real hook, we can verify the behavior by checking 
+      // that the origin has changed in the UI
+      expect(await screen.findByText('Origen: HSBC oro')).toBeInTheDocument();
     });
   });
 
@@ -142,10 +152,6 @@ describe('TransferAccountsSelector', () => {
     });
 
     it('should render destination dropdown with selected account name', () => {
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        destination: mockAccountTransfer2
-      });
 
       render(<TransferAccountsSelectorInner />);
 
