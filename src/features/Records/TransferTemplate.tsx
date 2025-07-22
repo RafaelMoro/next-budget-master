@@ -25,6 +25,7 @@ import { TransactionScreens } from "@/shared/types/dashboard.types"
 import { RiArrowDownSLine } from "@remixicon/react"
 import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { DESTINATION_ACC_REQUIRED } from "@/shared/constants/records.constants"
+import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -186,6 +187,21 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
               </div>
             </FurtherDetailsAccordeon>
           )}
+          <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-4">
+            <CancelButtonExpenseTemplate action="create" />
+            <Button
+              className="hover:cursor-pointer"
+              // disabled={isPending || isSuccess || openTagModal}
+              type="submit"
+            >
+              Crear transferencia
+              {/* { isPending ? (
+                  <Spinner aria-label="loading create transfer" />
+                ) : isSuccess ? (
+                  <CheckIcon data-testid="check-icon" />
+                ) : buttonText } */}
+            </Button>
+          </div>
         </form>
       </AnimatePresence>
       { isDesktop && (
