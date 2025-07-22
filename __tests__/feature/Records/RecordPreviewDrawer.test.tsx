@@ -56,6 +56,7 @@ describe('RecordsPreviewDrawer', () => {
     await user.click(openButton);
 
     expect(screen.getByText('Detalles de la transacción')).toBeInTheDocument();
+    expect(screen.getByText('Gasto')).toBeInTheDocument();
     expect(screen.getByText(recordMock.shortName)).toBeInTheDocument();
     expect(screen.getByText(recordMock.amountFormatted)).toBeInTheDocument();
 
@@ -64,6 +65,8 @@ describe('RecordsPreviewDrawer', () => {
     }
 
     expect(screen.getByText(recordMock.subCategory)).toBeInTheDocument();
+    expect(screen.getByText('Estatus de pago:')).toBeInTheDocument();
+    expect(screen.getByText('Sin pagar')).toBeInTheDocument();
   });
 
   it('should close the drawer when the close button is clicked', async () => {
