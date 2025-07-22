@@ -57,6 +57,7 @@ export const editIncome: BankMovement = {
   ...recordMock,
   _id: "6855ed98e3d57ba1214bc5c1",
   shortName: 'Edited Income',
+  typeOfRecord: 'income',
   description: 'a edited income description',
   amount: 500,
   amountFormatted: '$500.00',

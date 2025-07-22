@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecordsPreviewDrawer } from '@/features/Records/RecordsPreviewDrawer';
 import { useRecordPreview } from '@/shared/hooks/useRecordPreview';
-import { recordMock, paidRecordMock, editExpense, transferRecordMock } from '../../mocks/records.mock';
+import { recordMock, paidRecordMock, editExpense, transferRecordMock, editIncome } from '../../mocks/records.mock';
 import { BankMovement } from '@/shared/types/records.types';
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
@@ -122,5 +122,35 @@ describe('RecordsPreviewDrawer', () => {
     
     // Should display "Transferencia" as the type of record
     expect(screen.getByText('Transferencia')).toBeInTheDocument();
+  });
+
+  it('should navigate to edit expense route when editing an expense record', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn();
+    render(<RecordsPreviewDrawerWrapper recordProp={recordMock} push={push} />);
+
+    const openButton = screen.getByText('Open Drawer');
+    await user.click(openButton);
+
+    const editButton = screen.getByText('Editar');
+    await user.click(editButton);
+
+    // Should navigate to edit expense route since recordMock is an expense
+    expect(push).toHaveBeenCalledWith('/edit-record/edit-expense');
+  });
+
+  it('should navigate to edit income route when editing an income record', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn();
+    render(<RecordsPreviewDrawerWrapper recordProp={editIncome} push={push} />);
+
+    const openButton = screen.getByText('Open Drawer');
+    await user.click(openButton);
+
+    const editButton = screen.getByText('Editar');
+    await user.click(editButton);
+
+    // Should navigate to edit income route since editIncome is an income record
+    expect(push).toHaveBeenCalledWith('/edit-record/edit-income');
   });
 });
