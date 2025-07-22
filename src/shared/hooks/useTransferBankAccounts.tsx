@@ -11,6 +11,7 @@ interface UseTransferBankAccountsProps {
 }
 export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccount }: UseTransferBankAccountsProps) => {
   const [accountsFormatted, setAccountsFormatted] = useState<AccountTransfer[]>([])
+  const [destinationAccounts, setDestinationAccounts] = useState<AccountTransfer[]>([])
   const [origin, setOrigin] = useState<AccountTransfer | null>(null)
   const [destination, setDestination] = useState<AccountTransfer | null>(null)
 
@@ -19,6 +20,9 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
   }
   const updateOrigin = (account: AccountTransfer) => {
     setOrigin(account)
+    const newDestinationAccounts = destinationAccounts.filter(acc => acc.accountId !== account.accountId)
+    setDestinationAccounts(newDestinationAccounts)
+    setDestination(null)
   }
 
   const isTransfer = subscreen === 'transfer'
@@ -39,6 +43,9 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
       const originAccount: AccountTransfer = accounts.find(acc => acc.accountId === selectedAccount) ?? accounts?.[0]
       setOrigin(originAccount)
 
+      const newDestinationAccounts: AccountTransfer[] = accounts.filter(acc => acc.accountId !== originAccount.accountId)
+      setDestinationAccounts(newDestinationAccounts)
+
       setAccountsFormatted(accounts)
     }
   }, [data, isSuccess, selectedAccount])
@@ -48,6 +55,7 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
     isPending,
     origin,
     destination,
+    destinationAccounts,
     updateDestination,
     updateOrigin
   }

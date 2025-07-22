@@ -34,7 +34,7 @@ interface TransferTemplateProps {
 export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { isMobileTablet, isDesktop } = useMediaQuery()
-  const { accountsFormatted, isPending, origin, destination, updateOrigin, updateDestination } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
+  const { accountsFormatted, isPending, origin, destination, destinationAccounts, updateOrigin, updateDestination } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -104,7 +104,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
               <RiArrowDownSLine />
             </Button>
           )}>
-            { accountsFormatted.map((acc) => (
+            { destinationAccounts.map((acc) => (
               <DropdownItem
                 onClick={() => updateDestination(acc)}
                 value={acc.accountId}
