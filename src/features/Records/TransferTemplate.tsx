@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Label, Textarea, TextInput } from "flowbite-react"
+import { Button, Dropdown, DropdownItem, Label, Textarea, TextInput } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
@@ -22,6 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { CreateIncomeDataForm, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
+import { RiArrowDownSLine } from "@remixicon/react"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -33,8 +34,7 @@ interface TransferTemplateProps {
 export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { isMobileTablet, isDesktop } = useMediaQuery()
-  const { accountsFormatted } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
-  console.log('fetchedAccounts', accountsFormatted)
+  const { accountsFormatted, isPending, origin, updateOrigin } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -84,6 +84,20 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
           className="w-full px-4 mx-auto flex flex-col gap-4 md:max-w-xl mb-6 lg:mx-0 lg:px-0"
         >
           <DateTimePicker date={date} setDate={setDate} />
+          <Dropdown label="" renderTrigger={() => (
+            <Button disabled={isPending} data-testid="select-origin-dropdown-button" color="light">
+              { isPending ? 'Cargando...' : `Origen: ${origin?.name}` }
+              <RiArrowDownSLine />
+            </Button>
+          )}>
+            { accountsFormatted.map((acc) => (
+              <DropdownItem
+                onClick={() => updateOrigin(acc)}
+                value={acc.accountId}
+                key={acc.accountId}
+              >{acc.name}</DropdownItem>
+            ))}
+          </Dropdown>
           <CurrencyField
             labelName="Cantidad"
             dataTestId="amount"

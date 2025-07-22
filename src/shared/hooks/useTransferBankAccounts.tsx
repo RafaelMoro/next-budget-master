@@ -14,6 +14,13 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
   const [origin, setOrigin] = useState<AccountTransfer | null>(null)
   const [destination, setDestination] = useState<AccountTransfer | null>(null)
 
+  const updateDestination = (account: AccountTransfer) => {
+    setDestination(account)
+  }
+  const updateOrigin = (account: AccountTransfer) => {
+    setOrigin(account)
+  }
+
   const isTransfer = subscreen === 'transfer'
   const { data, isSuccess, isPending, } = useQuery({
     queryKey: ['accounts'],
@@ -23,12 +30,15 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
 
   useEffect(() => {
     if (Boolean(data) && isSuccess) {
+      // Format accounts
       const accounts = data.accounts.map(account => ({
         accountId: account._id,
         name: account.title
       }))
+      // Set origin account
       const originAccount: AccountTransfer = accounts.find(acc => acc.accountId === selectedAccount) ?? accounts?.[0]
       setOrigin(originAccount)
+
       setAccountsFormatted(accounts)
     }
   }, [data, isSuccess, selectedAccount])
@@ -37,6 +47,8 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
     accountsFormatted,
     isPending,
     origin,
-    destination
+    destination,
+    updateDestination,
+    updateOrigin
   }
 }
