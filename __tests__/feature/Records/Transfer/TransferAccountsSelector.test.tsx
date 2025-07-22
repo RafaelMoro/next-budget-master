@@ -4,31 +4,9 @@ import axios from 'axios';
 
 import { TransferAccountsSelector } from '@/features/Records/Transfer/TransferAccountsSelector';
 import { useTransferBankAccounts } from '@/shared/hooks/useTransferBankAccounts';
-import { AccountTransfer } from '@/shared/types/accounts.types';
 import { QueryProviderWrapper } from '@/app/QueryProviderWrapper';
 import { TransactionScreens } from '@/shared/types/dashboard.types';
 import { mockAccounts } from '../../../mocks/accounts.mock';
-
-// Mock accounts data for testing
-const mockAccountTransfer1: AccountTransfer = {
-  accountId: '1',
-  name: 'Santander Credit',
-  type: 'Crédito'
-};
-
-const mockAccountTransfer2: AccountTransfer = {
-  accountId: '2',
-  name: 'HSBC Debit',
-  type: 'Débito'
-};
-
-const mockAccountTransfer3: AccountTransfer = {
-  accountId: '3',
-  name: 'BBVA Savings',
-  type: 'Cuenta de ahorro'
-};
-
-const mockAccountsFormatted = [mockAccountTransfer1, mockAccountTransfer2, mockAccountTransfer3];
 
 interface TransferAccountsSelectorProps {
   subscreen?: TransactionScreens;
