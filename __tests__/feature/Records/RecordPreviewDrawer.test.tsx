@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecordsPreviewDrawer } from '@/features/Records/RecordsPreviewDrawer';
 import { useRecordPreview } from '@/shared/hooks/useRecordPreview';
-import { recordMock, paidRecordMock, editExpense } from '../../mocks/records.mock';
+import { recordMock, paidRecordMock, editExpense, transferRecordMock } from '../../mocks/records.mock';
 import { BankMovement } from '@/shared/types/records.types';
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
@@ -107,5 +107,20 @@ describe('RecordsPreviewDrawer', () => {
     
     // Should display the tag from editExpense mock
     expect(screen.getByText('something')).toBeInTheDocument();
+  });
+
+  it('should display transfer details when the record is a transfer', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn();
+    render(<RecordsPreviewDrawerWrapper recordProp={transferRecordMock} push={push} />);
+
+    const openButton = screen.getByText('Open Drawer');
+    await user.click(openButton);
+
+    // Should display the transfer details section header
+    expect(screen.getByText('Detalle de la transferencia:')).toBeInTheDocument();
+    
+    // Should display "Transferencia" as the type of record
+    expect(screen.getByText('Transferencia')).toBeInTheDocument();
   });
 });
