@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { TransactionScreens } from "../types/dashboard.types"
 import { getAccountsCb } from "../utils/accounts.utils"
 import { useEffect, useState } from "react"
-import { AccountTransfer } from "../types/accounts.types"
+import { AccountTransfer, AccountTypes } from "../types/accounts.types"
 
 interface UseTransferBankAccountsProps {
   subscreen: TransactionScreens
@@ -42,7 +42,8 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
       // Format accounts
       const accounts: AccountTransfer[] = data.accounts.map(account => ({
         accountId: account._id,
-        name: account.title
+        name: account.title,
+        type: account.accountType as AccountTypes,
       }))
       // Set origin account
       const originAccount: AccountTransfer = accounts.find(acc => acc.accountId === selectedAccount) ?? accounts?.[0]

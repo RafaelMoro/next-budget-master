@@ -39,6 +39,7 @@ export type AccountsDisplay = {
 export type AccountTransfer = {
   accountId: string
   name: string
+  type: AccountTypes;
 }
 
 //#region Data interfaces

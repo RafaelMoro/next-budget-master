@@ -217,10 +217,12 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
             <FurtherDetailsAccordeon>
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-                <SelectPaidSection
-                  selectedExpenses={selectedExpenses.current}
-                  toggleOpen={toggleSelectExpensesDrawer}
-                />
+                { destination && destination?.type === 'Crédito' && (
+                  <SelectPaidSection
+                    selectedExpenses={selectedExpenses.current}
+                    toggleOpen={toggleSelectExpensesDrawer}
+                  />
+                )}
               </div>
             </FurtherDetailsAccordeon>
           )}
@@ -247,10 +249,12 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
         <aside className="w-full flex flex-col gap-12 max-w-xs">
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
-          <SelectPaidSection
-            selectedExpenses={selectedExpenses.current}
-            toggleOpen={toggleSelectExpensesDrawer}
-          />
+          { destination && destination?.type === 'Crédito' && (
+            <SelectPaidSection
+              selectedExpenses={selectedExpenses.current}
+              toggleOpen={toggleSelectExpensesDrawer}
+            />
+          )}
         </aside>
       ) }
       <SelectPaidDrawer
