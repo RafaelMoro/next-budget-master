@@ -184,18 +184,30 @@ describe('TransferAccountsSelector', () => {
     });
 
     it('should call updateDestination when a destination account is selected', async () => {
-      const mockUpdateDestination = jest.fn();
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
 
       const user = userEvent.setup();
       render(<TransferAccountsSelectorWrapper />);
 
+      // Wait for accounts to load
+      await screen.findByText('Origen: Santander');
+
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
 
-      const hsbc = screen.getByText('HSBC Debit');
+      // Click on HSBC oro (the correct account name from mock data)
+      const hsbc = screen.getByText('HSBC oro');
       await user.click(hsbc);
 
-      expect(mockUpdateDestination).toHaveBeenCalledWith(mockAccountTransfer2);
+      // Since we're using the real hook, verify the behavior by checking 
+      // that the destination has changed in the UI
+      expect(await screen.findByText('Destino: HSBC oro')).toBeInTheDocument();
     });
   });
 
