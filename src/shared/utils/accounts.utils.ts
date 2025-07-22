@@ -43,7 +43,10 @@ export const getAccountsCb = async (accessToken: string): Promise<GetAccountsRes
         Authorization: `Bearer ${accessToken}`,
       },
     })
-    return res?.data
+    return {
+      detailedError: null,
+      accounts: res?.data?.data?.accounts
+    }
   } catch (error) {
     console.error('Error fetching accounts:', error);
     if ((error as ErrorCatched)?.cause?.code) {

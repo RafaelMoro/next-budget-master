@@ -14,7 +14,6 @@ export const useTransferBankAccounts = ({ subscreen, accessToken }: UseTransferB
     queryFn: () => getAccountsCb(accessToken)
   })
 
-  console.log('data', data)
   return {
     data
   }

@@ -34,6 +34,8 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { isMobileTablet, isDesktop } = useMediaQuery()
   const { data } = useTransferBankAccounts({ accessToken, subscreen })
+  const fetchedAccounts = data?.accounts
+  console.log('fetchedAccounts', fetchedAccounts)
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
