@@ -1,6 +1,6 @@
 "use client"
 
-import { RiCloseFill,
+import { RiBankLine, RiCloseFill,
   RiCloseLine,
   RiPriceTag3Line } from "@remixicon/react";
 import { Badge, Button, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
@@ -93,6 +93,20 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
               <p className={priceStyles}>{record.amountFormatted}</p>
               <p className="text-sm text-gray-400">{record.description}</p>
             </div>
+
+            { record?.transferRecord && (
+              <div className="flex flex-col gap-2">
+                <h5 className="text-lg tracking-wider">Detalle de la transferencia:</h5>
+                <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                  <RiBankLine size={20} />
+                  <p>Origen: <span className="text-black dark:text-white">{record.transferRecord?.account}</span></p>
+                </div>
+                <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                  <RiBankLine size={20} />
+                  <p>Destino: <span className="text-black dark:text-white">{record.transferRecord?.transferId}</span></p>
+                </div>
+              </div>
+            )}
 
             <div className="flex flex-col gap-2">
               <h5 className="text-lg tracking-wider">Categorias:</h5>
