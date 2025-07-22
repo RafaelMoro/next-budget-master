@@ -1,9 +1,11 @@
 import axios from "axios";
-import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse } from "../types/records.types";
+import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
+import { cleanCurrencyString } from "./formatNumberCurrency.utils";
 
+//#region API Calls
 export const createExpenseCb = (data: CreateExpensePayload, accessToken: string): Promise<ExpenseDataResponse> => {
   const uri = process.env.NEXT_PUBLIC_BACKEND_URI
   if (!uri) {
@@ -95,6 +97,7 @@ export const getExpensesByDateCb = async (payload: FetchExpensesDatePayload, acc
   }
 }
 
+//#region Local Storage
 export const saveEditRecordLS = (recordToBeEdited: BankMovement) => {
   try {
     addToLocalStorage({ prop: EDIT_RECORD_KEY, newInfo: { record: recordToBeEdited } })
@@ -110,3 +113,33 @@ export const resetEditRecordLS = () => {
     console.log('error while removing record to be edited in local storage', error)
   }
 }
+
+//#region Utility
+
+export const getValuesIncomeAndExpense = ({ values, expensesSelected }: { values: CreateTransferValues, expensesSelected: ExpensePaid[] }) => {
+  const typeOfRecordValue = 'transfer';
+  const {
+    amount, origin, destination, date, ...restValues
+  } = values;
+  const amountNumber = cleanCurrencyString(amount)
+  const newValuesExpense = {
+    ...restValues,
+    date,
+    amount: amountNumber,
+    indebtedPeople: [],
+    account: origin,
+    typeOfRecord: typeOfRecordValue,
+    isPaid: true,
+    linkedBudgets: [],
+  };
+  const newValuesIncome = {
+    ...restValues,
+    date,
+    amount: amountNumber,
+    indebtedPeople: [],
+    expensesPaid: expensesSelected,
+    account: destination,
+    typeOfRecord: typeOfRecordValue,
+  };
+  return { newValuesIncome, newValuesExpense };
+};
