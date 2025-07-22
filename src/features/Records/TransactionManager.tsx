@@ -89,7 +89,7 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
             selectedAccount={selectedAccount}
             accessToken={accessToken}
             subscreen={subscreen}
-            // detailedErrorCategories={errorCategories}
+            detailedErrorCategories={errorCategories}
           />
         )}
       </main>
