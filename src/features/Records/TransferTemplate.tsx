@@ -1,11 +1,12 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button, CheckIcon, Label, Spinner, Textarea, TextInput } from "flowbite-react"
 import { AnimatePresence } from "motion/react"
 import { useRouter } from 'next/navigation'
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useMutation } from "@tanstack/react-query"
+import { Toaster, toast } from "sonner";
 
 import { useCurrencyField } from "@/shared/hooks/useCurrencyField"
 import { CurrencyField } from "@/shared/ui/atoms/CurrencyField"
@@ -24,22 +25,24 @@ import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
 import { CreateIncomeDataForm, CreateTransferPayload, CreateTransferValues, ExpenseDataResponse, IncomeExpenseSchema, TransferErrorResponse } from "@/shared/types/records.types"
 import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
-import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
-import { DESTINATION_ACC_REQUIRED } from "@/shared/constants/records.constants"
+import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
+import { CREATE_EXPENSE_INCOME_ERROR, DESTINATION_ACC_REQUIRED } from "@/shared/constants/records.constants"
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 import { TransferAccountsSelector } from "./Transfer/TransferAccountsSelector"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { createTransferCb, getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
+import { DetailedError, GeneralError } from "@/shared/types/global.types"
 
 interface TransferTemplateProps {
   categories: Category[]
   selectedAccount: string | null
   accessToken: string
   subscreen: TransactionScreens
+  detailedErrorCategories: DetailedError | null
 }
 
-export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen }: TransferTemplateProps) => {
+export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen, detailedErrorCategories }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
@@ -94,6 +97,24 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   const isPending = isPendingCreate // || isPendingEdit
   const isSuccess = isSuccessCreate // || isSuccessEdit
   const isError = isErrorCreate // || isErrorEdit
+  const messageErrorCreate = (errorCreate as unknown as GeneralError)?.response?.data?.error?.message
+
+  // Handle error create transfer
+  useEffect(() => {
+    if (isError && messageErrorCreate) {
+      toast.error(CREATE_EXPENSE_INCOME_ERROR);
+      return
+    }
+  }, [isError, messageErrorCreate])
+
+  // Handle error categories use Effect
+    useEffect(() => {
+    if (detailedErrorCategories?.cause === 'connection') {
+      toast.error('Error de conexión. Por favor, inténtalo más tarde.');
+    } else if (detailedErrorCategories?.message) {
+      toast.error(CATEGORY_FETCH_ERROR);
+    }
+  }, [detailedErrorCategories?.cause, detailedErrorCategories?.message])
 
   const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
@@ -218,6 +239,9 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
             </Button>
           </div>
         </form>
+        { (isError || detailedErrorCategories?.message) && (
+            <Toaster position="top-center" />
+          )}
       </AnimatePresence>
       { isDesktop && (
         <aside className="w-full flex flex-col gap-12 max-w-xs">

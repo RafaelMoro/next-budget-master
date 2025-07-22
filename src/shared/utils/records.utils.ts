@@ -73,7 +73,7 @@ export const createTransferCb = (data: CreateTransferPayload, accessToken: strin
   if (!accessToken) {
     throw new Error("Access token is not defined");
   }
-  return axios.post(`${uri}/records/transfer`, data, {
+  return axios.post(`${uri}/records/transferr`, data, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
