@@ -20,16 +20,20 @@ import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { CreateIncomeDataForm, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
+import { TransactionScreens } from "@/shared/types/dashboard.types"
 
 interface TransferTemplateProps {
   categories: Category[]
   selectedAccount: string | null
   accessToken: string
+  subscreen: TransactionScreens
 }
 
-export const TransferTemplate = ({ categories, selectedAccount, accessToken }: TransferTemplateProps) => {
+export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { isMobileTablet, isDesktop } = useMediaQuery()
+  const { data } = useTransferBankAccounts({ accessToken, subscreen })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
