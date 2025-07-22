@@ -145,22 +145,29 @@ describe('TransferAccountsSelector', () => {
   });
 
   describe('Destination Dropdown', () => {
-    it('should render destination dropdown with empty value initially', () => {
-      render(<TransferAccountsSelectorInner />);
+    it('should render destination dropdown with empty value initially', async () => {
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
+      render(<TransferAccountsSelectorWrapper />);
 
-      expect(screen.getByText('Destino:')).toBeInTheDocument();
+      expect(await screen.findByText('Destino:')).toBeInTheDocument();
     });
 
     it('should render destination dropdown with selected account name', () => {
 
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
 
       expect(screen.getByText('Destino: HSBC Debit')).toBeInTheDocument();
     });
 
     it('should render only available destination accounts (excluding origin)', async () => {
       const user = userEvent.setup();
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
 
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
@@ -176,13 +183,9 @@ describe('TransferAccountsSelector', () => {
 
     it('should call updateDestination when a destination account is selected', async () => {
       const mockUpdateDestination = jest.fn();
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        updateDestination: mockUpdateDestination
-      });
 
       const user = userEvent.setup();
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
 
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
@@ -197,30 +200,22 @@ describe('TransferAccountsSelector', () => {
   describe('Error Handling', () => {
     it('should display error message when destinationError exists', () => {
       const errorMessage = 'Cannot transfer to the same account';
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        destinationError: errorMessage
-      });
 
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
 
       expect(screen.getByText(errorMessage)).toBeInTheDocument();
     });
 
     it('should not display error message when destinationError is null', () => {
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
 
       expect(screen.queryByText(/cannot transfer/i)).not.toBeInTheDocument();
     });
 
     it('should display error with proper styling', () => {
       const errorMessage = 'Transfer error occurred';
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        destinationError: errorMessage
-      });
 
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
 
       const errorElement = screen.getByText(errorMessage);
       expect(errorElement).toBeInTheDocument();
@@ -233,15 +228,9 @@ describe('TransferAccountsSelector', () => {
     it('should render both dropdowns and handle state updates correctly', async () => {
       const mockUpdateOrigin = jest.fn();
       const mockUpdateDestination = jest.fn();
-      
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        updateOrigin: mockUpdateOrigin,
-        updateDestination: mockUpdateDestination
-      });
 
       const user = userEvent.setup();
-      render(<TransferAccountsSelectorInner />);
+      render(<TransferAccountsSelectorWrapper />);
 
       // Verify initial state
       expect(screen.getByText('Origen: Santander Credit')).toBeInTheDocument();
@@ -261,12 +250,6 @@ describe('TransferAccountsSelector', () => {
     });
 
     it('should handle empty accounts list gracefully', () => {
-      mockUseTransferBankAccounts.mockReturnValue({
-        ...defaultMockHookReturn,
-        accountsFormatted: [],
-        destinationAccounts: [],
-        origin: null
-      });
 
       render(<TransferAccountsSelectorInner />);
 
