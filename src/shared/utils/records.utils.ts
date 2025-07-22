@@ -119,13 +119,10 @@ export const resetEditRecordLS = () => {
 export const getValuesIncomeAndExpense = ({ values, expensesSelected }: { values: CreateTransferValues, expensesSelected: ExpensePaid[] }) => {
   const typeOfRecordValue = 'transfer';
   const {
-    amount, origin, destination, date, ...restValues
+    origin, destination, ...restValues
   } = values;
-  const amountNumber = cleanCurrencyString(amount)
   const newValuesExpense = {
     ...restValues,
-    date,
-    amount: amountNumber,
     indebtedPeople: [],
     account: origin,
     typeOfRecord: typeOfRecordValue,
@@ -134,8 +131,6 @@ export const getValuesIncomeAndExpense = ({ values, expensesSelected }: { values
   };
   const newValuesIncome = {
     ...restValues,
-    date,
-    amount: amountNumber,
     indebtedPeople: [],
     expensesPaid: expensesSelected,
     account: destination,

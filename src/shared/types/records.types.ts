@@ -131,19 +131,16 @@ export type EditIncomePayload = CreateIncomePayload & {
 }
 
 export type CreateTransferValues = {
-  // It's string because it's coming from the text currency input
-  amount: string;
+  amount: number;
   budgets: string[];
   category: string;
   date: Date;
   description: string;
-  expensesPaid: ExpensePaid[]
   shortName: string;
   subCategory: string;
   origin: string;
   destination: string;
   tag: string[];
-  isPaid?: boolean;
 }
 
 export interface ExpenseDataResponse {

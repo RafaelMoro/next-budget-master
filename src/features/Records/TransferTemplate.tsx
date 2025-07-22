@@ -19,13 +19,14 @@ import { useSelectExpensesPaid } from "@/shared/hooks/useSelectExpensesPaid"
 import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { CreateIncomeDataForm, IncomeExpenseSchema } from "@/shared/types/records.types"
+import { CreateIncomeDataForm, CreateTransferValues, IncomeExpenseSchema } from "@/shared/types/records.types"
 import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
 import { CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
 import { DESTINATION_ACC_REQUIRED } from "@/shared/constants/records.constants"
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 import { TransferAccountsSelector } from "./Transfer/TransferAccountsSelector"
+import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -76,7 +77,6 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   })
 
   const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
-    console.log('data', data)
     if (!categorySelected.categoryId || !categorySelected.name) {
       updateCategoryError(CATEGORY_REQUIRED)
     }
@@ -87,6 +87,22 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
       handleDestinationError(DESTINATION_ACC_REQUIRED)
     }
     validateZeroAmount({ amountState: currencyState })
+
+    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
+      const amountNumber = cleanCurrencyString(currencyState)
+      const payload: CreateTransferValues = {
+        amount: amountNumber,
+        budgets: [],
+        category: categorySelected.categoryId,
+        date,
+        description: data.description ?? '',
+        shortName: data.shortDescription,
+        subCategory: subcategory,
+        origin: origin?.accountId ?? '',
+        destination: destination?.accountId ?? '',
+        tag: tags.current,
+      }
+    }
   }
 
   return (
