@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 
 import { QueryProviderWrapper } from "@/app/QueryProviderWrapper";
 import { TransferTemplate } from "@/features/Records/TransferTemplate";
@@ -7,6 +8,9 @@ import { Category } from "@/shared/types/categories.types";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import { mockMatchMedia, QueryMatchMedia } from "../../utils-test/record.utils";
 import { mockCategories } from "../../mocks/categories.mock";
+import { recordMock } from "../../mocks/records.mock";
+import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
+import { mockAccounts } from "../../mocks/accounts.mock";
 
 const TransferTemplateWrapper = ({
   push,
@@ -29,6 +33,9 @@ const TransferTemplateWrapper = ({
     </QueryProviderWrapper>
   )
 }
+
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('TransferTemplate', () => {
   mockMatchMedia({
@@ -258,6 +265,69 @@ describe('TransferTemplate', () => {
       await user.type(amountInput, '123');
 
       expect(screen.queryByText(/Por favor, ingrese una cantidad mayor a 0/i)).not.toBeInTheDocument();
+    })
+  })
+
+  describe('Form submission', () => {
+    mockMatchMedia({
+      [QueryMatchMedia.isMobileTablet]: false,
+      [QueryMatchMedia.isDesktop]: true,
+    });
+    it('Given a user filling correctly the form, it should see the tick in the button', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: ['Expense created', 'Account updated'],
+        success: true,
+        version: "v1.2.0",
+        data: {
+          expense: recordMock,
+          income: recordMock
+        },
+      })
+      render(<TransferTemplateWrapper push={push} categories={mockCategories} />);
+
+      await screen.findByText('Origen: Santander');
+      const destinationButton = screen.getByTestId('select-destination-dropdown-button');
+      await user.click(destinationButton);
+      
+      // Wait for dropdown to open and click Santander (now available as destination)
+      await user.click(screen.getByText('HSBC oro'));
+      
+      // Verify destination has changed
+      expect(await screen.findByText('Destino: HSBC oro')).toBeInTheDocument();
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      const amountInput = screen.getByLabelText(/Cantidad/i);
+      await user.type(amountInput, '123');
+
+      const createTransferButton = screen.getByRole('button', { name: /Crear transferencia/i });
+      await user.click(createTransferButton);
+
+      expect(screen.getByTestId('check-icon')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(push).toHaveBeenCalledWith(DASHBOARD_ROUTE)
+      }, { timeout: 2000 })
     })
   })
 })
