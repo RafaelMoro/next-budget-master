@@ -38,6 +38,16 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('TransferTemplate', () => {
+  beforeEach(() => {
+    mockedAxios.get.mockResolvedValue({
+      data: {
+        data: {
+          accounts: mockAccounts
+        }
+      }
+    });
+  });
+
   mockMatchMedia({
     [QueryMatchMedia.isMobileTablet]: false,
     [QueryMatchMedia.isDesktop]: false,
