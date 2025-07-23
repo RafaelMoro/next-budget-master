@@ -13,6 +13,9 @@ export const useDashboard = () => {
   const selectedAccountDisplay = useDashboardStore(
     state => state.selectedAccountDisplay
   )
+  const accountsDisplay = useDashboardStore(
+    (state) => state.accountsDisplay
+  )
 
   // Function that checks if the select cookie exists and set it if not,
   // This way we avoid on having null selected account in create record on first log in
@@ -42,6 +45,7 @@ export const useDashboard = () => {
 
   return {
     handleGoCreateRecordRoute,
-    manageSelectedAccountCookie
+    manageSelectedAccountCookie,
+    accountsDisplay,
   }
 }

@@ -1,9 +1,10 @@
 import axios from "axios";
-import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse } from "../types/records.types";
+import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
 
+//#region API Calls
 export const createExpenseCb = (data: CreateExpensePayload, accessToken: string): Promise<ExpenseDataResponse> => {
   const uri = process.env.NEXT_PUBLIC_BACKEND_URI
   if (!uri) {
@@ -64,6 +65,21 @@ export const editIncomeCb = (data: EditIncomePayload, accessToken: string): Prom
   })
 }
 
+export const createTransferCb = (data: CreateTransferPayload, accessToken: string): Promise<TransferDataResponse> => {
+  const uri = process.env.NEXT_PUBLIC_BACKEND_URI
+  if (!uri) {
+    throw new Error("Backend URI is not defined");
+  }
+  if (!accessToken) {
+    throw new Error("Access token is not defined");
+  }
+  return axios.post(`${uri}/records/transfer`, data, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
 export const getExpensesByDateCb = async (payload: FetchExpensesDatePayload, accessToken: string): Promise<FetchExpensesDateResponse> => {
   try {
     const { month, year, accountId } = payload;
@@ -95,6 +111,7 @@ export const getExpensesByDateCb = async (payload: FetchExpensesDatePayload, acc
   }
 }
 
+//#region Local Storage
 export const saveEditRecordLS = (recordToBeEdited: BankMovement) => {
   try {
     addToLocalStorage({ prop: EDIT_RECORD_KEY, newInfo: { record: recordToBeEdited } })
@@ -110,3 +127,28 @@ export const resetEditRecordLS = () => {
     console.log('error while removing record to be edited in local storage', error)
   }
 }
+
+//#region Utility
+
+export const getValuesIncomeAndExpense = ({ values, expensesSelected }: { values: CreateTransferValues, expensesSelected: ExpensePaid[] }) => {
+  const typeOfRecordValue = 'transfer';
+  const {
+    origin, destination, ...restValues
+  } = values;
+  const newValuesExpense: TransferExpense = {
+    ...restValues,
+    indebtedPeople: [],
+    account: origin,
+    typeOfRecord: typeOfRecordValue,
+    isPaid: true,
+    linkedBudgets: [],
+  };
+  const newValuesIncome: TransferIncome = {
+    ...restValues,
+    indebtedPeople: [],
+    expensesPaid: expensesSelected,
+    account: destination,
+    typeOfRecord: typeOfRecordValue,
+  };
+  return { newValuesIncome, newValuesExpense };
+};

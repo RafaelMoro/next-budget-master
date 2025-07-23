@@ -6,11 +6,11 @@ import { LinkButton } from "../atoms/LinkButton";
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
 
 interface LoginRequiredModalProps {
-  show: boolean;
+  accessToken: string
 }
 
-export const LoginRequiredModal = ({ show }: LoginRequiredModalProps) => {
-  const [openModal, setOpenModal] = useState<boolean>(show);
+export const LoginRequiredModal = ({ accessToken }: LoginRequiredModalProps) => {
+  const [openModal, setOpenModal] = useState<boolean>(!accessToken);
   const toggleModal = () => setOpenModal((prevState) => !prevState);
 
   return (

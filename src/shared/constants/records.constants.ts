@@ -17,6 +17,8 @@ export const TAG_MAX_LENGTH_ERROR = 'Por favor, ingrese una etiqueta con menos d
 export const TAG_REPEATED_ERROR = 'La etiqueta ya existe. Por favor, ingrese una etiqueta diferente.'
 export const CURRENCY_ZERO_ERROR = 'Por favor, ingrese una cantidad mayor a 0.'
 
+export const DESTINATION_ACC_REQUIRED = 'Por favor, seleccione un cuenta de destino.';
+
 export const defaultResFetchExpenses: FetchExpensesDateResponse = {
   data: {
     expenses: []
