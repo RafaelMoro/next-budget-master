@@ -11,6 +11,7 @@ import { mockCategories } from "../../mocks/categories.mock";
 import { recordMock } from "../../mocks/records.mock";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { mockAccounts } from "../../mocks/accounts.mock";
+import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants";
 
 const TransferTemplateWrapper = ({
   push,
@@ -283,6 +284,7 @@ describe('TransferTemplate', () => {
       [QueryMatchMedia.isMobileTablet]: false,
       [QueryMatchMedia.isDesktop]: true,
     });
+
     it('Given a user filling correctly the form, it should see the tick in the button', async () => {
       const user = userEvent.setup();
       const push = jest.fn();
@@ -338,6 +340,71 @@ describe('TransferTemplate', () => {
       await waitFor(() => {
         expect(push).toHaveBeenCalledWith(DASHBOARD_ROUTE)
       }, { timeout: 2000 })
+    })
+
+    it('Given a user filling correctly the form, then something went wrong, it should show notification', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          data: {
+            accounts: mockAccounts
+          }
+        }
+      })
+      mockedAxios.post.mockRejectedValue({
+        code: 'ERR_BAD_REQUEST',
+        config: null,
+        message: 'Request failed with status code 401',
+        name: 'AxiosError',
+        request: null,
+        response: {
+          config: null,
+          data: {
+            data: null,
+            error: {
+              error: 'Bad Request',
+              message: 'Something went wrong.',
+              statusCode: 403
+            },
+            message: null,
+            success: false,
+            version: '1.2.0'
+          }
+        }
+      })
+      render(<TransferTemplateWrapper push={push} categories={mockCategories} />);
+
+      await screen.findByText('Origen: Santander');
+      const destinationButton = screen.getByTestId('select-destination-dropdown-button');
+      await user.click(destinationButton);
+      
+      // Wait for dropdown to open and click Santander (now available as destination)
+      await user.click(screen.getByText('HSBC oro'));
+      
+      // Verify destination has changed
+      expect(await screen.findByText('Destino: HSBC oro')).toBeInTheDocument();
+
+      const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
+      await user.type(shortDescriptionInput, 'Test expense');
+
+      const categoryButton = screen.getByTestId('category-dropdown');
+      await user.click(categoryButton);
+      const categoryToSelect = screen.getByText(mockCategories[0].categoryName);
+      await user.click(categoryToSelect);
+
+      const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+      await user.click(subcategoryButton);
+      const subcategoryToSelect = screen.getByText(mockCategories[0].subCategories[0]);
+      await user.click(subcategoryToSelect);
+
+      const amountInput = screen.getByLabelText(/Cantidad/i);
+      await user.type(amountInput, '123');
+
+      const createExpenseButton = screen.getByRole('button', { name: /Crear transferencia/i });
+      await user.click(createExpenseButton);
+
+      expect(screen.getByText(CREATE_EXPENSE_INCOME_ERROR)).toBeInTheDocument();
     })
   })
 })
