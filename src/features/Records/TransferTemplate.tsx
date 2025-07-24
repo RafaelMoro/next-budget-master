@@ -14,7 +14,7 @@ import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
-import { Category } from "@/shared/types/categories.types"
+import { Category, CategoryShown } from "@/shared/types/categories.types"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { ManageTagsModal } from "./ManageTagsModal"
 import { SelectPaidSection } from "./ExpensesPaid/SelectPaidSection"
@@ -22,7 +22,7 @@ import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useSelectExpensesPaid } from "@/shared/hooks/useSelectExpensesPaid"
 import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
-import { CreateIncomeDataForm, CreateTransferPayload, CreateTransferValues, ExpenseDataResponse, IncomeExpenseSchema, TransferErrorResponse } from "@/shared/types/records.types"
+import { BankMovement, CreateIncomeDataForm, CreateTransferPayload, CreateTransferValues, ExpenseDataResponse, ExpensePaid, IncomeExpenseSchema, TransferErrorResponse } from "@/shared/types/records.types"
 import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
@@ -40,16 +40,17 @@ interface TransferTemplateProps {
   accessToken: string
   subscreen: TransactionScreens
   detailedErrorCategories: DetailedError | null
+  editRecord: BankMovement | null
 }
 
-export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen, detailedErrorCategories }: TransferTemplateProps) => {
+export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen, detailedErrorCategories, editRecord }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
   const { accountsFormatted, isPending: isPendingFetchAcc, origin, destination, destinationAccounts, destinationError,
     updateOrigin, updateDestination, handleDestinationError } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
 
-  const { handleChange, currencyState, errorAmount, validateZeroAmount,
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
     amount: null,
   })
@@ -73,12 +74,14 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     handleUnselectExpense,
     handleSubmitGetExpenses,
     handleClick,
+    loadSelectedExpenses,
   } = useSelectExpensesPaid({ accessToken, accountId: destination?.accountId || null })
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(IncomeExpenseSchema)
@@ -115,6 +118,31 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
       toast.error(CATEGORY_FETCH_ERROR);
     }
   }, [detailedErrorCategories?.cause, detailedErrorCategories?.message])
+
+  // Load edit record use Effect
+  useEffect(() => {
+    // Init state to edit expense
+    if (editRecord) {
+      setValue('shortDescription', editRecord?.shortName)
+      setValue('description', editRecord?.description)
+      setDate(new Date(editRecord.date))
+      handleEditCurrency(editRecord.amountFormatted)
+      updateSubcategory(editRecord.subCategory)
+      updateTags(editRecord.tag)
+      if (editRecord?.expensesPaid && editRecord?.expensesPaid?.length > 0) {
+        loadSelectedExpenses(editRecord.expensesPaid as ExpensePaid[])
+      }
+
+      if (editRecord.category) {
+        const cat: CategoryShown = {
+          name: editRecord.category.categoryName,
+          categoryId: editRecord.category._id
+        }
+        updateCategory(cat)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editRecord])
 
   const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
