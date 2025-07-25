@@ -1,7 +1,10 @@
 import { useMutation } from "@tanstack/react-query"
+import { useRouter } from 'next/navigation'
+
 import { BankMovement, CreateTransferValues, EditTransferExpensePayload, EditTransferIncomePayload, ExpenseDataResponse, ExpenseErrorResponse, ExpensePaid, IncomeDataResponse, IncomeErrorResponse } from "../types/records.types"
 import { cleanCurrencyString } from "../utils/formatNumberCurrency.utils"
-import { editExpenseTransferCb, editIncomeTransferCb } from "../utils/records.utils"
+import { editExpenseTransferCb, editIncomeTransferCb, resetEditRecordLS } from "../utils/records.utils"
+import { DASHBOARD_ROUTE } from "../constants/Global.constants"
 
 interface UseEditTransferProps {
   accessToken: string
@@ -9,13 +12,14 @@ interface UseEditTransferProps {
 }
 
 export const useEditTransfer = ({ editRecord, accessToken, }: UseEditTransferProps) => {
+  const router = useRouter()
   const {
-    mutate: editExpense, isError: isErrorEditExpense, isSuccess: isSuccessEditExpense, error: errorEditExpense
+    mutate: editExpense, isError: isErrorEditExpense, isSuccess: isSuccessEditExpense, error: errorEditExpense, isPending: isPendingEditExpense
   } = useMutation<ExpenseDataResponse, ExpenseErrorResponse, EditTransferExpensePayload>({
     mutationFn: (data) => editExpenseTransferCb(data, accessToken),
   })
   const {
-    mutate: editIncome, isError: isErrorEditIncome, isSuccess: isSuccessEditIncome, error: errorEditIncome
+    mutate: editIncome, isError: isErrorEditIncome, isSuccess: isSuccessEditIncome, error: errorEditIncome, isPending: isPendingEditIncome
   } = useMutation<IncomeDataResponse, IncomeErrorResponse, EditTransferIncomePayload>({
     mutationFn: (data) => editIncomeTransferCb(data, accessToken),
   })
@@ -75,6 +79,13 @@ export const useEditTransfer = ({ editRecord, accessToken, }: UseEditTransferPro
   
       await editExpense(editExpensePayload)
       await editIncome(editIncomePayload)
+      resetEditRecordLS()
+      router.refresh()
+
+      setTimeout(() => {
+        router.push(DASHBOARD_ROUTE)
+      }, 1000)
+
     } catch (error) {
       console.error('Error in editTransfer:', error)
       throw error
@@ -88,6 +99,8 @@ export const useEditTransfer = ({ editRecord, accessToken, }: UseEditTransferPro
     isErrorEditIncome,
     isSuccessEditIncome,
     errorEditIncome,
+    isPendingEditExpense,
+    isPendingEditIncome,
     editTransfer
   }
 }

@@ -53,7 +53,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   const { isMobileTablet, isDesktop } = useMediaQuery()
   const { accountsFormatted, isPending: isPendingFetchAcc, origin, destination, destinationAccounts, destinationError,
     updateOrigin, updateDestination, handleDestinationError, updateEditDestination, updateEditOrigin } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
-  const { editTransfer } = useEditTransfer({ accessToken, editRecord })
+  const { editTransfer, isSuccessEditExpense, isSuccessEditIncome, isPendingEditExpense, isPendingEditIncome, isErrorEditExpense, isErrorEditIncome } = useEditTransfer({ accessToken, editRecord })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -102,9 +102,9 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
       }, 1000)
     }
   })
-  const isPending = isPendingCreate // || isPendingEdit
-  const isSuccess = isSuccessCreate // || isSuccessEdit
-  const isError = isErrorCreate // || isErrorEdit
+  const isPending = isPendingCreate || isPendingEditExpense || isPendingEditIncome
+  const isSuccess = isSuccessCreate || (isSuccessEditExpense && isSuccessEditIncome)
+  const isError = isErrorCreate || isErrorEditExpense || isErrorEditIncome
   const messageErrorCreate = (errorCreate as unknown as GeneralError)?.response?.data?.error?.message
 
   // Handle error create transfer
