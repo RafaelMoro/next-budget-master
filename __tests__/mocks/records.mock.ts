@@ -153,3 +153,25 @@ export const expensePaidListMock3: ExpensePaid = {
   formattedTime: "19:45pm",
   isPaid: false,
 };
+
+// Transfer
+export const editTransfer: BankMovement = {
+  ...recordMock,
+  _id: "6855ed98e3d57ba1214bc5c2",
+  account: '2', // HSBC oro account ID
+  transferRecord: {
+    account: '1', // Santander account ID (destination)
+    transferId: 'some-transfer-id'
+  },
+  shortName: 'Edited Transfer',
+  typeOfRecord: 'transfer',
+  description: 'a edited income description',
+  amount: 500,
+  amountFormatted: '$500.00',
+  date: new Date("2025-06-22T17:23:42.000Z"),
+  fullDate: "Dom, 22 Jun, 2025",
+  tag: ['something'],
+  category: mockCategories[0],
+  subCategory: mockCategories[0].subCategories[0],
+  expensesPaid: [expensePaidListMock1]
+}

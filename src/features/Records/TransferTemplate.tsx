@@ -14,7 +14,7 @@ import { DateTimePicker } from "@/shared/ui/atoms/DatetimePicker"
 import { ErrorMessage } from "@/shared/ui/atoms/ErrorMessage"
 import { TransactionCategorizerDropdown } from "../Categories/TransactionCategorizerDropdown"
 import { useCategoriesForm } from "@/shared/hooks/useCategoriesForm"
-import { Category } from "@/shared/types/categories.types"
+import { Category, CategoryShown } from "@/shared/types/categories.types"
 import { FurtherDetailsAccordeon } from "./FurtherDetailsAccordeon"
 import { ManageTagsModal } from "./ManageTagsModal"
 import { SelectPaidSection } from "./ExpensesPaid/SelectPaidSection"
@@ -22,7 +22,7 @@ import { useMediaQuery } from "@/shared/hooks/useMediaQuery"
 import { useManageTags } from "@/shared/hooks/useManageTags"
 import { useSelectExpensesPaid } from "@/shared/hooks/useSelectExpensesPaid"
 import { SelectPaidDrawer } from "./ExpensesPaid/SelectPaidDrawer"
-import { CreateIncomeDataForm, CreateTransferPayload, CreateTransferValues, ExpenseDataResponse, IncomeExpenseSchema, TransferErrorResponse } from "@/shared/types/records.types"
+import { BankMovement, CreateIncomeDataForm, CreateTransferPayload, CreateTransferValues, ExpenseDataResponse, ExpensePaid, IncomeExpenseSchema, TransferErrorResponse } from "@/shared/types/records.types"
 import { useTransferBankAccounts } from "@/shared/hooks/useTransferBankAccounts"
 import { TransactionScreens } from "@/shared/types/dashboard.types"
 import { CATEGORY_FETCH_ERROR, CATEGORY_REQUIRED, SUBCATEGORY_REQUIRED } from "@/shared/constants/categories.constants"
@@ -30,9 +30,10 @@ import { CREATE_EXPENSE_INCOME_ERROR, DESTINATION_ACC_REQUIRED } from "@/shared/
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 import { TransferAccountsSelector } from "./Transfer/TransferAccountsSelector"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
-import { createTransferCb, getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
+import { createTransferCb, getOriginAccountForEdit, getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
+import { useEditTransfer } from "@/shared/hooks/useEditTransfer"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -40,16 +41,24 @@ interface TransferTemplateProps {
   accessToken: string
   subscreen: TransactionScreens
   detailedErrorCategories: DetailedError | null
+  editRecord: BankMovement | null
 }
 
-export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen, detailedErrorCategories }: TransferTemplateProps) => {
+export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen, detailedErrorCategories, editRecord }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const buttonText = editRecord?.shortName ? 'Editar transferencia' : 'Crear transferencia'
+  const isIncome = Boolean(editRecord?.expensesPaid);
+  const showDefaultError = () => {
+    toast.error(CREATE_EXPENSE_INCOME_ERROR);
+  }
+
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
   const { accountsFormatted, isPending: isPendingFetchAcc, origin, destination, destinationAccounts, destinationError,
-    updateOrigin, updateDestination, handleDestinationError } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
+    updateOrigin, updateDestination, handleDestinationError, updateEditDestination, updateEditOrigin } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
+  const { editTransfer, isSuccessEditExpense, isSuccessEditIncome, isPendingEditExpense, isPendingEditIncome, isErrorEditExpense, isErrorEditIncome } = useEditTransfer({ accessToken, editRecord, showDefaultError })
 
-  const { handleChange, currencyState, errorAmount, validateZeroAmount,
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
     amount: null,
   })
@@ -73,12 +82,14 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     handleUnselectExpense,
     handleSubmitGetExpenses,
     handleClick,
+    loadSelectedExpenses,
   } = useSelectExpensesPaid({ accessToken, accountId: destination?.accountId || null })
   const { tags, updateTags, openTagModal, closeModal, openModal } = useManageTags()
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(IncomeExpenseSchema)
@@ -94,15 +105,15 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
       }, 1000)
     }
   })
-  const isPending = isPendingCreate // || isPendingEdit
-  const isSuccess = isSuccessCreate // || isSuccessEdit
-  const isError = isErrorCreate // || isErrorEdit
+  const isPending = isPendingCreate || isPendingEditExpense || isPendingEditIncome
+  const isSuccess = isSuccessCreate || (isSuccessEditExpense && isSuccessEditIncome)
+  const isError = isErrorCreate || isErrorEditExpense || isErrorEditIncome
   const messageErrorCreate = (errorCreate as unknown as GeneralError)?.response?.data?.error?.message
 
   // Handle error create transfer
   useEffect(() => {
     if (isError && messageErrorCreate) {
-      toast.error(CREATE_EXPENSE_INCOME_ERROR);
+      showDefaultError()
       return
     }
   }, [isError, messageErrorCreate])
@@ -116,7 +127,38 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     }
   }, [detailedErrorCategories?.cause, detailedErrorCategories?.message])
 
-  const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
+  // Load edit record use Effect
+  useEffect(() => {
+    // Init state to edit expense
+    if (editRecord && accountsFormatted.length > 0) {
+      const destinationAccount = isIncome ? editRecord.account : editRecord?.transferRecord?.account ?? '';
+      const originAccount = getOriginAccountForEdit({
+        isIncome, recordToBeEdited: editRecord,
+      })
+      updateEditOrigin(originAccount)
+      updateEditDestination(destinationAccount)
+      setValue('shortDescription', editRecord?.shortName)
+      setValue('description', editRecord?.description)
+      setDate(new Date(editRecord.date))
+      handleEditCurrency(editRecord.amountFormatted)
+      updateSubcategory(editRecord.subCategory)
+      updateTags(editRecord.tag)
+      if (editRecord?.expensesPaid && editRecord?.expensesPaid?.length > 0) {
+        loadSelectedExpenses(editRecord.expensesPaid as ExpensePaid[])
+      }
+
+      if (editRecord.category) {
+        const cat: CategoryShown = {
+          name: editRecord.category.categoryName,
+          categoryId: editRecord.category._id
+        }
+        updateCategory(cat)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editRecord, accountsFormatted])
+
+  const onSubmit: SubmitHandler<CreateIncomeDataForm> = async (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
       updateCategoryError(CATEGORY_REQUIRED)
     }
@@ -142,6 +184,12 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
         destination: destination?.accountId ?? '',
         tag: tags.current,
       }
+
+      if (Boolean(editRecord)) {
+        await editTransfer({ payload, currencyState, expensesPaid: selectedExpenses.current })
+        return
+      }
+
       const { newValuesExpense, newValuesIncome } = getValuesIncomeAndExpense({ values: payload, expensesSelected: selectedExpenses.current })
       createTransfer({  expense: newValuesExpense, income: newValuesIncome })
     }
@@ -237,7 +285,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
                   <Spinner aria-label="loading create transfer" />
                 ) : isSuccess ? (
                   <CheckIcon data-testid="check-icon" />
-                ) : 'Crear transferencia' }
+                ) : buttonText }
             </Button>
           </div>
         </form>

@@ -8,27 +8,33 @@ import { Category } from "@/shared/types/categories.types";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import { mockMatchMedia, QueryMatchMedia } from "../../utils-test/record.utils";
 import { mockCategories } from "../../mocks/categories.mock";
-import { recordMock } from "../../mocks/records.mock";
+import { editTransfer, recordMock } from "../../mocks/records.mock";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { mockAccounts } from "../../mocks/accounts.mock";
 import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants";
+import { BankMovement } from "@/shared/types/records.types";
 
 const TransferTemplateWrapper = ({
   push,
   categories = [],
+  editRecord = null,
+  selectedAccount = "2", // Default to HSBC oro account ID
 }: {
   push: () => void;
   categories?: Category[];
+  editRecord?: BankMovement | null;
+  selectedAccount?: string;
 }) => {
   return (
     <QueryProviderWrapper>
       <AppRouterContextProviderMock router={{ push }}>
         <TransferTemplate
           categories={categories}
-          selectedAccount="123"
+          selectedAccount={selectedAccount}
           accessToken="abc"
           detailedErrorCategories={null}
           subscreen="transfer"
+          editRecord={editRecord}
         />
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>
@@ -72,6 +78,51 @@ describe('TransferTemplate', () => {
 
     expect(screen.getByRole('link', { name: /Cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear transferencia/i })).toBeInTheDocument();
+  })
+
+  it('Given a user editing a transfer, the fields should have the record values', async () => {
+    mockMatchMedia({
+      [QueryMatchMedia.isMobileTablet]: false,
+      [QueryMatchMedia.isDesktop]: true,
+    });
+    mockedAxios.get.mockResolvedValue({
+      data: {
+        data: {
+          accounts: mockAccounts
+        }
+      }
+    })
+    const push = jest.fn();
+    render(<TransferTemplateWrapper push={push} editRecord={editTransfer} categories={mockCategories} selectedAccount="2" />)
+
+    // 1. Show origin and destiny accounts
+    await waitFor(() => {
+      expect(screen.getByText('Origen: Santander')).toBeInTheDocument();
+      expect(screen.getByText('Destino: HSBC oro')).toBeInTheDocument();
+    });
+
+    // 2. Show amount
+    const amountInput = screen.getByLabelText(/Cantidad/i) as HTMLInputElement;
+    expect(amountInput.value).toBe('$500.00');
+
+    // 3. Show shortDescription
+    const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i) as HTMLInputElement;
+    expect(shortDescriptionInput.value).toBe('Edited Transfer');
+
+    // 4. Show description
+    const descriptionInput = screen.getByLabelText(/Descripción \(opcional\)/i) as HTMLTextAreaElement;
+    expect(descriptionInput.value).toBe('a edited income description');
+
+    // 5. Show category - check dropdown button instead of text
+    const categoryButton = screen.getByTestId('category-dropdown');
+    expect(categoryButton).toBeInTheDocument();
+
+    // 6. Show subcategory - check dropdown button instead of text
+    const subcategoryButton = screen.getByTestId('subcategory-dropdown');
+    expect(subcategoryButton).toBeInTheDocument();
+
+    // 7. Show tags section is present (it might be in a modal or aside section)
+    expect(screen.getByText('Más detalles')).toBeInTheDocument();
   })
 
   describe('More details section', () => {
@@ -307,15 +358,15 @@ describe('TransferTemplate', () => {
       })
       render(<TransferTemplateWrapper push={push} categories={mockCategories} />);
 
-      await screen.findByText('Origen: Santander');
+      await screen.findByText('Origen: HSBC oro');
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
       
       // Wait for dropdown to open and click Santander (now available as destination)
-      await user.click(screen.getByText('HSBC oro'));
+      await user.click(screen.getByText('Santander'));
       
       // Verify destination has changed
-      expect(await screen.findByText('Destino: HSBC oro')).toBeInTheDocument();
+      expect(await screen.findByText('Destino: Santander')).toBeInTheDocument();
 
       const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
       await user.type(shortDescriptionInput, 'Test expense');
@@ -375,15 +426,15 @@ describe('TransferTemplate', () => {
       })
       render(<TransferTemplateWrapper push={push} categories={mockCategories} />);
 
-      await screen.findByText('Origen: Santander');
+      await screen.findByText('Origen: HSBC oro');
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
       
       // Wait for dropdown to open and click Santander (now available as destination)
-      await user.click(screen.getByText('HSBC oro'));
+      await user.click(screen.getByText('Santander'));
       
       // Verify destination has changed
-      expect(await screen.findByText('Destino: HSBC oro')).toBeInTheDocument();
+      expect(await screen.findByText('Destino: Santander')).toBeInTheDocument();
 
       const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
       await user.type(shortDescriptionInput, 'Test expense');

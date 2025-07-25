@@ -26,6 +26,26 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
     setDestination(null)
     setDestinationError(null)
   }
+  const updateEditOrigin = (accountId: string) => {
+    const account = accountsFormatted.find(acc => acc.accountId === accountId)
+    if (account) {
+      setOrigin(account)
+      const newDestinationAccounts = accountsFormatted.filter(acc => acc.accountId !== account.accountId)
+      setDestinationAccounts(newDestinationAccounts)
+      return
+    }
+    console.warn('Account not found for origin update:', accountId)
+  }
+  const updateEditDestination = (accountId: string) => {
+    const account = accountsFormatted.find(acc => acc.accountId === accountId)
+    if (account) {
+      setDestination(account)
+      setDestinationError(null)
+      return
+    }
+    console.warn('Account not found for destination update:', accountId)
+  }
+
   const handleDestinationError = (error: string) => {
     setDestinationError(error)
   }
@@ -65,6 +85,8 @@ export const useTransferBankAccounts = ({ subscreen, accessToken, selectedAccoun
     destinationAccounts,
     updateDestination,
     handleDestinationError,
-    updateOrigin
+    updateOrigin,
+    updateEditOrigin,
+    updateEditDestination
   }
 }
