@@ -18,17 +18,19 @@ const TransferTemplateWrapper = ({
   push,
   categories = [],
   editRecord = null,
+  selectedAccount = "2", // Default to HSBC oro account ID
 }: {
   push: () => void;
   categories?: Category[];
-  editRecord?: BankMovement | null
+  editRecord?: BankMovement | null;
+  selectedAccount?: string;
 }) => {
   return (
     <QueryProviderWrapper>
       <AppRouterContextProviderMock router={{ push }}>
         <TransferTemplate
           categories={categories}
-          selectedAccount="123"
+          selectedAccount={selectedAccount}
           accessToken="abc"
           detailedErrorCategories={null}
           subscreen="transfer"
@@ -91,11 +93,37 @@ describe('TransferTemplate', () => {
       }
     })
     const push = jest.fn();
-    render(<TransferTemplateWrapper push={push} editRecord={editTransfer} />)
+    render(<TransferTemplateWrapper push={push} editRecord={editTransfer} categories={mockCategories} selectedAccount="2" />)
 
+    // 1. Show origin and destiny accounts
     await waitFor(() => {
-      screen.debug(undefined, 100000)
-    })
+      expect(screen.getByText('Origen: Santander')).toBeInTheDocument();
+      expect(screen.getByText('Destino: HSBC oro')).toBeInTheDocument();
+    });
+
+    // 2. Show amount
+    const amountInput = screen.getByLabelText(/Cantidad/i) as HTMLInputElement;
+    expect(amountInput.value).toBe('$500.00');
+
+    // 3. Show shortDescription
+    const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i) as HTMLInputElement;
+    expect(shortDescriptionInput.value).toBe('Edited Transfer');
+
+    // 4. Show description
+    const descriptionInput = screen.getByLabelText(/Descripción \(opcional\)/i) as HTMLTextAreaElement;
+    expect(descriptionInput.value).toBe('a edited income description');
+
+    // 5. Show category
+    expect(screen.getByText('Comida y Bebida')).toBeInTheDocument();
+
+    // 6. Show subcategory
+    expect(screen.getByText('Bar')).toBeInTheDocument();
+
+    // 7. Show 1 tag
+    expect(screen.getByText('something')).toBeInTheDocument();
+
+    // 8. Show 1 expense paid in the expense paid section
+    expect(screen.getByText('Coffee Shop Purchase')).toBeInTheDocument();
   })
 
   describe('More details section', () => {

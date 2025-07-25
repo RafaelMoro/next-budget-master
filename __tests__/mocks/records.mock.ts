@@ -158,8 +158,9 @@ export const expensePaidListMock3: ExpensePaid = {
 export const editTransfer: BankMovement = {
   ...recordMock,
   _id: "6855ed98e3d57ba1214bc5c2",
+  account: '2', // HSBC oro account ID
   transferRecord: {
-    account: '1',
+    account: '1', // Santander account ID (destination)
     transferId: 'some-transfer-id'
   },
   shortName: 'Edited Transfer',
