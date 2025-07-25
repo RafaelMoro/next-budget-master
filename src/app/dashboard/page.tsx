@@ -22,7 +22,7 @@ export default async function DashboardPage () {
 
   return (
     <DashboardStoreProvider records={records} accounts={accounts} selectedAccountId={selectedAccount}>
-      <LoginRequiredModal show={!accessToken} />
+      <LoginRequiredModal accessToken={accessToken} />
       <Dashboard detailedError={detailedError} accountsFetched={accounts} />
     </DashboardStoreProvider>
   )

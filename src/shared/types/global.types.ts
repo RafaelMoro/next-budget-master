@@ -34,6 +34,11 @@ export type ErrorCatched = {
   }
 }
 
+export type GetAccessTokenResponse = {
+  message: string | null
+  accessToken: string | null
+}
+
 export type DetailedError = {
   message: string;
   cause?: string;

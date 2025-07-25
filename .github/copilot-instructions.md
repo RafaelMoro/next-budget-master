@@ -15,4 +15,11 @@ For the unit tests, consider the following instructions:
 
 - Remember to use userEvent for user interactions. Do not use fireEvent.
 
+- Do not mock custom hooks like shown in the snippet below
+
+```typescript
+// Mock the hook
+jest.mock("@/shared/hooks/useTransferBankAccounts");
+```
+
 - Make sure the tests are passing. Iterate until the tests are passing. Apply the changes into the file if needed. To be sure these are passing run the command: pnpm test -- tests/feature/Accounts/CreateAccButton.test.tsx

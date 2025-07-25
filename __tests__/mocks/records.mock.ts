@@ -57,6 +57,7 @@ export const editIncome: BankMovement = {
   ...recordMock,
   _id: "6855ed98e3d57ba1214bc5c1",
   shortName: 'Edited Income',
+  typeOfRecord: 'income',
   description: 'a edited income description',
   amount: 500,
   amountFormatted: '$500.00',
@@ -77,6 +78,24 @@ export const paidRecordMock: BankMovement = {
   amountFormatted: "$750.00",
   date: new Date("2025-06-23T17:23:42.000Z"),
   fullDate: "Lun, 23 Jun, 2025",
+};
+
+export const transferRecordMock: BankMovement = {
+  ...recordMock,
+  _id: "6855ed98e3d57ba1214bc5c8",
+  shortName: "Transfer to Savings",
+  typeOfRecord: "transfer",
+  description: "Monthly savings transfer",
+  amount: 1000,
+  amountFormatted: "$1,000.00",
+  date: new Date("2025-06-24T10:00:00.000Z"),
+  fullDate: "Mar, 24 Jun, 2025",
+  transferRecord: {
+    account: "6579221448b3dbd136ce2989",
+    transferId: "transfer123"
+  },
+  tag: [],
+  isPaid: true,
 };
 
 export const drawerTestExpense1: ExpensePaid = {
@@ -134,3 +153,25 @@ export const expensePaidListMock3: ExpensePaid = {
   formattedTime: "19:45pm",
   isPaid: false,
 };
+
+// Transfer
+export const editTransfer: BankMovement = {
+  ...recordMock,
+  _id: "6855ed98e3d57ba1214bc5c2",
+  account: '2', // HSBC oro account ID
+  transferRecord: {
+    account: '1', // Santander account ID (destination)
+    transferId: 'some-transfer-id'
+  },
+  shortName: 'Edited Transfer',
+  typeOfRecord: 'transfer',
+  description: 'a edited income description',
+  amount: 500,
+  amountFormatted: '$500.00',
+  date: new Date("2025-06-22T17:23:42.000Z"),
+  fullDate: "Dom, 22 Jun, 2025",
+  tag: ['something'],
+  category: mockCategories[0],
+  subCategory: mockCategories[0].subCategories[0],
+  expensesPaid: [expensePaidListMock1]
+}

@@ -1,3 +1,15 @@
+## v0.27.0 (2025-07-25)
+
+### Pull Requests
+[#44](https://github.com/RafaelMoro/next-budget-master/pull/44) | Edit transfer
+
+
+## v0.26.0 (2025-07-23)
+
+### Pull Requests
+[#43](https://github.com/RafaelMoro/next-budget-master/pull/43) | Add transfer
+
+
 ## v0.25.0 (2025-07-19)
 
 ### Pull Requests

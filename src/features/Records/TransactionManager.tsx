@@ -13,6 +13,7 @@ import { ExpenseTemplate } from "./ExpenseTemplate/ExpenseTemplate";
 import { getSelectedAccountLocalStorage } from "@/shared/utils/user-info.utils"
 import { GetBudgetsResponse } from "@/shared/types/budgets.types"
 import { IncomeTemplate } from "./IncomeTemplate"
+import { TransferTemplate } from "./TransferTemplate"
 
 interface TransactionManagerProps {
   resCategories: GetCategoriesResponse
@@ -78,6 +79,16 @@ export const TransactionManager = ({ resCategories, resBudgets, selectedAccount,
             categories={categories}
             selectedAccount={selectedAccount}
             accessToken={accessToken}
+            detailedErrorCategories={errorCategories}
+            editRecord={null}
+          />
+        )}
+        { subscreen === 'transfer' && (
+          <TransferTemplate
+            categories={categories}
+            selectedAccount={selectedAccount}
+            accessToken={accessToken}
+            subscreen={subscreen}
             detailedErrorCategories={errorCategories}
             editRecord={null}
           />

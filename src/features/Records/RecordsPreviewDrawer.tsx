@@ -1,6 +1,6 @@
 "use client"
 
-import { RiCloseFill,
+import { RiBankLine, RiCloseFill,
   RiCloseLine,
   RiPriceTag3Line } from "@remixicon/react";
 import { Badge, Button, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
@@ -12,7 +12,7 @@ import { categoryIcons } from "@/shared/constants/categories.constants";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon";
 import { saveEditRecordLS } from "@/shared/utils/records.utils";
-import { EDIT_EXPENSE_ROUTE, EDIT_INCOME_ROUTE } from "@/shared/constants/Global.constants";
+import { EDIT_EXPENSE_ROUTE, EDIT_INCOME_ROUTE, EDIT_TRANSFER_ROUTE } from "@/shared/constants/Global.constants";
 import { useDashboard } from "@/shared/hooks/useDashboard";
 import { ExpensePaidList } from "./ExpensesPaid/ExpensePaidList";
 import { IndebtedPeoplePreviewRecord } from "../IndebtedPeople/IndebtedPeoplePreviewRecord";
@@ -26,7 +26,10 @@ interface RecordsPreviewDrawerProps {
 export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPreviewDrawerProps) => {
   const router = useRouter()
   const { isMobile } = useMediaQuery()
-  const { manageSelectedAccountCookie } = useDashboard()
+  const { manageSelectedAccountCookie, accountsDisplay } = useDashboard()
+  const isOrigin = typeof record?.isPaid !== 'undefined' && record?.typeOfRecord === 'transfer';
+  const transferText = isOrigin ? 'Transferencia a' : 'Transferencia desde';
+  const transferAccountName = accountsDisplay.find(account => account.accountId === record?.transferRecord?.account)?.name || ''
 
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
   const paidStatus = record?.isPaid ? 'Pagado' : 'Sin pagar'
@@ -67,7 +70,10 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
       router.push(EDIT_INCOME_ROUTE)
       return
     }
-    // TODO: Change this when editing income or transfer
+    if (record.typeOfRecord === 'transfer') {
+      router.push(EDIT_TRANSFER_ROUTE)
+      return
+    }
     router.push(EDIT_EXPENSE_ROUTE)
   }
 
@@ -93,6 +99,16 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
               <p className={priceStyles}>{record.amountFormatted}</p>
               <p className="text-sm text-gray-400">{record.description}</p>
             </div>
+
+            { record?.transferRecord && (
+              <div className="flex flex-col gap-2">
+                <h5 className="text-lg tracking-wider">Detalle de la transferencia:</h5>
+                <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                  <RiBankLine size={20} />
+                  <p>{transferText}: <span className="text-black dark:text-white">{transferAccountName}</span></p>
+                </div>
+              </div>
+            )}
 
             <div className="flex flex-col gap-2">
               <h5 className="text-lg tracking-wider">Categorias:</h5>

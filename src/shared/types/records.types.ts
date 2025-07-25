@@ -110,6 +110,10 @@ export type CreateExpensePayload = {
 export type EditExpensePayload = CreateExpensePayload & {
   recordId: string;
 }
+export type EditTransferExpensePayload = Omit<CreateExpensePayload, 'typeOfRecord'> & {
+  recordId: string;
+  typeOfRecord: 'transfer'
+}
 
 export type CreateIncomePayload = {
   account: string;
@@ -129,6 +133,59 @@ export type CreateIncomePayload = {
 export type EditIncomePayload = CreateIncomePayload & {
   recordId: string;
 }
+export type EditTransferIncomePayload = Omit<EditIncomePayload, 'typeOfRecord'> & {
+  recordId: string;
+  typeOfRecord: 'transfer'
+}
+
+export type CreateTransferValues = {
+  amount: number;
+  budgets: string[];
+  category: string;
+  date: Date;
+  description: string;
+  shortName: string;
+  subCategory: string;
+  origin: string;
+  destination: string;
+  tag: string[];
+}
+
+export type TransferExpense = {
+  indebtedPeople: never[];
+  account: string;
+  typeOfRecord: 'transfer';
+  isPaid: boolean;
+  linkedBudgets: never[];
+  amount: number;
+  budgets: string[];
+  category: string;
+  date: Date;
+  description: string;
+  shortName: string;
+  subCategory: string;
+  tag: string[];
+}
+
+export type TransferIncome = {
+  indebtedPeople: never[];
+  expensesPaid: ExpensePaid[];
+  account: string;
+  typeOfRecord: 'transfer';
+  amount: number;
+  budgets: string[];
+  category: string;
+  date: Date;
+  description: string;
+  shortName: string;
+  subCategory: string;
+  tag: string[];
+}
+
+export type CreateTransferPayload = {
+  expense: TransferExpense
+  income: TransferIncome
+}
 
 export interface ExpenseDataResponse {
   data: {
@@ -142,6 +199,17 @@ export interface ExpenseDataResponse {
 
 export interface IncomeDataResponse {
   data: {
+    income: IncomeRecord
+  }
+  error: null;
+  message: string[];
+  success: boolean;
+  version: string;
+}
+
+export interface TransferDataResponse {
+  data: {
+    expense: ExpenseRecord
     income: IncomeRecord
   }
   error: null;
@@ -175,6 +243,14 @@ export interface ExpenseErrorResponse extends Omit<AxiosError, 'response'> {
 }
 
 export interface IncomeErrorResponse extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
+    }
+  }>;
+}
+
+export interface TransferErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;
