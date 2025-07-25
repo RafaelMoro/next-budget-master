@@ -8,17 +8,20 @@ import { Category } from "@/shared/types/categories.types";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import { mockMatchMedia, QueryMatchMedia } from "../../utils-test/record.utils";
 import { mockCategories } from "../../mocks/categories.mock";
-import { recordMock } from "../../mocks/records.mock";
+import { editTransfer, recordMock } from "../../mocks/records.mock";
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants";
 import { mockAccounts } from "../../mocks/accounts.mock";
 import { CREATE_EXPENSE_INCOME_ERROR } from "@/shared/constants/records.constants";
+import { BankMovement } from "@/shared/types/records.types";
 
 const TransferTemplateWrapper = ({
   push,
   categories = [],
+  editRecord = null,
 }: {
   push: () => void;
   categories?: Category[];
+  editRecord?: BankMovement | null
 }) => {
   return (
     <QueryProviderWrapper>
@@ -29,6 +32,7 @@ const TransferTemplateWrapper = ({
           accessToken="abc"
           detailedErrorCategories={null}
           subscreen="transfer"
+          editRecord={editRecord}
         />
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>
@@ -72,6 +76,26 @@ describe('TransferTemplate', () => {
 
     expect(screen.getByRole('link', { name: /Cancelar/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear transferencia/i })).toBeInTheDocument();
+  })
+
+  it.only('Given a user editing a transfer, the fields should have the record values', async () => {
+    mockMatchMedia({
+      [QueryMatchMedia.isMobileTablet]: false,
+      [QueryMatchMedia.isDesktop]: true,
+    });
+    mockedAxios.get.mockResolvedValue({
+      data: {
+        data: {
+          accounts: mockAccounts
+        }
+      }
+    })
+    const push = jest.fn();
+    render(<TransferTemplateWrapper push={push} editRecord={editTransfer} />)
+
+    await waitFor(() => {
+      screen.debug(undefined, 100000)
+    })
   })
 
   describe('More details section', () => {
