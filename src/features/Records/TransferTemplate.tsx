@@ -30,7 +30,7 @@ import { CREATE_EXPENSE_INCOME_ERROR, DESTINATION_ACC_REQUIRED } from "@/shared/
 import { CancelButtonExpenseTemplate } from "./ExpenseTemplate/CancelButtonExpenseTemplate"
 import { TransferAccountsSelector } from "./Transfer/TransferAccountsSelector"
 import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
-import { createTransferCb, getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
+import { createTransferCb, getOriginAccountForEdit, getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
 
@@ -46,11 +46,12 @@ interface TransferTemplateProps {
 export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen, detailedErrorCategories, editRecord }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const buttonText = editRecord?.shortName ? 'Editar transferencia' : 'Crear transferencia'
+  const isIncome = Boolean(editRecord?.expensesPaid);
 
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
   const { accountsFormatted, isPending: isPendingFetchAcc, origin, destination, destinationAccounts, destinationError,
-    updateOrigin, updateDestination, handleDestinationError } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
+    updateOrigin, updateDestination, handleDestinationError, updateEditDestination, updateEditOrigin } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -124,7 +125,13 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   // Load edit record use Effect
   useEffect(() => {
     // Init state to edit expense
-    if (editRecord) {
+    if (editRecord && accountsFormatted.length > 0) {
+      const destinationAccount = isIncome ? editRecord.account : editRecord?.transferRecord?.account ?? '';
+      const originAccount = getOriginAccountForEdit({
+        isIncome, recordToBeEdited: editRecord,
+      })
+      updateEditOrigin(originAccount)
+      updateEditDestination(destinationAccount)
       setValue('shortDescription', editRecord?.shortName)
       setValue('description', editRecord?.description)
       setDate(new Date(editRecord.date))
@@ -144,7 +151,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editRecord])
+    }, [editRecord, accountsFormatted])
 
   const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {

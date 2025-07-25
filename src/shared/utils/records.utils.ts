@@ -152,3 +152,17 @@ export const getValuesIncomeAndExpense = ({ values, expensesSelected }: { values
   };
   return { newValuesIncome, newValuesExpense };
 };
+
+interface GetOriginAccountProps {
+  isIncome: boolean;
+  recordToBeEdited?: BankMovement | null;
+}
+
+export const getOriginAccountForEdit = ({
+  isIncome, recordToBeEdited,
+}: GetOriginAccountProps) => {
+  if (recordToBeEdited) {
+    return !isIncome ? recordToBeEdited.account : recordToBeEdited.transferRecord?.account ?? '';
+  }
+  return '';
+};
