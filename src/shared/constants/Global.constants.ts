@@ -23,3 +23,4 @@ export const LOGIN_ROUTE = '/';
 export const CREATE_RECORD_ROUTE = '/create-record';
 export const EDIT_EXPENSE_ROUTE = '/edit-record/edit-expense'
 export const EDIT_INCOME_ROUTE = '/edit-record/edit-income'
+export const EDIT_TRANSFER_ROUTE = '/edit-record/edit-transfer'

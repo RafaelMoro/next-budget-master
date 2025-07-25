@@ -1,12 +1,12 @@
 "use client"
 import { useEffect, useState } from "react"
-import { Header } from "@radix-ui/react-accordion"
 
 import { GetCategoriesResponse } from "@/shared/types/categories.types"
 import { CancelButtonExpenseTemplate } from "../ExpenseTemplate/CancelButtonExpenseTemplate"
 import { TransferTemplate } from "../TransferTemplate"
 import { getLocalStorageInfo } from "@/shared/lib/local-storage.lib"
 import { BankMovement } from "@/shared/types/records.types"
+import { Header } from "@/shared/ui/organisms/Header"
 
 interface EditTransferProps {
   resCategories: GetCategoriesResponse

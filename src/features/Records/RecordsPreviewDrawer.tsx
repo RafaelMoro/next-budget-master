@@ -12,7 +12,7 @@ import { categoryIcons } from "@/shared/constants/categories.constants";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon";
 import { saveEditRecordLS } from "@/shared/utils/records.utils";
-import { EDIT_EXPENSE_ROUTE, EDIT_INCOME_ROUTE } from "@/shared/constants/Global.constants";
+import { EDIT_EXPENSE_ROUTE, EDIT_INCOME_ROUTE, EDIT_TRANSFER_ROUTE } from "@/shared/constants/Global.constants";
 import { useDashboard } from "@/shared/hooks/useDashboard";
 import { ExpensePaidList } from "./ExpensesPaid/ExpensePaidList";
 import { IndebtedPeoplePreviewRecord } from "../IndebtedPeople/IndebtedPeoplePreviewRecord";
@@ -70,7 +70,10 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
       router.push(EDIT_INCOME_ROUTE)
       return
     }
-    // TODO: Change this when editing income or transfer
+    if (record.typeOfRecord === 'transfer') {
+      router.push(EDIT_TRANSFER_ROUTE)
+      return
+    }
     router.push(EDIT_EXPENSE_ROUTE)
   }
 
