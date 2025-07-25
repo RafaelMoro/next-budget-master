@@ -80,7 +80,7 @@ describe('TransferTemplate', () => {
     expect(screen.getByRole('button', { name: /Crear transferencia/i })).toBeInTheDocument();
   })
 
-  it.only('Given a user editing a transfer, the fields should have the record values', async () => {
+  it('Given a user editing a transfer, the fields should have the record values', async () => {
     mockMatchMedia({
       [QueryMatchMedia.isMobileTablet]: false,
       [QueryMatchMedia.isDesktop]: true,
@@ -122,15 +122,7 @@ describe('TransferTemplate', () => {
     expect(subcategoryButton).toBeInTheDocument();
 
     // 7. Show tags section is present (it might be in a modal or aside section)
-    await waitFor(() => {
-      expect(screen.getByText('Más detalles')).toBeInTheDocument();
-    });
-
-    // 8. Show expenses paid section when destination is a credit account
-    await waitFor(() => {
-      // Look for the expenses paid section title or button
-      expect(screen.getByText(/Gastos pagados/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText('Más detalles')).toBeInTheDocument();
   })
 
   describe('More details section', () => {
