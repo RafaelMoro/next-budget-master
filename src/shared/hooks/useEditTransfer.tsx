@@ -5,24 +5,29 @@ import { BankMovement, CreateTransferValues, EditTransferExpensePayload, EditTra
 import { cleanCurrencyString } from "../utils/formatNumberCurrency.utils"
 import { editExpenseTransferCb, editIncomeTransferCb, resetEditRecordLS } from "../utils/records.utils"
 import { DASHBOARD_ROUTE } from "../constants/Global.constants"
+import { useEffect } from "react"
+import { GeneralError } from "../types/global.types"
 
 interface UseEditTransferProps {
   accessToken: string
   editRecord: BankMovement | null
+  showDefaultError: () => void
 }
 
-export const useEditTransfer = ({ editRecord, accessToken, }: UseEditTransferProps) => {
+export const useEditTransfer = ({ editRecord, accessToken, showDefaultError, }: UseEditTransferProps) => {
   const router = useRouter()
   const {
-    mutate: editExpense, isError: isErrorEditExpense, isSuccess: isSuccessEditExpense, error: errorEditExpense, isPending: isPendingEditExpense
+    mutateAsync: editExpense, isError: isErrorEditExpense, isSuccess: isSuccessEditExpense, error: errorEditExpense, isPending: isPendingEditExpense
   } = useMutation<ExpenseDataResponse, ExpenseErrorResponse, EditTransferExpensePayload>({
     mutationFn: (data) => editExpenseTransferCb(data, accessToken),
   })
   const {
-    mutate: editIncome, isError: isErrorEditIncome, isSuccess: isSuccessEditIncome, error: errorEditIncome, isPending: isPendingEditIncome
+    mutateAsync: editIncome, isError: isErrorEditIncome, isSuccess: isSuccessEditIncome, error: errorEditIncome, isPending: isPendingEditIncome
   } = useMutation<IncomeDataResponse, IncomeErrorResponse, EditTransferIncomePayload>({
     mutationFn: (data) => editIncomeTransferCb(data, accessToken),
   })
+  const messageErrorEditExpense = (errorEditExpense as unknown as GeneralError)?.response?.data?.error?.message
+  const messageErrorEditIncome = (errorEditIncome as unknown as GeneralError)?.response?.data?.error?.message
   
   const editTransfer = async ({
     payload, currencyState, expensesPaid
@@ -79,18 +84,26 @@ export const useEditTransfer = ({ editRecord, accessToken, }: UseEditTransferPro
   
       await editExpense(editExpensePayload)
       await editIncome(editIncomePayload)
+    } catch (error) {
+      console.error('Error in editTransfer:', error)
+      showDefaultError()
+    } finally {
       resetEditRecordLS()
       router.refresh()
 
       setTimeout(() => {
         router.push(DASHBOARD_ROUTE)
-      }, 1000)
-
-    } catch (error) {
-      console.error('Error in editTransfer:', error)
-      throw error
+      }, 1500)
     }
   }
+
+  useEffect(() => {
+    if ((errorEditExpense && messageErrorEditExpense) || (isErrorEditIncome && messageErrorEditIncome)) {
+      showDefaultError()
+      return
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorEditExpense, isErrorEditIncome, messageErrorEditExpense, messageErrorEditIncome])
 
   return {
     isErrorEditExpense,

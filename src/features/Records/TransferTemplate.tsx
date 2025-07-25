@@ -48,12 +48,15 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   const [date, setDate] = useState<Date | undefined>(new Date())
   const buttonText = editRecord?.shortName ? 'Editar transferencia' : 'Crear transferencia'
   const isIncome = Boolean(editRecord?.expensesPaid);
+  const showDefaultError = () => {
+    toast.error(CREATE_EXPENSE_INCOME_ERROR);
+  }
 
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
   const { accountsFormatted, isPending: isPendingFetchAcc, origin, destination, destinationAccounts, destinationError,
     updateOrigin, updateDestination, handleDestinationError, updateEditDestination, updateEditOrigin } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
-  const { editTransfer, isSuccessEditExpense, isSuccessEditIncome, isPendingEditExpense, isPendingEditIncome, isErrorEditExpense, isErrorEditIncome } = useEditTransfer({ accessToken, editRecord })
+  const { editTransfer, isSuccessEditExpense, isSuccessEditIncome, isPendingEditExpense, isPendingEditIncome, isErrorEditExpense, isErrorEditIncome } = useEditTransfer({ accessToken, editRecord, showDefaultError })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -110,7 +113,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   // Handle error create transfer
   useEffect(() => {
     if (isError && messageErrorCreate) {
-      toast.error(CREATE_EXPENSE_INCOME_ERROR);
+      showDefaultError()
       return
     }
   }, [isError, messageErrorCreate])
