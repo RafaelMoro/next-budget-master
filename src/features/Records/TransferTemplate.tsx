@@ -45,6 +45,8 @@ interface TransferTemplateProps {
 
 export const TransferTemplate = ({ categories, selectedAccount, accessToken, subscreen, detailedErrorCategories, editRecord }: TransferTemplateProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const buttonText = editRecord?.shortName ? 'Editar transferencia' : 'Crear transferencia'
+
   const router = useRouter()
   const { isMobileTablet, isDesktop } = useMediaQuery()
   const { accountsFormatted, isPending: isPendingFetchAcc, origin, destination, destinationAccounts, destinationError,
@@ -265,7 +267,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
                   <Spinner aria-label="loading create transfer" />
                 ) : isSuccess ? (
                   <CheckIcon data-testid="check-icon" />
-                ) : 'Crear transferencia' }
+                ) : buttonText }
             </Button>
           </div>
         </form>
