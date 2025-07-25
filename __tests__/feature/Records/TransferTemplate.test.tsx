@@ -358,15 +358,15 @@ describe('TransferTemplate', () => {
       })
       render(<TransferTemplateWrapper push={push} categories={mockCategories} />);
 
-      await screen.findByText('Origen: Santander');
+      await screen.findByText('Origen: HSBC oro');
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
       
       // Wait for dropdown to open and click Santander (now available as destination)
-      await user.click(screen.getByText('HSBC oro'));
+      await user.click(screen.getByText('Santander'));
       
       // Verify destination has changed
-      expect(await screen.findByText('Destino: HSBC oro')).toBeInTheDocument();
+      expect(await screen.findByText('Destino: Santander')).toBeInTheDocument();
 
       const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
       await user.type(shortDescriptionInput, 'Test expense');
@@ -426,15 +426,15 @@ describe('TransferTemplate', () => {
       })
       render(<TransferTemplateWrapper push={push} categories={mockCategories} />);
 
-      await screen.findByText('Origen: Santander');
+      await screen.findByText('Origen: HSBC oro');
       const destinationButton = screen.getByTestId('select-destination-dropdown-button');
       await user.click(destinationButton);
       
       // Wait for dropdown to open and click Santander (now available as destination)
-      await user.click(screen.getByText('HSBC oro'));
+      await user.click(screen.getByText('Santander'));
       
       // Verify destination has changed
-      expect(await screen.findByText('Destino: HSBC oro')).toBeInTheDocument();
+      expect(await screen.findByText('Destino: Santander')).toBeInTheDocument();
 
       const shortDescriptionInput = screen.getByLabelText(/Pequeña descripción/i);
       await user.type(shortDescriptionInput, 'Test expense');
