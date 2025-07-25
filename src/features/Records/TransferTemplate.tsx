@@ -33,6 +33,7 @@ import { cleanCurrencyString } from "@/shared/utils/formatNumberCurrency.utils"
 import { createTransferCb, getOriginAccountForEdit, getValuesIncomeAndExpense } from "@/shared/utils/records.utils"
 import { DASHBOARD_ROUTE } from "@/shared/constants/Global.constants"
 import { DetailedError, GeneralError } from "@/shared/types/global.types"
+import { useEditTransfer } from "@/shared/hooks/useEditTransfer"
 
 interface TransferTemplateProps {
   categories: Category[]
@@ -52,6 +53,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   const { isMobileTablet, isDesktop } = useMediaQuery()
   const { accountsFormatted, isPending: isPendingFetchAcc, origin, destination, destinationAccounts, destinationError,
     updateOrigin, updateDestination, handleDestinationError, updateEditDestination, updateEditOrigin } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
+  const { editTransfer } = useEditTransfer({ accessToken, editRecord })
 
   const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
   } = useCurrencyField({
@@ -153,7 +155,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editRecord, accountsFormatted])
 
-  const onSubmit: SubmitHandler<CreateIncomeDataForm> = (data) => {
+  const onSubmit: SubmitHandler<CreateIncomeDataForm> = async (data) => {
     if (!categorySelected.categoryId || !categorySelected.name) {
       updateCategoryError(CATEGORY_REQUIRED)
     }
@@ -179,6 +181,12 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
         destination: destination?.accountId ?? '',
         tag: tags.current,
       }
+
+      if (Boolean(editRecord)) {
+        await editTransfer({ payload, currencyState, expensesPaid: selectedExpenses.current })
+        return
+      }
+
       const { newValuesExpense, newValuesIncome } = getValuesIncomeAndExpense({ values: payload, expensesSelected: selectedExpenses.current })
       createTransfer({  expense: newValuesExpense, income: newValuesIncome })
     }

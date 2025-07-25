@@ -110,6 +110,10 @@ export type CreateExpensePayload = {
 export type EditExpensePayload = CreateExpensePayload & {
   recordId: string;
 }
+export type EditTransferExpensePayload = Omit<CreateExpensePayload, 'typeOfRecord'> & {
+  recordId: string;
+  typeOfRecord: 'transfer'
+}
 
 export type CreateIncomePayload = {
   account: string;
@@ -128,6 +132,10 @@ export type CreateIncomePayload = {
 
 export type EditIncomePayload = CreateIncomePayload & {
   recordId: string;
+}
+export type EditTransferIncomePayload = Omit<EditIncomePayload, 'typeOfRecord'> & {
+  recordId: string;
+  typeOfRecord: 'transfer'
 }
 
 export type CreateTransferValues = {

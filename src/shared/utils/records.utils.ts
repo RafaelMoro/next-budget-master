@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse } from "../types/records.types";
+import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse, EditTransferExpensePayload, EditTransferIncomePayload } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
@@ -35,6 +35,21 @@ export const editExpenseCb = (data: EditExpensePayload, accessToken: string): Pr
   })
 }
 
+export const editExpenseTransferCb = (data: EditTransferExpensePayload, accessToken: string): Promise<ExpenseDataResponse> => {
+  const uri = process.env.NEXT_PUBLIC_BACKEND_URI
+  if (!uri) {
+    throw new Error("Backend URI is not defined");
+  }
+  if (!accessToken) {
+    throw new Error("Access token is not defined");
+  }
+  return axios.put(`${uri}/expenses-actions`, data, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
 export const createIncomeCb = (data: CreateIncomePayload, accessToken: string): Promise<IncomeDataResponse> => {
   const uri = process.env.NEXT_PUBLIC_BACKEND_URI
   if (!uri) {
@@ -51,6 +66,21 @@ export const createIncomeCb = (data: CreateIncomePayload, accessToken: string): 
 }
 
 export const editIncomeCb = (data: EditIncomePayload, accessToken: string): Promise<IncomeDataResponse> => {
+  const uri = process.env.NEXT_PUBLIC_BACKEND_URI
+  if (!uri) {
+    throw new Error("Backend URI is not defined");
+  }
+  if (!accessToken) {
+    throw new Error("Access token is not defined");
+  }
+  return axios.put(`${uri}/incomes-actions`, data, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
+export const editIncomeTransferCb = (data: EditTransferIncomePayload, accessToken: string): Promise<IncomeDataResponse> => {
   const uri = process.env.NEXT_PUBLIC_BACKEND_URI
   if (!uri) {
     throw new Error("Backend URI is not defined");
@@ -166,14 +196,3 @@ export const getOriginAccountForEdit = ({
   }
   return '';
 };
-
-export const symmetricDifferenceExpensesRelated = (oldArray: ExpensePaid[], newArray: ExpensePaid[]) => {
-  const getId = (expense: ExpensePaid) => expense._id;
-  const firstDifference = oldArray.filter((oldExpense) => !newArray.some((newExpense) => getId(oldExpense) === getId(newExpense)));
-  const secondDifference = newArray.filter((newExpense) => !oldArray.some((oldExpense) => getId(newExpense) === getId(oldExpense)));
-
-  return {
-    oldRecords: firstDifference,
-    newRecords: secondDifference,
-  };
-}
