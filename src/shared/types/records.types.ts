@@ -66,6 +66,10 @@ export type ExpensePaid = {
   date: Date;
 }
 
+export type DeleteRecordPayload = {
+  recordId: string;
+}
+
 /**
  * Represents a record of an account transaction, which can be an expense, income, or transfer.
  */
@@ -218,6 +222,16 @@ export interface TransferDataResponse {
   version: string;
 }
 
+export interface DeleteExpenseDataResponse {
+  data: {
+    expense: ExpenseRecord
+  }
+  error: null;
+  message: string[];
+  success: boolean;
+  version: string;
+}
+
 export interface FetchExpensesDatePayload {
   month: string;
   year: string;
@@ -251,6 +265,14 @@ export interface IncomeErrorResponse extends Omit<AxiosError, 'response'> {
 }
 
 export interface TransferErrorResponse extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
+    }
+  }>;
+}
+
+export interface DeleteExpenseErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;

@@ -186,7 +186,7 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
           </footer>
         </div>
       </Drawer>
-      <DeleteRecordModal open={openDeleteRecordModal} toggleDrawer={toggleDeleteRecordModal} record={record} />
+      <DeleteRecordModal open={openDeleteRecordModal} toggleModal={toggleDeleteRecordModal} handleCloseDrawer={handleClose} record={record} />
     </>
   )
 }

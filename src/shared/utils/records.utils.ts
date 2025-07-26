@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse, EditTransferExpensePayload, EditTransferIncomePayload } from "../types/records.types";
+import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse, EditTransferExpensePayload, EditTransferIncomePayload, DeleteRecordPayload, DeleteExpenseDataResponse } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
@@ -47,6 +47,12 @@ export const editExpenseTransferCb = (data: EditTransferExpensePayload, accessTo
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
+  })
+}
+
+export const deleteExpenseCb = (data: DeleteRecordPayload): Promise<DeleteExpenseDataResponse> => {
+  return axios.delete('/api/records/expense', {
+    data,
   })
 }
 
