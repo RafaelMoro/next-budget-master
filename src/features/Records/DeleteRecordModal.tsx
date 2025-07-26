@@ -12,11 +12,13 @@ interface DeleteRecordModalProps {
 }
 
 export const DeleteRecordModal = ({ record, open, toggleModal, handleCloseDrawer }: DeleteRecordModalProps) => {
-  const { mutate: deleteExpense, isError, isPending, isSuccess, isIdle, error } = useMutation<DeleteExpenseDataResponse
+  const router = useRouter()
+
+  const { mutate: deleteExpense, isError, isPending, isSuccess, error } = useMutation<DeleteExpenseDataResponse
   , DeleteExpenseErrorResponse, DeleteRecordPayload>({
     mutationFn: deleteExpenseCb,
     onSuccess: () => {
-      // TODO: refresh records
+      router.refresh()
       setTimeout(() => {
         toggleModal()
         handleCloseDrawer()
