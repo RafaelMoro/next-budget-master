@@ -3,7 +3,7 @@ import { useDashboardStore } from '@/zustand/provider/dashboard-store-provider'
 import { useRouter } from 'next/navigation'
 import { getAccountCookie } from '../lib/preferences.lib'
 import { saveAccountApi, saveSelectedAccountLocalStorage } from '../utils/user-info.utils'
-import { CREATE_RECORD_ROUTE } from '../constants/Global.constants'
+import { CREATE_RECORD_ROUTE, LOGIN_ROUTE } from '../constants/Global.constants'
 
 export const useDashboard = () => {
   const router = useRouter()
@@ -43,9 +43,12 @@ export const useDashboard = () => {
     }
   }
 
+  const redirectLogin = () => router.push(LOGIN_ROUTE)
+
   return {
     handleGoCreateRecordRoute,
     manageSelectedAccountCookie,
+    redirectLogin,
     accountsDisplay,
   }
 }

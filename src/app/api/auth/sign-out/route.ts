@@ -1,10 +1,10 @@
 import { LOGIN_ROUTE } from "@/shared/constants/Global.constants";
 import { signOut } from "@/shared/lib/auth.lib";
 import { revalidatePath } from "next/cache";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   await signOut();
   revalidatePath(LOGIN_ROUTE);
-  return NextResponse.redirect(new URL(LOGIN_ROUTE, req.nextUrl))
+  return NextResponse.json({ message: "Signed out successfully" });
 }
