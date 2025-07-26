@@ -20,10 +20,11 @@ interface DashboardAsideProps {
 }
 
 export const DashboardAside = ({ children, accounts, updateScreen, toggleSelectAccountModal, screen }: DashboardAsideProps) => {
-  const { handleGoCreateRecordRoute } = useDashboard()
+  const { handleGoCreateRecordRoute, redirectLogin } = useDashboard()
   const handleSignOut = async () => {
     resetLocalStorage()
     await fetch('/api/auth/sign-out')
+    redirectLogin()
   }
   return (
     <aside className="w-72 p-5 flex flex-col gap-4 border-r border-r-gray-600">
