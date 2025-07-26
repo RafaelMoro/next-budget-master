@@ -29,14 +29,9 @@ export async function POST(request: NextRequest) {
       return response
     }
 
-    return new Response(JSON.stringify({ message: 'missing cookie' }), { status: 400 })
+    return NextResponse.json({ message: 'missing cookie' }, { status: 400 })
   } catch (error) {
     const message = (error as unknown as GeneralError)?.response?.data?.error?.message
-    return new Response(JSON.stringify({ message }), {
-      status: 400,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    return NextResponse.json({ message }, { status: 400 })
   }
 }
