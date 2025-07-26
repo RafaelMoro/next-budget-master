@@ -100,6 +100,7 @@ export const ExpenseTemplate = ({
   } = useMutation<ExpenseDataResponse, ExpenseErrorResponse, CreateExpensePayload>({
     mutationFn: (data) => createExpenseCb(data, accessToken),
     onSuccess: () => {
+      router.refresh()
       setTimeout(() => {
         router.push(DASHBOARD_ROUTE)
       }, 1000)
