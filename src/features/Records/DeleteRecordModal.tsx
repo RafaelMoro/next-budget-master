@@ -72,17 +72,19 @@ export const DeleteRecordModal = ({ record, open, toggleModal, handleCloseDrawer
         <ModalHeader>Eliminar {record.shortName}</ModalHeader>
         <ModalBody>
           <p>¿Estás seguro de que deseas eliminar esta transacción?</p>
-          <p>Esta acción no puede deshacerse.</p>
+          <p className="text-red-600">Esta acción no puede deshacerse.</p>
         </ModalBody>
         <ModalFooter>
-          <Button color="red" outline onClick={toggleModal}>Cancelar</Button>
-          <Button onClick={handleDeleteRecord}>
-            { isPending ? (
-              <Spinner aria-label="loading delete record budget master" />
-            ) : isSuccess ? (
-              <CheckIcon data-testid="check-icon" />
-            ) : 'Eliminar' }
-          </Button>
+          <div className="w-full flex justify-between">
+            <Button outline onClick={toggleModal}>Cancelar</Button>
+            <Button color="red" onClick={handleDeleteRecord}>
+              { isPending ? (
+                <Spinner aria-label="loading delete record budget master" />
+              ) : isSuccess ? (
+                <CheckIcon data-testid="check-icon" />
+              ) : 'Eliminar' }
+            </Button>
+          </div>
         </ModalFooter>
       </Modal>
       { (isError) && (
