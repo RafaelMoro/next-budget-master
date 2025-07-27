@@ -8,7 +8,7 @@ import { OverviewScreens } from "@/shared/types/dashboard.types"
 interface OverviewButtonGroupProps {
   updateStatisticsScreen: () => void
   updateAccountScreen: () => void
-  screen: OverviewScreens
+  screen: OverviewScreens | null
 }
 
 export const OverviewButtonGroup = ({ updateStatisticsScreen, updateAccountScreen, screen }: OverviewButtonGroupProps) => {
