@@ -178,6 +178,7 @@ describe("DeleteRecordModal", () => {
     });
   });
 
+  // Test not completely working as it does not shows the state of the toast in the UI
   it("Show error when deletion fails", async () => {
     mockedAxios.delete.mockRejectedValue({
         code: 'ERR_BAD_REQUEST',
