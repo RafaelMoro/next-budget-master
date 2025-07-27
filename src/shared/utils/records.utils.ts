@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse, EditTransferExpensePayload, EditTransferIncomePayload } from "../types/records.types";
+import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse, EditTransferExpensePayload, EditTransferIncomePayload, DeleteRecordPayload, DeleteExpenseDataResponse, DeleteIncomeDataResponse } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
@@ -50,6 +50,12 @@ export const editExpenseTransferCb = (data: EditTransferExpensePayload, accessTo
   })
 }
 
+export const deleteExpenseCb = (data: DeleteRecordPayload): Promise<DeleteExpenseDataResponse> => {
+  return axios.delete('/api/records/expense', {
+    data,
+  })
+}
+
 export const createIncomeCb = (data: CreateIncomePayload, accessToken: string): Promise<IncomeDataResponse> => {
   const uri = process.env.NEXT_PUBLIC_BACKEND_URI
   if (!uri) {
@@ -77,6 +83,12 @@ export const editIncomeCb = (data: EditIncomePayload, accessToken: string): Prom
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
+  })
+}
+
+export const deleteIncomeCb = (data: DeleteRecordPayload): Promise<DeleteIncomeDataResponse> => {
+  return axios.delete('/api/records/income', {
+    data,
   })
 }
 

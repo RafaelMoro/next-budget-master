@@ -8,7 +8,7 @@ const DashboardWrapper = ({ push }: { push: () => void }) => {
   return (
     <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
       <AppRouterContextProviderMock router={{ push }}>
-        <Dashboard detailedError={null} accountsFetched={mockAccounts} />
+        <Dashboard detailedError={null} accountsFetched={mockAccounts} recordsFetched={[]} />
       </AppRouterContextProviderMock>
     </DashboardStoreProvider>
   )

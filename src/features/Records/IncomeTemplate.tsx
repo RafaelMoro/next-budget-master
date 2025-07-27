@@ -87,6 +87,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
   const { mutate: createIncome, isError: isErrorCreate, isPending: isPendingCreate, isSuccess: isSuccessCreate, error: errorCreate } = useMutation<IncomeDataResponse, IncomeErrorResponse, CreateIncomePayload>({
     mutationFn: (data) => createIncomeCb(data, accessToken),
     onSuccess: () => {
+      router.refresh()
       setTimeout(() => {
         router.push(DASHBOARD_ROUTE)
       }, 1000)

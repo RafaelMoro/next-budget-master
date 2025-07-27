@@ -100,6 +100,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
   } = useMutation<ExpenseDataResponse, TransferErrorResponse, CreateTransferPayload>({
     mutationFn: (data) => createTransferCb(data, accessToken),
     onSuccess: () => {
+      router.refresh()
       setTimeout(() => {
         router.push(DASHBOARD_ROUTE)
       }, 1000)
