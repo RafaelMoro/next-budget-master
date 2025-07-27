@@ -18,9 +18,10 @@ export const LastMonthAccordion = () => {
   const selectedAccount = useDashboardStore(
     (state) => state.selectedAccount
   )
-  const [fetchRecordsFlag, setFetchRecordsFlag] = useState<boolean>(false)
-  const handleClick = () => {
-    setFetchRecordsFlag(true)
+  const [isOpen, setIsOpen] = useState(false)
+  // Toggle open state on title click
+  const handleAccordionTitleClick = () => {
+    setIsOpen(true)
   }
 
   const {
@@ -30,10 +31,6 @@ export const LastMonthAccordion = () => {
   const {
     lastMonth, year,
   } = getDateInfo();
-  console.group('Flag')
-  console.log('fetchRecordsFlag', fetchRecordsFlag)
-  console.log('Boolean(selectedAccount?._id)', Boolean(selectedAccount?._id))
-  console.groupEnd()
 
   const { data: records = [], isPending, isSuccess } = useQuery({
     queryKey: [LAST_MONTH_RECORDS_TAG, selectedAccount?._id, lastMonth, year],
@@ -41,14 +38,14 @@ export const LastMonthAccordion = () => {
       const res: GetRecordsResponse = await axios.post('api/records', { accountId: selectedAccount?._id, month: lastMonth, year })
       return res?.data.data.records
     },
-    enabled: fetchRecordsFlag && Boolean(selectedAccount?._id),
+    enabled: isOpen,
   })
-  console.log('records', records)
   console.log('isSuccess', isSuccess)
+  console.log('records', records)
 
   return (
     <>
-      <Accordion onClick={handleClick} collapseAll className="max-w-3xl min-w-[540px]">
+      <Accordion onClick={handleAccordionTitleClick} collapseAll className="max-w-3xl min-w-[540px]">
         <AccordionPanel>
           <AccordionTitle>Último mes</AccordionTitle>
           <AccordionContent>
