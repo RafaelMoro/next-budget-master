@@ -1,19 +1,64 @@
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react"
+"use client"
+import { Fragment, useState } from "react"
+import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, HR } from "flowbite-react"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios";
+
+import { LAST_MONTH_RECORDS_TAG } from "@/shared/constants/Global.constants"
+import { getDateInfo } from "@/shared/utils/getDateInfo";
+import { GetRecordsResponse } from "@/shared/types/records.types";
+import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
+import { RecordEntrySkeleton } from "../RecordEntrySkeleton";
+import { RecordEntry } from "../RecordEntry";
+import { useRecordPreview } from "@/shared/hooks/useRecordPreview";
+import { RecordsPreviewDrawer } from "../RecordsPreviewDrawer";
 
 export const LastMonthAccordion = () => {
+  const { selectedAccount } = useDashboardStore(
+    (state) => state
+  )
+  const [fetchRecordsFlag, setFetchRecordsFlag] = useState<boolean>(false)
   const handleClick = () => {
-    console.log('click')
+    setFetchRecordsFlag(true)
   }
+
+  const {
+    record, handleOpenRecordPreviewDrawer, handleCloseRecordPreviewDrawer, openRecordDrawer
+  } = useRecordPreview()
+
+  const {
+    lastMonth, year,
+  } = getDateInfo();
+
+  const { data: records = [], isPending } = useQuery({
+    queryKey: [LAST_MONTH_RECORDS_TAG],
+    queryFn: async () => {
+      const res: GetRecordsResponse = await axios.post('api/records', { accountId: selectedAccount?._id, month: lastMonth, year })
+      return res?.data.data.records
+    },
+    enabled: fetchRecordsFlag && Boolean(selectedAccount?._id),
+  })
+  console.log('records', records)
+
   return (
     <>
       <Accordion onClick={handleClick} collapseAll className="max-w-3xl min-w-[540px]">
         <AccordionPanel>
           <AccordionTitle>Último mes</AccordionTitle>
           <AccordionContent>
-            <p>Some text</p>
+            { isPending && Array.from({ length: 3 }).map((_, index) => (
+              <RecordEntrySkeleton key={index} />
+            ))}
+            { records.length > 0 && records.map((record, index) => (
+              <Fragment key={record._id}>
+                <RecordEntry record={record} handleOpenRecordPreviewDrawer={handleOpenRecordPreviewDrawer} />
+                {index !== (records.length - 1) && <HR />}
+              </Fragment>
+            ))}
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
+      <RecordsPreviewDrawer open={openRecordDrawer} handleClose={handleCloseRecordPreviewDrawer} record={record} />
     </>
   )
 }
