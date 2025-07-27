@@ -8,28 +8,27 @@ import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterCon
 import { useState } from "react";
 import { recordMock } from "../../mocks/records.mock";
 
-const push = jest.fn();
-const refresh = jest.fn();
-
-
-type WrapperProps = {
-  open?: boolean;
-  toggleModal?: () => void;
+function DeleteRecordModalTestWrapper({
+  push,
+  refresh,
+  handleCloseDrawer
+}: {
+  push: () => void
+  refresh: () => void
   handleCloseDrawer?: () => void;
-};
-
-function DeleteRecordModalTestWrapper(props: WrapperProps = {}) {
+}) {
   const [openDeleteRecordModal, setOpenDeleteRecordModal] = useState(true);
-  const toggleDeleteRecordModal = props.toggleModal || (() => setOpenDeleteRecordModal((prev) => !prev));
-  const handleCloseDrawer = props.handleCloseDrawer || jest.fn();
+  const toggleDeleteRecordModal = () => setOpenDeleteRecordModal((prev) => !prev)
+
+  const handleCloseDrawerMock = handleCloseDrawer || jest.fn();
   return (
     <QueryProviderWrapper>
       <AppRouterContextProviderMock router={{ push, refresh }}>
         <DeleteRecordModal
-          open={typeof props.open === 'boolean' ? props.open : openDeleteRecordModal}
+          open={openDeleteRecordModal}
           toggleModal={toggleDeleteRecordModal}
           record={recordMock}
-          handleCloseDrawer={handleCloseDrawer}
+          handleCloseDrawer={handleCloseDrawerMock}
         />
       </AppRouterContextProviderMock>
     </QueryProviderWrapper>
@@ -39,12 +38,15 @@ function DeleteRecordModalTestWrapper(props: WrapperProps = {}) {
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe("DeleteRecordModal", () => {
+  const push = jest.fn();
+  const refresh = jest.fn();
+
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it("Show modal to delete record", () => {
-    render(<DeleteRecordModalTestWrapper />);
+    render(<DeleteRecordModalTestWrapper push={push} refresh={refresh} />);
     expect(screen.getByRole("heading", { name: /Eliminar/i })).toBeInTheDocument();
     expect(screen.getByText(/¿Estás seguro de que deseas eliminar esta transacción/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Cancelar/i })).toBeInTheDocument();
@@ -52,13 +54,12 @@ describe("DeleteRecordModal", () => {
   });
 
   it("Close modal when the button Cancelar is clicked", async () => {
-    const toggleModal = jest.fn();
-    render(<DeleteRecordModalTestWrapper toggleModal={toggleModal} />);
+    render(<DeleteRecordModalTestWrapper push={push} refresh={refresh} />);
     await userEvent.click(screen.getByRole("button", { name: /Cancelar/i }));
-    expect(toggleModal).toHaveBeenCalled();
+    expect(screen.queryByRole("heading", { name: /Eliminar/i })).not.toBeInTheDocument();
   });
 
-  it("Show success icon after deletion of record", async () => {
+  it("Show success icon after deletion of an expense", async () => {
     mockedAxios.delete.mockResolvedValue({
       error: null,
       message: ['Expense created', 'Account updated'],
@@ -68,7 +69,25 @@ describe("DeleteRecordModal", () => {
         expense: recordMock
       },
     })
-    render(<DeleteRecordModalTestWrapper />);
+    render(<DeleteRecordModalTestWrapper push={push} refresh={refresh} />);
+    await userEvent.click(screen.getByRole("button", { name: /^Eliminar$/i }));
+    expect(await screen.findByTestId("check-icon")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(refresh).toHaveBeenCalled()
+    });
+  });
+
+  it("Show success icon after deletion of an expense", async () => {
+    mockedAxios.delete.mockResolvedValue({
+      error: null,
+      message: ['Expense created', 'Account updated'],
+      success: true,
+      version: "v1.2.0",
+      data: {
+        income: recordMock
+      },
+    })
+    render(<DeleteRecordModalTestWrapper push={push} refresh={refresh} />);
     await userEvent.click(screen.getByRole("button", { name: /^Eliminar$/i }));
     expect(await screen.findByTestId("check-icon")).toBeInTheDocument();
     await waitFor(() => {
@@ -98,9 +117,8 @@ describe("DeleteRecordModal", () => {
           }
         }
       })
-    const toggleModal = jest.fn();
     const handleCloseDrawer = jest.fn();
-    render(<DeleteRecordModalTestWrapper toggleModal={toggleModal} handleCloseDrawer={handleCloseDrawer} />);
+    render(<DeleteRecordModalTestWrapper push={push} refresh={refresh} handleCloseDrawer={handleCloseDrawer} />);
     await userEvent.click(screen.getByRole("button", { name: /^Eliminar$/i }));
   });
 });
