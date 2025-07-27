@@ -1,8 +1,10 @@
 "use client"
 import { Dropdown, DropdownItem } from "flowbite-react"
 import { RiExpandUpDownLine } from "@remixicon/react";
+import { useQueryClient } from '@tanstack/react-query'
 
 import { useSelectAccount } from "@/shared/hooks/useSelectAccount";
+import { LAST_MONTH_RECORDS_TAG } from "@/shared/constants/Global.constants";
 
 interface DropdownSelectAccountProps {
   cssClass?: string;
@@ -17,7 +19,13 @@ interface DropdownSelectAccountProps {
  * it does not trigger the onclick event.
  */
 export const DropdownSelectAccount = ({ cssClass, goAccounts }: DropdownSelectAccountProps) => {
+  const queryClient = useQueryClient()
   const { accountsOptions, selectedAccountDisplay, handleSelectAccount, hasMore10Accounts } = useSelectAccount({ limit10Accounts: true })
+
+  const onSelectAccount = (accountId: string) => {
+    queryClient.invalidateQueries({ queryKey: [LAST_MONTH_RECORDS_TAG] })
+    handleSelectAccount(accountId)
+  }
 
   return (
     <div className={cssClass && cssClass}>
@@ -36,7 +44,7 @@ export const DropdownSelectAccount = ({ cssClass, goAccounts }: DropdownSelectAc
         </article>
       )}>
         { accountsOptions.length > 0 && accountsOptions.map((acc) => (
-            <DropdownItem data-testid={`option-${acc.accountId}`} className="flex justify-between" onClick={() => handleSelectAccount(acc.accountId)} key={acc.accountId}>
+            <DropdownItem data-testid={`option-${acc.accountId}`} className="flex justify-between" onClick={() => onSelectAccount(acc.accountId)} key={acc.accountId}>
               <div className="flex flex-col gap-1 items-start">
                 <span>{acc.name}</span>
                 <span className="text-xs text-gray-600 dark:text-gray-400">{acc.type}</span>
