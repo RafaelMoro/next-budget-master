@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse, EditTransferExpensePayload, EditTransferIncomePayload, DeleteRecordPayload, DeleteExpenseDataResponse } from "../types/records.types";
+import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResponse as IncomeDataResponse, CreateIncomePayload, EditExpensePayload, EditIncomePayload, FetchExpensesDatePayload, FetchExpensesDateResponse, CreateTransferValues, ExpensePaid, TransferIncome, TransferExpense, CreateTransferPayload, TransferDataResponse, EditTransferExpensePayload, EditTransferIncomePayload, DeleteRecordPayload, DeleteExpenseDataResponse, DeleteIncomeDataResponse } from "../types/records.types";
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
@@ -83,6 +83,12 @@ export const editIncomeCb = (data: EditIncomePayload, accessToken: string): Prom
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
+  })
+}
+
+export const deleteIncomeCb = (data: DeleteRecordPayload): Promise<DeleteIncomeDataResponse> => {
+  return axios.delete('/api/records/income', {
+    data,
   })
 }
 

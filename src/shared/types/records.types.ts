@@ -232,6 +232,16 @@ export interface DeleteExpenseDataResponse {
   version: string;
 }
 
+export interface DeleteIncomeDataResponse {
+  data: {
+    income: IncomeRecord
+  }
+  error: null;
+  message: string[];
+  success: boolean;
+  version: string;
+}
+
 export interface FetchExpensesDatePayload {
   month: string;
   year: string;
@@ -273,6 +283,14 @@ export interface TransferErrorResponse extends Omit<AxiosError, 'response'> {
 }
 
 export interface DeleteExpenseErrorResponse extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    error: {
+      message: string;
+    }
+  }>;
+}
+
+export interface DeleteIncomeErrorResponse extends Omit<AxiosError, 'response'> {
   response: AxiosResponse<{
     error: {
       message: string;

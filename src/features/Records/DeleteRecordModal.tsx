@@ -3,8 +3,8 @@ import { useMutation } from "@tanstack/react-query"
 import { Button, CheckIcon, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "flowbite-react"
 import { Toaster, toast } from "sonner";
 
-import { BankMovement, DeleteExpenseDataResponse, DeleteExpenseErrorResponse, DeleteRecordPayload } from "@/shared/types/records.types"
-import { deleteExpenseCb } from "@/shared/utils/records.utils"
+import { BankMovement, DeleteExpenseDataResponse, DeleteExpenseErrorResponse, DeleteIncomeDataResponse, DeleteIncomeErrorResponse, DeleteRecordPayload } from "@/shared/types/records.types"
+import { deleteExpenseCb, deleteIncomeCb } from "@/shared/utils/records.utils"
 import { DELETE_RECORD_ERROR } from "@/shared/constants/records.constants";
 
 interface DeleteRecordModalProps {
@@ -17,7 +17,7 @@ interface DeleteRecordModalProps {
 export const DeleteRecordModal = ({ record, open, toggleModal, handleCloseDrawer }: DeleteRecordModalProps) => {
   const router = useRouter()
 
-  const { mutate: deleteExpense, isError, isPending, isSuccess } = useMutation<DeleteExpenseDataResponse
+  const { mutate: deleteExpense, isError: isErrorExpense, isPending: isPendingExpense, isSuccess: isSuccessExpense } = useMutation<DeleteExpenseDataResponse
   , DeleteExpenseErrorResponse, DeleteRecordPayload>({
     mutationFn: deleteExpenseCb,
     onError: () => {
@@ -35,8 +35,35 @@ export const DeleteRecordModal = ({ record, open, toggleModal, handleCloseDrawer
       }, 1000)
     }
   })
+
+  const { mutate: deleteIncome, isError: isErrorIncome, isPending: isPendingIncome, isSuccess: isSuccessIncome } = useMutation<DeleteIncomeDataResponse
+  , DeleteIncomeErrorResponse, DeleteRecordPayload>({
+    mutationFn: deleteIncomeCb,
+    onError: () => {
+      toast.error(DELETE_RECORD_ERROR)
+      setTimeout(() => {
+        toggleModal()
+        handleCloseDrawer()
+      }, 1000)
+    },
+    onSuccess: () => {
+      router.refresh()
+      setTimeout(() => {
+        toggleModal()
+        handleCloseDrawer()
+      }, 1000)
+    }
+  })
+
+  const isPending = isPendingExpense || isPendingIncome;
+  const isSuccess = isSuccessExpense || isSuccessIncome;
+  const isError = isErrorExpense || isErrorIncome;
+
   const handleDeleteRecord = () => {
-    // TODO: Add condition for Income records
+    if (record.typeOfRecord === 'income') {
+      deleteIncome({ recordId: record._id })
+      return
+    }
     // TODO: Add condition for transfer records
     deleteExpense({ recordId: record._id })
   }
