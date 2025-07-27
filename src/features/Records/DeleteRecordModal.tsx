@@ -62,7 +62,20 @@ export const DeleteRecordModal = ({ record, open, toggleModal, handleCloseDrawer
       deleteIncome({ recordId: record._id })
       return
     }
-    // TODO: Add condition for transfer records
+  
+    if (record.typeOfRecord === 'transfer' && record.transferRecord !== undefined) {
+      // We don-t have an endpoint to delete transfers
+      const isExpense = record?.isPaid !== undefined
+      if (isExpense) {
+        deleteExpense({ recordId: record._id })
+        deleteIncome({ recordId: record.transferRecord.transferId })
+        return
+      }
+      deleteIncome({ recordId: record._id })
+      deleteExpense({ recordId: record.transferRecord.transferId  })
+      return
+    }
+  
     deleteExpense({ recordId: record._id })
   }
 
