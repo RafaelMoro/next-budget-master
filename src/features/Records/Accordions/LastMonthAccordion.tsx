@@ -33,7 +33,7 @@ export const LastMonthAccordion = () => {
   } = getDateInfo();
 
   const { data, isPending, isSuccess } = useQuery({
-    queryKey: [LAST_MONTH_RECORDS_TAG, selectedAccount?._id, lastMonth, year],
+    queryKey: [LAST_MONTH_RECORDS_TAG],
     queryFn: async () => {
       const res: GetRecordsResponse = await axios.post('api/records', { accountId: selectedAccount?._id, month: lastMonth, year })
       return res?.data.data
@@ -41,8 +41,6 @@ export const LastMonthAccordion = () => {
     enabled: isOpen,
   })
   const records = data?.records ?? []
-  console.log('isSuccess', isSuccess)
-  console.log('records', records)
 
   return (
     <>

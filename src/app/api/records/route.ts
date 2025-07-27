@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    console.log({data: res.data })
     return NextResponse.json(res.data, { status: 200 })
   } catch (error) {
     console.error('Error fetching records:', error);
