@@ -15,8 +15,8 @@ import { RecordsPreviewDrawer } from "../RecordsPreviewDrawer";
 import { EmptyAccordionResult } from "./EmptyAccordionResult";
 
 export const LastMonthAccordion = () => {
-  const { selectedAccount } = useDashboardStore(
-    (state) => state
+  const selectedAccount = useDashboardStore(
+    (state) => state.selectedAccount
   )
   const [fetchRecordsFlag, setFetchRecordsFlag] = useState<boolean>(false)
   const handleClick = () => {
@@ -36,7 +36,7 @@ export const LastMonthAccordion = () => {
   console.groupEnd()
 
   const { data: records = [], isPending, isSuccess } = useQuery({
-    queryKey: [LAST_MONTH_RECORDS_TAG],
+    queryKey: [LAST_MONTH_RECORDS_TAG, selectedAccount?._id, lastMonth, year],
     queryFn: async () => {
       const res: GetRecordsResponse = await axios.post('api/records', { accountId: selectedAccount?._id, month: lastMonth, year })
       return res?.data.data.records
