@@ -34,6 +34,7 @@ describe('AccountOverviewSubscreen', () => {
     expect(screen.getByText('Santander')).toBeInTheDocument()
     expect(screen.getByText('$12,640.54')).toBeInTheDocument()
     expect(screen.getByText('Este mes')).toBeInTheDocument()
+    expect(screen.getByText('Último mes')).toBeInTheDocument()
     expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument()
     expect(screen.getByText('Sin pagar')).toBeInTheDocument()
   })
