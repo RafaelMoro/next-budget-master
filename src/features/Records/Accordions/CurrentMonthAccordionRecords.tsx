@@ -1,9 +1,9 @@
 import { BankMovement } from "@/shared/types/records.types"
 import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Button, HR } from "flowbite-react"
 import { Fragment } from "react";
-import { RecordEntry } from "./RecordEntry";
+import { RecordEntry } from "../RecordEntry";
 import { useDashboard } from "@/shared/hooks/useDashboard";
-import { RecordsPreviewDrawer } from "./RecordsPreviewDrawer";
+import { RecordsPreviewDrawer } from "../RecordsPreviewDrawer";
 import { useRecordPreview } from "@/shared/hooks/useRecordPreview";
 
 interface CurrentMonthAccordionRecordsProps {

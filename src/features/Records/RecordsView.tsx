@@ -5,7 +5,7 @@ import axios from "axios";
 import { CURRENT_MONTH_RECORDS_TAG } from "@/shared/constants/Global.constants";
 import { getDateInfo } from "@/shared/utils/getDateInfo";
 import { GetRecordsResponse } from "@/shared/types/records.types";
-import { MonthAccordionRecords } from "./CurrentMonthAccordionRecords";
+import { MonthAccordionRecords } from "./Accordions/CurrentMonthAccordionRecords";
 
 interface RecordViewProps {
   accountId: string
