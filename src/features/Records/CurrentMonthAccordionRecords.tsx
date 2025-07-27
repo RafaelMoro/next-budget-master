@@ -27,20 +27,20 @@ export const MonthAccordionRecords = ({ records, title }: CurrentMonthAccordionR
       <Accordion className="max-w-3xl min-w-[540px]">
         <AccordionPanel>
           <AccordionTitle>{title}</AccordionTitle>
-            <AccordionContent>
-              { records.length > 0 && records.map((record, index) => (
-                <Fragment key={record._id}>
-                  <RecordEntry record={record} handleOpenRecordPreviewDrawer={handleOpenRecordPreviewDrawer} />
-                  {index !== (records.length - 1) && <HR />}
-                </Fragment>
-              ))}
-              { records.length === 0 && (
-                <div className="flex flex-col gap-5 justify-center">
-                  <p>Aún no has registrado movimientos este mes</p>
-                  <Button onClick={handleGoCreateRecordRoute} >Registrar movimiento</Button>
-                </div>
-              )}
-            </AccordionContent>
+          <AccordionContent>
+            { records.length > 0 && records.map((record, index) => (
+              <Fragment key={record._id}>
+                <RecordEntry record={record} handleOpenRecordPreviewDrawer={handleOpenRecordPreviewDrawer} />
+                {index !== (records.length - 1) && <HR />}
+              </Fragment>
+            ))}
+            { records.length === 0 && (
+              <div className="flex flex-col gap-5 justify-center">
+                <p>Aún no has registrado movimientos este mes</p>
+                <Button onClick={handleGoCreateRecordRoute} >Registrar movimiento</Button>
+              </div>
+            )}
+          </AccordionContent>
         </AccordionPanel>
       </Accordion>
       <RecordsPreviewDrawer open={openRecordDrawer} handleClose={handleCloseRecordPreviewDrawer} record={record} />

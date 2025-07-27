@@ -6,6 +6,7 @@ import { MonthAccordionRecords } from "@/features/Records/CurrentMonthAccordionR
 import { useAccountModal } from "@/hooks/useAccountModal";
 import { useDashboard } from "@/shared/hooks/useDashboard";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
+import { LastMonthAccordion } from "@/features/Records/Accordions/LastMonthAccordion";
 
 /**
  * This subscreen shows the overview of the account with it's information and records
@@ -47,6 +48,7 @@ export const AccountOverviewSubscreen = () => {
         </Button>
       ) }
       <MonthAccordionRecords records={records} title="Este mes" />
+      <LastMonthAccordion />
     </section>
   )
 }
