@@ -1,3 +1,9 @@
+## v0.28.2 (2025-07-27)
+
+### Pull Requests
+[#50](https://github.com/RafaelMoro/next-budget-master/pull/50) | Add Account Skeleton and fix CLS loading overview screen
+
+
 ## v0.28.1 (2025-07-27)
 
 ### Pull Requests
