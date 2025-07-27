@@ -1,6 +1,6 @@
 export const AccountSkeleton = () => {
   return (
-    <button className="p-2 rounded-3xl card-gradient-bg flex flex-col justify-between max-w-64 min-w-3xs min-h-40 text-start cursor-pointer">
+    <button data-testid="account-skeleton" className="p-2 rounded-3xl card-gradient-bg flex flex-col justify-between max-w-64 min-w-3xs min-h-40 text-start cursor-pointer">
       <span className="text-lg text-gray-200 bg-slate-500 rounded w-full h-7 animate-pulse"></span>
       <div className="flex flex-col gap-2">
         <h5 className="text-2xl text-gray-200 font-semibold h-8 bg-slate-500 rounded animate-pulse"></h5>
