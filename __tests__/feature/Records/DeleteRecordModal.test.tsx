@@ -141,6 +141,43 @@ describe("DeleteRecordModal", () => {
     });
   });
 
+  it("Show success icon after deletion of a transfer income", async () => {
+    const mockIncome: BankMovement = {
+      ...recordMock,
+      isPaid: undefined,
+      typeOfRecord: 'transfer',
+      transferRecord: {
+        transferId: 'transfer-id',
+        account: 'transfer-account',
+      }
+    }
+    mockedAxios.delete.mockResolvedValue({
+      error: null,
+      message: ['Expense deleted', 'Account updated'],
+      success: true,
+      version: "v1.2.0",
+      data: {
+        expense: recordMock
+      },
+    })
+    mockedAxios.delete.mockResolvedValue({
+      error: null,
+      message: ['Income deleted', 'Account updated'],
+      success: true,
+      version: "v1.2.0",
+      data: {
+        income: mockIncome
+      },
+    })
+
+    render(<DeleteRecordModalTestWrapper push={push} refresh={refresh} record={mockIncome} />);
+    await userEvent.click(screen.getByRole("button", { name: /^Eliminar$/i }));
+    expect(await screen.findByTestId("check-icon")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(refresh).toHaveBeenCalled()
+    });
+  });
+
   it("Show error when deletion fails", async () => {
     mockedAxios.delete.mockRejectedValue({
         code: 'ERR_BAD_REQUEST',
