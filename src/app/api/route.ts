@@ -1,5 +1,5 @@
 import axios from "axios";
-import { type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 import { getCookieProps } from "@/shared/utils/parseCookie";
 import { encodeAccessToken, saveSessionCookie } from "@/shared/lib/auth.lib";
@@ -18,26 +18,20 @@ export async function POST(request: NextRequest) {
       const session = await encodeAccessToken(cookieValue)
       await saveSessionCookie(session)
       
-      return new Response(JSON.stringify(res.data), {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      const response = NextResponse.json({ data: res.data }, { status: 201 })
+      response.cookies.set('session', session, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 24 * 5 // 5 days
+      });
+      return response
     }
-    return new Response(JSON.stringify({ message: 'missing cookie' }), {
-      status: 400,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+
+    return NextResponse.json({ message: 'missing cookie' }, { status: 400 })
   } catch (error) {
     const message = (error as unknown as GeneralError)?.response?.data?.error?.message
-    return new Response(JSON.stringify({ message }), {
-      status: 400,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    return NextResponse.json({ message }, { status: 400 })
   }
 }

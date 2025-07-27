@@ -21,7 +21,9 @@ export const saveSessionCookie = async (session: string): Promise<void> => {
   await cookies().set('session', session, {
     httpOnly: true,
     secure: true,
+    path: '/',
     sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 5 // 5 days
   })
 }
 

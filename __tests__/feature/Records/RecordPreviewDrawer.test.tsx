@@ -7,6 +7,7 @@ import { BankMovement } from '@/shared/types/records.types';
 import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
 import { mockAccounts } from '../../mocks/accounts.mock';
+import { QueryProviderWrapper } from '@/app/QueryProviderWrapper';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -34,13 +35,15 @@ const RecordsPreviewDrawerWrapper = ({ push, recordProp = recordMock  }: { push:
     <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
       <div>
         <button onClick={() => handleOpenRecordPreviewDrawer(recordProp)}>Open Drawer</button>
-        <AppRouterContextProviderMock router={{ push }}>
-          <RecordsPreviewDrawer
-            open={openRecordDrawer}
-            handleClose={handleCloseRecordPreviewDrawer}
-            record={record}
-          />
-        </AppRouterContextProviderMock>
+        <QueryProviderWrapper>
+          <AppRouterContextProviderMock router={{ push }}>
+            <RecordsPreviewDrawer
+              open={openRecordDrawer}
+              handleClose={handleCloseRecordPreviewDrawer}
+              record={record}
+            />
+          </AppRouterContextProviderMock>
+        </QueryProviderWrapper>
       </div>
     </DashboardStoreProvider>
   );

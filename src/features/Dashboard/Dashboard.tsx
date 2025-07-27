@@ -16,9 +16,11 @@ import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 import { AccountBank } from "@/shared/types/accounts.types";
 import { SelectAccountDialog } from "../Accounts/SelectAccountDialog";
 import { getDashboardScreen, saveDashboardScreen } from "@/shared/lib/preferences.lib";
+import { BankMovement } from "@/shared/types/records.types";
 
 interface DashboardViewProps {
   accountsFetched: AccountBank[]
+  recordsFetched: BankMovement[]
   detailedError: DetailedError | null
 }
 
@@ -27,9 +29,9 @@ interface DashboardViewProps {
  * For mobile, the component renders the header and inside the drawer with the show accounts selector
  * For Desktop, the component shows the aside section along with the links and show accounts selector
  */
-export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps) => {
+export const Dashboard = ({ detailedError, accountsFetched, recordsFetched }: DashboardViewProps) => {
   const { isMobile } = useMediaQuery()
-  const { accounts, updateAccounts, updateSelectedAccount } = useDashboardStore(
+  const { accounts, updateAccounts, updateSelectedAccount, updateRecords } = useDashboardStore(
   (state) => state
   )
   const [screen, setScreen] = useState<DashboardScreens | null>(null)
@@ -48,6 +50,11 @@ export const Dashboard = ({ detailedError, accountsFetched }: DashboardViewProps
       setScreen(screen as DashboardScreens)
     })
   }, [])
+
+  // If the router has been refreshed, update zustand store of records
+  useEffect(() => {
+    updateRecords(recordsFetched)
+  }, [recordsFetched, updateRecords])
 
   const toggleSelectAccountModal = () => setOpenSelectAccountModal((prev) => !prev)
 

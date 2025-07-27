@@ -1,10 +1,11 @@
+import { Button } from "flowbite-react";
+
 import { AccountDialog } from "@/features/Accounts/AccountDialog";
 import { Account } from "@/features/Accounts/Accounts";
 import { MonthAccordionRecords } from "@/features/Records/CurrentMonthAccordionRecords";
 import { useAccountModal } from "@/hooks/useAccountModal";
 import { useDashboard } from "@/shared/hooks/useDashboard";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
-import { Button } from "flowbite-react";
 
 /**
  * This subscreen shows the overview of the account with it's information and records

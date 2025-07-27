@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react";
 import { RiBankLine, RiCloseFill,
   RiCloseLine,
   RiPriceTag3Line } from "@remixicon/react";
@@ -16,6 +17,7 @@ import { EDIT_EXPENSE_ROUTE, EDIT_INCOME_ROUTE, EDIT_TRANSFER_ROUTE } from "@/sh
 import { useDashboard } from "@/shared/hooks/useDashboard";
 import { ExpensePaidList } from "./ExpensesPaid/ExpensePaidList";
 import { IndebtedPeoplePreviewRecord } from "../IndebtedPeople/IndebtedPeoplePreviewRecord";
+import { DeleteRecordModal } from "./DeleteRecordModal";
 
 interface RecordsPreviewDrawerProps {
   record: BankMovement | null;
@@ -27,6 +29,10 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
   const router = useRouter()
   const { isMobile } = useMediaQuery()
   const { manageSelectedAccountCookie, accountsDisplay } = useDashboard()
+
+  const [openDeleteRecordModal, setOpenDeleteRecordModal] = useState(false);
+  const toggleDeleteRecordModal = () => setOpenDeleteRecordModal((prev) => !prev);
+
   const isOrigin = typeof record?.isPaid !== 'undefined' && record?.typeOfRecord === 'transfer';
   const transferText = isOrigin ? 'Transferencia a' : 'Transferencia desde';
   const transferAccountName = accountsDisplay.find(account => account.accountId === record?.transferRecord?.account)?.name || ''
@@ -78,106 +84,109 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
   }
 
   return (
-    <Drawer className="w-max" open={open} onClose={handleClose} position={drawerDirection}>
-      <div className="grid min-h-full grid-layout-header-footer">
-        <header className="grid grid-rows-2 grid-record-preview gap-x-2 text-gray-600 dark:text-gray-400">
-          <ChartLineIcon className="row-span-2 place-self-center" />
-          <h4 className="text-gray-600 dark:text-gray-400 col-start-2 col-end-3 row-start-1 row-end-2">Detalles de la transacción</h4>
-          <p className={typeRecordStyle}>{typeRecordDict[record.typeOfRecord]}</p>
-          <button
-            className="text-gray-600 dark:text-gray-400 place-self-center cursor-pointer"
-            onClick={handleClose}
-            aria-label="Close"
-          >
-            <RiCloseFill />
-          </button>
-        </header>
-        <DrawerItems>
-          <div className="flex flex-col gap-10 mt-8">
-            <div className="flex flex-col gap-4">
-              <h4 className="text-xl font-semibold capitalize">{record.shortName}</h4>
-              <p className={priceStyles}>{record.amountFormatted}</p>
-              <p className="text-sm text-gray-400">{record.description}</p>
-            </div>
-
-            { record?.transferRecord && (
-              <div className="flex flex-col gap-2">
-                <h5 className="text-lg tracking-wider">Detalle de la transferencia:</h5>
-                <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
-                  <RiBankLine size={20} />
-                  <p>{transferText}: <span className="text-black dark:text-white">{transferAccountName}</span></p>
-                </div>
+    <>
+      <Drawer className="w-max" open={open} onClose={handleClose} position={drawerDirection}>
+        <div className="grid min-h-full grid-layout-header-footer">
+          <header className="grid grid-rows-2 grid-record-preview gap-x-2 text-gray-600 dark:text-gray-400">
+            <ChartLineIcon className="row-span-2 place-self-center" />
+            <h4 className="text-gray-600 dark:text-gray-400 col-start-2 col-end-3 row-start-1 row-end-2">Detalles de la transacción</h4>
+            <p className={typeRecordStyle}>{typeRecordDict[record.typeOfRecord]}</p>
+            <button
+              className="text-gray-600 dark:text-gray-400 place-self-center cursor-pointer"
+              onClick={handleClose}
+              aria-label="Close"
+            >
+              <RiCloseFill />
+            </button>
+          </header>
+          <DrawerItems>
+            <div className="flex flex-col gap-10 mt-8">
+              <div className="flex flex-col gap-4">
+                <h4 className="text-xl font-semibold capitalize">{record.shortName}</h4>
+                <p className={priceStyles}>{record.amountFormatted}</p>
+                <p className="text-sm text-gray-400">{record.description}</p>
               </div>
-            )}
 
-            <div className="flex flex-col gap-2">
-              <h5 className="text-lg tracking-wider">Categorias:</h5>
-              <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
-                <Icon size={20} />
-                <p>Categoria: <span className="text-black dark:text-white">{record.category?.categoryName}</span></p>
-              </div>
-              <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
-                <RiPriceTag3Line size={20} />
-                <p>Subcategoria: <span className="text-black dark:text-white">{record.subCategory}</span></p>
-              </div>
-            </div>
-
-            { record.typeOfRecord === 'expense' && (
-              <div className="flex flex-col gap-2">
-                <h5 className="text-lg tracking-wider">Estatus de pago:</h5>
-                <div className={statusBoxCss}>
-                  { record.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
-                  <p className="text-sm">{paidStatus}</p>
-                </div>
-              </div>
-            ) }
-
-            { record?.linkedBudgets && record?.linkedBudgets.length > 0 && (
-              <div className="flex flex-col gap-2">
-                <h5 className="text-lg tracking-wider">Presupuestos:</h5>
-                <div className="flex gap-2">
-                  { record.linkedBudgets.map((budget) => (
-                    <Badge key={budget._id} className="max-w-max" color="warning">
-                      {budget.description}
-                    </Badge>
-                  )) }
-                </div>
-              </div>
-              ) }
-
-              { record.tag.length > 0 && (
+              { record?.transferRecord && (
                 <div className="flex flex-col gap-2">
-                  <h5 className="text-lg tracking-wider">Etiquetas:</h5>
-                  <div className="flex gap-2">
-                    { record.tag.map((t) => (
-                      <Badge key={t} className="max-w-max" color="purple">
-                        {t}
-                      </Badge>
-                    )) }
+                  <h5 className="text-lg tracking-wider">Detalle de la transferencia:</h5>
+                  <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                    <RiBankLine size={20} />
+                    <p>{transferText}: <span className="text-black dark:text-white">{transferAccountName}</span></p>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-col gap-2">
+                <h5 className="text-lg tracking-wider">Categorias:</h5>
+                <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                  <Icon size={20} />
+                  <p>Categoria: <span className="text-black dark:text-white">{record.category?.categoryName}</span></p>
+                </div>
+                <div className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                  <RiPriceTag3Line size={20} />
+                  <p>Subcategoria: <span className="text-black dark:text-white">{record.subCategory}</span></p>
+                </div>
+              </div>
+
+              { record.typeOfRecord === 'expense' && (
+                <div className="flex flex-col gap-2">
+                  <h5 className="text-lg tracking-wider">Estatus de pago:</h5>
+                  <div className={statusBoxCss}>
+                    { record.isPaid ? (<CheckIcon />) : (<RiCloseLine />) }
+                    <p className="text-sm">{paidStatus}</p>
                   </div>
                 </div>
               ) }
 
-              { record?.indebtedPeople && record?.indebtedPeople.length > 0 && (
+              { record?.linkedBudgets && record?.linkedBudgets.length > 0 && (
                 <div className="flex flex-col gap-2">
-                  <h5 className="text-lg tracking-wider">Personas que te deben:</h5>
-                  <IndebtedPeoplePreviewRecord indebtedPeople={record?.indebtedPeople} />
+                  <h5 className="text-lg tracking-wider">Presupuestos:</h5>
+                  <div className="flex gap-2">
+                    { record.linkedBudgets.map((budget) => (
+                      <Badge key={budget._id} className="max-w-max" color="warning">
+                        {budget.description}
+                      </Badge>
+                    )) }
+                  </div>
                 </div>
-              )}
+                ) }
 
-              { record?.expensesPaid && record?.expensesPaid.length > 0 && (
-                <div className="flex flex-col gap-3">
-                  <h5 className="text-lg tracking-wider">Gastos pagados:</h5>
-                  <ExpensePaidList expenses={record?.expensesPaid} />
-                </div>
-              )}
-          </div>
-        </DrawerItems>
-        <footer className="mt-10 lg:mt-0 flex justify-between">
-          <Button color="red" outline>Eliminar</Button>
-          <Button onClick={handleEditRecord}>Editar</Button>
-        </footer>
-      </div>
-    </Drawer>
+                { record.tag.length > 0 && (
+                  <div className="flex flex-col gap-2">
+                    <h5 className="text-lg tracking-wider">Etiquetas:</h5>
+                    <div className="flex gap-2">
+                      { record.tag.map((t) => (
+                        <Badge key={t} className="max-w-max" color="purple">
+                          {t}
+                        </Badge>
+                      )) }
+                    </div>
+                  </div>
+                ) }
+
+                { record?.indebtedPeople && record?.indebtedPeople.length > 0 && (
+                  <div className="flex flex-col gap-2">
+                    <h5 className="text-lg tracking-wider">Personas que te deben:</h5>
+                    <IndebtedPeoplePreviewRecord indebtedPeople={record?.indebtedPeople} />
+                  </div>
+                )}
+
+                { record?.expensesPaid && record?.expensesPaid.length > 0 && (
+                  <div className="flex flex-col gap-3">
+                    <h5 className="text-lg tracking-wider">Gastos pagados:</h5>
+                    <ExpensePaidList expenses={record?.expensesPaid} />
+                  </div>
+                )}
+            </div>
+          </DrawerItems>
+          <footer className="mt-10 lg:mt-0 flex justify-between">
+            <Button color="red" outline onClick={toggleDeleteRecordModal}>Eliminar</Button>
+            <Button onClick={handleEditRecord}>Editar</Button>
+          </footer>
+        </div>
+      </Drawer>
+      <DeleteRecordModal open={openDeleteRecordModal} toggleModal={toggleDeleteRecordModal} handleCloseDrawer={handleClose} record={record} />
+    </>
   )
 }

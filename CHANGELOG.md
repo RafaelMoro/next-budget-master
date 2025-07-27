@@ -1,3 +1,21 @@
+## v0.28.1 (2025-07-27)
+
+### Pull Requests
+[#48](https://github.com/RafaelMoro/next-budget-master/pull/48) | Fix don't send empty currency and fix empty destination sent
+
+
+## v0.28.0 (2025-07-27)
+
+### Pull Requests
+[#47](https://github.com/RafaelMoro/next-budget-master/pull/47) | Add delete record feature
+
+
+## v0.27.1 (2025-07-26)
+
+### Pull Requests
+[#46](https://github.com/RafaelMoro/next-budget-master/pull/46) | Add Login, sign out fixes
+
+
 ## v0.27.0 (2025-07-25)
 
 ### Pull Requests
