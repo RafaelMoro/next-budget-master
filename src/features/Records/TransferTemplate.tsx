@@ -58,7 +58,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     updateOrigin, updateDestination, handleDestinationError, updateEditDestination, updateEditOrigin } = useTransferBankAccounts({ accessToken, subscreen, selectedAccount })
   const { editTransfer, isSuccessEditExpense, isSuccessEditIncome, isPendingEditExpense, isPendingEditIncome, isErrorEditExpense, isErrorEditIncome } = useEditTransfer({ accessToken, editRecord, showDefaultError })
 
-  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency, isZeroCurrency,
   } = useCurrencyField({
     amount: null,
   })
@@ -170,8 +170,9 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
       handleDestinationError(DESTINATION_ACC_REQUIRED)
     }
     validateZeroAmount({ amountState: currencyState })
+    const isAmountZero = isZeroCurrency()
 
-    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
+    if (!categoryError && !subcategoryError && !isAmountZero && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
       const amountNumber = cleanCurrencyString(currencyState)
       const payload: CreateTransferValues = {
         amount: amountNumber,
