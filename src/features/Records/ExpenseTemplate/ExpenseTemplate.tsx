@@ -79,7 +79,7 @@ export const ExpenseTemplate = ({
     { "max-w-2xl": indebtedPeopleUI.length > 0 }
   )
 
-  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState } = useCurrencyField({
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState, isZeroCurrency } = useCurrencyField({
     amount: null,
   })
   const { categoriesShown, categorySelected, updateCategory, updateSubcategory, subcategories, subcategory,
@@ -197,8 +197,9 @@ export const ExpenseTemplate = ({
       updateSubcategoryError(SUBCATEGORY_REQUIRED)
     }
     validateZeroAmount({ amountState: currencyState })
+    const isAmountZero = isZeroCurrency()
 
-    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
+    if (!categoryError && !subcategoryError && !isAmountZero && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
       const amountNumber = cleanCurrencyString(currencyState)
       const payload: CreateExpensePayload = {
         account: selectedAccount,
