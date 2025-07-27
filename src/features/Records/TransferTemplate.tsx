@@ -172,7 +172,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     validateZeroAmount({ amountState: currencyState })
     const isAmountZero = isZeroCurrency()
 
-    if (!categoryError && !subcategoryError && !isAmountZero && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
+    if (!categoryError && !subcategoryError && !isAmountZero && !errorAmount && selectedAccount && date && subcategory && !openTagModal && Boolean(destination)) {
       const amountNumber = cleanCurrencyString(currencyState)
       const payload: CreateTransferValues = {
         amount: amountNumber,
