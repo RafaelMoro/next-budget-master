@@ -12,6 +12,7 @@ import { RecordEntrySkeleton } from "../RecordEntrySkeleton";
 import { RecordEntry } from "../RecordEntry";
 import { useRecordPreview } from "@/shared/hooks/useRecordPreview";
 import { RecordsPreviewDrawer } from "../RecordsPreviewDrawer";
+import { EmptyAccordionResult } from "./EmptyAccordionResult";
 
 export const LastMonthAccordion = () => {
   const { selectedAccount } = useDashboardStore(
@@ -29,8 +30,12 @@ export const LastMonthAccordion = () => {
   const {
     lastMonth, year,
   } = getDateInfo();
+  console.group('Flag')
+  console.log('fetchRecordsFlag', fetchRecordsFlag)
+  console.log('Boolean(selectedAccount?._id)', Boolean(selectedAccount?._id))
+  console.groupEnd()
 
-  const { data: records = [], isPending } = useQuery({
+  const { data: records = [], isPending, isSuccess } = useQuery({
     queryKey: [LAST_MONTH_RECORDS_TAG],
     queryFn: async () => {
       const res: GetRecordsResponse = await axios.post('api/records', { accountId: selectedAccount?._id, month: lastMonth, year })
@@ -39,6 +44,7 @@ export const LastMonthAccordion = () => {
     enabled: fetchRecordsFlag && Boolean(selectedAccount?._id),
   })
   console.log('records', records)
+  console.log('isSuccess', isSuccess)
 
   return (
     <>
@@ -49,12 +55,15 @@ export const LastMonthAccordion = () => {
             { isPending && Array.from({ length: 3 }).map((_, index) => (
               <RecordEntrySkeleton key={index} />
             ))}
-            { records.length > 0 && records.map((record, index) => (
+            { (records.length > 0 && isSuccess) && records.map((record, index) => (
               <Fragment key={record._id}>
                 <RecordEntry record={record} handleOpenRecordPreviewDrawer={handleOpenRecordPreviewDrawer} />
                 {index !== (records.length - 1) && <HR />}
               </Fragment>
             ))}
+            { (records.length === 0 && isSuccess) && (
+              <EmptyAccordionResult />
+            )}
           </AccordionContent>
         </AccordionPanel>
       </Accordion>

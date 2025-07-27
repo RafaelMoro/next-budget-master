@@ -1,10 +1,10 @@
 import { BankMovement } from "@/shared/types/records.types"
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Button, HR } from "flowbite-react"
+import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, HR } from "flowbite-react"
 import { Fragment } from "react";
 import { RecordEntry } from "../RecordEntry";
-import { useDashboard } from "@/shared/hooks/useDashboard";
 import { RecordsPreviewDrawer } from "../RecordsPreviewDrawer";
 import { useRecordPreview } from "@/shared/hooks/useRecordPreview";
+import { EmptyAccordionResult } from "./EmptyAccordionResult";
 
 interface CurrentMonthAccordionRecordsProps {
   records: BankMovement[];
@@ -17,7 +17,6 @@ interface CurrentMonthAccordionRecordsProps {
  * @returns The accordion showing the records
  */
 export const MonthAccordionRecords = ({ records, title }: CurrentMonthAccordionRecordsProps) => {
-  const { handleGoCreateRecordRoute } = useDashboard()
   const {
     record, handleOpenRecordPreviewDrawer, handleCloseRecordPreviewDrawer, openRecordDrawer
   } = useRecordPreview()
@@ -35,10 +34,7 @@ export const MonthAccordionRecords = ({ records, title }: CurrentMonthAccordionR
               </Fragment>
             ))}
             { records.length === 0 && (
-              <div className="flex flex-col gap-5 justify-center">
-                <p>Aún no has registrado movimientos este mes</p>
-                <Button onClick={handleGoCreateRecordRoute} >Registrar movimiento</Button>
-              </div>
+              <EmptyAccordionResult />
             )}
           </AccordionContent>
         </AccordionPanel>
