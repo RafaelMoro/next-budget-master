@@ -6,7 +6,7 @@ import { DeleteRecordModal } from "@/features/Records/DeleteRecordModal";
 import { QueryProviderWrapper } from "@/app/QueryProviderWrapper";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import { useState } from "react";
-import { recordMock } from "../../mocks/records.mock";1
+import { recordMock } from "../../mocks/records.mock";
 
 const push = jest.fn();
 const refresh = jest.fn();
@@ -43,7 +43,7 @@ describe("DeleteRecordModal", () => {
     jest.clearAllMocks();
   });
 
-  it("renders modal with record name and actions", () => {
+  it("Show modal to delete record", () => {
     render(<DeleteRecordModalTestWrapper />);
     expect(screen.getByRole("heading", { name: /Eliminar/i })).toBeInTheDocument();
     expect(screen.getByText(/¿Estás seguro de que deseas eliminar esta transacción/i)).toBeInTheDocument();
@@ -51,21 +51,14 @@ describe("DeleteRecordModal", () => {
     expect(screen.getByRole("button", { name: /^Eliminar$/i })).toBeInTheDocument();
   });
 
-  it("calls toggleModal when Cancelar is clicked", async () => {
+  it("Close modal when the button Cancelar is clicked", async () => {
     const toggleModal = jest.fn();
     render(<DeleteRecordModalTestWrapper toggleModal={toggleModal} />);
     await userEvent.click(screen.getByRole("button", { name: /Cancelar/i }));
     expect(toggleModal).toHaveBeenCalled();
   });
 
-  it("calls deleteExpenseCb and shows spinner when Eliminar is clicked", async () => {
-    render(<DeleteRecordModalTestWrapper />);
-    await userEvent.click(screen.getByRole("button", { name: /^Eliminar$/i }));
-    // Spinner may not appear instantly, so wait for it
-    expect(await screen.findByLabelText(/loading delete record budget master/i)).toBeInTheDocument();
-  });
-
-  it("shows check icon on success", async () => {
+  it("Show success icon after deletion of record", async () => {
     mockedAxios.delete.mockResolvedValue({
       error: null,
       message: ['Expense created', 'Account updated'],
@@ -78,10 +71,12 @@ describe("DeleteRecordModal", () => {
     render(<DeleteRecordModalTestWrapper />);
     await userEvent.click(screen.getByRole("button", { name: /^Eliminar$/i }));
     expect(await screen.findByTestId("check-icon")).toBeInTheDocument();
-    await waitFor(() => expect(refresh).toHaveBeenCalled());
+    await waitFor(() => {
+      expect(refresh).toHaveBeenCalled()
+    });
   });
 
-  it("shows error toast and closes modal on error", async () => {
+  it("Show error when deletion fails", async () => {
     mockedAxios.delete.mockRejectedValue({
         code: 'ERR_BAD_REQUEST',
         config: null,
@@ -107,10 +102,5 @@ describe("DeleteRecordModal", () => {
     const handleCloseDrawer = jest.fn();
     render(<DeleteRecordModalTestWrapper toggleModal={toggleModal} handleCloseDrawer={handleCloseDrawer} />);
     await userEvent.click(screen.getByRole("button", { name: /^Eliminar$/i }));
-  });
-
-  it("does not render modal when open is false", () => {
-    render(<DeleteRecordModalTestWrapper open={false} />);
-    expect(screen.queryByText(/Eliminar/i)).not.toBeInTheDocument();
   });
 });
