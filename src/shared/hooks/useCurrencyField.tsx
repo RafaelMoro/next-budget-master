@@ -18,6 +18,10 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     setErrorAmount(error);
   }
 
+  const isZeroCurrency = () => {
+    return currencyState === DEFAULT_AMOUNT_VALUE;
+  }
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
 
@@ -112,5 +116,6 @@ export const useCurrencyField = ({ amount }: UseCurrencyFieldProps) => {
     validateZeroAmount,
     resetCurrencyState,
     handleEditState,
+    isZeroCurrency,
   };
 }

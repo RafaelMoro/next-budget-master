@@ -44,7 +44,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
   const [date, setDate] = useState<Date | undefined>(new Date())
   const buttonText = editRecord?.shortName ? 'Editar ingreso' : 'Crear ingreso'
 
-  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency,
+  const { handleChange, currencyState, errorAmount, validateZeroAmount, handleEditState: handleEditCurrency, isZeroCurrency,
   } = useCurrencyField({
     amount: null,
   })
@@ -172,8 +172,9 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
       updateSubcategoryError(SUBCATEGORY_REQUIRED)
     }
     validateZeroAmount({ amountState: currencyState })
+    const isAmountZero = isZeroCurrency()
 
-    if (!categoryError && !subcategoryError && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
+    if (!categoryError && !subcategoryError && !isAmountZero && !errorAmount && selectedAccount && date && subcategory && !openTagModal) {
       const amountNumber = cleanCurrencyString(currencyState)
       const payload: CreateIncomePayload = {
         account: selectedAccount,
