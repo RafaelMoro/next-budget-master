@@ -1,3 +1,9 @@
+## v0.28.1 (2025-07-27)
+
+### Pull Requests
+[#48](https://github.com/RafaelMoro/next-budget-master/pull/48) | Fix don't send empty currency and fix empty destination sent
+
+
 ## v0.28.0 (2025-07-27)
 
 ### Pull Requests
