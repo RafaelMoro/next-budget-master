@@ -7,18 +7,22 @@ import { QueryProviderWrapper } from "@/app/QueryProviderWrapper";
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock";
 import { useState } from "react";
 import { recordMock } from "../../mocks/records.mock";
+import { BankMovement } from "@/shared/types/records.types";
 
 function DeleteRecordModalTestWrapper({
   push,
   refresh,
-  handleCloseDrawer
+  handleCloseDrawer,
+  record = null
 }: {
   push: () => void
   refresh: () => void
   handleCloseDrawer?: () => void;
+  record?: BankMovement | null
 }) {
   const [openDeleteRecordModal, setOpenDeleteRecordModal] = useState(true);
   const toggleDeleteRecordModal = () => setOpenDeleteRecordModal((prev) => !prev)
+  const mockRecord = record || recordMock
 
   const handleCloseDrawerMock = handleCloseDrawer || jest.fn();
   return (
@@ -27,7 +31,7 @@ function DeleteRecordModalTestWrapper({
         <DeleteRecordModal
           open={openDeleteRecordModal}
           toggleModal={toggleDeleteRecordModal}
-          record={recordMock}
+          record={mockRecord}
           handleCloseDrawer={handleCloseDrawerMock}
         />
       </AppRouterContextProviderMock>
@@ -62,7 +66,7 @@ describe("DeleteRecordModal", () => {
   it("Show success icon after deletion of an expense", async () => {
     mockedAxios.delete.mockResolvedValue({
       error: null,
-      message: ['Expense created', 'Account updated'],
+      message: ['Expense deleted', 'Account updated'],
       success: true,
       version: "v1.2.0",
       data: {
@@ -77,17 +81,22 @@ describe("DeleteRecordModal", () => {
     });
   });
 
-  it("Show success icon after deletion of an expense", async () => {
+  it("Show success icon after deletion of an income", async () => {
+    const mockIncome: BankMovement = {
+      ...recordMock,
+      typeOfRecord: 'income'
+    }
     mockedAxios.delete.mockResolvedValue({
       error: null,
-      message: ['Expense created', 'Account updated'],
+      message: ['Income deleted', 'Account updated'],
       success: true,
       version: "v1.2.0",
       data: {
-        income: recordMock
+        income: mockIncome
       },
     })
-    render(<DeleteRecordModalTestWrapper push={push} refresh={refresh} />);
+
+    render(<DeleteRecordModalTestWrapper push={push} refresh={refresh} record={mockIncome} />);
     await userEvent.click(screen.getByRole("button", { name: /^Eliminar$/i }));
     expect(await screen.findByTestId("check-icon")).toBeInTheDocument();
     await waitFor(() => {
