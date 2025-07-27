@@ -16,23 +16,29 @@ interface DeleteRecordModalProps {
 
 export const DeleteRecordModal = ({ record, open, toggleModal, handleCloseDrawer }: DeleteRecordModalProps) => {
   const router = useRouter()
+  const handleError = () => {
+    toast.error(DELETE_RECORD_ERROR)
+    setTimeout(() => {
+      toggleModal()
+      handleCloseDrawer()
+    }, 1000)
+  }
+  const handleSuccess = () => {
+    router.refresh()
+    setTimeout(() => {
+      toggleModal()
+      handleCloseDrawer()
+    }, 1000)
+  }
 
   const { mutate: deleteExpense, isError: isErrorExpense, isPending: isPendingExpense, isSuccess: isSuccessExpense } = useMutation<DeleteExpenseDataResponse
   , DeleteExpenseErrorResponse, DeleteRecordPayload>({
     mutationFn: deleteExpenseCb,
     onError: () => {
-      toast.error(DELETE_RECORD_ERROR)
-      setTimeout(() => {
-        toggleModal()
-        handleCloseDrawer()
-      }, 1000)
+      handleError()
     },
     onSuccess: () => {
-      router.refresh()
-      setTimeout(() => {
-        toggleModal()
-        handleCloseDrawer()
-      }, 1000)
+      handleSuccess()
     }
   })
 
@@ -40,18 +46,10 @@ export const DeleteRecordModal = ({ record, open, toggleModal, handleCloseDrawer
   , DeleteIncomeErrorResponse, DeleteRecordPayload>({
     mutationFn: deleteIncomeCb,
     onError: () => {
-      toast.error(DELETE_RECORD_ERROR)
-      setTimeout(() => {
-        toggleModal()
-        handleCloseDrawer()
-      }, 1000)
+      handleError()
     },
     onSuccess: () => {
-      router.refresh()
-      setTimeout(() => {
-        toggleModal()
-        handleCloseDrawer()
-      }, 1000)
+      handleSuccess()
     }
   })
 
