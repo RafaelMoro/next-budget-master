@@ -1,4 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
 import { HeaderMenuMobile } from '@/shared/ui/atoms/HeaderMenuMobile';
 import { mockAccounts } from '@/../__tests__/mocks/accounts.mock';
 import { recordMock } from '@/../__tests__/mocks/records.mock';
@@ -23,7 +25,8 @@ describe('HeaderMenuMobile', () => {
   const updateScreen = jest.fn();
   const toggleSelectAccountModal = jest.fn();
 
-  it('renders menu button and opens drawer on click', () => {
+  it('renders menu button and opens drawer on click', async () => {
+    const user = userEvent.setup();
     render(
       <DashboardStoreProvider {...dashboardStoreProps}>
         <QueryProviderWrapper>
@@ -40,12 +43,13 @@ describe('HeaderMenuMobile', () => {
     const menuButton = screen.getAllByRole('button')[0];
     expect(menuButton).toBeInTheDocument();
     // Click to open drawer
-    fireEvent.click(menuButton);
+    await user.click(menuButton);
     // Drawer should open and show the menu title as heading
     expect(screen.getByRole('heading', { name: /menu/i })).toBeInTheDocument();
   });
 
-  it('renders account dropdown if accounts are present', () => {
+  it('renders account dropdown if accounts are present', async () => {
+    const user = userEvent.setup();
     render(
       <DashboardStoreProvider {...dashboardStoreProps}>
         <QueryProviderWrapper>
@@ -58,12 +62,13 @@ describe('HeaderMenuMobile', () => {
         </QueryProviderWrapper>
       </DashboardStoreProvider>
     );
-    fireEvent.click(screen.getAllByRole('button')[0]);
+    await user.click(screen.getAllByRole('button')[0]);
     // Should render the account name in the dropdown
     expect(screen.getByText('Santander')).toBeInTheDocument();
   });
 
-  it('calls updateScreen when a menu link is clicked', () => {
+  it('calls updateScreen when a menu link is clicked', async () => {
+    const user = userEvent.setup();
     render(
       <DashboardStoreProvider {...dashboardStoreProps}>
         <QueryProviderWrapper>
@@ -76,10 +81,10 @@ describe('HeaderMenuMobile', () => {
         </QueryProviderWrapper>
       </DashboardStoreProvider>
     );
-    fireEvent.click(screen.getAllByRole('button')[0]);
+    await user.click(screen.getAllByRole('button')[0]);
     // Click the 'Cuentas' menu link
     const cuentasBtn = screen.getByText(/cuentas/i);
-    fireEvent.click(cuentasBtn);
+    await user.click(cuentasBtn);
     expect(updateScreen).toHaveBeenCalledWith('accounts');
   });
 });
