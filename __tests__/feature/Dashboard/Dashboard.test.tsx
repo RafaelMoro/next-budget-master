@@ -3,13 +3,16 @@ import { DashboardStoreProvider } from "@/zustand/provider/dashboard-store-provi
 import { mockAccounts } from "../../mocks/accounts.mock"
 import { render, screen } from "@testing-library/react"
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
+import { QueryProviderWrapper } from "@/app/QueryProviderWrapper"
 
 const DashboardWrapper = ({ push }: { push: () => void }) => {
   return (
     <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
-      <AppRouterContextProviderMock router={{ push }}>
-        <Dashboard detailedError={null} accountsFetched={mockAccounts} recordsFetched={[]} />
-      </AppRouterContextProviderMock>
+      <QueryProviderWrapper>
+        <AppRouterContextProviderMock router={{ push }}>
+          <Dashboard detailedError={null} accountsFetched={mockAccounts} recordsFetched={[]} />
+        </AppRouterContextProviderMock>
+      </QueryProviderWrapper>
     </DashboardStoreProvider>
   )
 }
