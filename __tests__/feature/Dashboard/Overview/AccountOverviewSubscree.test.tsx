@@ -5,6 +5,7 @@ import { AccountOverviewSubscreen } from "@/features/Dashboard/Overview/subscree
 import { mockAccounts } from "../../../mocks/accounts.mock"
 import { recordMock } from "../../../mocks/records.mock"
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
+import { QueryProviderWrapper } from "@/app/QueryProviderWrapper"
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -25,9 +26,11 @@ describe('AccountOverviewSubscreen', () => {
     const push = jest.fn()
     render(
       <DashboardStoreProvider accounts={mockAccounts} records={[recordMock]} selectedAccountId={mockAccounts[0]._id}>
-        <AppRouterContextProviderMock router={{ push }}>
-          <AccountOverviewSubscreen />
-        </AppRouterContextProviderMock>
+        <QueryProviderWrapper>
+          <AppRouterContextProviderMock router={{ push }}>
+            <AccountOverviewSubscreen />
+          </AppRouterContextProviderMock>
+        </QueryProviderWrapper>
       </DashboardStoreProvider>
     )
 
