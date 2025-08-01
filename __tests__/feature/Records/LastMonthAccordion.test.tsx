@@ -60,4 +60,28 @@ describe('LastMonthAccordion', () => {
 
     expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument();
   })
+
+  it('Given a user clicking on the accordion, and there are no records, show empty accordion UI', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn();
+    mockedAxios.post.mockResolvedValue({
+      error: null,
+      message: null,
+      success: true,
+      version: "v1.2.0",
+      data: {
+        data: {
+          records: []
+        }
+      },
+    })
+
+    render(<LastMonthAccordionWrapper push={push} />)
+
+    const accordion = screen.getByRole('button', { name: 'Último mes' });
+    await user.click(accordion);
+
+    expect(screen.getByText("Aún no has registrado movimientos este mes")).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Registrar movimiento' })).toBeInTheDocument();
+  })
 })
