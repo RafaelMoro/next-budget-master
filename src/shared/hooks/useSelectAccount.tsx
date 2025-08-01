@@ -10,7 +10,7 @@ interface SelectAccountProps {
 }
 
 export const useSelectAccount = ({ limit10Accounts = false, closeModal }: SelectAccountProps) => {
-  const { accountsDisplay, selectedAccountDisplay, updateSelectedAccountDisplay, updateRecords } = useDashboardStore(
+  const { accounts, accountsDisplay, selectedAccountDisplay, updateRecords, updateSelectedAccount } = useDashboardStore(
     (state) => state
   )
   const [accountsOptions, setAccountsOptions] = useState<AccountsDisplay[]>([])
@@ -26,23 +26,25 @@ export const useSelectAccount = ({ limit10Accounts = false, closeModal }: Select
   }, [accountsDisplay, limit10Accounts, selectedAccountDisplay])
 
   const handleSelectAccount = async (accountId: string) => {
-    const selected = accountsOptions.find(acc => acc.accountId === accountId)
-    if (!selected) {
+    const selectedAccDisplay = accountsOptions.find(acc => acc.accountId === accountId)
+    const selectedAcc = accounts.find(acc => acc._id === accountId)
+    if (!selectedAccDisplay || !selectedAcc) {
       console.warn('Account not found in options:', accountId);
       return;
     }
     const newOptions = accountsDisplay.filter(acc => acc.accountId !== accountId)
     // Save the account selected into the cookie
-    await saveAccountApi(selected.accountId)
+    await saveAccountApi(selectedAccDisplay.accountId)
     saveSelectedAccountLocalStorage({
-      accountId: selected.accountId,
-      accountType: selected.type
+      accountId: selectedAccDisplay.accountId,
+      accountType: selectedAccDisplay.type
     })
     setAccountsOptions(newOptions)
-    updateSelectedAccountDisplay(selected)
+    // This updates select account display and selected account
+    updateSelectedAccount(selectedAcc)
 
     // Fetch new records of the selected account
-    const { records } = await fetchRecordsCurrentMonth({ accountId: selected.accountId });
+    const { records } = await fetchRecordsCurrentMonth({ accountId: selectedAccDisplay.accountId });
     updateRecords(records);
     if (closeModal) closeModal()
   }

@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { DropdownSelectAccount } from '@/features/Accounts/DropdownSelectAccount';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
 import { mockAccounts } from '../mocks/accounts.mock';
+import { QueryProviderWrapper } from '@/app/QueryProviderWrapper';
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(() => ({
@@ -23,10 +24,13 @@ function mockFetch() {
 }
 
 describe('DropdownSelectAccount', () => {
+  const goAccounts = jest.fn();
   beforeEach(() => {
     render(
       <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
-        <DropdownSelectAccount />
+        <QueryProviderWrapper>
+          <DropdownSelectAccount goAccounts={goAccounts} />
+        </QueryProviderWrapper>
       </DashboardStoreProvider>
     );
   })

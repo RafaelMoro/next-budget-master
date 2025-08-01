@@ -7,7 +7,7 @@ import { getOverviewSubscreen } from "@/shared/lib/preferences.lib"
 import { saveOverviewSubscreenApi } from "@/shared/utils/preferences.utils"
 
 export const OverviewScreen = () => {
-  const [subscreen, setSubscreen] = useState<OverviewScreens>('statistics')
+  const [subscreen, setSubscreen] = useState<OverviewScreens | null>(null)
   const updateSubscreen = async (newScreen: OverviewScreens) => {
     await saveOverviewSubscreenApi(newScreen)
     setSubscreen(newScreen)

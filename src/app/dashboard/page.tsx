@@ -14,9 +14,11 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage () {
-  const accessToken = await getAccessToken()
-  const { accounts, detailedError } = await fetchAccounts()
-  const selectedAccountCookie = await getAccountCookie()
+  const [accessToken, { accounts, detailedError }, selectedAccountCookie] = await Promise.all([
+    getAccessToken(),
+    fetchAccounts(),
+    getAccountCookie()
+  ])
   const selectedAccount = selectedAccountCookie ?? accounts[0]?._id ?? null;
   const { records } = await fetchRecordsCurrentMonth({ accountId: selectedAccount });
 
