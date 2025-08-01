@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react"
 import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react"
 
