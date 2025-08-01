@@ -7,6 +7,7 @@ import { drawerTestExpense1, drawerTestExpense2 } from '../../mocks/records.mock
 import { ExpensePaid } from '@/shared/types/records.types';
 import { useSelectExpensesPaid } from '@/shared/hooks/useSelectExpensesPaid';
 import { mockMatchMedia, QueryMatchMedia } from '../../utils-test/record.utils';
+import { getDateInfo } from '@/shared/utils/getDateInfo';
 
 interface SelectPaidDrawerWrapperProps {
   isOpen?: boolean;
@@ -172,11 +173,11 @@ describe('SelectPaidDrawer', () => {
 
   it('should render month and year dropdowns', () => {
     render(<SelectPaidDrawerWrapper isOpen={true} />);
+    const { completeMonth, year, } = getDateInfo()
 
     // These should be rendered as dropdowns - checking for their containers
-    // July is the current month based on the current date
-    expect(screen.getByRole('button', { name: /Julio/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /2025/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: completeMonth })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: year })).toBeInTheDocument();
   });
 
   it('should render expenses with correct data in table mode', () => {
