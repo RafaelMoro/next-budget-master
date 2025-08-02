@@ -68,6 +68,7 @@ export const SelectPaidDrawer = ({
             <SelectExpensesPaidList
               expenses={expenses}
               selectedExpenses={selectedExpenses}
+              totalSelectedExpenses={totalSelectedExpenses}
               handleSelectExpense={handleSelectExpense}
               handleUnselectExpense={handleUnselectExpense}
             />
