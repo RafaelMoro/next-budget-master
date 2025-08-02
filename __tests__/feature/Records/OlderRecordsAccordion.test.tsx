@@ -9,6 +9,7 @@ import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterCon
 import { OlderRecordsAccordion } from "@/features/Records/Accordions/OlderRecordsAccordion"
 import { mockMatchMedia, QueryMatchMedia } from "../../utils-test/record.utils";
 import { recordMock } from "../../mocks/records.mock";
+import { getDateInfo } from "@/shared/utils/getDateInfo";
 
 const OlderRecordsAccordionWrapper = ({ push }: { push: () => void }) => {
   return (
@@ -86,5 +87,39 @@ describe('OlderRecordsAccordion', () => {
 
     expect(screen.getByText("Aún no has registrado movimientos este mes")).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Registrar movimiento' })).toBeInTheDocument();
+  })
+
+  it('Given a user clicking on the accordion, then change the month to the current month, then click on search, should see error message', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn();
+    const { completeMonth } = getDateInfo({ isOlderRecords: false })
+    mockedAxios.post.mockResolvedValue({
+      error: null,
+      message: null,
+      success: true,
+      version: "v1.2.0",
+      data: {
+        data: {
+          records: [recordMock]
+        }
+      },
+    })
+
+    render(<OlderRecordsAccordionWrapper push={push} />)
+
+    const accordion = screen.getByRole('button', { name: 'Transacciones anteriores' });
+    await user.click(accordion);
+
+    expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument();
+    const changeMonthDropdown = screen.getByTestId('select-month-dropdown-button');
+    await user.click(changeMonthDropdown);
+
+    const currentMonthOption = screen.getByText(completeMonth);
+    await user.click(currentMonthOption);
+
+    const searchButton = screen.getByRole('button', { name: 'Buscar' })
+    await user.click(searchButton);
+
+    expect(screen.getByText('Los movimientos de Agosto se muestran en la sección de "Este mes". Selecciona un mes anterior.')).toBeInTheDocument();
   })
 })
