@@ -267,6 +267,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
                 <SelectPaidSection
                   selectedExpenses={selectedExpenses}
+                  totalSelectedExpenses={totalSelectedExpenses}
                   toggleOpen={toggleSelectExpensesDrawer}
                 />
               </div>
@@ -297,6 +298,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
           <SelectPaidSection
             selectedExpenses={selectedExpenses}
+            totalSelectedExpenses={totalSelectedExpenses}
             toggleOpen={toggleSelectExpensesDrawer}
           />
         </aside>

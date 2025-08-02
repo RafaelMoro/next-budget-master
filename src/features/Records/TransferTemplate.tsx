@@ -271,6 +271,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
                 { destination && destination?.type === 'Crédito' && (
                   <SelectPaidSection
                     selectedExpenses={selectedExpenses}
+                    totalSelectedExpenses={totalSelectedExpenses}
                     toggleOpen={toggleSelectExpensesDrawer}
                   />
                 )}
@@ -303,6 +304,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
           { destination && destination?.type === 'Crédito' && (
             <SelectPaidSection
               selectedExpenses={selectedExpenses}
+              totalSelectedExpenses={totalSelectedExpenses}
               toggleOpen={toggleSelectExpensesDrawer}
             />
           )}
