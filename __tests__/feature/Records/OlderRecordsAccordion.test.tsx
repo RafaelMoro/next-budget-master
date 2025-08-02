@@ -58,6 +58,9 @@ describe('OlderRecordsAccordion', () => {
       const accordion = screen.getByRole('button', { name: 'Transacciones anteriores' });
       await user.click(accordion);
   
+      expect(screen.getByTestId('select-month-dropdown-button')).toBeInTheDocument();
+      expect(screen.getByTestId('select-year-dropdown-button')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Buscar' })).toBeInTheDocument();
       expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument();
     })
 })
