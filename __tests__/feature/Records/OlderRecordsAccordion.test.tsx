@@ -10,7 +10,7 @@ import { OlderRecordsAccordion } from "@/features/Records/Accordions/OlderRecord
 import { mockMatchMedia, QueryMatchMedia } from "../../utils-test/record.utils";
 import { recordMock } from "../../mocks/records.mock";
 
-const LastMonthAccordionWrapper = ({ push }: { push: () => void }) => {
+const OlderRecordsAccordionWrapper = ({ push }: { push: () => void }) => {
   return (
     <DashboardStoreProvider accounts={mockAccounts} records={[]} selectedAccountId={mockAccounts[0]._id}>
       <QueryProviderWrapper>
@@ -33,34 +33,58 @@ describe('OlderRecordsAccordion', () => {
 
   it('Show older records month accordion', () => {
     const push = jest.fn();
-    render(<LastMonthAccordionWrapper push={push} />)
+    render(<OlderRecordsAccordionWrapper push={push} />)
 
     expect(screen.getByText('Transacciones anteriores')).toBeInTheDocument()
   })
 
   it('Given a user clicking on the accordion, show records', async () => {
-      const user = userEvent.setup();
-      const push = jest.fn();
-      mockedAxios.post.mockResolvedValue({
-        error: null,
-        message: null,
-        success: true,
-        version: "v1.2.0",
+    const user = userEvent.setup();
+    const push = jest.fn();
+    mockedAxios.post.mockResolvedValue({
+      error: null,
+      message: null,
+      success: true,
+      version: "v1.2.0",
+      data: {
         data: {
-          data: {
-            records: [recordMock]
-          }
-        },
-      })
-  
-      render(<LastMonthAccordionWrapper push={push} />)
-  
-      const accordion = screen.getByRole('button', { name: 'Transacciones anteriores' });
-      await user.click(accordion);
-  
-      expect(screen.getByTestId('select-month-dropdown-button')).toBeInTheDocument();
-      expect(screen.getByTestId('select-year-dropdown-button')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Buscar' })).toBeInTheDocument();
-      expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument();
+          records: [recordMock]
+        }
+      },
     })
+
+    render(<OlderRecordsAccordionWrapper push={push} />)
+
+    const accordion = screen.getByRole('button', { name: 'Transacciones anteriores' });
+    await user.click(accordion);
+
+    expect(screen.getByTestId('select-month-dropdown-button')).toBeInTheDocument();
+    expect(screen.getByTestId('select-year-dropdown-button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Buscar' })).toBeInTheDocument();
+    expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument();
+  })
+
+  it('Given a user clicking on the accordion, and there are no records, show empty accordion UI', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn();
+    mockedAxios.post.mockResolvedValue({
+      error: null,
+      message: null,
+      success: true,
+      version: "v1.2.0",
+      data: {
+        data: {
+          records: []
+        }
+      },
+    })
+
+    render(<OlderRecordsAccordionWrapper push={push} />)
+
+    const accordion = screen.getByRole('button', { name: 'Transacciones anteriores' });
+    await user.click(accordion);
+
+    expect(screen.getByText("Aún no has registrado movimientos este mes")).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Registrar movimiento' })).toBeInTheDocument();
+  })
 })
