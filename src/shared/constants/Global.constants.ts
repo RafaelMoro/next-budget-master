@@ -1,5 +1,7 @@
 export type ThemeMode = 'light' | 'dark';
 
+export const DEFAULT_AMOUNT_VALUE = '$0.00'
+
 // Cookie keys
 export const COOKIE_SESSION_KEY = 'session'
 export const THEME_COOKIE_KEY = 'theme'
