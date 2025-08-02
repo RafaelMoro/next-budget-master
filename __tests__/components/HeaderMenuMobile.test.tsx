@@ -6,6 +6,8 @@ import { mockAccounts } from '@/../__tests__/mocks/accounts.mock';
 import { recordMock } from '@/../__tests__/mocks/records.mock';
 import { DashboardStoreProvider } from '@/zustand/provider/dashboard-store-provider';
 import { QueryProviderWrapper } from '@/app/QueryProviderWrapper';
+import { AppRouterContextProviderMock } from '@/shared/ui/organisms/AppRouterContextProviderMock';
+import { DashboardScreens } from '@/shared/types/dashboard.types';
 
 // Mock next/headers cookies for Next.js API usage in tests
 jest.mock('next/headers', () => ({
@@ -21,23 +23,40 @@ const dashboardStoreProps = {
   selectedAccountId: mockAccounts[0]._id,
 };
 
+const HeaderMenuMobileWrapper = ({ push, updateScreen, toggleSelectAccountModal }: {
+  push: () => void
+  updateScreen: (screen: DashboardScreens) => void
+  toggleSelectAccountModal: () => void
+}) => {
+  return (
+    <DashboardStoreProvider {...dashboardStoreProps}>
+        <QueryProviderWrapper>
+          <AppRouterContextProviderMock router={{ push }}>
+            <HeaderMenuMobile
+              accounts={mockAccounts}
+              updateScreen={updateScreen}
+              toggleSelectAccountModal={toggleSelectAccountModal}
+              screen={null}
+            />
+          </AppRouterContextProviderMock>
+        </QueryProviderWrapper>
+      </DashboardStoreProvider>
+  )
+}
+
 describe('HeaderMenuMobile', () => {
   const updateScreen = jest.fn();
   const toggleSelectAccountModal = jest.fn();
+  const push = jest.fn();
 
   it('renders menu button and opens drawer on click', async () => {
     const user = userEvent.setup();
     render(
-      <DashboardStoreProvider {...dashboardStoreProps}>
-        <QueryProviderWrapper>
-          <HeaderMenuMobile
-            accounts={mockAccounts}
-            updateScreen={updateScreen}
-            toggleSelectAccountModal={toggleSelectAccountModal}
-            screen={null}
-          />
-        </QueryProviderWrapper>
-      </DashboardStoreProvider>
+      <HeaderMenuMobileWrapper
+        push={push}
+        updateScreen={updateScreen}
+        toggleSelectAccountModal={toggleSelectAccountModal}
+      />
     );
     // Menu button should be present (first button)
     const menuButton = screen.getAllByRole('button')[0];
@@ -51,16 +70,11 @@ describe('HeaderMenuMobile', () => {
   it('renders account dropdown if accounts are present', async () => {
     const user = userEvent.setup();
     render(
-      <DashboardStoreProvider {...dashboardStoreProps}>
-        <QueryProviderWrapper>
-          <HeaderMenuMobile
-            accounts={mockAccounts}
-            updateScreen={updateScreen}
-            toggleSelectAccountModal={toggleSelectAccountModal}
-            screen={null}
-          />
-        </QueryProviderWrapper>
-      </DashboardStoreProvider>
+      <HeaderMenuMobileWrapper
+        push={push}
+        updateScreen={updateScreen}
+        toggleSelectAccountModal={toggleSelectAccountModal}
+      />
     );
     await user.click(screen.getAllByRole('button')[0]);
     // Should render the account name in the dropdown
@@ -70,16 +84,11 @@ describe('HeaderMenuMobile', () => {
   it('calls updateScreen when a menu link is clicked', async () => {
     const user = userEvent.setup();
     render(
-      <DashboardStoreProvider {...dashboardStoreProps}>
-        <QueryProviderWrapper>
-          <HeaderMenuMobile
-            accounts={mockAccounts}
-            updateScreen={updateScreen}
-            toggleSelectAccountModal={toggleSelectAccountModal}
-            screen={null}
-          />
-        </QueryProviderWrapper>
-      </DashboardStoreProvider>
+      <HeaderMenuMobileWrapper
+        push={push}
+        updateScreen={updateScreen}
+        toggleSelectAccountModal={toggleSelectAccountModal}
+      />
     );
     await user.click(screen.getAllByRole('button')[0]);
     // Click the 'Cuentas' menu link
