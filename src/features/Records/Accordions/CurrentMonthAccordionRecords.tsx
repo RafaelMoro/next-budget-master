@@ -23,7 +23,7 @@ export const MonthAccordionRecords = ({ records, title }: CurrentMonthAccordionR
 
   return (
     <>
-      <Accordion className="max-w-3xl min-w-[540px]">
+      <Accordion className="max-w-3xl min-w-2xs md:min-w-[540px]">
         <AccordionPanel>
           <AccordionTitle>{title}</AccordionTitle>
           <AccordionContent>
