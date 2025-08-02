@@ -1,6 +1,7 @@
 "use client"
 import { FormEvent, Fragment, useState } from "react"
 import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, HR } from "flowbite-react"
+import { RiErrorWarningLine } from "@remixicon/react"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios";
 
@@ -15,16 +16,21 @@ import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 import { OLDER_RECORDS_TAG } from "@/shared/constants/Global.constants";
 import { RecordEntrySkeleton } from "../RecordEntrySkeleton";
 import { RecordEntry } from "../RecordEntry";
+import { getDateInfo } from "@/shared/utils/getDateInfo";
 
 export const OlderRecordsAccordion = () => {
   const selectedAccount = useDashboardStore(
     (state) => state.selectedAccount
   )
   const [isOpen, setIsOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const handleAccordionTitleClick = () => {
     setIsOpen(true)
   }
 
+  const {
+    completeCurrentMonth, completeLastMonth, year
+  } = getDateInfo();
   const { selectedMonth, updateSelectMonth, allMonths } = useSelectMonth({ isOlderRecords: true })
   const { selectedYear, updateSelectYear } = useSelectYear({ isOlderRecords: true })
 
@@ -41,6 +47,16 @@ export const OlderRecordsAccordion = () => {
   const handleSubmitGetRecord = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     event.stopPropagation()
+    setError(null)
+
+    if (selectedMonth === completeCurrentMonth && selectedYear === year) {
+      setError(`Los movimientos de ${completeCurrentMonth} se muestran en la sección de "Este mes". Selecciona un mes anterior.`)
+      return
+    }
+    if (selectedMonth === completeLastMonth && selectedYear === year) {
+      setError(`Los movimientos de ${completeLastMonth} se muestran en la sección de "Último mes". Selecciona un mes anterior.`)
+      return
+    }
     refetch()
   }
 
@@ -64,17 +80,25 @@ export const OlderRecordsAccordion = () => {
                   changeSelectedYear={updateSelectYear}
                 />
               </div>
-              { isPending && Array.from({ length: 3 }).map((_, index) => (
+              { isPending && !error && Array.from({ length: 3 }).map((_, index) => (
                 <RecordEntrySkeleton key={index} />
               ))}
-              { (records.length > 0 && isSuccess) && records.map((record, index) => (
+              { (records.length > 0 && isSuccess && !error) && records.map((record, index) => (
                 <Fragment key={record._id}>
                   <RecordEntry record={record} handleOpenRecordPreviewDrawer={handleOpenRecordPreviewDrawer} />
                   {index !== (records.length - 1) && <HR />}
                 </Fragment>
               ))}
-              { (records.length === 0 && isSuccess) && (
+              { (records.length === 0 && isSuccess && !error) && (
                 <EmptyAccordionResult />
+              )}
+              { error && (
+                <div data-testid="error-accordion-result" className="flex flex-col gap-5 items-center">
+                  <span className="text-red-500">
+                    <RiErrorWarningLine />
+                  </span>
+                  <p className="text-red-500">{error}</p>
+                </div>
               )}
           </AccordionContent>
         </AccordionPanel>
