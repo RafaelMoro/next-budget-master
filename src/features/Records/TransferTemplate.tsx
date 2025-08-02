@@ -75,6 +75,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     allMonths,
     expensesFetched,
     isMobile,
+    totalSelectedExpenses,
     toggleSelectExpensesDrawer,
     updateSelectMonth,
     updateSelectYear,
@@ -188,11 +189,11 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
       }
 
       if (Boolean(editRecord)) {
-        await editTransfer({ payload, currencyState, expensesPaid: selectedExpenses.current })
+        await editTransfer({ payload, currencyState, expensesPaid: selectedExpenses })
         return
       }
 
-      const { newValuesExpense, newValuesIncome } = getValuesIncomeAndExpense({ values: payload, expensesSelected: selectedExpenses.current })
+      const { newValuesExpense, newValuesIncome } = getValuesIncomeAndExpense({ values: payload, expensesSelected: selectedExpenses })
       createTransfer({  expense: newValuesExpense, income: newValuesIncome })
     }
   }
@@ -269,7 +270,8 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
                 { destination && destination?.type === 'Crédito' && (
                   <SelectPaidSection
-                    selectedExpenses={selectedExpenses.current}
+                    selectedExpenses={selectedExpenses}
+                    totalSelectedExpenses={totalSelectedExpenses}
                     toggleOpen={toggleSelectExpensesDrawer}
                   />
                 )}
@@ -301,7 +303,8 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
           { destination && destination?.type === 'Crédito' && (
             <SelectPaidSection
-              selectedExpenses={selectedExpenses.current}
+              selectedExpenses={selectedExpenses}
+              totalSelectedExpenses={totalSelectedExpenses}
               toggleOpen={toggleSelectExpensesDrawer}
             />
           )}
@@ -315,7 +318,8 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
         selectedMonth={selectedMonth}
         selectedYear={selectedYear}
         expenses={expensesFetched}
-        selectedExpenses={selectedExpenses.current}
+        selectedExpenses={selectedExpenses}
+        totalSelectedExpenses={totalSelectedExpenses}
         toggleOpen={toggleSelectExpensesDrawer}
         handleSubmit={handleSubmitGetExpenses}
         changeSelectedMonth={updateSelectMonth}

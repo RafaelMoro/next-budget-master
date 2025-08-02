@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { SelectExpensesPaidList } from '@/features/Records/ExpensesPaid/SelectExpensesPaidList';
 import { recordMock, editExpense, paidRecordMock } from '../../mocks/records.mock';
 import { ExpensePaid } from '@/shared/types/records.types';
+import { DEFAULT_AMOUNT_VALUE } from '@/shared/constants/Global.constants';
 
 const ExpensesPaidListWrapper = ({
   expenses = [],
@@ -19,6 +20,7 @@ const ExpensesPaidListWrapper = ({
     <SelectExpensesPaidList
       expenses={expenses}
       selectedExpenses={selectedExpenses}
+      totalSelectedExpenses={DEFAULT_AMOUNT_VALUE}
       handleSelectExpense={handleSelectExpense}
       handleUnselectExpense={handleUnselectExpense}
     />
@@ -135,7 +137,7 @@ describe('ExpensesPaidList', () => {
     render(<ExpensesPaidListWrapper expenses={mockExpenses} />);
 
     const scrollableContainer = screen.getByRole('list').parentElement;
-    expect(scrollableContainer).toHaveClass('max-h-[650px]', 'overflow-y-scroll');
+    expect(scrollableContainer).toHaveClass('max-h-[700px]', 'overflow-y-scroll');
   });
 
   it('should render date information for each expense', () => {

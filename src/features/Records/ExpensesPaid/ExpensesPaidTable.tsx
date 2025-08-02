@@ -7,11 +7,12 @@ import { ExpensePaid } from "@/shared/types/records.types"
 interface ExpensesPaidTableProps {
   expenses: ExpensePaid[]
   selectedExpenses: ExpensePaid[]
+  totalSelectedExpenses: string
   handleUnselectExpense: (expense: ExpensePaid) => void
   handleSelectExpense: (expense: ExpensePaid) => void
 }
 
-export const ExpensesPaidTable = ({ expenses, selectedExpenses, handleSelectExpense, handleUnselectExpense }: ExpensesPaidTableProps) => {
+export const ExpensesPaidTable = ({ expenses, totalSelectedExpenses, selectedExpenses, handleSelectExpense, handleUnselectExpense }: ExpensesPaidTableProps) => {
   const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: ExpensePaid) => {
     const checkboxChecked = event.target.checked
     if (!checkboxChecked) {
@@ -59,6 +60,10 @@ export const ExpensesPaidTable = ({ expenses, selectedExpenses, handleSelectExpe
           }
         </TableBody>
       </Table>
+      <div className="mt-5 flex justify-between">
+        <p>Movimientos seleccionados: {selectedExpenses.length}</p>
+        <p>Total: {totalSelectedExpenses}</p>
+      </div>
     </div>
   )
 }

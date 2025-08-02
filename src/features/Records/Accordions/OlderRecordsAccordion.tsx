@@ -66,7 +66,7 @@ export const OlderRecordsAccordion = () => {
 
   return (
     <>
-      <Accordion onClick={handleAccordionTitleClick} collapseAll className="max-w-3xl min-w-[540px]">
+      <Accordion onClick={handleAccordionTitleClick} collapseAll className="max-w-3xl min-w-2xs md:min-w-[540px]">
         <AccordionPanel>
           <AccordionTitle>Transacciones anteriores</AccordionTitle>
           <AccordionContent>
