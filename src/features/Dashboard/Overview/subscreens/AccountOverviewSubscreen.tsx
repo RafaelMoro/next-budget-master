@@ -29,7 +29,7 @@ export const AccountOverviewSubscreen = () => {
   } = useAccountModal()
 
   return (
-    <section className="w-full mt-9 flex flex-col gap-5 items-center justify-center">
+    <section className="w-full my-9 flex flex-col gap-5 items-center justify-center">
       { selectedAccountDisplay && (
         <Account
           account={selectedAccountDisplay}
