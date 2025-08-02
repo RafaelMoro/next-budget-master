@@ -57,6 +57,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
     allMonths,
     expensesFetched,
     isMobile,
+    totalSelectedExpenses,
     toggleSelectExpensesDrawer,
     updateSelectMonth,
     updateSelectYear,
@@ -309,6 +310,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         selectedYear={selectedYear}
         expenses={expensesFetched}
         selectedExpenses={selectedExpenses}
+        totalSelectedExpenses={totalSelectedExpenses}
         toggleOpen={toggleSelectExpensesDrawer}
         handleSubmit={handleSubmitGetExpenses}
         changeSelectedMonth={updateSelectMonth}

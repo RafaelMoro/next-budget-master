@@ -75,6 +75,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
     allMonths,
     expensesFetched,
     isMobile,
+    totalSelectedExpenses,
     toggleSelectExpensesDrawer,
     updateSelectMonth,
     updateSelectYear,
@@ -316,6 +317,7 @@ export const TransferTemplate = ({ categories, selectedAccount, accessToken, sub
         selectedYear={selectedYear}
         expenses={expensesFetched}
         selectedExpenses={selectedExpenses}
+        totalSelectedExpenses={totalSelectedExpenses}
         toggleOpen={toggleSelectExpensesDrawer}
         handleSubmit={handleSubmitGetExpenses}
         changeSelectedMonth={updateSelectMonth}

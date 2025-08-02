@@ -16,6 +16,7 @@ interface SelectExpensesPaidDrawerProps {
   expenses: ExpensePaid[]
   selectedExpenses: ExpensePaid[]
   isMobile: boolean
+  totalSelectedExpenses: string
   toggleOpen: () => void;
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void
   changeSelectedMonth: (newMonth: CompleteMonthsType) => void
@@ -34,6 +35,7 @@ export const SelectPaidDrawer = ({
   expenses,
   selectedExpenses,
   isMobile,
+  totalSelectedExpenses,
   toggleOpen,
   handleSubmit,
   changeSelectedMonth,
@@ -73,6 +75,7 @@ export const SelectPaidDrawer = ({
           { (!isMobile && expenses.length > 0) && (
             <ExpensesPaidTable
               expenses={expenses}
+              totalSelectedExpenses={totalSelectedExpenses}
               handleSelectExpense={handleSelectExpense}
               handleUnselectExpense={handleUnselectExpense}
               selectedExpenses={selectedExpenses}
