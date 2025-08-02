@@ -59,6 +59,10 @@ export const ExpensesPaidTable = ({ expenses, selectedExpenses, handleSelectExpe
           }
         </TableBody>
       </Table>
+      <div className="mt-5 flex justify-between">
+        <p>Movimientos seleccionados: {selectedExpenses.length}</p>
+        <p>Total: </p>
+      </div>
     </div>
   )
 }

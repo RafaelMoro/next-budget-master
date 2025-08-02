@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from "react"
+import { FormEvent, useState } from "react"
 import { DrawerDirection, ExpensePaid } from "../types/records.types"
 import { useSelectMonth } from "./useSelectMonth"
 import { useSelectYear } from "./useSelectYear"
@@ -16,7 +16,7 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
   const { selectedYear, updateSelectYear } = useSelectYear({ isOlderRecords: false })
   const { isMobile } = useMediaQuery()
 
-  const selectedExpenses = useRef<ExpensePaid []>([])
+  const [selectedExpenses, setSelectedExpenses] = useState<ExpensePaid []>([])
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const toggleOpen = () => setIsOpen((prev) => !prev)
 
@@ -24,18 +24,19 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
   const flag = Boolean(selectedAbbreviatedMonth && selectedYear && accessToken && accountId && isOpen)
 
   const handleUnselectExpense = (expense: ExpensePaid) => {
-    const fileteredExpenses = selectedExpenses.current.filter((e) => e._id !== expense._id)
-    selectedExpenses.current = fileteredExpenses
+    const fileteredExpenses = selectedExpenses.filter((e) => e._id !== expense._id)
+    setSelectedExpenses(fileteredExpenses)
   }
   const handleSelectExpense = (expense: ExpensePaid) => {
-    if (selectedExpenses.current.includes(expense)) {
+    if (selectedExpenses.includes(expense)) {
       console.warn('Expense selected already added', expense)
       return
     }
-    selectedExpenses.current.push(expense)
+    const updatedSelectedExpenses = [...selectedExpenses, expense]
+    setSelectedExpenses(updatedSelectedExpenses)
   }
   const loadSelectedExpenses = (expenses: ExpensePaid[]) => {
-    selectedExpenses.current = expenses
+    setSelectedExpenses(expenses)
   }
 
   const { data, refetch } = useQuery({
@@ -46,7 +47,7 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
   const expensesFetched = data?.data?.expenses ?? []
 
   const handleFinishSelection =() => {
-    console.log('Selected expenses:', selectedExpenses.current)
+    console.log('Selected expenses:', selectedExpenses)
     // Here you can handle the selected expenses, e.g., save them or process them further
   }
 

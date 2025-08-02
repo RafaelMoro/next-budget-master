@@ -184,7 +184,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         category: categorySelected.categoryId,
         date,
         description: data.description ?? '',
-        expensesPaid: selectedExpenses.current,
+        expensesPaid: selectedExpenses,
         indebtedPeople: [],
         shortName: data.shortDescription,
         subCategory: subcategory,
@@ -265,7 +265,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
               <div className="w-full flex flex-col gap-12">
                 <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
                 <SelectPaidSection
-                  selectedExpenses={selectedExpenses.current}
+                  selectedExpenses={selectedExpenses}
                   toggleOpen={toggleSelectExpensesDrawer}
                 />
               </div>
@@ -295,7 +295,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
           <h2 className="text-center text-2xl font-semibold">Más detalles</h2>
           <ManageTagsModal tags={tags.current} updateTags={updateTags} openModal={openTagModal} openModalFn={openModal} closeModalFn={closeModal} />
           <SelectPaidSection
-            selectedExpenses={selectedExpenses.current}
+            selectedExpenses={selectedExpenses}
             toggleOpen={toggleSelectExpensesDrawer}
           />
         </aside>
@@ -308,7 +308,7 @@ export const IncomeTemplate = ({ categories, selectedAccount, accessToken, detai
         selectedMonth={selectedMonth}
         selectedYear={selectedYear}
         expenses={expensesFetched}
-        selectedExpenses={selectedExpenses.current}
+        selectedExpenses={selectedExpenses}
         toggleOpen={toggleSelectExpensesDrawer}
         handleSubmit={handleSubmitGetExpenses}
         changeSelectedMonth={updateSelectMonth}
