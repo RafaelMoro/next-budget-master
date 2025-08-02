@@ -13,13 +13,18 @@ export const IncomeExpensesChart = ({ records }: IncomeExpensesChartProps) => {
   return (
     <Card className="flex flex-col gap-2">
       <h4 className="text-2xl font-bold">Ingresos vs Gastos</h4>
-      <AreaChart
-        className="h-52"
-        data={currentData}
-        index="fullDate"
-        categories={["expenseTotal", "incomeTotal"]}
-        showLegend={false}
-      />
+      { currentData.length > 0 && (
+        <AreaChart
+          className="h-52"
+          data={currentData}
+          index="fullDate"
+          categories={["expenseTotal", "incomeTotal"]}
+          showLegend={false}
+        />
+      )}
+      { currentData.length === 0 && (
+        <p className="text-gray-500 text-center">No hay datos suficientes para mostrar el gráfico.</p>
+      )}
     </Card>
   )
 }
