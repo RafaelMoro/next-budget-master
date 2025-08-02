@@ -23,6 +23,7 @@ const getDateInfo = ({ isOlderRecords }: UseDateProps = {}) => {
   // If we're on january, set last month as december
   const lastMonth = currentMonthNumber === 0 ? ABBREVIATED_MONTHS[11] : ABBREVIATED_MONTHS[currentMonthNumber - 1];
   const beforeLastMonth = currentMonthNumber === 0 ? ABBREVIATED_MONTHS[10] : ABBREVIATED_MONTHS[currentMonthNumber - 2];
+  const beforeLastMonthComplete = currentMonthNumber === 0 ? MONTHS[10] : MONTHS[currentMonthNumber - 2];
   // If we're on january, set last month as december
   const completeLastMonth = currentMonthNumber === 0 ? MONTHS[11] : MONTHS[currentMonthNumber - 1];
   const currentYear = String(dateOfToday.year());
@@ -39,6 +40,7 @@ const getDateInfo = ({ isOlderRecords }: UseDateProps = {}) => {
     completeMonth,
     lastMonth,
     beforeLastMonth,
+    beforeLastMonthComplete,
     years,
     year: currentYear,
     yearLastMonth,

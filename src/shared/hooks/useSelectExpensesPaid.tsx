@@ -12,7 +12,7 @@ interface UseSelectExpensesPaidProps {
 }
 
 export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpensesPaidProps) => {
-  const { selectedMonth, updateSelectMonth, allMonths, selectedAbbreviatedMonth } = useSelectMonth()
+  const { selectedMonth, updateSelectMonth, allMonths, selectedAbbreviatedMonth } = useSelectMonth({ isOlderRecords: false })
   const { selectedYear, updateSelectYear } = useSelectYear()
   const { isMobile } = useMediaQuery()
 
