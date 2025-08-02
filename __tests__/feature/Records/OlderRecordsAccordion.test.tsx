@@ -8,6 +8,7 @@ import { QueryProviderWrapper } from "@/app/QueryProviderWrapper"
 import { AppRouterContextProviderMock } from "@/shared/ui/organisms/AppRouterContextProviderMock"
 import { OlderRecordsAccordion } from "@/features/Records/Accordions/OlderRecordsAccordion"
 import { mockMatchMedia, QueryMatchMedia } from "../../utils-test/record.utils";
+import { recordMock } from "../../mocks/records.mock";
 
 const LastMonthAccordionWrapper = ({ push }: { push: () => void }) => {
   return (
@@ -36,4 +37,27 @@ describe('OlderRecordsAccordion', () => {
 
     expect(screen.getByText('Transacciones anteriores')).toBeInTheDocument()
   })
+
+  it('Given a user clicking on the accordion, show records', async () => {
+      const user = userEvent.setup();
+      const push = jest.fn();
+      mockedAxios.post.mockResolvedValue({
+        error: null,
+        message: null,
+        success: true,
+        version: "v1.2.0",
+        data: {
+          data: {
+            records: [recordMock]
+          }
+        },
+      })
+  
+      render(<LastMonthAccordionWrapper push={push} />)
+  
+      const accordion = screen.getByRole('button', { name: 'Transacciones anteriores' });
+      await user.click(accordion);
+  
+      expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument();
+    })
 })
