@@ -1,12 +1,11 @@
 "use client"
 import { FormEvent } from "react";
-import { SelectMonthDropdown } from "@/shared/ui/atoms/SelectMonthDropdown"
-import { SelectYearDropdown } from "@/shared/ui/atoms/SelectYearDropdown"
 import { Button, Drawer, DrawerHeader, DrawerItems } from "flowbite-react"
 import { ExpensesPaidTable } from "./ExpensesPaidTable"
 import { CompleteMonthsType } from "@/shared/types/global.types";
 import { DrawerDirection, ExpensePaid } from "@/shared/types/records.types";
 import { SelectExpensesPaidList } from "./SelectExpensesPaidList";
+import { DateRangeSearchPanel } from "@/shared/ui/molecules/DateRangeSearchPanel";
 
 interface SelectExpensesPaidDrawerProps {
   isOpen: boolean;
@@ -48,11 +47,14 @@ export const SelectPaidDrawer = ({
       <DrawerHeader title="Agregar gastos" />
       <DrawerItems>
         <div className="flex flex-col gap-5">
-          <form className="flex justify-center gap-3" onSubmit={handleSubmit}>
-            <SelectMonthDropdown allMonths={allMonths} selectedMonth={selectedMonth} changeSelectedMonth={changeSelectedMonth} />
-            <SelectYearDropdown selectedYear={selectedYear} changeSelectedYear={changeSelectedYear} />
-            <Button type="submit" className="max-w-max" outline>Buscar</Button>
-          </form>
+          <DateRangeSearchPanel
+            allMonths={allMonths}
+            selectedMonth={selectedMonth}
+            selectedYear={selectedYear}
+            handleSubmit={handleSubmit}
+            changeSelectedMonth={changeSelectedMonth}
+            changeSelectedYear={changeSelectedYear}
+          />
           {
             expenses.length === 0 && (
               <div className="w-full">

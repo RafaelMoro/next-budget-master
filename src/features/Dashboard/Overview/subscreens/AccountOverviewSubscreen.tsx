@@ -7,6 +7,7 @@ import { useAccountModal } from "@/hooks/useAccountModal";
 import { useDashboard } from "@/shared/hooks/useDashboard";
 import { useDashboardStore } from "@/zustand/provider/dashboard-store-provider";
 import { LastMonthAccordion } from "@/features/Records/Accordions/LastMonthAccordion";
+import { OlderRecordsAccordion } from "@/features/Records/Accordions/OlderRecordsAccordion";
 
 /**
  * This subscreen shows the overview of the account with it's information and records
@@ -28,7 +29,7 @@ export const AccountOverviewSubscreen = () => {
   } = useAccountModal()
 
   return (
-    <section className="w-full mt-9 flex flex-col gap-5 items-center justify-center">
+    <section className="w-full my-9 flex flex-col gap-5 items-center justify-center">
       { selectedAccountDisplay && (
         <Account
           account={selectedAccountDisplay}
@@ -49,6 +50,7 @@ export const AccountOverviewSubscreen = () => {
       ) }
       <MonthAccordionRecords records={records} title="Este mes" />
       <LastMonthAccordion />
+      <OlderRecordsAccordion />
     </section>
   )
 }

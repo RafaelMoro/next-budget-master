@@ -7,7 +7,7 @@ import { getDateInfo } from "@/shared/utils/getDateInfo";
 
 // Wrapper component that integrates useSelectMonth and SelectMonthDropdown
 const SelectMonthDropdownWrapper = () => {
-  const { selectedMonth, updateSelectMonth, allMonths } = useSelectMonth();
+  const { selectedMonth, updateSelectMonth, allMonths } = useSelectMonth({ isOlderRecords: false });
 
   return (
     <SelectMonthDropdown
