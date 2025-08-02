@@ -89,6 +89,7 @@ describe('OlderRecordsAccordion', () => {
     expect(screen.getByRole('button', { name: 'Registrar movimiento' })).toBeInTheDocument();
   })
 
+  // this test also covers clearing the error message making a new search again
   it('Given a user clicking on the accordion, then change the month to the current month, then click on search, should see error message', async () => {
     const user = userEvent.setup();
     const push = jest.fn();
@@ -120,7 +121,7 @@ describe('OlderRecordsAccordion', () => {
     const searchButton = screen.getByRole('button', { name: 'Buscar' })
     await user.click(searchButton);
 
-    expect(screen.getByText('Los movimientos de Agosto se muestran en la sección de "Este mes". Selecciona un mes anterior.')).toBeInTheDocument();
+    expect(screen.getByText(`Los movimientos de ${completeMonth} se muestran en la sección de "Este mes". Selecciona un mes anterior.`)).toBeInTheDocument();
 
     // Select the before last month and search again
     await user.click(changeMonthDropdown);
@@ -130,5 +131,39 @@ describe('OlderRecordsAccordion', () => {
 
     // Expect to see the records again
     expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument();
+  })
+
+  it('Given a user clicking on the accordion, then change the month to the last month, then click on search, should see error message', async () => {
+    const user = userEvent.setup();
+    const push = jest.fn();
+    const { completeLastMonth } = getDateInfo({ isOlderRecords: false })
+    mockedAxios.post.mockResolvedValue({
+      error: null,
+      message: null,
+      success: true,
+      version: "v1.2.0",
+      data: {
+        data: {
+          records: [recordMock]
+        }
+      },
+    })
+
+    render(<OlderRecordsAccordionWrapper push={push} />)
+
+    const accordion = screen.getByRole('button', { name: 'Transacciones anteriores' });
+    await user.click(accordion);
+
+    expect(screen.getByText("Arby's burger y papas")).toBeInTheDocument();
+    const changeMonthDropdown = screen.getByTestId('select-month-dropdown-button');
+    await user.click(changeMonthDropdown);
+
+    const lastMonthOption = screen.getByText(completeLastMonth);
+    await user.click(lastMonthOption);
+
+    const searchButton = screen.getByRole('button', { name: 'Buscar' })
+    await user.click(searchButton);
+
+    expect(screen.getByText(`Los movimientos de ${completeLastMonth} se muestran en la sección de "Último mes". Selecciona un mes anterior.`)).toBeInTheDocument();
   })
 })
