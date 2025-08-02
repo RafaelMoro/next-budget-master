@@ -6,7 +6,7 @@ import { getDateInfo } from "@/shared/utils/getDateInfo";
 
 // Wrapper component that integrates useSelectYear and SelectYearDropdown
 const SelectYearDropdownWrapper = () => {
-  const { selectedYear, updateSelectYear } = useSelectYear();
+  const { selectedYear, updateSelectYear } = useSelectYear({ isOlderRecords: false });
 
   return (
     <SelectYearDropdown

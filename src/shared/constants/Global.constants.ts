@@ -10,6 +10,7 @@ export const DASHBOARD_SCREEN_KEY = 'dashboard_screen'
 
 export const CURRENT_MONTH_RECORDS_TAG = 'current-month-records'
 export const LAST_MONTH_RECORDS_TAG = 'last-month-records'
+export const OLDER_RECORDS_TAG = 'older-records'
 
 export const ERROR_CONNECTION = 'ECONNREFUSED'
 
