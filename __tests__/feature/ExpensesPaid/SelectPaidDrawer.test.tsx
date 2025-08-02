@@ -37,6 +37,7 @@ const SelectPaidDrawerInner = (props: SelectPaidDrawerWrapperProps) => {
       allMonths,
       expensesFetched,
       isMobile,
+      totalSelectedExpenses,
       toggleSelectExpensesDrawer,
       updateSelectMonth,
       updateSelectYear,
@@ -54,10 +55,11 @@ const SelectPaidDrawerInner = (props: SelectPaidDrawerWrapperProps) => {
       selectedMonth={selectedMonth}
       selectedYear={selectedYear}
       expenses={props.expenses ?? expensesFetched}
-      selectedExpenses={selectedExpenses.current}
+      selectedExpenses={selectedExpenses}
       isMobile={props.isMobile ?? isMobile}
       toggleOpen={props.toggleOpen ?? toggleSelectExpensesDrawer}
       handleSubmit={props.handleSubmit ?? handleSubmitGetExpenses}
+      totalSelectedExpenses={totalSelectedExpenses}
       changeSelectedMonth={updateSelectMonth}
       changeSelectedYear={updateSelectYear}
       handleSelectExpense={props.handleSelectExpense ?? handleSelectExpense}

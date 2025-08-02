@@ -12,6 +12,7 @@ import { AccountRecordsIcon } from "../icons/AccountRecordsIcon"
 import { ToggleDarkMode } from "./ToggleDarkMode"
 import { DashboardScreens } from "@/shared/types/dashboard.types"
 import { resetLocalStorage } from "@/shared/lib/local-storage.lib"
+import { useDashboard } from "@/shared/hooks/useDashboard"
 
 interface HeaderMenuMobileProps {
   accounts: AccountBank[];
@@ -21,6 +22,8 @@ interface HeaderMenuMobileProps {
 }
 
 export const HeaderMenuMobile = ({ accounts, screen, updateScreen, toggleSelectAccountModal }: HeaderMenuMobileProps) => {
+  const { redirectLogin } = useDashboard()
+
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const toggleDrawer = () => setOpenDrawer((prev) => !prev)
   const handleClick = (onClickCb: (newScreen: DashboardScreens) => void, newScreen: DashboardScreens) => {
@@ -30,6 +33,7 @@ export const HeaderMenuMobile = ({ accounts, screen, updateScreen, toggleSelectA
   const handleSignOut = async () => {
     resetLocalStorage()
     await fetch('/api/auth/sign-out')
+    redirectLogin()
   }
 
   return (

@@ -1,3 +1,9 @@
+## v0.31.0 (2025-08-02)
+
+### Pull Requests
+[#55](https://github.com/RafaelMoro/next-budget-master/pull/55) | Add count selected expenses and other fixes
+
+
 ## v0.30.0 (2025-08-02)
 
 ### Pull Requests

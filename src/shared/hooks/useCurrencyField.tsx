@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { cleanCurrencyString, formatNumberToCurrency, shiftSingleDecimalLeft, shiftThousandSingleDecimalLeft } from "../utils/formatNumberCurrency.utils";
 import { CURRENCY_ZERO_ERROR } from "../constants/records.constants";
+import { DEFAULT_AMOUNT_VALUE } from "../constants/Global.constants";
 
 interface UseCurrencyFieldProps {
   amount: string | null;
 }
-
-export const DEFAULT_AMOUNT_VALUE = '$0.00'
 
 /**
 * This hook is to handle the usage of the currency field component

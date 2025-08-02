@@ -6,11 +6,12 @@ import { getBadgeColor, getBadgeText } from "./expensePaid.utils"
 interface SelectExpensesPaidListProps {
   expenses: ExpensePaid[]
   selectedExpenses: ExpensePaid[]
+  totalSelectedExpenses: string
   handleUnselectExpense: (expense: ExpensePaid) => void
   handleSelectExpense: (expense: ExpensePaid) => void
 }
 
-export const SelectExpensesPaidList = ({ expenses, selectedExpenses, handleSelectExpense, handleUnselectExpense }: SelectExpensesPaidListProps) => {
+export const SelectExpensesPaidList = ({ expenses, selectedExpenses, totalSelectedExpenses, handleSelectExpense, handleUnselectExpense }: SelectExpensesPaidListProps) => {
   const isSelected = (expenseId: string) => selectedExpenses.some((expense) => expense._id === expenseId);
   const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: ExpensePaid) => {
     const checkboxChecked = event.target.checked
@@ -22,7 +23,11 @@ export const SelectExpensesPaidList = ({ expenses, selectedExpenses, handleSelec
   }
 
   return (
-    <div className="max-h-[650px] overflow-y-scroll">
+    <div className="max-h-[700px] overflow-y-scroll">
+      <div className="flex flex-col justify-between mb-5">
+        <p>Movimientos seleccionados: {selectedExpenses.length}</p>
+        <p>Total: {totalSelectedExpenses}</p>
+      </div>
       <ListGroup>
         { expenses.map((expense) => (
           <ListGroupItem className="max-w-80 sm:max-w-screen" key={expense._id}>
