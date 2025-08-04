@@ -8,11 +8,13 @@ import { DEFAULT_AMOUNT_VALUE } from '@/shared/constants/Global.constants';
 const ExpensesPaidListWrapper = ({
   expenses = [],
   selectedExpenses = [],
+  totalSelectedExpenses = DEFAULT_AMOUNT_VALUE,
   handleSelectExpense = jest.fn(),
   handleUnselectExpense = jest.fn()
 }: {
   expenses?: ExpensePaid[];
   selectedExpenses?: ExpensePaid[];
+  totalSelectedExpenses?: string
   handleSelectExpense?: (expense: ExpensePaid) => void;
   handleUnselectExpense?: (expense: ExpensePaid) => void;
 }) => {
@@ -20,7 +22,7 @@ const ExpensesPaidListWrapper = ({
     <SelectExpensesPaidList
       expenses={expenses}
       selectedExpenses={selectedExpenses}
-      totalSelectedExpenses={DEFAULT_AMOUNT_VALUE}
+      totalSelectedExpenses={totalSelectedExpenses}
       handleSelectExpense={handleSelectExpense}
       handleUnselectExpense={handleUnselectExpense}
     />
@@ -45,6 +47,8 @@ describe('ExpensesPaidList', () => {
     expect(screen.getByText(paidRecordMock.shortName)).toBeInTheDocument();
     expect(screen.getByText(`- ${paidRecordMock.amountFormatted}`)).toBeInTheDocument();
     expect(screen.getByText(paidRecordMock.fullDate)).toBeInTheDocument();
+    expect(screen.getByText('Movimientos seleccionados: 0')).toBeInTheDocument();
+    expect(screen.getByText('Total: $0.00')).toBeInTheDocument();
   });
 
   it('should show checkboxes for each expense', () => {
@@ -109,6 +113,7 @@ describe('ExpensesPaidList', () => {
       <ExpensesPaidListWrapper
         expenses={mockExpenses}
         selectedExpenses={mocks}
+        totalSelectedExpenses="$42.54"
       />
     );
 
@@ -116,6 +121,9 @@ describe('ExpensesPaidList', () => {
     expect(checkboxes[0]).toBeChecked(); // recordMock
     expect(checkboxes[1]).toBeChecked(); // editExpense
     expect(checkboxes[2]).not.toBeChecked(); // paidRecordMock - not in selectedExpenses
+
+    expect(screen.getByText('Movimientos seleccionados: 2')).toBeInTheDocument();
+    expect(screen.getByText('Total: $42.54')).toBeInTheDocument();
   });
 
   it('should render amount with negative sign prefix', () => {
