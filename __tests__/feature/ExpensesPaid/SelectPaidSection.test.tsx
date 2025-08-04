@@ -1,19 +1,23 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SelectPaidSection } from '@/features/Records/ExpensesPaid/SelectPaidSection';
-import { recordMock, editExpense } from '../../mocks/records.mock';
-import { BankMovement } from '@/shared/types/records.types';
+import { expensePaidFromRecordMock, expensePaidFromEditExpense } from '../../mocks/records.mock';
+import { ExpensePaid } from '@/shared/types/records.types';
+import { DEFAULT_AMOUNT_VALUE } from '@/shared/constants/Global.constants';
 
 const SelectPaidSectionWrapper = ({
   selectedExpenses = [],
-  toggleOpen = jest.fn()
+  toggleOpen = jest.fn(),
+  totalSelectedExpenses = DEFAULT_AMOUNT_VALUE,
 }: {
-  selectedExpenses?: BankMovement[];
+  selectedExpenses?: ExpensePaid[];
   toggleOpen?: () => void;
+  totalSelectedExpenses?: string
 }) => {
   return (
     <SelectPaidSection
       selectedExpenses={selectedExpenses}
+      totalSelectedExpenses={totalSelectedExpenses}
       toggleOpen={toggleOpen}
     />
   );
@@ -30,7 +34,7 @@ describe('SelectPaidSection', () => {
   });
 
   it('should render the section with manage expenses text when expenses are selected', () => {
-    const selectedExpenses = [recordMock, editExpense];
+    const selectedExpenses = [expensePaidFromRecordMock, expensePaidFromEditExpense];
     render(<SelectPaidSectionWrapper selectedExpenses={selectedExpenses} />);
 
     expect(screen.getByText('Conecta este pago con tus gastos')).toBeInTheDocument();
@@ -51,7 +55,7 @@ describe('SelectPaidSection', () => {
   });
 
   it('should display correct number of selected expenses', () => {
-    const selectedExpenses = [recordMock];
+    const selectedExpenses = [expensePaidFromRecordMock];
     render(<SelectPaidSectionWrapper selectedExpenses={selectedExpenses} />);
 
     expect(screen.getByText('Gastos seleccionados: 1')).toBeInTheDocument();
