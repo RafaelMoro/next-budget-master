@@ -1,3 +1,9 @@
+## v0.31.1 (2025-08-04)
+
+### Pull Requests
+[#57](https://github.com/RafaelMoro/next-budget-master/pull/57) | Update unit tests on regards the feature count expenses paid
+
+
 ## v0.31.0 (2025-08-02)
 
 ### Pull Requests
