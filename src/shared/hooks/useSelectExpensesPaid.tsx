@@ -55,11 +55,6 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
   })
   const expensesFetched = data?.data?.expenses ?? []
 
-  const handleFinishSelection =() => {
-    console.log('Selected expenses:', selectedExpenses)
-    // Here you can handle the selected expenses, e.g., save them or process them further
-  }
-
   const handleSubmitGetExpenses = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     event.stopPropagation()
@@ -67,7 +62,6 @@ export const useSelectExpensesPaid = ({ accessToken, accountId }: UseSelectExpen
   }
 
   const handleClick = () => {
-    handleFinishSelection()
     toggleOpen()
   }
 
