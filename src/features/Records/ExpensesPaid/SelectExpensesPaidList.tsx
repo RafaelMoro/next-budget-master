@@ -11,6 +11,9 @@ interface SelectExpensesPaidListProps {
   handleSelectExpense: (expense: ExpensePaid) => void
 }
 
+/**
+ * This component is to select the expenses paid in the select paid drawer
+ */
 export const SelectExpensesPaidList = ({ expenses, selectedExpenses, totalSelectedExpenses, handleSelectExpense, handleUnselectExpense }: SelectExpensesPaidListProps) => {
   const isSelected = (expenseId: string) => selectedExpenses.some((expense) => expense._id === expenseId);
   const handleCheckboxcChange = (event: ChangeEvent<HTMLInputElement>, expenseSelected: ExpensePaid) => {

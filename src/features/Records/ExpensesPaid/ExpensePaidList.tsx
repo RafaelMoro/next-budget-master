@@ -5,6 +5,9 @@ interface ExpensePaidListProps {
   expenses: ExpensePaid[];
 }
 
+/**
+ * This component is to show the expenses paid list in the record preview drawer
+ */
 export const ExpensePaidList = ({ expenses }: ExpensePaidListProps) => {
   return (
     <ListGroup>
