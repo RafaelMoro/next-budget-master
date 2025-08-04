@@ -16,6 +16,7 @@ export const IncomeExpensesChart = ({ records }: IncomeExpensesChartProps) => {
       { currentData.length > 0 && (
         <AreaChart
           className="h-52"
+          data-testid="income-expenses-chart"
           data={currentData}
           index="fullDate"
           categories={["expenseTotal", "incomeTotal"]}
