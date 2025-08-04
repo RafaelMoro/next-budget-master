@@ -7,10 +7,12 @@ import {
   expensePaidListMock3 
 } from '../../mocks/records.mock';
 import { ExpensePaid } from '@/shared/types/records.types';
+import { DEFAULT_AMOUNT_VALUE } from '@/shared/constants/Global.constants';
 
 const ExpensesPaidTableWrapper = ({
   expenses = [],
   selectedExpenses = [],
+  totalSelectedExpenses = DEFAULT_AMOUNT_VALUE,
   handleSelectExpense = jest.fn(),
   handleUnselectExpense = jest.fn()
 }: {
@@ -18,11 +20,13 @@ const ExpensesPaidTableWrapper = ({
   selectedExpenses?: ExpensePaid[];
   handleSelectExpense?: (expense: ExpensePaid) => void;
   handleUnselectExpense?: (expense: ExpensePaid) => void;
+  totalSelectedExpenses?: string
 }) => {
   return (
     <ExpensesPaidTable
       expenses={expenses}
       selectedExpenses={selectedExpenses}
+      totalSelectedExpenses={totalSelectedExpenses}
       handleSelectExpense={handleSelectExpense}
       handleUnselectExpense={handleUnselectExpense}
     />
@@ -53,6 +57,9 @@ describe('ExpensesPaidTable', () => {
     expect(screen.getByText(expensePaidListMock3.shortName)).toBeInTheDocument();
     expect(screen.getByText(expensePaidListMock3.amountFormatted)).toBeInTheDocument();
     expect(screen.getByText(expensePaidListMock3.fullDate)).toBeInTheDocument();
+
+    expect(screen.getByText(/Movimientos seleccionados:/i)).toBeInTheDocument();
+    expect(screen.getByText(`Total: ${DEFAULT_AMOUNT_VALUE}`)).toBeInTheDocument();
   });
 
   it('should show checkboxes for each expense', () => {
