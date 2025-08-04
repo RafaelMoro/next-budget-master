@@ -35,6 +35,19 @@ export const recordMock: BankMovement ={
   isPaid: false,
   linkedBudgets: [],
 }
+
+// ExpensePaid based on recordMock
+export const expensePaidFromRecordMock: ExpensePaid = {
+  _id: "6855ed98e3d57ba1214bc5bf",
+  shortName: "Arby's burger y papas",
+  amount: 380,
+  amountFormatted: "$380.00",
+  formattedTime: "17:23pm",
+  fullDate: "Vie, 20 Jun, 2025",
+  isPaid: false,
+  date: new Date("2025-06-20T17:23:42.000Z"),
+}
+
 export const editExpense: BankMovement = {
   ...recordMock,
   _id: "6855ed98e3d57ba1214bc5c0",
@@ -51,6 +64,18 @@ export const editExpense: BankMovement = {
   linkedBudgets: [mockBudgets[0]],
   category: mockCategories[0],
   subCategory: mockCategories[0].subCategories[0],
+};
+
+// ExpensePaid based on editExpense
+export const expensePaidFromEditExpense: ExpensePaid = {
+  _id: "6855ed98e3d57ba1214bc5c0",
+  shortName: "Edited Expense",
+  amount: 500,
+  amountFormatted: "$500.00",
+  formattedTime: "17:23pm",
+  fullDate: "Sab, 21 Jun, 2025",
+  isPaid: false,
+  date: new Date("2025-06-21T17:23:42.000Z"),
 };
 
 export const editIncome: BankMovement = {
