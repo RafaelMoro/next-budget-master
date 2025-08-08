@@ -1,9 +1,10 @@
 "use client"
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
+
 import { NOT_APPLICABLE_TEXT } from "@/shared/constants/Global.constants"
 import { typeRecordDict } from "@/shared/constants/records.constants"
 import { BankMovement } from "@/shared/types/records.types"
-import { showNumberTransactionsPaid, showPriceFormatted, showTransactionStatus } from "@/shared/utils/records.utils"
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
+import { cssTypeRecordColor, showNumberTransactionsPaid, showPriceFormatted, showTransactionStatus } from "@/shared/utils/records.utils"
 
 interface TransactionsTableProps {
   records: BankMovement[]
@@ -12,7 +13,7 @@ interface TransactionsTableProps {
 export const TransactionsTable = ({ records }: TransactionsTableProps) => {
   return (
     <div data-testid="transactions-table" className="overflow-x-auto">
-      <Table hoverable>
+      <Table hoverable striped>
         <TableHead>
           <TableRow>
             <TableHeadCell className="p-4">Tipo:</TableHeadCell>
@@ -32,7 +33,7 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
         <TableBody className="divide-y">
           { records.map((record) => (
             <TableRow key={record._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableCell className="px-4">{typeRecordDict[record.typeOfRecord]}</TableCell>
+              <TableCell className={cssTypeRecordColor(record)}>{typeRecordDict[record.typeOfRecord]}</TableCell>
               <TableCell className="px-4">{record.fullDate} {record.formattedTime}</TableCell>
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {record.shortName}
@@ -47,9 +48,6 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
               <TableCell className="p-4">{record?.tag && record?.tag.length > 0 ? record?.tag.length : 'Sin etiquetas'}</TableCell>
               <TableCell className="p-4">
                 {record?.indebtedPeople && record?.indebtedPeople.length > 0 ? record?.indebtedPeople.length : 'Sin personas que deben'}
-              </TableCell>
-              <TableCell className="p-4">
-                {record?.isPaid && record?.typeOfRecord === 'expense' ? record?.isPaid : 'Sin personas que deben'}
               </TableCell>
               <TableCell className="p-4">
                 {showTransactionStatus(record)}
