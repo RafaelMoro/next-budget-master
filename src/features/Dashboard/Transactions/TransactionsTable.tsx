@@ -1,17 +1,24 @@
 "use client"
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
+import { CheckIcon, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
 
 import { NOT_APPLICABLE_TEXT } from "@/shared/constants/Global.constants"
 import { typeRecordDict } from "@/shared/constants/records.constants"
 import { BankMovement } from "@/shared/types/records.types"
 import { cssTypeRecordColor, showNumberTransactionsPaid, showPriceFormatted, showTransactionStatus } from "@/shared/utils/records.utils"
 import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon"
+import { RiCloseLine } from "@remixicon/react"
 
 interface TransactionsTableProps {
   records: BankMovement[]
 }
 
 export const TransactionsTable = ({ records }: TransactionsTableProps) => {
+  const iconPaidDict = {
+    'Pagado': <CheckIcon />,
+    'Sin pagar': <RiCloseLine />,
+    'No Aplica': 'No Aplica'
+  }
+
   return (
     <div data-testid="transactions-table" className="overflow-x-auto">
       <Table hoverable striped>
@@ -54,7 +61,7 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
                 {record?.indebtedPeople && record?.indebtedPeople.length > 0 ? record?.indebtedPeople.length : 'Sin personas que deben'}
               </TableCell>
               <TableCell className="p-4">
-                {showTransactionStatus(record)}
+                {iconPaidDict[showTransactionStatus(record)]}
               </TableCell>
               <TableCell className="p-4">{showNumberTransactionsPaid(record)}</TableCell>
             </TableRow>
