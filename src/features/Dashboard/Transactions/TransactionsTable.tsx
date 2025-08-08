@@ -17,9 +17,9 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
         <TableHead>
           <TableRow>
             <TableHeadCell className="p-4">Tipo:</TableHeadCell>
-            <TableHeadCell className="p-4">Fecha y hora:</TableHeadCell>
+            <TableHeadCell className="p-4 min-w-32">Fecha y hora:</TableHeadCell>
             <TableHeadCell className="p-4">Pequeña descripción:</TableHeadCell>
-            <TableHeadCell className="p-4">Monto:</TableHeadCell>
+            <TableHeadCell className="p-4 min-w-36">Monto:</TableHeadCell>
             <TableHeadCell className="p-4">Descripción:</TableHeadCell>
             <TableHeadCell className="p-4">Categoría:</TableHeadCell>
             <TableHeadCell className="p-4">Subcategoría:</TableHeadCell>
@@ -38,7 +38,7 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {record.shortName}
               </TableCell>
-              <TableCell className="p-4">{showPriceFormatted(record)}</TableCell>
+              <TableCell className={cssTypeRecordColor(record)}>{showPriceFormatted(record)}</TableCell>
               <TableCell className="px-4">{record.description}</TableCell>
               <TableCell className="p-4">{record.category?.categoryName}</TableCell>
               <TableCell className="p-4">{record.subCategory}</TableCell>
