@@ -41,7 +41,7 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
         <TableBody className="divide-y">
           { records.map((record) => (
             <TableRow key={record._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableCell className={cssTypeRecordColor(record)}>
+              <TableCell className={cssTypeRecordColor({ record, isTypeRecord: true})}>
                 <ChartLineIcon className="row-span-2 place-self-center" />
                 {typeRecordDict[record.typeOfRecord]}
               </TableCell>
@@ -49,7 +49,7 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {record.shortName}
               </TableCell>
-              <TableCell className={cssTypeRecordColor(record)}>{showPriceFormatted(record)}</TableCell>
+              <TableCell className={cssTypeRecordColor({ record, isTypeRecord: false})}>{showPriceFormatted(record)}</TableCell>
               <TableCell className="px-4">{record.description}</TableCell>
               <TableCell className="p-4">{record.category?.categoryName}</TableCell>
               <TableCell className="p-4">{record.subCategory}</TableCell>

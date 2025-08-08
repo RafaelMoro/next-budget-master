@@ -232,9 +232,10 @@ export const showNumberTransactionsPaid = (record: BankMovement) => {
   return NOT_APPLICABLE_TEXT
 }
 
-export const cssTypeRecordColor = (record: BankMovement) => {
+export const cssTypeRecordColor = ({ record, isTypeRecord }:{record: BankMovement, isTypeRecord: boolean}) => {
   return clsx(
-    "p-4",
+    "p-4 ",
+    { "flex flex-col align-center justify-center text-center": isTypeRecord },
     { "text-green-500": record.typeOfRecord === 'income' },
     { "text-red-500": record.typeOfRecord === 'expense' },
     { "text-blue-500": record.typeOfRecord === 'transfer' },
