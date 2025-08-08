@@ -234,8 +234,8 @@ export const showNumberTransactionsPaid = (record: BankMovement) => {
 
 export const cssTypeRecordColor = ({ record, isTypeRecord }:{record: BankMovement, isTypeRecord: boolean}) => {
   return clsx(
-    "p-4 ",
-    { "flex flex-col align-center justify-center text-center": isTypeRecord },
+    { "p-4": !isTypeRecord},
+    { "flex flex-col align-center justify-center text-center p-2 h-full": isTypeRecord },
     { "text-green-500": record.typeOfRecord === 'income' },
     { "text-red-500": record.typeOfRecord === 'expense' },
     { "text-blue-500": record.typeOfRecord === 'transfer' },

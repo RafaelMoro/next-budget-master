@@ -24,7 +24,7 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
       <Table hoverable striped>
         <TableHead>
           <TableRow>
-            <TableHeadCell className="p-4">Tipo:</TableHeadCell>
+            <TableHeadCell className="p-2 text-center">Tipo:</TableHeadCell>
             <TableHeadCell className="p-4 min-w-32">Fecha y hora:</TableHeadCell>
             <TableHeadCell className="p-4">Pequeña descripción:</TableHeadCell>
             <TableHeadCell className="p-4 min-w-36">Monto:</TableHeadCell>
