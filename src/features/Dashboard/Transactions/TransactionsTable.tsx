@@ -5,6 +5,7 @@ import { NOT_APPLICABLE_TEXT } from "@/shared/constants/Global.constants"
 import { typeRecordDict } from "@/shared/constants/records.constants"
 import { BankMovement } from "@/shared/types/records.types"
 import { cssTypeRecordColor, showNumberTransactionsPaid, showPriceFormatted, showTransactionStatus } from "@/shared/utils/records.utils"
+import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon"
 
 interface TransactionsTableProps {
   records: BankMovement[]
@@ -33,7 +34,10 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
         <TableBody className="divide-y">
           { records.map((record) => (
             <TableRow key={record._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableCell className={cssTypeRecordColor(record)}>{typeRecordDict[record.typeOfRecord]}</TableCell>
+              <TableCell className={cssTypeRecordColor(record)}>
+                <ChartLineIcon className="row-span-2 place-self-center" />
+                {typeRecordDict[record.typeOfRecord]}
+              </TableCell>
               <TableCell className="px-4">{record.fullDate} {record.formattedTime}</TableCell>
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {record.shortName}
