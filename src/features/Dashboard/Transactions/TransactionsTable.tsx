@@ -1,7 +1,15 @@
 "use client"
+import { NOT_APPLICABLE_TEXT } from "@/shared/constants/Global.constants"
+import { typeRecordDict } from "@/shared/constants/records.constants"
+import { BankMovement } from "@/shared/types/records.types"
+import { showNumberTransactionsPaid, showPriceFormatted, showTransactionStatus } from "@/shared/utils/records.utils"
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react"
 
-export const TransactionsTable = () => {
+interface TransactionsTableProps {
+  records: BankMovement[]
+}
+
+export const TransactionsTable = ({ records }: TransactionsTableProps) => {
   return (
     <div data-testid="transactions-table" className="overflow-x-auto">
       <Table hoverable>
@@ -22,22 +30,33 @@ export const TransactionsTable = () => {
           </TableRow>
         </TableHead>
         <TableBody className="divide-y">
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="px-4">Gasto</TableCell>
-            <TableCell className="px-4">Vie, 1 Ago, 2025 20:10pm</TableCell>
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Uber gym al depa
-            </TableCell>
-            <TableCell className="p-4">$242.10</TableCell>
-            <TableCell className="px-4">Uber del gimnasio al departamento</TableCell>
-            <TableCell className="p-4">Transporte</TableCell>
-            <TableCell className="p-4">Uber/Didi</TableCell>
-            <TableCell className="p-4">No Aplica</TableCell>
-            <TableCell className="p-4">No Aplica</TableCell>
-            <TableCell className="p-4">4</TableCell>
-            <TableCell className="p-4">Sin pagar</TableCell>
-            <TableCell className="p-4">No Aplica</TableCell>
-          </TableRow>
+          { records.map((record) => (
+            <TableRow key={record._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <TableCell className="px-4">{typeRecordDict[record.typeOfRecord]}</TableCell>
+              <TableCell className="px-4">{record.fullDate} {record.formattedTime}</TableCell>
+              <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                {record.shortName}
+              </TableCell>
+              <TableCell className="p-4">{showPriceFormatted(record)}</TableCell>
+              <TableCell className="px-4">{record.description}</TableCell>
+              <TableCell className="p-4">{record.category?.categoryName}</TableCell>
+              <TableCell className="p-4">{record.subCategory}</TableCell>
+              <TableCell className="p-4">
+                {record?.linkedBudgets && record?.linkedBudgets.length > 0 ? record?.linkedBudgets.length : NOT_APPLICABLE_TEXT}
+              </TableCell>
+              <TableCell className="p-4">{record?.tag && record?.tag.length > 0 ? record?.tag.length : 'Sin etiquetas'}</TableCell>
+              <TableCell className="p-4">
+                {record?.indebtedPeople && record?.indebtedPeople.length > 0 ? record?.indebtedPeople.length : 'Sin personas que deben'}
+              </TableCell>
+              <TableCell className="p-4">
+                {record?.isPaid && record?.typeOfRecord === 'expense' ? record?.isPaid : 'Sin personas que deben'}
+              </TableCell>
+              <TableCell className="p-4">
+                {showTransactionStatus(record)}
+              </TableCell>
+              <TableCell className="p-4">{showNumberTransactionsPaid(record)}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

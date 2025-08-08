@@ -3,6 +3,7 @@ import { clsx } from 'clsx';
 
 import { BankMovement, TypeOfRecord } from "@/shared/types/records.types"
 import { categoryIcons } from "@/shared/constants/categories.constants";
+import { showPriceFormatted } from "@/shared/utils/records.utils";
 
 interface AccountEntryProps {
   record: BankMovement;
@@ -20,11 +21,6 @@ export const RecordEntry = ({ record, handleOpenRecordPreviewDrawer }: AccountEn
   const expenseTagText = record?.isPaid && record.typeOfRecord === 'expense' ? 'Pagado' : 'Sin pagar'
   const badgeColorGreen = record?.isPaid && record.typeOfRecord === 'expense' ? 'success' : 'failure'
 
-  const showPriceDict: Record<TypeOfRecord, string> = {
-    expense: `- ${record.amountFormatted}`,
-    income: `+ ${record.amountFormatted}`,
-    transfer: `${record.amountFormatted}`
-  }
   const showBadgeDict: Record<TypeOfRecord, string> = {
     expense: expenseTagText,
     income: 'Ingreso',
@@ -43,7 +39,7 @@ export const RecordEntry = ({ record, handleOpenRecordPreviewDrawer }: AccountEn
         <Icon />
       </div>
       <h5 className="col-start-2 col-end-3 row-start-2 row-end-3 text-xl font-semibold capitalize">{record.shortName}</h5>
-      <p className={priceClass}>{showPriceDict[record.typeOfRecord]}</p>
+      <p className={priceClass}>{showPriceFormatted(record)}</p>
       <div className="col-start-3 col-end-4 row-span-2 w-full flex items-center justify-center">
         <Badge color={badgeColorDict[record.typeOfRecord]}>{showBadgeDict[record.typeOfRecord]}</Badge>
       </div>

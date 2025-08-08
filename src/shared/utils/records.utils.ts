@@ -3,6 +3,7 @@ import { BankMovement, ExpenseDataResponse, CreateExpensePayload, IncomeDataResp
 import { addToLocalStorage, removeFromLocalStorage } from "../lib/local-storage.lib";
 import { EDIT_RECORD_KEY } from "../constants/local-storage.constants";
 import { defaultResFetchExpenses } from "../constants/records.constants";
+import { NOT_APPLICABLE_TEXT } from "../constants/Global.constants";
 
 //#region API Calls
 export const createExpenseCb = (data: CreateExpensePayload, accessToken: string): Promise<ExpenseDataResponse> => {
@@ -208,3 +209,20 @@ export const getOriginAccountForEdit = ({
   }
   return '';
 };
+
+export const showPriceFormatted = (record: BankMovement)  => {
+  if (record.typeOfRecord === 'expense') return `- ${record.amountFormatted}`
+  if (record.typeOfRecord === 'income') return `+ ${record.amountFormatted}`
+  return `${record.amountFormatted}`
+}
+
+export const showTransactionStatus = (record: BankMovement) => {
+  if (record.typeOfRecord === 'expense' && record.isPaid) return 'Pagado'
+  if (record.typeOfRecord === 'expense' && !record.isPaid) return 'Sin pagar'
+  return 'No Aplica'
+}
+
+export const showNumberTransactionsPaid = (record: BankMovement) => {
+  if (record.typeOfRecord !== 'expense') return record?.expensesPaid?.length ?? 'Sin movimientos'
+  return NOT_APPLICABLE_TEXT
+}

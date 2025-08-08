@@ -1,4 +1,4 @@
-import { FetchExpensesDateResponse } from "../types/records.types";
+import { FetchExpensesDateResponse, TypeOfRecord } from "../types/records.types";
 
 export const GET_EXPENSES_AND_INCOMES_BY_MONTH_ROUTE = '/records/expenses-and-incomes';
 export const EXPENSE_ROUTE = '/expenses-actions';
@@ -28,4 +28,10 @@ export const defaultResFetchExpenses: FetchExpensesDateResponse = {
   message: null,
   success: false,
   version: null,
+}
+
+export const typeRecordDict: Record<TypeOfRecord, string> = {
+  expense: 'Gasto',
+  income: 'Ingreso',
+  transfer: 'Transferencia'
 }

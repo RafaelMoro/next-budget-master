@@ -105,7 +105,7 @@ export const Dashboard = ({ detailedError, accountsFetched, recordsFetched }: Da
       )}
       { (screen === 'overview' && accounts.length > 0 ) && (<OverviewScreen />) }
       { (screen === 'accounts' && accounts.length > 0 ) && (<AccountScreen />) }
-      { screen === 'transactions' && accounts.length > 0 && (<TransactionsScreen />)}
+      { screen === 'transactions' && accounts.length > 0 && (<TransactionsScreen recordsFetched={recordsFetched} />)}
       <Toaster position="top-center" />
       <SelectAccountDialog openModal={openSelectAccountModal} closeModal={toggleSelectAccountModal} />
     </div>

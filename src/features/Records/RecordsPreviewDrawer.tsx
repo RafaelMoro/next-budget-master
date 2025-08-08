@@ -8,7 +8,7 @@ import { Badge, Button, CheckIcon, Drawer, DrawerItems } from "flowbite-react";
 import clsx from "clsx"
 import { useRouter } from 'next/navigation'
 
-import { BankMovement, TypeOfRecord } from "@/shared/types/records.types";
+import { BankMovement } from "@/shared/types/records.types";
 import { categoryIcons } from "@/shared/constants/categories.constants";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon";
@@ -18,6 +18,7 @@ import { useDashboard } from "@/shared/hooks/useDashboard";
 import { ExpensePaidList } from "./ExpensesPaid/ExpensePaidList";
 import { IndebtedPeoplePreviewRecord } from "../IndebtedPeople/IndebtedPeoplePreviewRecord";
 import { DeleteRecordModal } from "./DeleteRecordModal";
+import { typeRecordDict } from "@/shared/constants/records.constants";
 
 interface RecordsPreviewDrawerProps {
   record: BankMovement | null;
@@ -39,11 +40,6 @@ export const RecordsPreviewDrawer = ({ open, handleClose, record }: RecordsPrevi
 
   const Icon = categoryIcons[record?.category?.icon ?? 'newCategory']
   const paidStatus = record?.isPaid ? 'Pagado' : 'Sin pagar'
-  const typeRecordDict: Record<TypeOfRecord, string> = {
-    expense: 'Gasto',
-    income: 'Ingreso',
-    transfer: 'Transferencia'
-  }
   const statusBoxCss = clsx(
     "flex gap-1 items-center",
     { "text-green-500": record?.isPaid },
