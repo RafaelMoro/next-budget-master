@@ -4,7 +4,7 @@ import { CheckIcon, Table, TableBody, TableCell, TableHead, TableHeadCell, Table
 import { NOT_APPLICABLE_TEXT } from "@/shared/constants/Global.constants"
 import { typeRecordDict } from "@/shared/constants/records.constants"
 import { BankMovement } from "@/shared/types/records.types"
-import { cssTypeRecordColor, showNumberTransactionsPaid, showPriceFormatted, showTransactionStatus } from "@/shared/utils/records.utils"
+import { cssTransactionPaidStatus, cssTypeRecordColor, showNumberTransactionsPaid, showPriceFormatted, showTransactionStatus } from "@/shared/utils/records.utils"
 import { ChartLineIcon } from "@/shared/ui/icons/ChartLineIcon"
 import { RiCloseLine } from "@remixicon/react"
 
@@ -60,7 +60,7 @@ export const TransactionsTable = ({ records }: TransactionsTableProps) => {
               <TableCell className="p-4">
                 {record?.indebtedPeople && record?.indebtedPeople.length > 0 ? record?.indebtedPeople.length : 'Sin personas que deben'}
               </TableCell>
-              <TableCell className="p-4">
+              <TableCell className={cssTransactionPaidStatus(record)}>
                 {iconPaidDict[showTransactionStatus(record)]}
               </TableCell>
               <TableCell className="p-4">{showNumberTransactionsPaid(record)}</TableCell>

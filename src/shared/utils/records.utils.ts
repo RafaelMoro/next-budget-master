@@ -240,3 +240,12 @@ export const cssTypeRecordColor = (record: BankMovement) => {
     { "text-blue-500": record.typeOfRecord === 'transfer' },
   )
 }
+
+export const cssTransactionPaidStatus = (record: BankMovement) => {
+  return clsx(
+    "p-4",
+    { "text-green-500": record.isPaid && typeof record.isPaid === 'boolean' },
+    { "text-red-500": !record.isPaid && typeof record.isPaid === 'boolean' },
+    { "text-gray-500": typeof record.isPaid === undefined }
+  )
+}
